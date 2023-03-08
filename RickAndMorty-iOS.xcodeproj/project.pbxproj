@@ -56,15 +56,39 @@
 		F77E4B7A29B906D400B8B5CE /* RickAndMorty-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				F77E4B7B29B906D400B8B5CE /* AppDelegate.swift */,
-				F77E4B7D29B906D400B8B5CE /* SceneDelegate.swift */,
-				F77E4B8F29B908E700B8B5CE /* CharactersGridView.swift */,
-				F77E4B9129B9090900B8B5CE /* CharactersViewController.swift */,
+				F77E4B9729B9355800B8B5CE /* Delegates */,
+				F77E4B9429B934C300B8B5CE /* Views */,
 				F77E4B8429B906D600B8B5CE /* Assets.xcassets */,
 				F77E4B8629B906D600B8B5CE /* LaunchScreen.storyboard */,
 				F77E4B8929B906D600B8B5CE /* Info.plist */,
 			);
 			path = "RickAndMorty-iOS";
+			sourceTree = "<group>";
+		};
+		F77E4B9429B934C300B8B5CE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F77E4B9529B934D200B8B5CE /* Characters */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F77E4B9529B934D200B8B5CE /* Characters */ = {
+			isa = PBXGroup;
+			children = (
+				F77E4B8F29B908E700B8B5CE /* CharactersGridView.swift */,
+				F77E4B9129B9090900B8B5CE /* CharactersViewController.swift */,
+			);
+			path = Characters;
+			sourceTree = "<group>";
+		};
+		F77E4B9729B9355800B8B5CE /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				F77E4B7B29B906D400B8B5CE /* AppDelegate.swift */,
+				F77E4B7D29B906D400B8B5CE /* SceneDelegate.swift */,
+			);
+			path = Delegates;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
