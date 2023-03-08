@@ -9,9 +9,10 @@ import UIKit
 
 class CharactersViewController: UIViewController {
 
+    weak var coordinator: MainCoordinator?
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
 
     override func loadView() {

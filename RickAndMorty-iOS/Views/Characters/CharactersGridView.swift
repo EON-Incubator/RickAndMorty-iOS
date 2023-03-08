@@ -19,7 +19,7 @@ class CharactersGridView: UIView {
     }
 
     private func setupViews() {
-        self.backgroundColor = .lightGray
+        self.backgroundColor = .systemBackground
     }
 
 }
