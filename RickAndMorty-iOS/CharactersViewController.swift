@@ -9,8 +9,6 @@ import UIKit
 
 class CharactersViewController: UIViewController {
 
-
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -19,8 +17,5 @@ class CharactersViewController: UIViewController {
     override func loadView() {
         view = CharactersGridView()
     }
-
-    
-
 
 }
