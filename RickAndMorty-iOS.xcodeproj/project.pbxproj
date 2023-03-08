@@ -16,6 +16,8 @@
 		F77E4B9A29B9362300B8B5CE /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B9929B9362300B8B5CE /* Coordinator.swift */; };
 		F77E4B9C29B9364600B8B5CE /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B9B29B9364600B8B5CE /* MainCoordinator.swift */; };
 		F77E4B9F29B94B9300B8B5CE /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = F77E4B9E29B94B9300B8B5CE /* Apollo */; };
+		F77E4BA729B94F9400B8B5CE /* queries.graphql in Resources */ = {isa = PBXBuildFile; fileRef = F77E4BA529B94F9400B8B5CE /* queries.graphql */; };
+		F77E4BA829B94F9400B8B5CE /* rick-and-morty-a3b90u@current.graphqls in Resources */ = {isa = PBXBuildFile; fileRef = F77E4BA629B94F9400B8B5CE /* rick-and-morty-a3b90u@current.graphqls */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		F77E4B9129B9090900B8B5CE /* CharactersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersViewController.swift; sourceTree = "<group>"; };
 		F77E4B9929B9362300B8B5CE /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		F77E4B9B29B9364600B8B5CE /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
+		F77E4BA529B94F9400B8B5CE /* queries.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = queries.graphql; sourceTree = "<group>"; };
+		F77E4BA629B94F9400B8B5CE /* rick-and-morty-a3b90u@current.graphqls */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "rick-and-morty-a3b90u@current.graphqls"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +115,8 @@
 		F77E4BA029B94D5900B8B5CE /* GraphQL */ = {
 			isa = PBXGroup;
 			children = (
+				F77E4BA529B94F9400B8B5CE /* queries.graphql */,
+				F77E4BA629B94F9400B8B5CE /* rick-and-morty-a3b90u@current.graphqls */,
 			);
 			path = GraphQL;
 			sourceTree = "<group>";
@@ -181,7 +187,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F77E4B8829B906D600B8B5CE /* LaunchScreen.storyboard in Resources */,
+				F77E4BA729B94F9400B8B5CE /* queries.graphql in Resources */,
 				F77E4B8529B906D600B8B5CE /* Assets.xcassets in Resources */,
+				F77E4BA829B94F9400B8B5CE /* rick-and-morty-a3b90u@current.graphqls in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,0 +1,63 @@
+query Characters($page: Int, $name: String, $status: String, $gender: String) {
+  characters(page: $page, filter: {name: $name, status: $status, gender: $gender}) {
+    info {
+      ...pageInfo
+    }
+    results {
+      ...characterBasics
+    }
+  }
+}
+
+query Character($characterId: ID!) {
+  character(id: $characterId) {
+    ...characterBasics
+      created
+      episode {
+        ...episodeBasics
+      }
+      origin {
+        ...locationBasics
+      }
+      location {
+        ...locationBasics
+      }
+  }
+}
+
+fragment pageInfo on Info{
+  count
+  pages
+  prev
+  next
+}
+
+fragment characterBasics on Character {
+  id
+  name
+  image
+  gender
+  status
+  species
+  type
+}
+
+fragment locationBasics on Location {
+  id
+  dimension
+  name
+  residents {
+    image
+  }
+  type
+}
+
+fragment episodeBasics on Episode {
+  air_date
+  episode
+  id
+  name
+}
+
+
+
