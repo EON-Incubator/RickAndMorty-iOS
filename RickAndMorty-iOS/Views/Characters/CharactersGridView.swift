@@ -28,7 +28,7 @@ class CharactersGridView: UIView {
     lazy var collectionView: UICollectionView = {
         var flowLayout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: flowLayout)
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "collectionCell")
+        collectionView.register(CharactersGridCell.self, forCellWithReuseIdentifier: CharactersGridCell.identifier)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .lightGray
@@ -50,8 +50,8 @@ extension CharactersGridView: UICollectionViewDelegate, UICollectionViewDataSour
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionCell", for: indexPath)
-        cell.backgroundColor = .gray
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharactersGridCell.identifier,
+                                                      for: indexPath)
         return cell
     }
 }
