@@ -31,27 +31,31 @@ class CharactersGridView: UIView {
         collectionView.register(CharactersGridCell.self, forCellWithReuseIdentifier: CharactersGridCell.identifier)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = .lightGray
         return collectionView
     }()
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(self.safeAreaLayoutGuide)
+            make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 30))
         }
     }
 }
 
-// MARK: - UICollectionView
-extension CharactersGridView: UICollectionViewDelegate, UICollectionViewDataSource {
+// MARK: - UICollectionViewDataSource
+extension CharactersGridView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return 16
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharactersGridCell.identifier,
-                                                      for: indexPath)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharactersGridCell.identifier, for: indexPath)
         return cell
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+extension CharactersGridView: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.width/2 - 10, height: 150)
     }
 }
