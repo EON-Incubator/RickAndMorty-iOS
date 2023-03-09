@@ -1,4 +1,4 @@
-query Characters($page: Int, $name: String, $status: String, $gender: String) {
+query getCharacters($page: Int, $name: String, $status: String, $gender: String) {
   characters(page: $page, filter: {name: $name, status: $status, gender: $gender}) {
     info {
       ...pageInfo
@@ -9,7 +9,7 @@ query Characters($page: Int, $name: String, $status: String, $gender: String) {
   }
 }
 
-query Character($characterId: ID!) {
+query getCharacter($characterId: ID!) {
   character(id: $characterId) {
     ...characterBasics
       created
@@ -21,6 +21,54 @@ query Character($characterId: ID!) {
       }
       location {
         ...locationBasics
+        residents {
+          image
+        }
+      }
+  }
+}
+
+query getLocations($page: Int, $name: String, $type: String) {
+  locations(page: $page, filter: {name: $name, type: $type}) {
+    info {
+      ...pageInfo
+    }
+    results {
+      ...locationBasics
+      residents {
+        image
+      }
+    }
+  }
+}
+
+query getLocation($locationId: ID!) {
+  location(id: $locationId) {
+    ...locationBasics
+      created
+      residents {
+        ...characterBasics
+      }
+  }
+}
+
+query getEpisodes($page: Int, $name: String, $episode: String) {
+  episodes(page: $page, filter: {name: $name, episode: $episode}) {
+    info {
+      ...pageInfo
+    }
+    results {
+      ...episodeBasics
+    }
+  }
+}
+
+query getEpisode($episodeId: ID!) {
+  episode(id: $episodeId) {
+    ...episodeBasics
+      created
+      characters {
+        ...characterBasics
       }
   }
 }
@@ -46,9 +94,6 @@ fragment locationBasics on Location {
   id
   dimension
   name
-  residents {
-    image
-  }
   type
 }
 
