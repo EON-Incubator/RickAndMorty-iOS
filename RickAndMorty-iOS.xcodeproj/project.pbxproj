@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5447EE1A29BA36DC00D2D05A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5447EE1929BA36DC00D2D05A /* SnapKit */; };
+		5447EE1D29BA591800D2D05A /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 5447EE1C29BA591800D2D05A /* SDWebImage */; };
 		F77E4B7C29B906D400B8B5CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B7B29B906D400B8B5CE /* AppDelegate.swift */; };
 		F77E4B7E29B906D400B8B5CE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B7D29B906D400B8B5CE /* SceneDelegate.swift */; };
 		F77E4B8529B906D600B8B5CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F77E4B8429B906D600B8B5CE /* Assets.xcassets */; };
@@ -99,7 +101,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5447EE1D29BA591800D2D05A /* SDWebImage in Frameworks */,
 				F77E4B9F29B94B9300B8B5CE /* Apollo in Frameworks */,
+				5447EE1A29BA36DC00D2D05A /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,8 +163,8 @@
 		F77E4B9529B934D200B8B5CE /* Characters */ = {
 			isa = PBXGroup;
 			children = (
-				F77E4B8F29B908E700B8B5CE /* CharactersGridView.swift */,
 				F77E4B9129B9090900B8B5CE /* CharactersViewController.swift */,
+				F77E4B8F29B908E700B8B5CE /* CharactersGridView.swift */,
 			);
 			path = Characters;
 			sourceTree = "<group>";
@@ -288,6 +292,8 @@
 			name = "RickAndMorty-iOS";
 			packageProductDependencies = (
 				F77E4B9E29B94B9300B8B5CE /* Apollo */,
+				5447EE1929BA36DC00D2D05A /* SnapKit */,
+				5447EE1C29BA591800D2D05A /* SDWebImage */,
 			);
 			productName = "RickAndMorty-iOS";
 			productReference = F77E4B7829B906D400B8B5CE /* RickAndMorty-iOS.app */;
@@ -345,6 +351,8 @@
 			mainGroup = F77E4B6F29B906D400B8B5CE;
 			packageReferences = (
 				F77E4B9D29B94B9300B8B5CE /* XCRemoteSwiftPackageReference "apollo-ios" */,
+				5447EE1829BA36DC00D2D05A /* XCRemoteSwiftPackageReference "SnapKit" */,
+				5447EE1B29BA591800D2D05A /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				F77E4BF129BA3BE100B8B5CE /* XCRemoteSwiftPackageReference "Quick" */,
 				F77E4BF429BA3BF200B8B5CE /* XCRemoteSwiftPackageReference "Nimble" */,
 			);
@@ -708,6 +716,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5447EE1829BA36DC00D2D05A /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = exactVersion;
+				version = 5.6.0;
+			};
+		};
+		5447EE1B29BA591800D2D05A /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		F77E4B9D29B94B9300B8B5CE /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
@@ -735,6 +759,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5447EE1929BA36DC00D2D05A /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5447EE1829BA36DC00D2D05A /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		5447EE1C29BA591800D2D05A /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5447EE1B29BA591800D2D05A /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
 		F77E4B9E29B94B9300B8B5CE /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F77E4B9D29B94B9300B8B5CE /* XCRemoteSwiftPackageReference "apollo-ios" */;
