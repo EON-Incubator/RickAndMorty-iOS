@@ -44,7 +44,7 @@ class MainCoordinator: Coordinator {
         searchNavController.tabBarItem.title = "Search"
 
         // Add CharactersViewController to the character navigation controller.
-        let viewController = CharactersViewController()
+        let viewController = CharactersViewController() // To try the DemoView, replace it with DemoViewController()
         viewController.coordinator = self
         characterNavController.navigationBar.backgroundColor = .systemBackground
         characterNavController.pushViewController(viewController, animated: false)
