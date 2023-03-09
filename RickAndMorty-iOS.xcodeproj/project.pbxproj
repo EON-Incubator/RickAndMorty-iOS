@@ -40,6 +40,7 @@
 		F77E4BD829B9B27900B8B5CE /* SchemaConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4BC329B9B27900B8B5CE /* SchemaConfiguration.swift */; };
 		F77E4BD929B9B27900B8B5CE /* SchemaMetadata.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4BC429B9B27900B8B5CE /* SchemaMetadata.graphql.swift */; };
 		F77E4BDA29B9B27900B8B5CE /* RickAndMortyAPI.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4BC529B9B27900B8B5CE /* RickAndMortyAPI.graphql.swift */; };
+		F77E4BDC29BA390200B8B5CE /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4BDB29BA390200B8B5CE /* Network.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +78,7 @@
 		F77E4BC329B9B27900B8B5CE /* SchemaConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaConfiguration.swift; sourceTree = "<group>"; };
 		F77E4BC429B9B27900B8B5CE /* SchemaMetadata.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaMetadata.graphql.swift; sourceTree = "<group>"; };
 		F77E4BC529B9B27900B8B5CE /* RickAndMortyAPI.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RickAndMortyAPI.graphql.swift; sourceTree = "<group>"; };
+		F77E4BDB29BA390200B8B5CE /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				F77E4B9729B9355800B8B5CE /* Delegates */,
 				F77E4B9829B935EC00B8B5CE /* Coordinators */,
 				F77E4B9429B934C300B8B5CE /* Views */,
+				F77E4BDD29BA390F00B8B5CE /* Network */,
 				F77E4BAB29B9B27900B8B5CE /* RickAndMortyAPI */,
 				F77E4BA029B94D5900B8B5CE /* GraphQL */,
 				F77E4B8429B906D600B8B5CE /* Assets.xcassets */,
@@ -233,6 +236,14 @@
 				F77E4BC229B9B27900B8B5CE /* Locations.graphql.swift */,
 			);
 			path = Objects;
+			sourceTree = "<group>";
+		};
+		F77E4BDD29BA390F00B8B5CE /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				F77E4BDB29BA390200B8B5CE /* Network.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -363,6 +374,7 @@
 				F77E4BC929B9B27900B8B5CE /* LocationBasics.graphql.swift in Sources */,
 				F77E4BC729B9B27900B8B5CE /* PageInfo.graphql.swift in Sources */,
 				F77E4BD229B9B27900B8B5CE /* Info.graphql.swift in Sources */,
+				F77E4BDC29BA390200B8B5CE /* Network.swift in Sources */,
 				F77E4BD029B9B27900B8B5CE /* Characters.graphql.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
