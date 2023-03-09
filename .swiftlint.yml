@@ -1,1 +1,4 @@
 disabled_rules:
+
+excluded:
+  - RickAndMortyAPI

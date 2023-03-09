@@ -1,0 +1,108 @@
+query getCharacters($page: Int, $name: String, $status: String, $gender: String) {
+  characters(page: $page, filter: {name: $name, status: $status, gender: $gender}) {
+    info {
+      ...pageInfo
+    }
+    results {
+      ...characterBasics
+    }
+  }
+}
+
+query getCharacter($characterId: ID!) {
+  character(id: $characterId) {
+    ...characterBasics
+      created
+      episode {
+        ...episodeBasics
+      }
+      origin {
+        ...locationBasics
+      }
+      location {
+        ...locationBasics
+        residents {
+          image
+        }
+      }
+  }
+}
+
+query getLocations($page: Int, $name: String, $type: String) {
+  locations(page: $page, filter: {name: $name, type: $type}) {
+    info {
+      ...pageInfo
+    }
+    results {
+      ...locationBasics
+      residents {
+        image
+      }
+    }
+  }
+}
+
+query getLocation($locationId: ID!) {
+  location(id: $locationId) {
+    ...locationBasics
+      created
+      residents {
+        ...characterBasics
+      }
+  }
+}
+
+query getEpisodes($page: Int, $name: String, $episode: String) {
+  episodes(page: $page, filter: {name: $name, episode: $episode}) {
+    info {
+      ...pageInfo
+    }
+    results {
+      ...episodeBasics
+    }
+  }
+}
+
+query getEpisode($episodeId: ID!) {
+  episode(id: $episodeId) {
+    ...episodeBasics
+      created
+      characters {
+        ...characterBasics
+      }
+  }
+}
+
+fragment pageInfo on Info{
+  count
+  pages
+  prev
+  next
+}
+
+fragment characterBasics on Character {
+  id
+  name
+  image
+  gender
+  status
+  species
+  type
+}
+
+fragment locationBasics on Location {
+  id
+  dimension
+  name
+  type
+}
+
+fragment episodeBasics on Episode {
+  air_date
+  episode
+  id
+  name
+}
+
+
+
