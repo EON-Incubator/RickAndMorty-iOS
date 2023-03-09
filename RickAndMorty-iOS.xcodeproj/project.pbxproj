@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5447EE1A29BA36DC00D2D05A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5447EE1929BA36DC00D2D05A /* SnapKit */; };
 		5447EE1D29BA591800D2D05A /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 5447EE1C29BA591800D2D05A /* SDWebImage */; };
+		5447EE1F29BA5A7900D2D05A /* CharactersGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5447EE1E29BA5A7900D2D05A /* CharactersGridCell.swift */; };
 		F77E4B7C29B906D400B8B5CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B7B29B906D400B8B5CE /* AppDelegate.swift */; };
 		F77E4B7E29B906D400B8B5CE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B7D29B906D400B8B5CE /* SceneDelegate.swift */; };
 		F77E4B8529B906D600B8B5CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F77E4B8429B906D600B8B5CE /* Assets.xcassets */; };
@@ -58,6 +59,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5447EE1E29BA5A7900D2D05A /* CharactersGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersGridCell.swift; sourceTree = "<group>"; };
 		F77E4B7829B906D400B8B5CE /* RickAndMorty-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RickAndMorty-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F77E4B7B29B906D400B8B5CE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F77E4B7D29B906D400B8B5CE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			children = (
 				F77E4B9129B9090900B8B5CE /* CharactersViewController.swift */,
 				F77E4B8F29B908E700B8B5CE /* CharactersGridView.swift */,
+				5447EE1E29BA5A7900D2D05A /* CharactersGridCell.swift */,
 			);
 			path = Characters;
 			sourceTree = "<group>";
@@ -432,6 +435,7 @@
 				F77E4BD129B9B27900B8B5CE /* Character.graphql.swift in Sources */,
 				F77E4BCA29B9B27900B8B5CE /* GetCharactersQuery.graphql.swift in Sources */,
 				F77E4BCC29B9B27900B8B5CE /* GetEpisodesQuery.graphql.swift in Sources */,
+				5447EE1F29BA5A7900D2D05A /* CharactersGridCell.swift in Sources */,
 				F77E4BCF29B9B27900B8B5CE /* GetCharacterQuery.graphql.swift in Sources */,
 				F77E4BD429B9B27900B8B5CE /* Query.graphql.swift in Sources */,
 				F77E4B7E29B906D400B8B5CE /* SceneDelegate.swift in Sources */,
