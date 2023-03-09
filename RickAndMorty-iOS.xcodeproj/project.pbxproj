@@ -41,6 +41,9 @@
 		F77E4BD929B9B27900B8B5CE /* SchemaMetadata.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4BC429B9B27900B8B5CE /* SchemaMetadata.graphql.swift */; };
 		F77E4BDA29B9B27900B8B5CE /* RickAndMortyAPI.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4BC529B9B27900B8B5CE /* RickAndMortyAPI.graphql.swift */; };
 		F77E4BDC29BA390200B8B5CE /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4BDB29BA390200B8B5CE /* Network.swift */; };
+		F77E4BFC29BA4A2100B8B5CE /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4BFB29BA4A2100B8B5CE /* DemoViewController.swift */; };
+		F77E4BFF29BA4A3700B8B5CE /* DemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4BFE29BA4A3700B8B5CE /* DemoView.swift */; };
+		F77E4C0129BA4A6100B8B5CE /* DemoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4C0029BA4A6100B8B5CE /* DemoViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +82,9 @@
 		F77E4BC429B9B27900B8B5CE /* SchemaMetadata.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaMetadata.graphql.swift; sourceTree = "<group>"; };
 		F77E4BC529B9B27900B8B5CE /* RickAndMortyAPI.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RickAndMortyAPI.graphql.swift; sourceTree = "<group>"; };
 		F77E4BDB29BA390200B8B5CE /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		F77E4BFB29BA4A2100B8B5CE /* DemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
+		F77E4BFE29BA4A3700B8B5CE /* DemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoView.swift; sourceTree = "<group>"; };
+		F77E4C0029BA4A6100B8B5CE /* DemoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				F77E4B9529B934D200B8B5CE /* Characters */,
+				F77E4BFD29BA4A2900B8B5CE /* Demo */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -246,6 +253,16 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
+		F77E4BFD29BA4A2900B8B5CE /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				F77E4BFE29BA4A3700B8B5CE /* DemoView.swift */,
+				F77E4BFB29BA4A2100B8B5CE /* DemoViewController.swift */,
+				F77E4C0029BA4A6100B8B5CE /* DemoViewModel.swift */,
+			);
+			path = Demo;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -349,6 +366,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F77E4B9029B908E700B8B5CE /* CharactersGridView.swift in Sources */,
+				F77E4BFF29BA4A3700B8B5CE /* DemoView.swift in Sources */,
 				F77E4BC629B9B27900B8B5CE /* CharacterBasics.graphql.swift in Sources */,
 				F77E4BD629B9B27900B8B5CE /* Episodes.graphql.swift in Sources */,
 				F77E4BDA29B9B27900B8B5CE /* RickAndMortyAPI.graphql.swift in Sources */,
@@ -357,6 +375,7 @@
 				F77E4BCB29B9B27900B8B5CE /* GetEpisodeQuery.graphql.swift in Sources */,
 				F77E4B9A29B9362300B8B5CE /* Coordinator.swift in Sources */,
 				F77E4BD529B9B27900B8B5CE /* Episode.graphql.swift in Sources */,
+				F77E4C0129BA4A6100B8B5CE /* DemoViewModel.swift in Sources */,
 				F77E4B9229B9090900B8B5CE /* CharactersViewController.swift in Sources */,
 				F77E4BD329B9B27900B8B5CE /* Location.graphql.swift in Sources */,
 				F77E4BD829B9B27900B8B5CE /* SchemaConfiguration.swift in Sources */,
@@ -375,6 +394,7 @@
 				F77E4BC729B9B27900B8B5CE /* PageInfo.graphql.swift in Sources */,
 				F77E4BD229B9B27900B8B5CE /* Info.graphql.swift in Sources */,
 				F77E4BDC29BA390200B8B5CE /* Network.swift in Sources */,
+				F77E4BFC29BA4A2100B8B5CE /* DemoViewController.swift in Sources */,
 				F77E4BD029B9B27900B8B5CE /* Characters.graphql.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
