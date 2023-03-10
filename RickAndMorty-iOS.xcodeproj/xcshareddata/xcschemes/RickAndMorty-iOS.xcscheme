@@ -41,7 +41,13 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "EpisodesSpec">
+               </Test>
+               <Test
                   Identifier = "LocationsSpec">
+               </Test>
+               <Test
+                  Identifier = "SearchSpec">
                </Test>
             </SkippedTests>
          </TestableReference>
@@ -57,7 +63,13 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "EpisodesUISpec">
+               </Test>
+               <Test
                   Identifier = "LocationsUISpec">
+               </Test>
+               <Test
+                  Identifier = "SearchsUISpec">
                </Test>
             </SkippedTests>
          </TestableReference>

@@ -1,6 +1,6 @@
 //
-//  LocationsUISpec.swift
-//  RickAndMorty-iOSUITests
+//  EpisodesUISpec.swift
+//  RickAndMorty-iOSTests
 //
 //  Created by Calvin Pak on 2023-03-10.
 //
@@ -9,7 +9,7 @@ import XCTest
 import Quick
 import Nimble
 
-final class LocationsUISpec: QuickSpec {
+final class EpisodesUISpec: QuickSpec {
 
     override func spec() {
 
@@ -19,21 +19,21 @@ final class LocationsUISpec: QuickSpec {
 
             app.launch()
 
-            context("when user tap the Location button on Tab Bar") {
+            context("when user tap the Episode button on Tab Bar") {
 
                 beforeEach {
                     DispatchQueue.main.async {
-                        app.tabBars.buttons["Locations"].tap()
+                        app.tabBars.buttons["Episode"].tap()
                     }
                 }
 
-                it("should display a list of location with at least 1 cell") {
+                it("should display a list of episodes with at least 1 cell") {
                     let collectionView = app.collectionViews.element
                     await expect(collectionView.cells.count).toEventually(beGreaterThanOrEqualTo(1))
                 }
             }
 
-            context("when user tap the first location cell") {
+            context("when user tap the first episode cell") {
 
                 beforeEach {
                     DispatchQueue.main.async {
@@ -41,9 +41,9 @@ final class LocationsUISpec: QuickSpec {
                     }
                 }
 
-                it("should show the location details in next screen") {
+                it("should show the episode details in next screen") {
                     let collectionView = app.collectionViews.element
-                    await expect(collectionView.identifier).toEventually(equal("LocationDetailsCollectionView"))
+                    await expect(collectionView.identifier).toEventually(equal("EpisodeDetailsCollectionView"))
                 }
             }
         }
