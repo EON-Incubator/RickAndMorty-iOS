@@ -58,6 +58,8 @@
 		F7DB570729BBBC62000FAB01 /* DemoUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB570629BBBC62000FAB01 /* DemoUISpec.swift */; };
 		F7DB570929BBBCA1000FAB01 /* Quick in Frameworks */ = {isa = PBXBuildFile; productRef = F7DB570829BBBCA1000FAB01 /* Quick */; };
 		F7DB570B29BBBCA1000FAB01 /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = F7DB570A29BBBCA1000FAB01 /* Nimble */; };
+		F7DB570F29BBCDE3000FAB01 /* LocationsUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB570D29BBC3F6000FAB01 /* LocationsUISpec.swift */; };
+		F7DB571029BBCDF2000FAB01 /* LocationsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB570E29BBC4BE000FAB01 /* LocationsSpec.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -172,7 +174,6 @@
 		54A2EC3929BB7D31006E880E /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				F7DB56F229BBBB81000FAB01 /* Locations */,
 				54A2EC3A29BB7D44006E880E /* Characters */,
 			);
 			path = Views;
@@ -350,6 +351,7 @@
 		F77E4BE929BA3BA000B8B5CE /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				F7DB56F229BBBB81000FAB01 /* Locations */,
 				54A2EC3929BB7D31006E880E /* Views */,
 				F7DB570429BBBC24000FAB01 /* DemoSpec.swift */,
 				F77E4BF729BA3C3300B8B5CE /* CharactersSpec.swift */,
@@ -609,6 +611,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7DB571029BBCDF2000FAB01 /* LocationsSpec.swift in Sources */,
 				54A2EC3C29BB7D7C006E880E /* CharactersGridCellSpec.swift in Sources */,
 				F77E4BF829BA3C3300B8B5CE /* CharactersSpec.swift in Sources */,
 				F7DB570529BBBC25000FAB01 /* DemoSpec.swift in Sources */,
@@ -620,6 +623,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7DB570F29BBCDE3000FAB01 /* LocationsUISpec.swift in Sources */,
 				F7DB570729BBBC62000FAB01 /* DemoUISpec.swift in Sources */,
 				F7DB56FC29BBBBF6000FAB01 /* DemoUITests.swift in Sources */,
 			);
