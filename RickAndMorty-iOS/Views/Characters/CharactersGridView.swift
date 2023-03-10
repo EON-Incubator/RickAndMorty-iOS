@@ -26,13 +26,22 @@ class CharactersGridView: UIView {
     }
 
     lazy var collectionView: UICollectionView = {
-        var flowLayout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: flowLayout)
+        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
         collectionView.register(CharactersGridCell.self, forCellWithReuseIdentifier: CharactersGridCell.identifier)
-        collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
     }()
+
+    private func createLayout() -> UICollectionViewLayout {
+        let screenSize = UIScreen.main.bounds
+        let screenWidth = screenSize.width
+        let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.itemSize = CGSize(width: screenWidth/3 + 20, height: screenWidth/3)
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 10
+        return layout
+    }
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
@@ -50,12 +59,5 @@ extension CharactersGridView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharactersGridCell.identifier, for: indexPath)
         return cell
-    }
-}
-
-// MARK: - UICollectionViewDelegateFlowLayout
-extension CharactersGridView: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width/2 - 10, height: 150)
     }
 }
