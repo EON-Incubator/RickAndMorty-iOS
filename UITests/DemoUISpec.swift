@@ -1,8 +1,9 @@
 //
 //  DemoUISpec.swift
-//  DemoUISpec
+//  RickAndMorty-iOSUITests
 //
 //  Created by Calvin Pak on 2023-03-10.
+//  This is an demonstration of UITest using Quick + Nimble.
 //
 import XCTest
 import Quick
@@ -14,7 +15,7 @@ final class DemoUISpec: QuickSpec {
 
         let app = XCUIApplication()
 
-        describe("Given app launch") {
+        describe("Demo") {
 
             app.launch()
 
@@ -34,10 +35,16 @@ final class DemoUISpec: QuickSpec {
                     }
                 }
 
+                it("should display the MainTextView") {
+                    let textView = app.textViews.element
+                    await expect(textView.identifier).toEventually(equal("MainTextView"))
+                }
+
                 it("should display Rick in the textview") {
                     let textView = app.textViews.element
                     await expect(textView.value as? String).toEventually(contain("Rick"))
                 }
+
             }
         }
     }

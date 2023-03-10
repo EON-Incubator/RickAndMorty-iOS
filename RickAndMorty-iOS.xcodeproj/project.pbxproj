@@ -125,6 +125,8 @@
 		F7DB56FB29BBBBF6000FAB01 /* DemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoUITests.swift; sourceTree = "<group>"; };
 		F7DB570429BBBC24000FAB01 /* DemoSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoSpec.swift; sourceTree = "<group>"; };
 		F7DB570629BBBC62000FAB01 /* DemoUISpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoUISpec.swift; sourceTree = "<group>"; };
+		F7DB570D29BBC3F6000FAB01 /* LocationsUISpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsUISpec.swift; sourceTree = "<group>"; };
+		F7DB570E29BBC4BE000FAB01 /* LocationsSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsSpec.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -368,6 +370,7 @@
 		F7DB56F229BBBB81000FAB01 /* Locations */ = {
 			isa = PBXGroup;
 			children = (
+				F7DB570E29BBC4BE000FAB01 /* LocationsSpec.swift */,
 			);
 			path = Locations;
 			sourceTree = "<group>";
@@ -375,10 +378,19 @@
 		F7DB56FA29BBBBF6000FAB01 /* UITests */ = {
 			isa = PBXGroup;
 			children = (
+				F7DB570C29BBC3EA000FAB01 /* Locations */,
 				F7DB570629BBBC62000FAB01 /* DemoUISpec.swift */,
 				F7DB56FB29BBBBF6000FAB01 /* DemoUITests.swift */,
 			);
 			path = UITests;
+			sourceTree = "<group>";
+		};
+		F7DB570C29BBC3EA000FAB01 /* Locations */ = {
+			isa = PBXGroup;
+			children = (
+				F7DB570D29BBC3F6000FAB01 /* LocationsUISpec.swift */,
+			);
+			path = Locations;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
