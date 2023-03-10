@@ -19,8 +19,9 @@ class CharactersViewController: UIViewController {
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension CharactersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.item)
+        coordinator?.goCharacterDetails(id: indexPath.row, navController: coordinator!.characterNavController)
     }
 }
