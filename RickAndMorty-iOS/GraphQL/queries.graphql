@@ -73,6 +73,39 @@ query getEpisode($episodeId: ID!) {
   }
 }
 
+query searchFor($keyword: String) {
+  characters(filter: {name: $keyword}) {
+    info {
+      ...pageInfo
+    }
+    results {
+      ...characterBasics
+    }
+  }
+  locationsWithName: locations(filter: {name: $keyword}) {
+    info {
+      ...pageInfo
+    }
+    results {
+      ...locationBasics
+      residents {
+        image
+      }
+    }
+  }
+  locationsWithType: locations(filter: {type: $keyword}) {
+    info {
+      ...pageInfo
+    }
+    results {
+      ...locationBasics
+      residents {
+        image
+      }
+    }
+  }
+}
+
 fragment pageInfo on Info{
   count
   pages
