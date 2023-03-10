@@ -62,7 +62,7 @@
 		F7DB571029BBCDF2000FAB01 /* LocationsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB570E29BBC4BE000FAB01 /* LocationsSpec.swift */; };
 		F7DB571229BBDEFA000FAB01 /* EpisodesSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB571129BBDEFA000FAB01 /* EpisodesSpec.swift */; };
 		F7DB571429BBDF1D000FAB01 /* SearchSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB571329BBDF1D000FAB01 /* SearchSpec.swift */; };
-		F7DB571A29BBDFF0000FAB01 /* SearchsUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB571929BBDFF0000FAB01 /* SearchsUISpec.swift */; };
+		F7DB571A29BBDFF0000FAB01 /* SearchUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB571929BBDFF0000FAB01 /* SearchUISpec.swift */; };
 		F7DB571D29BBE024000FAB01 /* EpisodesUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB571729BBDFD2000FAB01 /* EpisodesUISpec.swift */; };
 /* End PBXBuildFile section */
 
@@ -136,7 +136,7 @@
 		F7DB571129BBDEFA000FAB01 /* EpisodesSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesSpec.swift; sourceTree = "<group>"; };
 		F7DB571329BBDF1D000FAB01 /* SearchSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSpec.swift; sourceTree = "<group>"; };
 		F7DB571729BBDFD2000FAB01 /* EpisodesUISpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesUISpec.swift; sourceTree = "<group>"; };
-		F7DB571929BBDFF0000FAB01 /* SearchsUISpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchsUISpec.swift; sourceTree = "<group>"; };
+		F7DB571929BBDFF0000FAB01 /* SearchUISpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUISpec.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -392,7 +392,7 @@
 			children = (
 				F7DB570C29BBC3EA000FAB01 /* Locations */,
 				F7DB571B29BBDFFF000FAB01 /* Episodes */,
-				F7DB571C29BBE009000FAB01 /* Searchs */,
+				F7DB571C29BBE009000FAB01 /* Search */,
 				F7DB570629BBBC62000FAB01 /* DemoUISpec.swift */,
 				F7DB56FB29BBBBF6000FAB01 /* DemoUITests.swift */,
 			);
@@ -431,12 +431,12 @@
 			path = Episodes;
 			sourceTree = "<group>";
 		};
-		F7DB571C29BBE009000FAB01 /* Searchs */ = {
+		F7DB571C29BBE009000FAB01 /* Search */ = {
 			isa = PBXGroup;
 			children = (
-				F7DB571929BBDFF0000FAB01 /* SearchsUISpec.swift */,
+				F7DB571929BBDFF0000FAB01 /* SearchUISpec.swift */,
 			);
-			path = Searchs;
+			path = Search;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -669,7 +669,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7DB571A29BBDFF0000FAB01 /* SearchsUISpec.swift in Sources */,
+				F7DB571A29BBDFF0000FAB01 /* SearchUISpec.swift in Sources */,
 				F7DB570F29BBCDE3000FAB01 /* LocationsUISpec.swift in Sources */,
 				F7DB571D29BBE024000FAB01 /* EpisodesUISpec.swift in Sources */,
 				F7DB570729BBBC62000FAB01 /* DemoUISpec.swift in Sources */,

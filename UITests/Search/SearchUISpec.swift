@@ -1,5 +1,5 @@
 //
-//  SearchsUISpec.swift
+//  SearchUISpec.swift
 //  RickAndMorty-iOSUITests
 //
 //  Created by Calvin Pak on 2023-03-10.
@@ -9,16 +9,14 @@ import XCTest
 import Quick
 import Nimble
 
-final class SearchsUISpec: QuickSpec {
+final class SearchUISpec: QuickSpec {
 
     override func spec() {
 
         let app = XCUIApplication()
 
         describe("Given app launch") {
-
             app.launch()
-
             context("when user tap the Search button on Tab Bar") {
 
                 beforeEach {
@@ -49,8 +47,10 @@ final class SearchsUISpec: QuickSpec {
                 }
 
                 afterEach {
-                    let searchTextFields = app.textFields.matching(identifier: "SearchTextField")
-                    searchTextFields.element.buttons["Clear text"].tap()
+                    DispatchQueue.main.async {
+                        let searchTextFields = app.textFields.matching(identifier: "SearchTextField")
+                        searchTextFields.element.buttons["Clear text"].tap()
+                    }
                 }
             }
 
@@ -66,12 +66,14 @@ final class SearchsUISpec: QuickSpec {
 
                 it("should show at no result in the search result list") {
                     let collectionView = app.collectionViews.element
-                    await expect(collectionView.cells.count).toEventually(be(0))
+                    await expect(collectionView.cells.count).toEventually(equal(0))
                 }
 
                 afterEach {
-                    let searchTextFields = app.textFields.matching(identifier: "SearchTextField")
-                    searchTextFields.element.buttons["Clear text"].tap()
+                    DispatchQueue.main.async {
+                        let searchTextFields = app.textFields.matching(identifier: "SearchTextField")
+                        searchTextFields.element.buttons["Clear text"].tap()
+                    }
                 }
             }
         }
