@@ -17,6 +17,7 @@ class MainCoordinator: Coordinator {
     let locationNavController = UINavigationController()
     let episodeNavController = UINavigationController()
     let searchNavController = UINavigationController()
+    let demoNavController = UINavigationController()
 
     init(window: UIWindow) {
         self.window = window
@@ -43,11 +44,20 @@ class MainCoordinator: Coordinator {
         searchNavController.tabBarItem.image = UIImage(systemName: "magnifyingglass")
         searchNavController.tabBarItem.title = "Search"
 
+        tabBarController.addChild(demoNavController)
+        demoNavController.tabBarItem.title = "Demo"
+
         // Add CharactersViewController to the character navigation controller.
         let viewController = CharactersViewController() // To try the DemoView, replace it with DemoViewController()
         viewController.coordinator = self
         characterNavController.navigationBar.backgroundColor = .systemBackground
         characterNavController.pushViewController(viewController, animated: false)
+
+        // Add CharactersViewController to the character navigation controller.
+        let demoViewController = DemoViewController()
+        viewController.coordinator = self
+        demoNavController.navigationBar.backgroundColor = .systemBackground
+        demoNavController.pushViewController(demoViewController, animated: false)
 
         // Set tab bar controller as the root view controller of the UIWindow.
         window.rootViewController = tabBarController

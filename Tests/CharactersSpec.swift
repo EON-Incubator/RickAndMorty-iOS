@@ -5,6 +5,7 @@
 //  Created by Calvin Pak on 2023-03-09.
 //
 
+import XCTest
 import Quick
 import Nimble
 
@@ -22,6 +23,7 @@ final class CharactersSpec: QuickSpec {
 
                 it("Should pass the test") {
                     expect(true).to(beTruthy())
+
                 }
 
             }
