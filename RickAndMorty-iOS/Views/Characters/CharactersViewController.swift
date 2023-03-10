@@ -10,13 +10,17 @@ import UIKit
 class CharactersViewController: UIViewController {
 
     weak var coordinator: MainCoordinator?
+    var charactersGridView = CharactersGridView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view = charactersGridView
+        charactersGridView.collectionView.delegate = self
     }
+}
 
-    override func loadView() {
-        view = CharactersGridView()
+extension CharactersViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(indexPath.item)
     }
-
 }
