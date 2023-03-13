@@ -9,11 +9,11 @@ import UIKit
 import SnapKit
 
 enum Section: Int, CaseIterable {
-    case single
+    case appearance
     case info
     var columnCount: Int {
         switch self {
-        case .single:
+        case .appearance:
             return 1
         case .info:
             return 3
@@ -52,6 +52,11 @@ class CharacterDetailsView: UIView {
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
         collectionView.register(CharacterDetailsViewAvatarCell.self,
                                 forCellWithReuseIdentifier: CharacterDetailsViewAvatarCell.identifier)
+        collectionView.register(InfoCell.self,
+                                forCellWithReuseIdentifier: InfoCell.identifier)
+        collectionView.register(HeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: "HeaderView")
 
         return collectionView
     }()
@@ -77,6 +82,11 @@ class CharacterDetailsView: UIView {
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: columns)
 
             let section = NSCollectionLayoutSection(group: group)
+
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
+            let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+            section.boundarySupplementaryItems = [header]
+
             return section
         }
         return layout
@@ -88,14 +98,24 @@ class CharacterDetailsView: UIView {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterDetailsViewAvatarCell.identifier, for: indexPath)
                 return cell
             } else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterDetailsViewAvatarCell.identifier, for: indexPath)
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath)
                 return cell
             }
+
         })
+        // for custom header
+        dataSource.supplementaryViewProvider = { (_ collectionView, _ kind, indexPath) in
+            guard let headerView = self.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
+                fatalError()
+            }
+            headerView.textLabel.text = "\(Section.allCases[indexPath.section])".uppercased()
+            headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+            return headerView
+        }
 
         var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
-        snapshot.appendSections([.single, .info])
-        snapshot.appendItems([1], toSection: .single)
+        snapshot.appendSections([.appearance, .info])
+        snapshot.appendItems([1], toSection: .appearance)
         snapshot.appendItems(Array(2...4), toSection: .info)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
