@@ -11,11 +11,14 @@ import SnapKit
 enum Section: Int, CaseIterable {
     case appearance
     case info
+    case location
     var columnCount: Int {
         switch self {
         case .appearance:
             return 1
         case .info:
+            return 3
+        case .location:
             return 3
         }
     }
@@ -60,7 +63,10 @@ class CharacterDetailsView: UIView {
 
         return collectionView
     }()
+}
 
+// MARK: - CollectionView Layout
+extension CharacterDetailsView {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, _) -> NSCollectionLayoutSection? in
 
@@ -91,7 +97,10 @@ class CharacterDetailsView: UIView {
         }
         return layout
     }
+}
 
+// MARK: - CollectionView DataSource
+extension CharacterDetailsView {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: collectionView, cellProvider: { (collectionView, indexPath, _ item) -> UICollectionViewCell? in
             if indexPath.section == 0 {
@@ -114,9 +123,10 @@ class CharacterDetailsView: UIView {
         }
 
         var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
-        snapshot.appendSections([.appearance, .info])
+        snapshot.appendSections([.appearance, .info, .location])
         snapshot.appendItems([1], toSection: .appearance)
         snapshot.appendItems(Array(2...4), toSection: .info)
+        snapshot.appendItems(Array(5...6), toSection: .location)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
