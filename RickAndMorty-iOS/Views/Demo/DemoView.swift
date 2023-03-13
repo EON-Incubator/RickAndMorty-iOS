@@ -24,6 +24,7 @@ class DemoView: UIView {
     private func setupViews() {
         self.backgroundColor = .systemBackground
 
+        textView.accessibilityIdentifier = "MainTextView"
         textView.backgroundColor = .systemGray6
         textView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(textView)

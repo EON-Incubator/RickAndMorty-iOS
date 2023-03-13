@@ -18,6 +18,19 @@ class MainCoordinator: Coordinator {
     let episodeNavController = UINavigationController()
     let searchNavController = UINavigationController()
 
+    // MARK: - Setup demo tab for experiment
+    let demoNavController = UINavigationController()
+
+    func setupDemo() {
+        tabBarController.addChild(demoNavController)
+        demoNavController.tabBarItem.title = "Demo"
+        let demoViewController = DemoViewController()
+        demoViewController.coordinator = self
+        demoNavController.navigationBar.backgroundColor = .systemBackground
+        demoNavController.pushViewController(demoViewController, animated: false)
+    }
+    // MARK: -
+
     init(window: UIWindow) {
         self.window = window
     }
@@ -48,6 +61,10 @@ class MainCoordinator: Coordinator {
         viewController.coordinator = self
         characterNavController.navigationBar.backgroundColor = .systemBackground
         characterNavController.pushViewController(viewController, animated: false)
+
+        // MARK: - Setup demo tab for experiment, remove this from production.
+        setupDemo()
+        // MARK: -
 
         // Set tab bar controller as the root view controller of the UIWindow.
         window.rootViewController = tabBarController
