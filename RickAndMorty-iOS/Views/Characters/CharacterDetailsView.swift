@@ -8,22 +8,6 @@
 import UIKit
 import SnapKit
 
-enum Section: Int, CaseIterable {
-    case appearance
-    case info
-    case location
-    var columnCount: Int {
-        switch self {
-        case .appearance:
-            return 1
-        case .info:
-            return 3
-        case .location:
-            return 2
-        }
-    }
-}
-
 class CharacterDetailsView: UIView {
 
     required init?(coder: NSCoder) {
