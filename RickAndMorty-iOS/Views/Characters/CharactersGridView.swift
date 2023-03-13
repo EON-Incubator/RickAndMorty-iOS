@@ -32,15 +32,20 @@ class CharactersGridView: UIView {
         return collectionView
     }()
 
-    private func createLayout() -> UICollectionViewLayout {
-        let screenSize = UIScreen.main.bounds
-        let screenWidth = screenSize.width
-        let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: screenWidth/3 + 20, height: screenWidth/3)
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 10
-        return layout
+    func createLayout() -> UICollectionViewCompositionalLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(160))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 2)
+
+        let spacing = CGFloat(10)
+        group.interItemSpacing = .fixed(spacing)
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = spacing
+
+        return UICollectionViewCompositionalLayout(section: section)
     }
 
     private func setupConstraints() {

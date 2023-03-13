@@ -72,7 +72,9 @@ class MainCoordinator: Coordinator {
     }
 
     func goCharacterDetails(id: Int, navController: UINavigationController) {
-
+        let viewController = CharacterDetailsViewController()
+        viewController.coordinator = self
+        navController.pushViewController(viewController, animated: true)
     }
 
     func goLocationDetails(id: Int, navController: UINavigationController) {
