@@ -8,11 +8,12 @@
 import UIKit
 
 class CharacterDetailsViewAvatarCell: UICollectionViewCell {
-    static let identifier = "CharacterDetailsCell"
+    static let identifier = "CharacterAvatarCell"
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
+        setupConstraints()
     }
 
     required init?(coder: NSCoder) {
@@ -20,6 +21,20 @@ class CharacterDetailsViewAvatarCell: UICollectionViewCell {
     }
 
     func setupViews() {
-        self.backgroundColor = .gray
+        self.addSubview(characterImage)
+    }
+
+    lazy var characterImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.sd_setImage(with: URL(string: "https://picsum.photos/200/300"))
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = self.bounds.height / 2
+        return imageView
+    }()
+
+    func setupConstraints() {
+        characterImage.snp.makeConstraints { make in
+            make.edges.equalTo(self)
+        }
     }
 }
