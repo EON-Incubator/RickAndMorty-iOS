@@ -11,18 +11,11 @@ class LocationRowCell: UICollectionViewCell {
 
     static let identifier = "LocationRowCell"
 
-    lazy var characterAvatarImageViews = [UIImageView]() // [UIImageView(), UIImageView(), UIImageView(), UIImageView()]
+    lazy var characterAvatarImageViews = [UIImageView]()
 
     lazy var characterAvatarsView: UIView = {
         let view = UIView()
         return view
-    }()
-
-    lazy var infoImage: UIImageView = {
-        let image = UIImageView()
-        image.image = UIImage(systemName: "person.circle")
-        image.contentMode = .scaleAspectFill
-        return image
     }()
 
     lazy var upperLabel: UILabel = {
@@ -75,8 +68,10 @@ class LocationRowCell: UICollectionViewCell {
 
         for index in 0...3 {
             let imageView = UIImageView(image: UIImage(systemName: "person.circle"))
+            imageView.tintColor = .systemGray3
             imageView.contentMode = .scaleAspectFill
             imageView.backgroundColor = .systemGray6
+            imageView.clipsToBounds = true
             imageView.layer.cornerRadius = imageView.frame.width / 2
             characterAvatarImageViews.append(imageView)
             characterAvatarsView.addSubview(characterAvatarImageViews[index])

@@ -10,7 +10,7 @@ import Combine
 
 class LocationsViewModel {
 
-    var locations = CurrentValueSubject<[RickAndMortyAPI.LocationBasics], Never>([])
+    var locations = CurrentValueSubject<[RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result], Never>([])
     var currentPage = 0 {
         didSet {
             fetchData(page: currentPage)
@@ -25,8 +25,7 @@ class LocationsViewModel {
                 type: nil)) { result in
                     switch result {
                     case .success(let response):
-                        self.locations.value = (response.data?.locations?.results?
-                            .compactMap { $0?.fragments.locationBasics })!
+                        self.locations.value = (response.data?.locations?.results?.compactMap { $0 })!
                     case .failure(let error):
                         print(error)
                     }
