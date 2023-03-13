@@ -24,7 +24,6 @@ class CharacterDetailsView: UIView {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
         collectionView.accessibilityIdentifier = "CharacterDetailsView"
-        configureDataSource()
     }
 
     private func setupConstraints() {
@@ -32,9 +31,6 @@ class CharacterDetailsView: UIView {
             make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 30))
         }
     }
-
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, Int>
-    private var dataSource: DataSource!
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
@@ -81,37 +77,5 @@ extension CharacterDetailsView {
             return section
         }
         return layout
-    }
-}
-
-// MARK: - CollectionView DataSource
-extension CharacterDetailsView {
-    private func configureDataSource() {
-        dataSource = DataSource(collectionView: collectionView, cellProvider: { (collectionView, indexPath, _ item) -> UICollectionViewCell? in
-            if indexPath.section == 0 {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterDetailsViewAvatarCell.identifier, for: indexPath)
-                return cell
-            } else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath)
-                return cell
-            }
-
-        })
-        // for custom header
-        dataSource.supplementaryViewProvider = { (_ collectionView, _ kind, indexPath) in
-            guard let headerView = self.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
-                fatalError()
-            }
-            headerView.textLabel.text = "\(Section.allCases[indexPath.section])".uppercased()
-            headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-            return headerView
-        }
-
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
-        snapshot.appendSections([.appearance, .info, .location])
-        snapshot.appendItems([1], toSection: .appearance)
-        snapshot.appendItems(Array(2...4), toSection: .info)
-        snapshot.appendItems(Array(5...6), toSection: .location)
-        dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
