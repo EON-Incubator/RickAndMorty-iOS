@@ -29,6 +29,7 @@ class LocationRowCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Location Name"
         label.font = .boldSystemFont(ofSize: 26)
+        label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         return label
     }()
@@ -37,6 +38,7 @@ class LocationRowCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Type"
         label.font = .systemFont(ofSize: 12)
+        label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.backgroundColor = .systemGray5
         label.layer.cornerRadius = 5
@@ -48,6 +50,7 @@ class LocationRowCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Dimension"
         label.font = .systemFont(ofSize: 12)
+        label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.backgroundColor = .systemBrown
         label.layer.cornerRadius = 5

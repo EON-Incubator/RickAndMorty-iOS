@@ -10,9 +10,6 @@ import SnapKit
 
 class LocationsView: UIView {
 
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, Int>
-    private var dataSource: DataSource!
-
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
         collectionView.register(LocationRowCell.self,
@@ -38,7 +35,6 @@ class LocationsView: UIView {
     private func setupViews() {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
-        configureDataSource()
     }
 
     private func setupConstraints() {
@@ -76,20 +72,5 @@ extension LocationsView {
             return section
         }
         return layout
-    }
-}
-
-// MARK: - CollectionView DataSource
-extension LocationsView {
-    private func configureDataSource() {
-        dataSource = DataSource(collectionView: collectionView, cellProvider: { (collectionView, indexPath, _ item) -> UICollectionViewCell? in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationRowCell.identifier, for: indexPath)
-            return cell
-        })
-
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
-        snapshot.appendSections([.appearance])
-        snapshot.appendItems([1, 2], toSection: .appearance)
-        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
