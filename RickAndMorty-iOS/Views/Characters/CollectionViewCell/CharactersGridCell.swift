@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import SDWebImage
 
 class CharactersGridCell: UICollectionViewCell {
 
@@ -15,7 +14,6 @@ class CharactersGridCell: UICollectionViewCell {
 
     lazy var characterNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Name"
         label.textAlignment = .center
         label.backgroundColor = .gray
         label.layer.opacity = 0.9
@@ -24,7 +22,6 @@ class CharactersGridCell: UICollectionViewCell {
 
     lazy var characterImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.sd_setImage(with: URL(string: "https://picsum.photos/200/300"))
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = self.layer.cornerRadius
         return imageView

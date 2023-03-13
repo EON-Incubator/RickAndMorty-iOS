@@ -28,7 +28,6 @@ class CharactersGridView: UIView {
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
         collectionView.register(CharactersGridCell.self, forCellWithReuseIdentifier: CharactersGridCell.identifier)
-        collectionView.dataSource = self
         return collectionView
     }()
 
@@ -52,17 +51,5 @@ class CharactersGridView: UIView {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 30))
         }
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-extension CharactersGridView: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 16
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharactersGridCell.identifier, for: indexPath)
-        return cell
     }
 }
