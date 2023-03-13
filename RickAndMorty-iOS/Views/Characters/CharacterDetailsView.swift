@@ -19,7 +19,7 @@ enum Section: Int, CaseIterable {
         case .info:
             return 3
         case .location:
-            return 3
+            return 2
         }
     }
 }
@@ -81,11 +81,11 @@ extension CharacterDetailsView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.absolute(310) : NSCollectionLayoutDimension.fractionalWidth(0.50)
+            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.absolute(310) : NSCollectionLayoutDimension.estimated(60)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                    heightDimension: groupHeight)
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: columns)
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
 
             let section = NSCollectionLayoutSection(group: group)
 
