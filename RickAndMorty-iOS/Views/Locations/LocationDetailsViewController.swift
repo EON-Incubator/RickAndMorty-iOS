@@ -1,17 +1,17 @@
 //
-//  LocationsViewController.swift
+//  LocationDetailsViewController.swift
 //  RickAndMorty-iOS
 //
-//  Created by Calvin Pak on 2023-03-13.
+//  Created by Calvin Pak on 2023-03-14.
 //
 
 import UIKit
 import Combine
 
-class LocationsViewController: UIViewController {
+class LocationDetailsViewController: UIViewController {
 
-    let locationsView = LocationsView()
-    let viewModel = LocationsViewModel()
+    let locationDetailsView = LocationDetailsView()
+    let viewModel = LocationDetailsViewModel()
     weak var coordinator: MainCoordinator?
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result>
@@ -19,12 +19,12 @@ class LocationsViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
 
     override func loadView() {
-        view = locationsView
+        view = locationDetailsView
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Locations"
-        locationsView.collectionView.delegate = self
-        locationsView.collectionView.refreshControl = UIRefreshControl()
-        locationsView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+        locationDetailsView.collectionView.delegate = self
+        locationDetailsView.collectionView.refreshControl = UIRefreshControl()
+        locationDetailsView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
     }
 
     override func viewDidLoad() {
@@ -36,18 +36,18 @@ class LocationsViewController: UIViewController {
     }
 
     func subscribeToViewModel() {
-        viewModel.locations.sink(receiveValue: { locations in
-            var snapshot = NSDiffableDataSourceSnapshot<Section, RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result>()
-            snapshot.appendSections([.appearance])
-            snapshot.appendItems(locations, toSection: .appearance)
-            self.dataSource.apply(snapshot, animatingDifferences: true)
-
-            // Dismiss refresh control.
-            DispatchQueue.main.async {
-                self.locationsView.collectionView.refreshControl?.endRefreshing()
-            }
-
-        }).store(in: &cancellables)
+//        viewModel.location.sink(receiveValue: { location in
+//            var snapshot = NSDiffableDataSourceSnapshot<Section, RickAndMortyAPI.GetLocationQuery.Data.Location>()
+//            snapshot.appendSections([.appearance])
+//            snapshot.appendItems(location, toSection: .appearance)
+//            self.dataSource.apply(snapshot, animatingDifferences: true)
+//
+//            // Dismiss refresh control.
+//            DispatchQueue.main.async {
+//                self.locationDetailsView.collectionView.refreshControl?.endRefreshing()
+//            }
+//
+//        }).store(in: &cancellables)
     }
 
     @objc func onRefresh() {
@@ -61,9 +61,9 @@ class LocationsViewController: UIViewController {
 }
 
 // MARK: - CollectionView DataSource
-extension LocationsViewController {
+extension LocationDetailsViewController {
     private func configureDataSource() {
-        dataSource = DataSource(collectionView: locationsView.collectionView, cellProvider: { (collectionView, indexPath, location) -> UICollectionViewCell? in
+        dataSource = DataSource(collectionView: locationDetailsView.collectionView, cellProvider: { (collectionView, indexPath, location) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationRowCell.identifier, for: indexPath) as? LocationRowCell
             cell?.upperLabel.text = location.name
             cell?.lowerLeftLabel.text = location.type
@@ -81,7 +81,7 @@ extension LocationsViewController {
 }
 
 // MARK: - CollectionView Delegate
-extension LocationsViewController: UICollectionViewDelegate {
+extension LocationDetailsViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
@@ -91,6 +91,5 @@ extension LocationsViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        coordinator?.goLocationDetails(id: viewModel.locations.value[indexPath.row].id!, navController: self.navigationController!)
     }
 }

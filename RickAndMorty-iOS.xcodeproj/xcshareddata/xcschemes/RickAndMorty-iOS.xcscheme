@@ -44,9 +44,6 @@
                   Identifier = "EpisodesSpec">
                </Test>
                <Test
-                  Identifier = "LocationsSpec">
-               </Test>
-               <Test
                   Identifier = "SearchSpec">
                </Test>
             </SkippedTests>
@@ -64,9 +61,6 @@
             <SkippedTests>
                <Test
                   Identifier = "EpisodesUISpec">
-               </Test>
-               <Test
-                  Identifier = "LocationsUISpec">
                </Test>
                <Test
                   Identifier = "SearchsUISpec">

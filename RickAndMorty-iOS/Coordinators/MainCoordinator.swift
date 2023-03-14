@@ -83,8 +83,10 @@ class MainCoordinator: Coordinator {
         navController.pushViewController(viewController, animated: true)
     }
 
-    func goLocationDetails(id: Int, navController: UINavigationController) {
-
+    func goLocationDetails(id: String, navController: UINavigationController) {
+        let locationDetailsViewController = LocationDetailsViewController()
+        locationDetailsViewController.coordinator = self
+        locationNavController.pushViewController(locationDetailsViewController, animated: true)
     }
 
     func goEpisodeDetails(id: Int, navController: UINavigationController) {
