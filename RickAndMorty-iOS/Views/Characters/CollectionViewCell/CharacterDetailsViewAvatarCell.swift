@@ -26,9 +26,10 @@ class CharacterDetailsViewAvatarCell: UICollectionViewCell {
 
     lazy var characterImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.sd_setImage(with: URL(string: "https://picsum.photos/200/300"))
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = self.bounds.height / 2
+        imageView.layer.borderWidth = 1
+        imageView.layer.borderColor = UIColor.black.cgColor
         return imageView
     }()
 

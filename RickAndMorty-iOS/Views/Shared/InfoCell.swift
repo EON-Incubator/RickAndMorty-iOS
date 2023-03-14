@@ -35,6 +35,9 @@ class InfoCell: UICollectionViewCell {
     lazy var rightLabel: UILabel = {
         let label = UILabel()
         label.text = "Male"
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        label.numberOfLines = 0
         return label
     }()
 
@@ -55,13 +58,13 @@ class InfoCell: UICollectionViewCell {
             make.right.equalTo(self).offset(-20)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.width.equalTo(50)
+            make.width.equalTo(80)
         }
         infoImage.snp.makeConstraints { make in
-            make.left.equalTo(self).offset(5)
-            make.width.equalTo(40)
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.left.equalTo(self).offset(10)
+            make.width.equalTo(30)
+            make.height.equalTo(30)
+            make.top.equalTo(self).offset(10)
         }
     }
 
