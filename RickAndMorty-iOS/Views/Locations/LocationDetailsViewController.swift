@@ -10,13 +10,28 @@ import Combine
 
 class LocationDetailsViewController: UIViewController {
 
+    enum LocationDetailsSection: Int, CaseIterable {
+        case info
+        case residents
+    }
+
+    weak var coordinator: MainCoordinator?
     let locationDetailsView = LocationDetailsView()
     let viewModel = LocationDetailsViewModel()
-    weak var coordinator: MainCoordinator?
+    var locationId: String
 
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result>
+    typealias DataSource = UICollectionViewDiffableDataSource<LocationDetailsSection, LocationDetails>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
+
+    init(locationId: String) {
+        self.locationId = locationId
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func loadView() {
         view = locationDetailsView
@@ -32,30 +47,29 @@ class LocationDetailsViewController: UIViewController {
 
         configureDataSource()
         subscribeToViewModel()
-        viewModel.currentPage = 1
+        viewModel.locationId = locationId
     }
 
     func subscribeToViewModel() {
-//        viewModel.location.sink(receiveValue: { location in
-//            var snapshot = NSDiffableDataSourceSnapshot<Section, RickAndMortyAPI.GetLocationQuery.Data.Location>()
-//            snapshot.appendSections([.appearance])
-//            snapshot.appendItems(location, toSection: .appearance)
-//            self.dataSource.apply(snapshot, animatingDifferences: true)
-//
-//            // Dismiss refresh control.
-//            DispatchQueue.main.async {
-//                self.locationDetailsView.collectionView.refreshControl?.endRefreshing()
-//            }
-//
-//        }).store(in: &cancellables)
+        viewModel.location.sink(receiveValue: { location in
+
+            self.title = location.name
+
+            var snapshot = NSDiffableDataSourceSnapshot<LocationDetailsSection, LocationDetails>()
+            snapshot.appendSections([.info])
+            snapshot.appendItems([LocationDetails(location), LocationDetails(location)], toSection: .info)
+            self.dataSource.apply(snapshot, animatingDifferences: true)
+
+            // Dismiss refresh control.
+            DispatchQueue.main.async {
+                self.locationDetailsView.collectionView.refreshControl?.endRefreshing()
+            }
+
+        }).store(in: &cancellables)
     }
 
     @objc func onRefresh() {
-        viewModel.currentPage = 1
-    }
-
-    func loadMore() {
-        viewModel.currentPage += 1
+        viewModel.locationId = self.locationId
     }
 
 }
@@ -64,19 +78,34 @@ class LocationDetailsViewController: UIViewController {
 extension LocationDetailsViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: locationDetailsView.collectionView, cellProvider: { (collectionView, indexPath, location) -> UICollectionViewCell? in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationRowCell.identifier, for: indexPath) as? LocationRowCell
-            cell?.upperLabel.text = location.name
-            cell?.lowerLeftLabel.text = location.type
-            cell?.lowerRightLabel.text = location.dimension
-            for index in 0...3 {
-                let isIndexValid = location.residents.indices.contains(index)
-                if isIndexValid {
-                    let urlString = location.residents[index]?.image ?? ""
-                    cell?.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
-                }
+
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+
+            switch indexPath.item {
+            case 0:
+                cell?.leftLabel.text = "Type"
+                cell?.rightLabel.text = location.item.name
+                cell?.infoImage.image = UIImage(named: "gender")
+            case 1:
+                cell?.leftLabel.text = "Dimension"
+                cell?.rightLabel.text = location.item.dimension
+                cell?.infoImage.image = UIImage(named: "dna")
+            default:
+                cell?.rightLabel.text = "-"
             }
+
             return cell
         })
+
+        // for custom header
+        dataSource.supplementaryViewProvider = { (_ collectionView, _ kind, indexPath) in
+            guard let headerView = self.locationDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
+                fatalError()
+            }
+            headerView.textLabel.text = "\(LocationDetailsSection.allCases[indexPath.section])".uppercased()
+            headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+            return headerView
+        }
     }
 }
 
@@ -84,12 +113,26 @@ extension LocationDetailsViewController {
 extension LocationDetailsViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
-            loadMore()
-        }
+
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+    }
+}
+
+// MARK: Struct for Diffable DataSource
+struct LocationDetails: Hashable {
+    var id: UUID
+    var item: RickAndMortyAPI.GetLocationQuery.Data.Location
+    init(id: UUID = UUID(), _ item: RickAndMortyAPI.GetLocationQuery.Data.Location) {
+        self.id = id
+        self.item = item
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    static func == (lhs: LocationDetails, rhs: LocationDetails) -> Bool {
+        lhs.id == rhs.id
     }
 }

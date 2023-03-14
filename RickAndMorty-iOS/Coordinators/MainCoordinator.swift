@@ -85,7 +85,7 @@ class MainCoordinator: Coordinator {
     }
 
     func goLocationDetails(id: String, navController: UINavigationController) {
-        let locationDetailsViewController = LocationDetailsViewController()
+        let locationDetailsViewController = LocationDetailsViewController(locationId: id)
         locationDetailsViewController.coordinator = self
         locationNavController.pushViewController(locationDetailsViewController, animated: true)
     }

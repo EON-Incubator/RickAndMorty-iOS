@@ -11,9 +11,10 @@ import Combine
 class LocationDetailsViewModel {
 
     var location = PassthroughSubject<RickAndMortyAPI.GetLocationQuery.Data.Location, Never>()
-    var currentPage = 0 {
+
+    var locationId = "" {
         didSet {
-            fetchData(locationId: "1")
+            fetchData(locationId: locationId)
         }
     }
 

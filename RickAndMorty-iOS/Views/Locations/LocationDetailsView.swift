@@ -12,6 +12,11 @@ class LocationDetailsView: UIView {
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        collectionView.register(HeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: "HeaderView")
+        collectionView.register(InfoCell.self,
+                                forCellWithReuseIdentifier: InfoCell.identifier)
         collectionView.register(LocationRowCell.self,
                                 forCellWithReuseIdentifier: LocationRowCell.identifier)
 
@@ -35,6 +40,7 @@ class LocationDetailsView: UIView {
     private func setupViews() {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
+        collectionView.accessibilityIdentifier = "LocationDetailsCollectionView"
     }
 
     private func setupConstraints() {
@@ -61,13 +67,17 @@ extension LocationDetailsView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            let groupHeight = NSCollectionLayoutDimension.estimated(100)
+            let groupHeight = NSCollectionLayoutDimension.estimated(60)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                    heightDimension: groupHeight)
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
 
             let section = NSCollectionLayoutSection(group: group)
+
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
+            let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+            section.boundarySupplementaryItems = [header]
 
             return section
         }
