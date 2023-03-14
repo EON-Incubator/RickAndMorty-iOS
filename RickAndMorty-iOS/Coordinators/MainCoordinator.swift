@@ -94,8 +94,11 @@ class MainCoordinator: Coordinator {
 
     }
 
-    func goEpisodeDetails(id: Int, navController: UINavigationController) {
-
+    func goEpisodeDetails(id: String, navController: UINavigationController) {
+        let viewController = EpisodeDetailsViewController()
+        viewController.coordinator = self
+        viewController.characterID = id
+        navController.pushViewController(viewController, animated: true)
     }
 
 }
