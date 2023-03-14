@@ -62,7 +62,7 @@ extension CharacterDetailsView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.absolute(310) : NSCollectionLayoutDimension.estimated(60)
+            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.estimated(315) : NSCollectionLayoutDimension.estimated(60)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                    heightDimension: groupHeight)
