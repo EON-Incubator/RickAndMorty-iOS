@@ -25,7 +25,11 @@ class LocationsViewModel {
                 type: nil)) { result in
                     switch result {
                     case .success(let response):
-                        self.locations.value = (response.data?.locations?.results?.compactMap { $0 })!
+                        if page == 1 {
+                            self.locations.value = (response.data?.locations?.results?.compactMap { $0 })!
+                        } else {
+                            self.locations.value.append(contentsOf: (response.data?.locations?.results?.compactMap { $0 })! )
+                        }
                     case .failure(let error):
                         print(error)
                     }

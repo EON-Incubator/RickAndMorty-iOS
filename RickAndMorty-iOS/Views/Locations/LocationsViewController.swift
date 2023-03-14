@@ -20,12 +20,16 @@ class LocationsViewController: UIViewController {
 
     override func loadView() {
         view = locationsView
+        navigationController?.navigationBar.prefersLargeTitles = true
+        title = "Locations"
+        locationsView.collectionView.delegate = self
+        locationsView.collectionView.refreshControl = UIRefreshControl()
+        locationsView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Locations"
+
         configureDataSource()
         subscribeToViewModel()
         viewModel.currentPage = 1
@@ -37,7 +41,17 @@ class LocationsViewController: UIViewController {
             snapshot.appendSections([.appearance])
             snapshot.appendItems(locations, toSection: .appearance)
             self.dataSource.apply(snapshot, animatingDifferences: true)
+
+            // Dismiss refresh control.
+            DispatchQueue.main.async {
+                self.locationsView.collectionView.refreshControl?.endRefreshing()
+            }
+
         }).store(in: &cancellables)
+    }
+
+    @objc func onRefresh() {
+        viewModel.currentPage = 1
     }
 
     func loadMore() {
@@ -63,5 +77,19 @@ extension LocationsViewController {
             }
             return cell
         })
+    }
+}
+
+// MARK: - CollectionView Delegate
+extension LocationsViewController: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
+            loadMore()
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
