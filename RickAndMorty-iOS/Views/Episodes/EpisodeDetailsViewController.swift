@@ -12,6 +12,7 @@ class EpisodeDetailsViewController: UIViewController {
     weak var coordinator: MainCoordinator?
     var characterID: String?
     var episodeDetailsView = EpisodeDetailsView()
+    let viewModel = EpisodesViewModel()
 
     override func loadView() {
         view = episodeDetailsView
