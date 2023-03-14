@@ -16,6 +16,7 @@
 		544A6CBC29BF7BB90055FB75 /* CharactersGridUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CBB29BF7BB90055FB75 /* CharactersGridUISpec.swift */; };
 		544A6CC029BF88450055FB75 /* CharactersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CBF29BF88450055FB75 /* CharactersViewModel.swift */; };
 		544A6CC229BFA5410055FB75 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CC129BFA5410055FB75 /* Section.swift */; };
+		544A6CC429BFA8980055FB75 /* CharacterDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CC329BFA8980055FB75 /* CharacterDetailsViewModel.swift */; };
 		54A2EC3829BB7CEE006E880E /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 54A2EC3729BB7CEE006E880E /* SDWebImage */; };
 		54A2EC3C29BB7D7C006E880E /* CharactersGridCellSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A2EC3B29BB7D7C006E880E /* CharactersGridCellSpec.swift */; };
 		54BDF5BE29BBB2CB003F7084 /* CharacterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BDF5BD29BBB2CB003F7084 /* CharacterDetailsViewController.swift */; };
@@ -99,6 +100,7 @@
 		544A6CBB29BF7BB90055FB75 /* CharactersGridUISpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersGridUISpec.swift; sourceTree = "<group>"; };
 		544A6CBF29BF88450055FB75 /* CharactersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersViewModel.swift; sourceTree = "<group>"; };
 		544A6CC129BFA5410055FB75 /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
+		544A6CC329BFA8980055FB75 /* CharacterDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsViewModel.swift; sourceTree = "<group>"; };
 		54A2EC3B29BB7D7C006E880E /* CharactersGridCellSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersGridCellSpec.swift; sourceTree = "<group>"; };
 		54BDF5BD29BBB2CB003F7084 /* CharacterDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsViewController.swift; sourceTree = "<group>"; };
 		54BDF5C129BBBEB9003F7084 /* CharacterDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsView.swift; sourceTree = "<group>"; };
@@ -219,6 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				544A6CBF29BF88450055FB75 /* CharactersViewModel.swift */,
+				544A6CC329BFA8980055FB75 /* CharacterDetailsViewModel.swift */,
 			);
 			path = Characters;
 			sourceTree = "<group>";
@@ -713,6 +716,7 @@
 				F77E4BCE29B9B27900B8B5CE /* GetLocationQuery.graphql.swift in Sources */,
 				54BDF5BE29BBB2CB003F7084 /* CharacterDetailsViewController.swift in Sources */,
 				F77E4BC929B9B27900B8B5CE /* LocationBasics.graphql.swift in Sources */,
+				544A6CC429BFA8980055FB75 /* CharacterDetailsViewModel.swift in Sources */,
 				F77E4BC729B9B27900B8B5CE /* PageInfo.graphql.swift in Sources */,
 				54BDF5C229BBBEB9003F7084 /* CharacterDetailsView.swift in Sources */,
 				F77E4BD229B9B27900B8B5CE /* Info.graphql.swift in Sources */,
