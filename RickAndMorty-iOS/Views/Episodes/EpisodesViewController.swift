@@ -91,5 +91,6 @@ extension EpisodesViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        coordinator?.goEpisodeDetails(id: viewModel.episodes.value[indexPath.row].id!, navController: self.navigationController!)
     }
 }
