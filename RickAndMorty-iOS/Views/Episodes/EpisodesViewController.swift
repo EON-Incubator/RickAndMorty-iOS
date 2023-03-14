@@ -10,7 +10,7 @@ import Combine
 
 class EpisodesViewController: UIViewController {
 
-//    let episodesView = EpisodesView()
+    let episodesView = EpisodesView()
 //    let viewModel = EpisodesViewModel()
     weak var coordinator: MainCoordinator?
 
@@ -19,7 +19,7 @@ class EpisodesViewController: UIViewController {
     }
 
     override func loadView() {
-//        view = episodesView
+        view = episodesView
     }
 
 }
