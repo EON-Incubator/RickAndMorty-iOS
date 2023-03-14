@@ -17,8 +17,8 @@ class LocationDetailsView: UIView {
                                 withReuseIdentifier: "HeaderView")
         collectionView.register(InfoCell.self,
                                 forCellWithReuseIdentifier: InfoCell.identifier)
-        collectionView.register(LocationRowCell.self,
-                                forCellWithReuseIdentifier: LocationRowCell.identifier)
+        collectionView.register(CharacterRowCell.self,
+                                forCellWithReuseIdentifier: CharacterRowCell.identifier)
 
         return collectionView
     }()
@@ -67,10 +67,11 @@ extension LocationDetailsView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            let groupHeight = NSCollectionLayoutDimension.estimated(60)
+            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.estimated(60) : NSCollectionLayoutDimension.estimated(100)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                    heightDimension: groupHeight)
+
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
 
             let section = NSCollectionLayoutSection(group: group)

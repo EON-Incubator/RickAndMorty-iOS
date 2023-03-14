@@ -20,7 +20,7 @@ class LocationDetailsViewController: UIViewController {
     let viewModel = LocationDetailsViewModel()
     var locationId: String
 
-    typealias DataSource = UICollectionViewDiffableDataSource<LocationDetailsSection, LocationDetails>
+    typealias DataSource = UICollectionViewDiffableDataSource<LocationDetailsSection, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
 
@@ -55,9 +55,10 @@ class LocationDetailsViewController: UIViewController {
 
             self.title = location.name
 
-            var snapshot = NSDiffableDataSourceSnapshot<LocationDetailsSection, LocationDetails>()
-            snapshot.appendSections([.info])
+            var snapshot = NSDiffableDataSourceSnapshot<LocationDetailsSection, AnyHashable>()
+            snapshot.appendSections([.info, .residents])
             snapshot.appendItems([LocationDetails(location), LocationDetails(location)], toSection: .info)
+            snapshot.appendItems(location.residents, toSection: .residents)
             self.dataSource.apply(snapshot, animatingDifferences: true)
 
             // Dismiss refresh control.
@@ -79,19 +80,40 @@ extension LocationDetailsViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: locationDetailsView.collectionView, cellProvider: { (collectionView, indexPath, location) -> UICollectionViewCell? in
 
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+            var cell = UICollectionViewCell()
 
-            switch indexPath.item {
+            switch indexPath.section {
             case 0:
-                cell?.leftLabel.text = "Type"
-                cell?.rightLabel.text = location.item.name
-                cell?.infoImage.image = UIImage(named: "gender")
+                if let locationDetails = location as? LocationDetails {
+                    let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+                    switch indexPath.item {
+                    case 0:
+                        infoCell?.leftLabel.text = "Type"
+                        infoCell?.rightLabel.text = locationDetails.item.name
+                        infoCell?.infoImage.image = UIImage(named: "gender")
+                    case 1:
+                        infoCell?.leftLabel.text = "Dimension"
+                        infoCell?.rightLabel.text = locationDetails.item.dimension
+                        infoCell?.infoImage.image = UIImage(named: "dna")
+                    default:
+                        infoCell?.rightLabel.text = "-"
+                    }
+                    cell = infoCell!
+                }
+
             case 1:
-                cell?.leftLabel.text = "Dimension"
-                cell?.rightLabel.text = location.item.dimension
-                cell?.infoImage.image = UIImage(named: "dna")
+                if let character = location as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
+                    let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
+                    let urlString = character?.image ?? ""
+                    characterRowCell?.upperLabel.text = character?.name
+                    characterRowCell?.lowerLeftLabel.text = character?.gender
+                    characterRowCell?.lowerRightLabel.text = character?.species
+                    characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString))
+                    cell = characterRowCell!
+                }
+
             default:
-                cell?.rightLabel.text = "-"
+                cell = UICollectionViewCell()
             }
 
             return cell
