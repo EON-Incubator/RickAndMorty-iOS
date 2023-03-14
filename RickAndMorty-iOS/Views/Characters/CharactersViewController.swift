@@ -17,14 +17,20 @@ class CharactersViewController: UIViewController {
     var characterInfo: [RickAndMortyAPI.CharacterBasics] = []
     private var cancellables = Set<AnyCancellable>()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
         view = charactersGridView
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Characters"
-        subscribeToViewModel()
         charactersGridView.collectionView.delegate = self
         charactersGridView.collectionView.dataSource = self
+        charactersGridView.collectionView.refreshControl = UIRefreshControl()
+        charactersGridView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        subscribeToViewModel()
         viewModel.currentPage = 1
     }
 
@@ -34,7 +40,21 @@ class CharactersViewController: UIViewController {
                 self.characterInfo.append(characterInfo)
             }
             self.charactersGridView.collectionView.reloadData()
+            // Dismiss refresh control.
+            DispatchQueue.main.async {
+                self.charactersGridView.collectionView.refreshControl?.endRefreshing()
+            }
         }).store(in: &cancellables)
+    }
+
+    @objc func onRefresh() {
+        characterInfo = []
+        viewModel.currentPage = 1
+    }
+
+    func loadMore() {
+        characterInfo = []
+        viewModel.currentPage += 1
     }
 }
 
@@ -45,18 +65,26 @@ extension CharactersViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharactersGridCell.identifier,
-                                                            for: indexPath) as? CharactersGridCell else { fatalError("Wrong cell class dequeued") }
-        let name = characterInfo[indexPath.item].name
-        guard let image = characterInfo[indexPath.item].image else { fatalError("Image not found") }
-        cell.characterNameLabel.text = name
-        cell.characterImage.sd_setImage(with: URL(string: image))
-        return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharactersGridCell.identifier,
+                                                            for: indexPath) as? CharactersGridCell
+
+        if !characterInfo.isEmpty {
+            let name = self.characterInfo[indexPath.item].name
+            guard let image = characterInfo[indexPath.item].image else { fatalError("Image not found") }
+            cell?.characterNameLabel.text = name
+            cell?.characterImage.sd_setImage(with: URL(string: image))
+        }
+        return cell!
     }
 }
 
 // MARK: - UICollectionViewDelegate
 extension CharactersViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
+            loadMore()
+        }
+    }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         coordinator?.goCharacterDetails(id: characterInfo[indexPath.item].id!,
                                         navController: coordinator!.characterNavController)
