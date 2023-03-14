@@ -9,10 +9,17 @@ import UIKit
 
 class EpisodeDetailsViewController: UIViewController {
 
+    weak var coordinator: MainCoordinator?
+    var characterID: String?
+    var episodeDetailsView = EpisodeDetailsView()
+
+    override func loadView() {
+        view = episodeDetailsView
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
     }
 
 }
