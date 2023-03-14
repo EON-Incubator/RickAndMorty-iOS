@@ -18,6 +18,7 @@
 		544A6CC229BFA5410055FB75 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CC129BFA5410055FB75 /* Section.swift */; };
 		544A6CC429BFA8980055FB75 /* CharacterDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CC329BFA8980055FB75 /* CharacterDetailsViewModel.swift */; };
 		544A6CC629C0B67D0055FB75 /* CharacterInfoHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CC529C0B67D0055FB75 /* CharacterInfoHasher.swift */; };
+		544A6CC829C0F8A70055FB75 /* RowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CC729C0F8A70055FB75 /* RowCell.swift */; };
 		54A2EC3829BB7CEE006E880E /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 54A2EC3729BB7CEE006E880E /* SDWebImage */; };
 		54A2EC3C29BB7D7C006E880E /* CharactersGridCellSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A2EC3B29BB7D7C006E880E /* CharactersGridCellSpec.swift */; };
 		54BDF5BE29BBB2CB003F7084 /* CharacterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BDF5BD29BBB2CB003F7084 /* CharacterDetailsViewController.swift */; };
@@ -67,7 +68,6 @@
 		F7C26FE829BF730200903AF2 /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C26FE729BF730200903AF2 /* LocationsViewController.swift */; };
 		F7C26FEA29BF73B100903AF2 /* LocationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C26FE929BF73B100903AF2 /* LocationsViewModel.swift */; };
 		F7C26FEC29BF76FF00903AF2 /* LocationRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C26FEB29BF76FF00903AF2 /* LocationRowCell.swift */; };
-		F7DB56F429BBBBED000FAB01 /* CharactersGridViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB56F329BBBBEC000FAB01 /* CharactersGridViewSpec.swift */; };
 		F7DB56FC29BBBBF6000FAB01 /* DemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB56FB29BBBBF6000FAB01 /* DemoUITests.swift */; };
 		F7DB570529BBBC25000FAB01 /* DemoSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB570429BBBC24000FAB01 /* DemoSpec.swift */; };
 		F7DB570729BBBC62000FAB01 /* DemoUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB570629BBBC62000FAB01 /* DemoUISpec.swift */; };
@@ -108,6 +108,7 @@
 		544A6CC129BFA5410055FB75 /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		544A6CC329BFA8980055FB75 /* CharacterDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsViewModel.swift; sourceTree = "<group>"; };
 		544A6CC529C0B67D0055FB75 /* CharacterInfoHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInfoHasher.swift; sourceTree = "<group>"; };
+		544A6CC729C0F8A70055FB75 /* RowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowCell.swift; sourceTree = "<group>"; };
 		54A2EC3B29BB7D7C006E880E /* CharactersGridCellSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersGridCellSpec.swift; sourceTree = "<group>"; };
 		54BDF5BD29BBB2CB003F7084 /* CharacterDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsViewController.swift; sourceTree = "<group>"; };
 		54BDF5C129BBBEB9003F7084 /* CharacterDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsView.swift; sourceTree = "<group>"; };
@@ -156,7 +157,6 @@
 		F7C26FE729BF730200903AF2 /* LocationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsViewController.swift; sourceTree = "<group>"; };
 		F7C26FE929BF73B100903AF2 /* LocationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsViewModel.swift; sourceTree = "<group>"; };
 		F7C26FEB29BF76FF00903AF2 /* LocationRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRowCell.swift; sourceTree = "<group>"; };
-		F7DB56F329BBBBEC000FAB01 /* CharactersGridViewSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharactersGridViewSpec.swift; sourceTree = "<group>"; };
 		F7DB56F929BBBBF6000FAB01 /* RickAndMorty-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RickAndMorty-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7DB56FB29BBBBF6000FAB01 /* DemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoUITests.swift; sourceTree = "<group>"; };
 		F7DB570429BBBC24000FAB01 /* DemoSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoSpec.swift; sourceTree = "<group>"; };
@@ -209,6 +209,7 @@
 				540F4CF129BEABE700677B82 /* HeaderView.swift */,
 				544A6CC129BFA5410055FB75 /* Section.swift */,
 				544A6CC529C0B67D0055FB75 /* CharacterInfoHasher.swift */,
+				544A6CC729C0F8A70055FB75 /* RowCell.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -746,6 +747,7 @@
 				F77E4BCE29B9B27900B8B5CE /* GetLocationQuery.graphql.swift in Sources */,
 				54BDF5BE29BBB2CB003F7084 /* CharacterDetailsViewController.swift in Sources */,
 				F77E4BC929B9B27900B8B5CE /* LocationBasics.graphql.swift in Sources */,
+				544A6CC829C0F8A70055FB75 /* RowCell.swift in Sources */,
 				544A6CC429BFA8980055FB75 /* CharacterDetailsViewModel.swift in Sources */,
 				F77E4BC729B9B27900B8B5CE /* PageInfo.graphql.swift in Sources */,
 				54BDF5C229BBBEB9003F7084 /* CharacterDetailsView.swift in Sources */,
