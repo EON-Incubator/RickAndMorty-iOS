@@ -11,7 +11,7 @@ import Combine
 class EpisodesViewController: UIViewController {
 
     let episodesView = EpisodesView()
-//    let viewModel = EpisodesViewModel()
+    let viewModel = EpisodesViewModel()
     weak var coordinator: MainCoordinator?
 
     override func viewDidLoad() {
