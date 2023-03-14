@@ -27,8 +27,13 @@ class CharactersViewModel {
 
                     switch result {
                     case .success(let response):
-                        self.characters.value = (response.data?.characters?.results?
-                            .compactMap { $0?.fragments.characterBasics })!
+                        if page == 1 {
+                            self.characters.value = (response.data?.characters?.results?
+                                .compactMap { $0?.fragments.characterBasics })!
+                        } else {
+                            self.characters.value.append(contentsOf: (response.data?.characters?.results?
+                                .compactMap { $0?.fragments.characterBasics })!)
+                        }
 
                     case .failure(let error):
                         print(error)
