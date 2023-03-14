@@ -58,6 +58,7 @@ extension CharactersViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension CharactersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        coordinator?.goCharacterDetails(id: indexPath.row, navController: coordinator!.characterNavController)
+        coordinator?.goCharacterDetails(id: characterInfo[indexPath.item].id!,
+                                        navController: coordinator!.characterNavController)
     }
 }
