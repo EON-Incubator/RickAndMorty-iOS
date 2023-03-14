@@ -235,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				544A6CBE29BF87A30055FB75 /* Characters */,
+				544A6CD229C114300055FB75 /* Episodes */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -254,6 +255,13 @@
 				544A6CCA29C103180055FB75 /* EpisodeRowCell.swift */,
 				544A6CCC29C106060055FB75 /* EpisodesViewController.swift */,
 				544A6CCE29C1087C0055FB75 /* EpisodesView.swift */,
+			);
+			path = Episodes;
+			sourceTree = "<group>";
+		};
+		544A6CD229C114300055FB75 /* Episodes */ = {
+			isa = PBXGroup;
+			children = (
 				544A6CD029C109380055FB75 /* EpisodesViewModel.swift */,
 			);
 			path = Episodes;
