@@ -33,6 +33,10 @@ class DemoViewController: UIViewController {
                 self.demoView.textView.text += "\(characterBasic.name!)\n"
             }
         }).store(in: &cancellables)
+
+        viewModel.character.sink(receiveValue: { character in
+            self.demoView.textView.text += "\(character.name!)\n"
+        }).store(in: &cancellables)
     }
 
     @objc func loadMore() {
