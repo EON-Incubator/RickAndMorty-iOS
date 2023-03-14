@@ -59,6 +59,9 @@ query getEpisodes($page: Int, $name: String, $episode: String) {
     }
     results {
       ...episodeBasics
+      characters {
+      image
+      }
     }
   }
 }
