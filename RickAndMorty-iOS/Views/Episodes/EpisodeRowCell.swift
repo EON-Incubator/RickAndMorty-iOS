@@ -1,15 +1,14 @@
 //
-//  LocationRowCell.swift
+//  EpisodeRowCell.swift
 //  RickAndMorty-iOS
 //
-//  Created by Calvin Pak on 2023-03-13.
+//  Created by Gagan on 2023-03-14.
 //
 
 import UIKit
 
-class LocationRowCell: RowCell {
-
-    static let identifier = "LocationRowCell"
+class EpisodeRowCell: RowCell {
+    static let identifier = "EpisodeRowCell"
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
