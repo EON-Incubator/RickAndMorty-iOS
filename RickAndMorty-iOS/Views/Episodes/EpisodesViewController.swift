@@ -63,19 +63,9 @@ class EpisodesViewController: UIViewController {
 extension EpisodesViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: episodesView.collectionView, cellProvider: { (collectionView, indexPath, episode) -> UICollectionViewCell? in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeRowCell.identifier, for: indexPath) as? EpisodeRowCell
-            cell?.upperLabel.text = episode.name
-            cell?.lowerLeftLabel.text = episode.episode
-            cell?.lowerRightLabel.text = episode.air_date
-
-            for index in 0...3 {
-                let isIndexValid =  episode.characters.indices.contains(index)
-                if isIndexValid {
-                    let urlString = episode.characters[index]?.image ?? ""
-                    cell?.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
-                }
-            }
-            return cell
+            return collectionView.dequeueConfiguredReusableCell(using: self.episodesView.episodeCell,
+                                                                for: indexPath,
+                                                                item: episode)
         })
     }
 }

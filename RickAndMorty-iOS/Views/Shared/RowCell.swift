@@ -16,6 +16,16 @@ class RowCell: UICollectionViewCell {
         return view
     }()
 
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupViews()
+        setupConstraints()
+    }
+
     lazy var upperLabel: UILabel = {
         let label = UILabel()
         label.text = "Location Name"
