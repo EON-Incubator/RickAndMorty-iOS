@@ -41,9 +41,37 @@ class CharacterDetailsView: UIView {
         collectionView.register(HeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: "HeaderView")
-
         return collectionView
     }()
+
+    var episodeCell = UICollectionView.CellRegistration<RowCell, RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode> { (cell, _ indexPath, episode) in
+        cell.backgroundColor = UIColor(red: 1.00, green: 0.75, blue: 0.66, alpha: 0.1)
+
+        cell.lowerRightLabel.backgroundColor = UIColor(red: 1.00,
+                                                  green: 0.92,
+                                                  blue: 0.71,
+                                                  alpha: 0.4)
+        cell.lowerRightLabel.layer.borderWidth = 0.3
+        cell.lowerRightLabel.layer.borderColor = UIColor.gray.cgColor
+
+        cell.lowerLeftLabel.layer.borderWidth = 0.3
+        cell.lowerLeftLabel.layer.borderColor = UIColor.gray.cgColor
+        cell.lowerLeftLabel.backgroundColor = UIColor(red: 1.00,
+                                                 green: 0.75,
+                                                 blue: 0.66,
+                                                 alpha: 0.4)
+        cell.upperLabel.text = episode.name
+        cell.lowerLeftLabel.text = episode.episode
+        cell.lowerRightLabel.text = episode.air_date
+
+        for index in 0...3 {
+            let isIndexValid =  episode.characters.indices.contains(index)
+            if isIndexValid {
+                let urlString = episode.characters[index]?.image ?? ""
+                cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
+            }
+        }
+    }
 }
 
 // MARK: - CollectionView Layout
@@ -62,10 +90,19 @@ extension CharacterDetailsView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.estimated(315) : NSCollectionLayoutDimension.estimated(60)
+            func getGroupHeight() -> NSCollectionLayoutDimension {
+                switch sectionType {
+                case .appearance:
+                    return NSCollectionLayoutDimension.estimated(315)
+                case .info, .location:
+                    return NSCollectionLayoutDimension.estimated(60)
+                default:
+                    return NSCollectionLayoutDimension.estimated(100)
+                }
+            }
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: groupHeight)
+                                                   heightDimension: getGroupHeight())
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
 
             let section = NSCollectionLayoutSection(group: group)

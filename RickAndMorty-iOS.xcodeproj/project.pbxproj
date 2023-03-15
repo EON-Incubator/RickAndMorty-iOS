@@ -17,7 +17,6 @@
 		544A6CC029BF88450055FB75 /* CharactersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CBF29BF88450055FB75 /* CharactersViewModel.swift */; };
 		544A6CC229BFA5410055FB75 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CC129BFA5410055FB75 /* Section.swift */; };
 		544A6CC429BFA8980055FB75 /* CharacterDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CC329BFA8980055FB75 /* CharacterDetailsViewModel.swift */; };
-		544A6CC629C0B67D0055FB75 /* CharacterInfoHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CC529C0B67D0055FB75 /* CharacterInfoHasher.swift */; };
 		544A6CC829C0F8A70055FB75 /* RowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CC729C0F8A70055FB75 /* RowCell.swift */; };
 		544A6CCD29C106060055FB75 /* EpisodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CCC29C106060055FB75 /* EpisodesViewController.swift */; };
 		544A6CCF29C1087C0055FB75 /* EpisodesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CCE29C1087C0055FB75 /* EpisodesView.swift */; };
@@ -117,7 +116,6 @@
 		544A6CBF29BF88450055FB75 /* CharactersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersViewModel.swift; sourceTree = "<group>"; };
 		544A6CC129BFA5410055FB75 /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		544A6CC329BFA8980055FB75 /* CharacterDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsViewModel.swift; sourceTree = "<group>"; };
-		544A6CC529C0B67D0055FB75 /* CharacterInfoHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInfoHasher.swift; sourceTree = "<group>"; };
 		544A6CC729C0F8A70055FB75 /* RowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowCell.swift; sourceTree = "<group>"; };
 		544A6CCC29C106060055FB75 /* EpisodesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesViewController.swift; sourceTree = "<group>"; };
 		544A6CCE29C1087C0055FB75 /* EpisodesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesView.swift; sourceTree = "<group>"; };
@@ -228,7 +226,6 @@
 				540F4CEF29BEA1DC00677B82 /* InfoCell.swift */,
 				540F4CF129BEABE700677B82 /* HeaderView.swift */,
 				544A6CC129BFA5410055FB75 /* Section.swift */,
-				544A6CC529C0B67D0055FB75 /* CharacterInfoHasher.swift */,
 				F7C26FF529C119C900903AF2 /* CharacterRowCell.swift */,
 				544A6CC729C0F8A70055FB75 /* RowCell.swift */,
 			);
@@ -811,7 +808,6 @@
 				F7C26FF629C119C900903AF2 /* CharacterRowCell.swift in Sources */,
 				F77E4BC829B9B27900B8B5CE /* EpisodeBasics.graphql.swift in Sources */,
 				F77E4BD929B9B27900B8B5CE /* SchemaMetadata.graphql.swift in Sources */,
-				544A6CC629C0B67D0055FB75 /* CharacterInfoHasher.swift in Sources */,
 				544A6CD829C11BAA0055FB75 /* EpisodeDetailsViewModel.swift in Sources */,
 				544A6CC029BF88450055FB75 /* CharactersViewModel.swift in Sources */,
 				544A6CD429C119170055FB75 /* EpisodeDetailsViewController.swift in Sources */,
