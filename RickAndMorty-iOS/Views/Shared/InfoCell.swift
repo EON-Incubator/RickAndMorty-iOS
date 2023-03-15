@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class InfoCell: UICollectionViewCell {
+class InfoCell: UICollectionViewListCell {
     static let identifier = "InfoCell"
 
     override init(frame: CGRect) {
@@ -58,7 +58,7 @@ class InfoCell: UICollectionViewCell {
             make.width.equalToSuperview().offset(-20).multipliedBy(0.5)
         }
         rightLabel.snp.makeConstraints { make in
-            make.right.equalTo(self).offset(-20)
+            make.right.equalTo(self).offset(-25)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
             make.width.equalToSuperview().offset(-20).multipliedBy(0.5)

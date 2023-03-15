@@ -86,6 +86,8 @@ extension CharacterDetailsViewController {
             case 2:
                 if let character = characterInfo as? CharacterDetails {
                     let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+                    infoCell?.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
+
                     switch indexPath.item {
                     case 0:
                         infoCell?.leftLabel.text = "Origin"
