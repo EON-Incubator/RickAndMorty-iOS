@@ -52,6 +52,7 @@ class EpisodesView: UIView {
 
     init() {
         super.init(frame: .zero)
+        collectionView.showsVerticalScrollIndicator = false
         setupViews()
         setupConstraints()
     }
