@@ -1,19 +1,24 @@
 //
-//  LocationsView.swift
+//  LocationDetailsView.swift
 //  RickAndMorty-iOS
 //
-//  Created by Calvin Pak on 2023-03-13.
+//  Created by Calvin Pak on 2023-03-14.
 //
 
 import UIKit
 import SnapKit
 
-class LocationsView: UIView {
+class LocationDetailsView: UIView {
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
-        collectionView.register(LocationRowCell.self,
-                                forCellWithReuseIdentifier: LocationRowCell.identifier)
+        collectionView.register(HeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: "HeaderView")
+        collectionView.register(InfoCell.self,
+                                forCellWithReuseIdentifier: InfoCell.identifier)
+        collectionView.register(CharacterRowCell.self,
+                                forCellWithReuseIdentifier: CharacterRowCell.identifier)
 
         return collectionView
     }()
@@ -35,7 +40,7 @@ class LocationsView: UIView {
     private func setupViews() {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
-        collectionView.accessibilityIdentifier = "LocationsCollectionView"
+        collectionView.accessibilityIdentifier = "LocationDetailsCollectionView"
         collectionView.showsVerticalScrollIndicator = false
     }
 
@@ -48,7 +53,7 @@ class LocationsView: UIView {
 }
 
 // MARK: - CollectionView Layout
-extension LocationsView {
+extension LocationDetailsView {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, _) -> NSCollectionLayoutSection? in
 
@@ -63,16 +68,22 @@ extension LocationsView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            let groupHeight = NSCollectionLayoutDimension.estimated(100)
+            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.estimated(60) : NSCollectionLayoutDimension.estimated(100)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                    heightDimension: groupHeight)
+
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
 
             let section = NSCollectionLayoutSection(group: group)
+
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
+            let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+            section.boundarySupplementaryItems = [header]
 
             return section
         }
         return layout
     }
+
 }

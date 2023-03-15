@@ -29,6 +29,7 @@ class InfoCell: UICollectionViewCell {
     lazy var leftLabel: UILabel = {
         let label = UILabel()
         label.text = "Gender"
+        label.font = .boldSystemFont(ofSize: 14)
         return label
     }()
 
@@ -36,6 +37,7 @@ class InfoCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Male"
         label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .right
         label.minimumScaleFactor = 0.5
         label.numberOfLines = 0
         return label
@@ -44,6 +46,7 @@ class InfoCell: UICollectionViewCell {
     lazy var infoImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(systemName: "person.circle")
+        image.tintColor = .label
         return image
     }()
 
@@ -52,13 +55,13 @@ class InfoCell: UICollectionViewCell {
             make.left.equalTo(self).offset(50)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.width.equalTo(80)
+            make.width.equalToSuperview().offset(-20).multipliedBy(0.5)
         }
         rightLabel.snp.makeConstraints { make in
             make.right.equalTo(self).offset(-20)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.width.equalTo(80)
+            make.width.equalToSuperview().offset(-20).multipliedBy(0.5)
         }
         infoImage.snp.makeConstraints { make in
             make.left.equalTo(self).offset(10)

@@ -91,5 +91,6 @@ extension LocationsViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        coordinator?.goLocationDetails(id: viewModel.locations.value[indexPath.row].id!, navController: self.navigationController!)
     }
 }
