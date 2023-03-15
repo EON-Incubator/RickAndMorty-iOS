@@ -21,6 +21,7 @@ class CharacterDetailsViewController: UIViewController {
 
     override func loadView() {
         view = characterDetailsView
+        characterDetailsView.collectionView.delegate = self
     }
 
     override func viewDidLoad() {
@@ -117,6 +118,16 @@ extension CharacterDetailsViewController {
         }
     }
     // swiftlint:enable cyclomatic_complexity
+}
+
+// MARK: - CollectionView Delegate
+extension CharacterDetailsViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        if let episode = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode? {
+            coordinator?.goEpisodeDetails(id: (episode?.id)!, navController: self.navigationController!)
+        }
+    }
 }
 
 // MARK: Struct for Diffable DataSource
