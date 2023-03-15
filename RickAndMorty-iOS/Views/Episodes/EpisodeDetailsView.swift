@@ -1,46 +1,27 @@
 //
-//  EpisodesView.swift
+//  EpisodeDetails.swift
 //  RickAndMorty-iOS
 //
 //  Created by Gagan on 2023-03-14.
 //
 
 import UIKit
+import SnapKit
 
-class EpisodesView: UIView {
+class EpisodeDetailsView: UIView {
 
     lazy var collectionView: UICollectionView = {
-        return UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        collectionView.register(HeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: "HeaderView")
+        collectionView.register(InfoCell.self,
+                                forCellWithReuseIdentifier: InfoCell.identifier)
+        collectionView.register(CharacterRowCell.self,
+                                forCellWithReuseIdentifier: CharacterRowCell.identifier)
+
+        return collectionView
     }()
-
-    var episodeCell = UICollectionView.CellRegistration<RowCell, RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result> { (cell, _ indexPath, episode) in
-        cell.backgroundColor = UIColor(red: 1.00, green: 0.75, blue: 0.66, alpha: 0.1)
-
-        cell.lowerRightLabel.backgroundColor = UIColor(red: 1.00,
-                                                  green: 0.92,
-                                                  blue: 0.71,
-                                                  alpha: 0.4)
-        cell.lowerRightLabel.layer.borderWidth = 0.3
-        cell.lowerRightLabel.layer.borderColor = UIColor.gray.cgColor
-
-        cell.lowerLeftLabel.layer.borderWidth = 0.3
-        cell.lowerLeftLabel.layer.borderColor = UIColor.gray.cgColor
-        cell.lowerLeftLabel.backgroundColor = UIColor(red: 1.00,
-                                                 green: 0.75,
-                                                 blue: 0.66,
-                                                 alpha: 0.4)
-        cell.upperLabel.text = episode.name
-        cell.lowerLeftLabel.text = episode.episode
-        cell.lowerRightLabel.text = episode.air_date
-
-        for index in 0...3 {
-            let isIndexValid =  episode.characters.indices.contains(index)
-            if isIndexValid {
-                let urlString = episode.characters[index]?.image ?? ""
-                cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
-            }
-        }
-    }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -52,7 +33,6 @@ class EpisodesView: UIView {
 
     init() {
         super.init(frame: .zero)
-        collectionView.showsVerticalScrollIndicator = false
         setupViews()
         setupConstraints()
     }
@@ -60,6 +40,7 @@ class EpisodesView: UIView {
     private func setupViews() {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
+        collectionView.accessibilityIdentifier = "EpisodeDetailsCollectionView"
     }
 
     private func setupConstraints() {
@@ -70,7 +51,7 @@ class EpisodesView: UIView {
 }
 
 // MARK: - CollectionView Layout
-extension EpisodesView {
+extension EpisodeDetailsView {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, _) -> NSCollectionLayoutSection? in
 
@@ -85,13 +66,18 @@ extension EpisodesView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            let groupHeight = NSCollectionLayoutDimension.estimated(100)
+            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.estimated(60) :
+                                             NSCollectionLayoutDimension.estimated(100)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                    heightDimension: groupHeight)
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
 
             let section = NSCollectionLayoutSection(group: group)
+
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
+            let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+            section.boundarySupplementaryItems = [header]
 
             return section
         }
