@@ -17,6 +17,10 @@ public extension RickAndMortyAPI {
             episode {
               __typename
               ...episodeBasics
+              characters {
+                __typename
+                image
+              }
             }
             origin {
               __typename
@@ -112,9 +116,12 @@ public extension RickAndMortyAPI {
 
           public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Episode }
           public static var __selections: [ApolloAPI.Selection] { [
+            .field("characters", [Character?].self),
             .fragment(EpisodeBasics.self),
           ] }
 
+          /// List of characters who have been seen in the episode.
+          public var characters: [Character?] { __data["characters"] }
           /// The air date of the episode.
           public var air_date: String? { __data["air_date"] }
           /// The code of the episode.
@@ -129,6 +136,23 @@ public extension RickAndMortyAPI {
             public init(data: DataDict) { __data = data }
 
             public var episodeBasics: EpisodeBasics { _toFragment() }
+          }
+
+          /// Character.Episode.Character
+          ///
+          /// Parent Type: `Character`
+          public struct Character: RickAndMortyAPI.SelectionSet {
+            public let __data: DataDict
+            public init(data: DataDict) { __data = data }
+
+            public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Character }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("image", String?.self),
+            ] }
+
+            /// Link to the character's image.
+            /// All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
+            public var image: String? { __data["image"] }
           }
         }
 
