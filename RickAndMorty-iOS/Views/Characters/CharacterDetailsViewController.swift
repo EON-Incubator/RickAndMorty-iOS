@@ -19,6 +19,8 @@ class CharacterDetailsViewController: UIViewController {
     private var dataSource: DataSource!
     var characterID: String?
 
+    let locationsViewModel = LocationsViewModel()
+
     override func loadView() {
         view = characterDetailsView
         characterDetailsView.collectionView.delegate = self
@@ -124,8 +126,18 @@ extension CharacterDetailsViewController {
 extension CharacterDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        if let episode = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode? {
-            coordinator?.goEpisodeDetails(id: (episode?.id)!, navController: self.navigationController!)
+        if indexPath.section > 1 {
+            if let episode = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode? {
+                coordinator?.goEpisodeDetails(id: (episode?.id)!, navController: self.navigationController!)
+            }
+            if let character = dataSource.itemIdentifier(for: indexPath) as? CharacterDetails {
+                switch indexPath.row {
+                case 0:
+                    coordinator?.goLocationDetails(id: (character.item.origin?.id)!, navController: self.navigationController!)
+                default:
+                    coordinator?.goLocationDetails(id: (character.item.location?.id)!, navController: self.navigationController!)
+                }
+            }
         }
     }
 }
