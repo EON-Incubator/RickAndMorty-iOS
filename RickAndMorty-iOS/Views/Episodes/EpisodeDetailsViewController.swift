@@ -20,7 +20,7 @@ class EpisodeDetailsViewController: UIViewController {
     let viewModel = EpisodeDetailsViewModel()
     var episodeId: String
 
-    typealias DataSource = UICollectionViewDiffableDataSource<EpisodeDetailsSection, EpisodeDetails>
+    typealias DataSource = UICollectionViewDiffableDataSource<EpisodeDetailsSection, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
 
@@ -54,9 +54,10 @@ class EpisodeDetailsViewController: UIViewController {
 
             self.title = episode.name
 
-            var snapshot = NSDiffableDataSourceSnapshot<EpisodeDetailsSection, EpisodeDetails>()
-            snapshot.appendSections([.info])
+            var snapshot = NSDiffableDataSourceSnapshot<EpisodeDetailsSection, AnyHashable>()
+            snapshot.appendSections([.info, .characters])
             snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
+            snapshot.appendItems(episode.characters, toSection: .characters)
             self.dataSource.apply(snapshot, animatingDifferences: true)
 
             // Dismiss refresh control.
@@ -77,21 +78,43 @@ extension EpisodeDetailsViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: episodeDetailsView.collectionView, cellProvider: { (collectionView, indexPath, episode) -> UICollectionViewCell? in
 
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+            var cell = UICollectionViewCell()
 
-            switch indexPath.item {
+            switch indexPath.section {
             case 0:
-                cell?.leftLabel.text = "Episode"
-                cell?.rightLabel.text = episode.item.episode
-                cell?.infoImage.image = UIImage(named: "tv")
+                if let episodeDetails = episode as? EpisodeDetails {
+                    let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+                    switch indexPath.item {
+                    case 0:
+                        infoCell?.leftLabel.text = "Episode"
+                        infoCell?.rightLabel.text = episodeDetails.item.episode
+                        infoCell?.infoImage.image = UIImage(named: "tv")
+                    case 1:
+                        infoCell?.leftLabel.text = "Air Date"
+                        infoCell?.rightLabel.text = episodeDetails.item.air_date
+                        infoCell?.infoImage.image = UIImage(named: "calendar")
+                    default:
+                        infoCell?.rightLabel.text = "-"
+                    }
+                    cell = infoCell!
+                }
             case 1:
-                cell?.leftLabel.text = "Air Date"
-                cell?.rightLabel.text = episode.item.air_date
-                cell?.infoImage.image = UIImage(named: "calendar")
-            default:
-                cell?.rightLabel.text = "-"
-            }
+                if let character = episode as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
+                    let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
+                    let urlString = character?.image ?? ""
+                    characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString))
+                    characterRowCell?.upperLabel.text = character?.name
+                    characterRowCell?.lowerLeftLabel.text = character?.gender
+                    characterRowCell?.lowerRightLabel.text = character?.species
+                    characterRowCell?.characterStatusLabel.text = character?.status
+                    characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character?.status ?? "")
 
+                    cell = characterRowCell!
+                }
+
+            default:
+                cell = UICollectionViewCell()
+            }
             return cell
         })
 
@@ -109,13 +132,11 @@ extension EpisodeDetailsViewController {
 
 // MARK: - CollectionView Delegate
 extension EpisodeDetailsViewController: UICollectionViewDelegate {
-
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-
-    }
-
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
+            coordinator?.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
+        }
     }
 }
 
