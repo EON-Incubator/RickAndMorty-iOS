@@ -41,6 +41,8 @@ class CharacterDetailsView: UIView {
         collectionView.register(HeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: "HeaderView")
+        collectionView.register(CharacterRowCell.self,
+                                forCellWithReuseIdentifier: CharacterRowCell.identifier)
 
         return collectionView
     }()
@@ -62,10 +64,19 @@ extension CharacterDetailsView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.estimated(315) : NSCollectionLayoutDimension.estimated(60)
+            func getGroupHeight() -> NSCollectionLayoutDimension {
+                switch sectionType {
+                case .appearance:
+                    return NSCollectionLayoutDimension.estimated(315)
+                case .info, .location:
+                    return NSCollectionLayoutDimension.estimated(60)
+                default:
+                    return NSCollectionLayoutDimension.estimated(100)
+                }
+            }
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: groupHeight)
+                                                   heightDimension: getGroupHeight())
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
 
             let section = NSCollectionLayoutSection(group: group)
