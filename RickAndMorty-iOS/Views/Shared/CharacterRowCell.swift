@@ -106,6 +106,28 @@ class CharacterRowCell: UICollectionViewCell {
 
     }
 
+    enum CharacterStatus: String {
+        case alive = "Alive"
+        case dead = "Dead"
+        case unknown = "unknown"
+        var description: String {
+            return self.rawValue
+        }
+    }
+
+    func statusColor(_ color: String) -> UIColor {
+        switch color {
+        case CharacterStatus.alive.description:
+            return .systemGreen
+        case CharacterStatus.dead.description:
+            return .systemRed
+        case CharacterStatus.unknown.description:
+            return .systemYellow
+        default:
+            return .systemGray
+        }
+    }
+
     func setupConstraints() {
         characterAvatarImageView.snp.makeConstraints { make in
             // make.top.left.equalToSuperview().offset(5)
