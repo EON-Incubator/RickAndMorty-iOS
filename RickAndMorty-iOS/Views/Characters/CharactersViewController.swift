@@ -22,6 +22,7 @@ class CharactersViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Characters"
         navigationItem.rightBarButtonItem = charactersGridView.filterButton(self, action: #selector(filterButtonPressed))
+        navigationItem.leftBarButtonItem = charactersGridView.logoView()
         charactersGridView.collectionView.delegate = self
         charactersGridView.collectionView.dataSource = self
         charactersGridView.collectionView.refreshControl = UIRefreshControl()

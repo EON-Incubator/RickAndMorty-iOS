@@ -63,37 +63,21 @@ class MainCoordinator: Coordinator {
         // Add CharactersViewController to the character navigation controller.
         let charactersViewController = CharactersViewController()
         charactersViewController.coordinator = self
-        characterNavController.navigationBar.backgroundColor = .systemBackground
         characterNavController.pushViewController(charactersViewController, animated: false)
 
         // Add LocationsViewController to the location navigation controller.
         let locationsViewController = LocationsViewController()
         locationsViewController.coordinator = self
-        locationNavController.navigationBar.backgroundColor = .systemBackground
         locationNavController.pushViewController(locationsViewController, animated: false)
 
         // Add EpisodesViewController to the episode navigation controller.
         let episodesViewController = EpisodesViewController()
         episodesViewController.coordinator = self
-        episodeNavController.navigationBar.backgroundColor = .systemBackground
         episodeNavController.pushViewController(episodesViewController, animated: false)
 
         // MARK: - Setup demo tab for experiment, remove this from production.
         // setupDemo()
         // MARK: -
-
-        func customizeNavBar(_ navController: UINavigationController) {
-
-            navController.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Creepster-Regular", size: 34)!,
-                                                                    NSAttributedString.Key.foregroundColor: UIColor.label]
-
-            navController.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Creepster-Regular", size: 28)!,
-                                                               NSAttributedString.Key.foregroundColor: UIColor.systemCyan]
-
-            navController.navigationBar.backIndicatorImage = UIImage(systemName: "arrow.backward.circle")
-            navController.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.backward.circle")
-            navController.navigationBar.barTintColor = .systemGray4
-        }
 
         // Set tab bar controller as the root view controller of the UIWindow.
         window.tintColor = .label
@@ -124,10 +108,9 @@ extension UINavigationController {
     func customizeNavBar() {
         navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Creepster-Regular", size: 34)!,
                                                                 NSAttributedString.Key.foregroundColor: UIColor.label]
-
         navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Creepster-Regular", size: 28)!,
                                                            NSAttributedString.Key.foregroundColor: UIColor.systemCyan]
-
+        navigationBar.setTitleVerticalPositionAdjustment(5, for: .default)
         navigationBar.backIndicatorImage = UIImage(systemName: "arrow.backward.circle")
         navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.backward.circle")
         navigationBar.barTintColor = .systemGray4

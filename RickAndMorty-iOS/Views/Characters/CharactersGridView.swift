@@ -68,4 +68,14 @@ extension CharactersGridView {
         filterButton.addTarget(target, action: action, for: .touchUpInside)
         return UIBarButtonItem(customView: filterButton)
     }
+
+    func logoView() -> UIBarButtonItem {
+        let imageView = UIImageView(image: UIImage(named: "RickAndMorty"))
+        imageView.contentMode = .scaleAspectFit
+
+        imageView.snp.makeConstraints { make in
+            make.width.equalTo(100)
+        }
+        return UIBarButtonItem(customView: imageView)
+    }
 }
