@@ -75,7 +75,7 @@ class MainCoordinator: Coordinator {
         episodeNavController.pushViewController(episodesViewController, animated: false)
 
         // MARK: - Setup demo tab for experiment, remove this from production.
-        setupDemo()
+        // setupDemo()
         // MARK: -
 
         // Set tab bar controller as the root view controller of the UIWindow.
@@ -91,9 +91,9 @@ class MainCoordinator: Coordinator {
     }
 
     func goLocationDetails(id: String, navController: UINavigationController) {
-        let locationDetailsViewController = LocationDetailsViewController(locationId: id)
-        locationDetailsViewController.coordinator = self
-        locationNavController.pushViewController(locationDetailsViewController, animated: true)
+        let viewController = LocationDetailsViewController(locationId: id)
+        viewController.coordinator = self
+        navController.pushViewController(viewController, animated: true)
     }
 
     func goEpisodeDetails(id: Int, navController: UINavigationController) {
