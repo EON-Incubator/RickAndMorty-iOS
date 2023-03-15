@@ -68,6 +68,12 @@ class MainCoordinator: Coordinator {
         locationNavController.navigationBar.backgroundColor = .systemBackground
         locationNavController.pushViewController(locationsViewController, animated: false)
 
+        // Add EpisodesViewController to the episode navigation controller.
+        let episodesViewController = EpisodesViewController()
+        episodesViewController.coordinator = self
+        episodeNavController.navigationBar.backgroundColor = .systemBackground
+        episodeNavController.pushViewController(episodesViewController, animated: false)
+
         // MARK: - Setup demo tab for experiment, remove this from production.
         setupDemo()
         // MARK: -
