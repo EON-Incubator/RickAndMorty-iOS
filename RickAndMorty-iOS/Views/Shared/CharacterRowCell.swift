@@ -21,15 +21,27 @@ class CharacterRowCell: UICollectionViewCell {
         return imageView
     }()
 
-    lazy var characterStatusView: UIView = {
-        let view = UIView()
-        return view
+    lazy var characterStatusLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Status"
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 10)
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        label.backgroundColor = .systemGray
+        label.transform = CGAffineTransform(rotationAngle: -0.45)
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOpacity = 0.5
+        label.layer.shadowOffset = CGSize(width: 0, height: 2)
+        label.layer.shadowRadius = 1
+
+        return label
     }()
 
     lazy var upperLabel: UILabel = {
         let label = UILabel()
         label.text = "Character Name"
-        label.font = .boldSystemFont(ofSize: 26)
+        label.font = .boldSystemFont(ofSize: 22)
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .left
         return label
@@ -39,9 +51,10 @@ class CharacterRowCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Gender"
         label.font = .systemFont(ofSize: 14)
+        label.textColor = .systemBackground
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.backgroundColor = .systemBlue
+        label.backgroundColor = .systemIndigo
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
         return label
@@ -51,9 +64,10 @@ class CharacterRowCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Species"
         label.font = .systemFont(ofSize: 14)
+        label.textColor = .systemBackground
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.backgroundColor = .systemYellow
+        label.backgroundColor = .systemOrange
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
         return label
@@ -73,9 +87,11 @@ class CharacterRowCell: UICollectionViewCell {
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.gray.cgColor
         self.layer.cornerRadius = 5
+        self.layer.masksToBounds = true
+        self.backgroundColor = UIColor(named: "characterRowBackgroundColor")
 
         self.addSubview(characterAvatarImageView)
-        self.addSubview(characterStatusView)
+        self.addSubview(characterStatusLabel)
         self.addSubview(upperLabel)
         self.addSubview(lowerLeftLabel)
         self.addSubview(lowerRightLabel)
@@ -85,7 +101,7 @@ class CharacterRowCell: UICollectionViewCell {
     func setupConstraints() {
         characterAvatarImageView.snp.makeConstraints { make in
             // make.top.left.equalToSuperview().offset(5)
-            make.left.equalToSuperview().offset(20)
+            make.left.equalToSuperview().offset(10)
             make.centerY.equalToSuperview()
             make.height.equalToSuperview().offset(-20)
             make.width.equalTo(self.snp.height).offset(-20).multipliedBy(1.0 / 1.0)
@@ -110,6 +126,12 @@ class CharacterRowCell: UICollectionViewCell {
             make.left.equalTo(lowerLeftLabel.snp_rightMargin).offset(20)
             make.height.equalTo(lowerLeftLabel)
             make.width.equalTo(upperLabel).dividedBy(2)
+        }
+
+        characterStatusLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(5)
+            make.left.equalToSuperview().offset(-15)
+            make.width.equalTo(80)
         }
     }
 }

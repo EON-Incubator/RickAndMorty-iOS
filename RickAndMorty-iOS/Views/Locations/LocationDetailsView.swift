@@ -41,6 +41,7 @@ class LocationDetailsView: UIView {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
         collectionView.accessibilityIdentifier = "LocationDetailsCollectionView"
+        collectionView.showsVerticalScrollIndicator = false
     }
 
     private func setupConstraints() {

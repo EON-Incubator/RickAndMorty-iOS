@@ -15,6 +15,15 @@ class LocationDetailsViewController: UIViewController {
         case residents
     }
 
+    enum CharacterStatus: String {
+        case alive = "Alive"
+        case dead = "Dead"
+        case unknown = "unknown"
+        var description: String {
+            return self.rawValue
+        }
+    }
+
     weak var coordinator: MainCoordinator?
     let locationDetailsView = LocationDetailsView()
     let viewModel = LocationDetailsViewModel()
@@ -90,11 +99,11 @@ extension LocationDetailsViewController {
                     case 0:
                         infoCell?.leftLabel.text = "Type"
                         infoCell?.rightLabel.text = locationDetails.item.name
-                        infoCell?.infoImage.image = UIImage(named: "gender")
+                        infoCell?.infoImage.image = UIImage(systemName: "globe.asia.australia")
                     case 1:
                         infoCell?.leftLabel.text = "Dimension"
                         infoCell?.rightLabel.text = locationDetails.item.dimension
-                        infoCell?.infoImage.image = UIImage(named: "dna")
+                        infoCell?.infoImage.image = UIImage(systemName: "globe")
                     default:
                         infoCell?.rightLabel.text = "-"
                     }
@@ -105,10 +114,13 @@ extension LocationDetailsViewController {
                 if let character = location as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
                     let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
                     let urlString = character?.image ?? ""
+                    characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString))
                     characterRowCell?.upperLabel.text = character?.name
                     characterRowCell?.lowerLeftLabel.text = character?.gender
                     characterRowCell?.lowerRightLabel.text = character?.species
-                    characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString))
+                    characterRowCell?.characterStatusLabel.text = character?.status
+                    characterRowCell?.characterStatusLabel.backgroundColor = self.statusColor(character?.status ?? "")
+
                     cell = characterRowCell!
                 }
 
@@ -127,6 +139,19 @@ extension LocationDetailsViewController {
             headerView.textLabel.text = "\(LocationDetailsSection.allCases[indexPath.section])".uppercased()
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
+        }
+    }
+
+    func statusColor(_ color: String) -> UIColor {
+        switch color {
+        case CharacterStatus.alive.description:
+            return .systemGreen
+        case CharacterStatus.dead.description:
+            return .systemRed
+        case CharacterStatus.unknown.description:
+            return .systemYellow
+        default:
+            return .systemGray
         }
     }
 }
