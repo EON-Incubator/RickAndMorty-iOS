@@ -34,6 +34,10 @@ class CharactersViewController: UIViewController {
         viewModel.currentPage = 1
     }
 
+    func setupNavBar() {
+
+    }
+
     func subscribeToViewModel() {
         viewModel.characters.sink(receiveValue: { characterInfo in
             for characterInfo in characterInfo {
