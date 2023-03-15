@@ -73,6 +73,13 @@ class CharacterRowCell: UICollectionViewCell {
         return label
     }()
 
+    lazy var disclosureIndicatorImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(systemName: "chevron.right"))
+        imageView.tintColor = .systemGray2
+        imageView.contentMode = .scaleAspectFill
+        return imageView
+    }()
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -95,6 +102,7 @@ class CharacterRowCell: UICollectionViewCell {
         self.addSubview(upperLabel)
         self.addSubview(lowerLeftLabel)
         self.addSubview(lowerRightLabel)
+        self.addSubview(disclosureIndicatorImageView)
 
     }
 
@@ -111,7 +119,7 @@ class CharacterRowCell: UICollectionViewCell {
             make.left.equalToSuperview().offset(100)
             make.top.equalToSuperview().offset(10)
             make.height.equalTo(30)
-            make.width.equalToSuperview().offset(-100)
+            make.width.equalToSuperview().offset(-110)
         }
 
         lowerLeftLabel.snp.makeConstraints { make in
@@ -132,6 +140,11 @@ class CharacterRowCell: UICollectionViewCell {
             make.top.equalToSuperview().offset(5)
             make.left.equalToSuperview().offset(-15)
             make.width.equalTo(80)
+        }
+
+        disclosureIndicatorImageView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview().offset(-10)
         }
     }
 }
