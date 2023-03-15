@@ -21,6 +21,8 @@ class CharactersViewController: UIViewController {
         view = charactersGridView
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Characters"
+        navigationItem.rightBarButtonItem = charactersGridView.filterButton(self, action: #selector(filterButtonPressed))
+        navigationItem.leftBarButtonItem = charactersGridView.logoView()
         charactersGridView.collectionView.delegate = self
         charactersGridView.collectionView.dataSource = self
         charactersGridView.collectionView.refreshControl = UIRefreshControl()
@@ -29,9 +31,13 @@ class CharactersViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         subscribeToViewModel()
         viewModel.currentPage = 1
+
+    }
+
+    @objc func filterButtonPressed() {
+        print("filterButtonPressed")
     }
 
     func subscribeToViewModel() {

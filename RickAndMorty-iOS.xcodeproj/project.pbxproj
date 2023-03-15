@@ -77,6 +77,8 @@
 		F7C26FF129C0C10600903AF2 /* LocationDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C26FF029C0C10600903AF2 /* LocationDetailsView.swift */; };
 		F7C26FF329C0C11C00903AF2 /* LocationDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C26FF229C0C11C00903AF2 /* LocationDetailsViewModel.swift */; };
 		F7C26FF629C119C900903AF2 /* CharacterRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C26FF529C119C900903AF2 /* CharacterRowCell.swift */; };
+		F7C26FFB29C22F8E00903AF2 /* creepster_regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7C26FF929C22F8E00903AF2 /* creepster_regular.ttf */; };
+		F7C26FFC29C22F8E00903AF2 /* get_schwifty.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7C26FFA29C22F8E00903AF2 /* get_schwifty.ttf */; };
 		F7DB56FC29BBBBF6000FAB01 /* DemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB56FB29BBBBF6000FAB01 /* DemoUITests.swift */; };
 		F7DB570529BBBC25000FAB01 /* DemoSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB570429BBBC24000FAB01 /* DemoSpec.swift */; };
 		F7DB570729BBBC62000FAB01 /* DemoUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB570629BBBC62000FAB01 /* DemoUISpec.swift */; };
@@ -175,6 +177,8 @@
 		F7C26FF029C0C10600903AF2 /* LocationDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailsView.swift; sourceTree = "<group>"; };
 		F7C26FF229C0C11C00903AF2 /* LocationDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailsViewModel.swift; sourceTree = "<group>"; };
 		F7C26FF529C119C900903AF2 /* CharacterRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterRowCell.swift; sourceTree = "<group>"; };
+		F7C26FF929C22F8E00903AF2 /* creepster_regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = creepster_regular.ttf; sourceTree = "<group>"; };
+		F7C26FFA29C22F8E00903AF2 /* get_schwifty.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = get_schwifty.ttf; sourceTree = "<group>"; };
 		F7DB56F929BBBBF6000FAB01 /* RickAndMorty-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RickAndMorty-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7DB56FB29BBBBF6000FAB01 /* DemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoUITests.swift; sourceTree = "<group>"; };
 		F7DB570429BBBC24000FAB01 /* DemoSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoSpec.swift; sourceTree = "<group>"; };
@@ -355,7 +359,7 @@
 				F77E4BDD29BA390F00B8B5CE /* Network */,
 				F77E4BAB29B9B27900B8B5CE /* RickAndMortyAPI */,
 				F77E4BA029B94D5900B8B5CE /* GraphQL */,
-				F77E4B8429B906D600B8B5CE /* Assets.xcassets */,
+				F7C26FF729C22F5900903AF2 /* Assets */,
 				F77E4B8629B906D600B8B5CE /* LaunchScreen.storyboard */,
 				F77E4B8929B906D600B8B5CE /* Info.plist */,
 			);
@@ -528,6 +532,24 @@
 				F7C26FEB29BF76FF00903AF2 /* LocationRowCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		F7C26FF729C22F5900903AF2 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				F7C26FF829C22F6700903AF2 /* Fonts */,
+				F77E4B8429B906D600B8B5CE /* Assets.xcassets */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		F7C26FF829C22F6700903AF2 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F7C26FF929C22F8E00903AF2 /* creepster_regular.ttf */,
+				F7C26FFA29C22F8E00903AF2 /* get_schwifty.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		F7DB56F229BBBB81000FAB01 /* Locations */ = {
@@ -722,6 +744,8 @@
 				F77E4B8529B906D600B8B5CE /* Assets.xcassets in Resources */,
 				F77E4BAA29B9B1C900B8B5CE /* apollo-codegen-config.json in Resources */,
 				F77E4BA829B94F9400B8B5CE /* rick-and-morty-a3b90u@current.graphqls in Resources */,
+				F7C26FFC29C22F8E00903AF2 /* get_schwifty.ttf in Resources */,
+				F7C26FFB29C22F8E00903AF2 /* creepster_regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

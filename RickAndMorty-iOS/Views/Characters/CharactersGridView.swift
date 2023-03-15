@@ -53,3 +53,29 @@ class CharactersGridView: UIView {
         }
     }
 }
+
+extension CharactersGridView {
+    func filterButton(_ target: Any?, action: Selector) -> UIBarButtonItem {
+        let filterButton = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 30))
+        filterButton.layer.cornerRadius = 15
+        filterButton.tintColor = .black
+        filterButton.backgroundColor = UIColor(red: 0.65, green: 0.76, blue: 0.81, alpha: 1.00)
+        filterButton.setTitle("Filter", for: .normal)
+        filterButton.setTitleColor(.black, for: .normal)
+        filterButton.setTitleColor(.white, for: .highlighted)
+        filterButton.titleLabel?.font = .systemFont(ofSize: 12)
+        filterButton.setImage(UIImage(named: "filter"), for: .normal)
+        filterButton.addTarget(target, action: action, for: .touchUpInside)
+        return UIBarButtonItem(customView: filterButton)
+    }
+
+    func logoView() -> UIBarButtonItem {
+        let imageView = UIImageView(image: UIImage(named: "RickAndMorty"))
+        imageView.contentMode = .scaleAspectFit
+
+        imageView.snp.makeConstraints { make in
+            make.width.equalTo(100)
+        }
+        return UIBarButtonItem(customView: imageView)
+    }
+}
