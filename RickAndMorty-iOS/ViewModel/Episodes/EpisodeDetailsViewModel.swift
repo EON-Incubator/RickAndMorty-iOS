@@ -11,9 +11,9 @@ import Combine
 class EpisodeDetailsViewModel {
     var episode = PassthroughSubject<RickAndMortyAPI.GetEpisodeQuery.Data.Episode, Never>()
 
-    var selectedEpisode = "" {
+    var episodeID = "" {
         didSet {
-            fetchData(epiID: selectedEpisode)
+            fetchData(epiID: episodeID)
         }
     }
 
