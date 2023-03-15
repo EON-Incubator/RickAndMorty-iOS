@@ -45,7 +45,6 @@ class LocationDetailsViewController: UIViewController {
     override func loadView() {
         view = locationDetailsView
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Locations"
         locationDetailsView.collectionView.delegate = self
         locationDetailsView.collectionView.refreshControl = UIRefreshControl()
         locationDetailsView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
