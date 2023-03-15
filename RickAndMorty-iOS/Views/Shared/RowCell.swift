@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RowCell: UICollectionViewCell {
+class RowCell: UICollectionViewListCell {
 
     lazy var characterAvatarImageViews = [UIImageView]()
 
@@ -22,6 +22,8 @@ class RowCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        self.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
         setupViews()
         setupConstraints()
     }
@@ -29,9 +31,8 @@ class RowCell: UICollectionViewCell {
     lazy var upperLabel: UILabel = {
         let label = UILabel()
         label.text = "Location Name"
-        label.font = .boldSystemFont(ofSize: 26)
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
+        label.font = UIFont(name: "Chalkboard SE Regular", size: 18)
+        label.lineBreakMode = .byTruncatingTail
         label.textAlignment = .center
         return label
     }()
@@ -110,9 +111,8 @@ class RowCell: UICollectionViewCell {
 
         upperLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(100)
+            make.right.equalToSuperview().offset(-20)
             make.top.equalToSuperview().offset(10)
-            make.height.equalTo(30)
-            make.width.equalToSuperview().offset(-100)
         }
 
         lowerLeftLabel.snp.makeConstraints { make in
