@@ -11,43 +11,43 @@ import SnapKit
 class EpisodeDetailsView: UIView {
 
     lazy var collectionView: UICollectionView = {
-            let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
-            collectionView.register(HeaderView.self,
-                                    forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                    withReuseIdentifier: "HeaderView")
-            collectionView.register(InfoCell.self,
-                                    forCellWithReuseIdentifier: InfoCell.identifier)
-            collectionView.register(LocationRowCell.self,
-                                    forCellWithReuseIdentifier: LocationRowCell.identifier)
+        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        collectionView.register(HeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: "HeaderView")
+        collectionView.register(InfoCell.self,
+                                forCellWithReuseIdentifier: InfoCell.identifier)
+        collectionView.register(CharacterRowCell.self,
+                                forCellWithReuseIdentifier: CharacterRowCell.identifier)
 
-            return collectionView
-        }()
+        return collectionView
+    }()
 
     required init?(coder: NSCoder) {
-            super.init(coder: coder)
-        }
+        super.init(coder: coder)
+    }
 
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-        }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
 
-        init() {
-            super.init(frame: .zero)
-            setupViews()
-            setupConstraints()
-        }
+    init() {
+        super.init(frame: .zero)
+        setupViews()
+        setupConstraints()
+    }
 
-        private func setupViews() {
-            self.backgroundColor = .systemBackground
-            self.addSubview(collectionView)
-            collectionView.accessibilityIdentifier = "EpisodeDetailsCollectionView"
-        }
+    private func setupViews() {
+        self.backgroundColor = .systemBackground
+        self.addSubview(collectionView)
+        collectionView.accessibilityIdentifier = "EpisodeDetailsCollectionView"
+    }
 
     private func setupConstraints() {
-            collectionView.snp.makeConstraints { make in
-                make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
-            }
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
         }
+    }
 }
 
 // MARK: - CollectionView Layout
@@ -66,7 +66,8 @@ extension EpisodeDetailsView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            let groupHeight = NSCollectionLayoutDimension.estimated(60)
+            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.estimated(60) :
+                                             NSCollectionLayoutDimension.estimated(100)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                    heightDimension: groupHeight)
