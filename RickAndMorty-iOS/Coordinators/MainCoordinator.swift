@@ -43,24 +43,28 @@ class MainCoordinator: Coordinator {
         tabBarController.addChild(characterNavController)
         characterNavController.tabBarItem.image = UIImage(systemName: "person.text.rectangle")
         characterNavController.tabBarItem.title = "Characters"
+        characterNavController.customizeNavBar()
 
         tabBarController.addChild(locationNavController)
         locationNavController.tabBarItem.image = UIImage(systemName: "map")
         locationNavController.tabBarItem.title = "Locations"
+        locationNavController.customizeNavBar()
 
         tabBarController.addChild(episodeNavController)
         episodeNavController.tabBarItem.image = UIImage(systemName: "tv")
         episodeNavController.tabBarItem.title = "Episodes"
+        episodeNavController.customizeNavBar()
 
         tabBarController.addChild(searchNavController)
         searchNavController.tabBarItem.image = UIImage(systemName: "magnifyingglass")
         searchNavController.tabBarItem.title = "Search"
+        searchNavController.customizeNavBar()
 
         // Add CharactersViewController to the character navigation controller.
-        let viewController = CharactersViewController()
-        viewController.coordinator = self
+        let charactersViewController = CharactersViewController()
+        charactersViewController.coordinator = self
         characterNavController.navigationBar.backgroundColor = .systemBackground
-        characterNavController.pushViewController(viewController, animated: false)
+        characterNavController.pushViewController(charactersViewController, animated: false)
 
         // Add LocationsViewController to the location navigation controller.
         let locationsViewController = LocationsViewController()
@@ -78,7 +82,21 @@ class MainCoordinator: Coordinator {
         // setupDemo()
         // MARK: -
 
+        func customizeNavBar(_ navController: UINavigationController) {
+
+            navController.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Creepster-Regular", size: 34)!,
+                                                                    NSAttributedString.Key.foregroundColor: UIColor.label]
+
+            navController.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Creepster-Regular", size: 28)!,
+                                                               NSAttributedString.Key.foregroundColor: UIColor.systemCyan]
+
+            navController.navigationBar.backIndicatorImage = UIImage(systemName: "arrow.backward.circle")
+            navController.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.backward.circle")
+            navController.navigationBar.barTintColor = .systemGray4
+        }
+
         // Set tab bar controller as the root view controller of the UIWindow.
+        window.tintColor = .label
         window.rootViewController = tabBarController
         window.makeKeyAndVisible()
     }
@@ -100,4 +118,18 @@ class MainCoordinator: Coordinator {
 
     }
 
+}
+
+extension UINavigationController {
+    func customizeNavBar() {
+        navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Creepster-Regular", size: 34)!,
+                                                                NSAttributedString.Key.foregroundColor: UIColor.label]
+
+        navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Creepster-Regular", size: 28)!,
+                                                           NSAttributedString.Key.foregroundColor: UIColor.systemCyan]
+
+        navigationBar.backIndicatorImage = UIImage(systemName: "arrow.backward.circle")
+        navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.backward.circle")
+        navigationBar.barTintColor = .systemGray4
+    }
 }
