@@ -15,7 +15,7 @@ class CharacterDetailsViewController: UIViewController {
     var characterDetailsView = CharacterDetailsView()
     let viewModel = CharacterDetailsViewModel()
     private var cancellables = Set<AnyCancellable>()
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, CharacterInfoHasher>
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, CharacterDetails>
     private var dataSource: DataSource!
     var characterID: String?
 
@@ -34,16 +34,13 @@ class CharacterDetailsViewController: UIViewController {
         viewModel.character.sink(receiveValue: { characterInfo in
             self.title = characterInfo.name
 
-            var snapshot = NSDiffableDataSourceSnapshot<Section, CharacterInfoHasher>()
-            snapshot.appendSections([.appearance, .info, .location])
-            snapshot.appendItems([CharacterInfoHasher.init(item: characterInfo)], toSection: .appearance)
+            var snapshot = NSDiffableDataSourceSnapshot<Section, CharacterDetails>()
+            snapshot.appendSections([.appearance, .info, .location, .episodes])
+            snapshot.appendItems([CharacterDetails(characterInfo)], toSection: .appearance)
+            snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .info)
+            snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .location)
 
-            snapshot.appendItems([CharacterInfoHasher.init(item: characterInfo)], toSection: .info)
-            snapshot.appendItems([CharacterInfoHasher.init(item: characterInfo)], toSection: .info)
-            snapshot.appendItems([CharacterInfoHasher.init(item: characterInfo)], toSection: .info)
-
-            snapshot.appendItems([CharacterInfoHasher.init(item: characterInfo)], toSection: .location)
-            snapshot.appendItems([CharacterInfoHasher.init(item: characterInfo)], toSection: .location)
+            //            snapshot.appendItems(characterInfo.episode, toSection: .episodes)
             self.dataSource.apply(snapshot, animatingDifferences: true)
         }).store(in: &cancellables)
     }
@@ -107,5 +104,21 @@ extension CharacterDetailsViewController {
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
         }
+    }
+}
+
+// MARK: Struct for Diffable DataSource
+struct CharacterDetails: Hashable {
+    var id: UUID
+    var item: RickAndMortyAPI.GetCharacterQuery.Data.Character
+    init(id: UUID = UUID(), _ item: RickAndMortyAPI.GetCharacterQuery.Data.Character) {
+        self.id = id
+        self.item = item
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    static func == (lhs: CharacterDetails, rhs: CharacterDetails) -> Bool {
+        lhs.id == rhs.id
     }
 }
