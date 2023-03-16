@@ -47,7 +47,7 @@ class CharactersView: UIView {
         return UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
     }()
 
-    var characterCell = UICollectionView.CellRegistration<CharactersGridCell, RickAndMortyAPI.CharacterBasics> { (cell, _ indexPath, character) in
+    var characterCell = UICollectionView.CellRegistration<CharacterGridCell, RickAndMortyAPI.CharacterBasics> { (cell, _ indexPath, character) in
         cell.characterNameLabel.text = character.name
         if let image = character.image {
             cell.characterImage.sd_setImage(with: URL(string: image))

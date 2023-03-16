@@ -16,7 +16,7 @@ final class CharacterGridCellSpec: QuickSpec {
     override func spec() {
         describe("CharacterGridCell") {
 
-            var view: CharactersGridCell!
+            var view: CharacterGridCell!
             var imageView: UIImageView!
             var label: UILabel!
 
