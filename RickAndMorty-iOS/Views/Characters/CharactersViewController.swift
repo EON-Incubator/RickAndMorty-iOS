@@ -12,7 +12,7 @@ import SDWebImage
 class CharactersViewController: UIViewController {
 
     weak var coordinator: MainCoordinator?
-    var charactersGridView = CharactersGridView()
+    var charactersGridView = CharactersView()
     let viewModel = CharactersViewModel()
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, RickAndMortyAPI.CharacterBasics>

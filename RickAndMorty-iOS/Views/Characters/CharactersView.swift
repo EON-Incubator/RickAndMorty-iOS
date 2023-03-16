@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class CharactersGridView: UIView {
+class CharactersView: UIView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -77,7 +77,7 @@ class CharactersGridView: UIView {
     }
 }
 
-extension CharactersGridView {
+extension CharactersView {
     func filterButton(_ target: Any?, action: Selector) -> UIBarButtonItem {
         let filterButton = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 30))
         filterButton.layer.cornerRadius = 15
