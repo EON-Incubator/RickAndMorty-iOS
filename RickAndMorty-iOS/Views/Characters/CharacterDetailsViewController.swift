@@ -59,7 +59,7 @@ extension CharacterDetailsViewController {
             switch indexPath.section {
             case 0:
                 if let character = characterInfo as? CharacterDetails {
-                    let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterDetailsViewAvatarCell.identifier, for: indexPath) as? CharacterDetailsViewAvatarCell
+                    let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell
                     guard let image = character.item.image else { fatalError("Image not found") }
                     avatarCell?.characterImage.sd_setImage(with: URL(string: image))
                     cell = avatarCell!

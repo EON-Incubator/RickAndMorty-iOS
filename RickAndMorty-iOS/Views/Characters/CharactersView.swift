@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class CharactersGridView: UIView {
+class CharactersView: UIView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -44,10 +44,15 @@ class CharactersGridView: UIView {
     }()
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
-        collectionView.register(CharactersGridCell.self, forCellWithReuseIdentifier: CharactersGridCell.identifier)
-        return collectionView
+        return UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
     }()
+
+    var characterCell = UICollectionView.CellRegistration<CharacterGridCell, RickAndMortyAPI.CharacterBasics> { (cell, _ indexPath, character) in
+        cell.characterNameLabel.text = character.name
+        if let image = character.image {
+            cell.characterImage.sd_setImage(with: URL(string: image))
+        }
+    }
 
     func createLayout() -> UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0))
@@ -72,7 +77,7 @@ class CharactersGridView: UIView {
     }
 }
 
-extension CharactersGridView {
+extension CharactersView {
     func filterButton(_ target: Any?, action: Selector) -> UIBarButtonItem {
         let filterButton = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 30))
         filterButton.layer.cornerRadius = 15
