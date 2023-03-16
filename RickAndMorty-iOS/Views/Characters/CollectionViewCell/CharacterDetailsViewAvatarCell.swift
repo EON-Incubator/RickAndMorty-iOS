@@ -35,7 +35,8 @@ class CharacterDetailsViewAvatarCell: UICollectionViewCell {
 
     func setupConstraints() {
         characterImage.snp.makeConstraints { make in
-            make.edges.equalTo(self)
+            make.edges.equalTo(self).inset(UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40))
+
         }
     }
 }

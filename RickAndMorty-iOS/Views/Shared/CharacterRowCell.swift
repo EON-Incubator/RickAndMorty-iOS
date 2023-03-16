@@ -25,11 +25,11 @@ class CharacterRowCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Status"
         label.textColor = .black
-        label.font = .systemFont(ofSize: 10)
+        label.font = .systemFont(ofSize: 13, weight: .semibold)
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.backgroundColor = .systemGray
-        label.transform = CGAffineTransform(rotationAngle: -0.45)
+        label.transform = CGAffineTransform(rotationAngle: -0.70)
         label.layer.shadowColor = UIColor.black.cgColor
         label.layer.shadowOpacity = 0.5
         label.layer.shadowOffset = CGSize(width: 0, height: 2)
@@ -50,11 +50,11 @@ class CharacterRowCell: UICollectionViewCell {
     lazy var lowerLeftLabel: UILabel = {
         let label = UILabel()
         label.text = "Gender"
-        label.font = .systemFont(ofSize: 14)
+        label.font = .systemFont(ofSize: 14, weight: .bold)
         label.textColor = .systemBackground
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.backgroundColor = .systemIndigo
+        label.backgroundColor = UIColor(red: 0.40, green: 0.20, blue: 0.50, alpha: 0.9)
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
         return label
@@ -63,11 +63,11 @@ class CharacterRowCell: UICollectionViewCell {
     lazy var lowerRightLabel: UILabel = {
         let label = UILabel()
         label.text = "Species"
-        label.font = .systemFont(ofSize: 14)
+        label.font = .systemFont(ofSize: 14, weight: .bold)
         label.textColor = .systemBackground
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.backgroundColor = .systemOrange
+        label.backgroundColor = UIColor(red: 0.87, green: 0.47, blue: 0.34, alpha: 0.9)
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
         return label
@@ -162,6 +162,7 @@ class CharacterRowCell: UICollectionViewCell {
             make.top.equalToSuperview().offset(5)
             make.left.equalToSuperview().offset(-15)
             make.width.equalTo(80)
+            make.height.equalTo(25)
         }
 
         disclosureIndicatorImageView.snp.makeConstraints { make in

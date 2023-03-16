@@ -124,6 +124,7 @@ extension EpisodeDetailsViewController {
                 fatalError()
             }
             headerView.textLabel.text = "\(EpisodeDetailsSection.allCases[indexPath.section])".uppercased()
+            headerView.textLabel.textColor = .lightGray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
         }

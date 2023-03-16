@@ -117,6 +117,7 @@ extension CharacterDetailsViewController {
                 fatalError()
             }
             headerView.textLabel.text = "\(Section.allCases[indexPath.section])".uppercased()
+            headerView.textLabel.textColor = .lightGray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
         }
@@ -135,7 +136,9 @@ extension CharacterDetailsViewController: UICollectionViewDelegate {
             if let character = dataSource.itemIdentifier(for: indexPath) as? CharacterDetails {
                 switch indexPath.row {
                 case 0:
-                    coordinator?.goLocationDetails(id: (character.item.origin?.id)!, navController: self.navigationController!)
+                    if let originID = character.item.origin?.id {
+                        coordinator?.goLocationDetails(id: originID, navController: self.navigationController!)
+                    }
                 default:
                     coordinator?.goLocationDetails(id: (character.item.location?.id)!, navController: self.navigationController!)
                 }

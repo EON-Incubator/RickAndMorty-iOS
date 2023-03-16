@@ -18,6 +18,7 @@ class InfoCell: UICollectionViewListCell {
     }
 
     func setupViews() {
+        self.contentView.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.gray.cgColor
         self.layer.cornerRadius = 5
@@ -29,13 +30,15 @@ class InfoCell: UICollectionViewListCell {
     lazy var leftLabel: UILabel = {
         let label = UILabel()
         label.text = "Gender"
-        label.font = .boldSystemFont(ofSize: 14)
+        label.textColor = .black
+        label.font = .boldSystemFont(ofSize: 15)
         return label
     }()
 
     lazy var rightLabel: UILabel = {
         let label = UILabel()
         label.text = "Male"
+        label.textColor = .black
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .right
         label.minimumScaleFactor = 0.5
@@ -52,7 +55,7 @@ class InfoCell: UICollectionViewListCell {
 
     func setupConstraints() {
         leftLabel.snp.makeConstraints { make in
-            make.left.equalTo(self).offset(50)
+            make.left.equalTo(self).offset(60)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
             make.width.equalToSuperview().offset(-20).multipliedBy(0.5)
@@ -64,10 +67,10 @@ class InfoCell: UICollectionViewListCell {
             make.width.equalToSuperview().offset(-20).multipliedBy(0.5)
         }
         infoImage.snp.makeConstraints { make in
-            make.left.equalTo(self).offset(10)
-            make.width.equalTo(30)
-            make.height.equalTo(30)
-            make.top.equalTo(self).offset(10)
+            make.left.equalTo(self).offset(25)
+            make.width.equalTo(25)
+            make.height.equalTo(25)
+            make.top.equalTo(self).offset(12)
         }
     }
 

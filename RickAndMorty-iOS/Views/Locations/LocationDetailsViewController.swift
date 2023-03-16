@@ -136,6 +136,7 @@ extension LocationDetailsViewController {
                 fatalError()
             }
             headerView.textLabel.text = "\(LocationDetailsSection.allCases[indexPath.section])".uppercased()
+            headerView.textLabel.textColor = .gray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
         }

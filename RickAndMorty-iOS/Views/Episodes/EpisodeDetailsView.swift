@@ -41,11 +41,12 @@ class EpisodeDetailsView: UIView {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
         collectionView.accessibilityIdentifier = "EpisodeDetailsCollectionView"
+        collectionView.showsVerticalScrollIndicator = false
     }
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
+            make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
     }
 }
