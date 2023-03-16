@@ -24,7 +24,23 @@ class CharactersGridView: UIView {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
         collectionView.showsVerticalScrollIndicator = false
+
+        let layoutGuide = self.safeAreaLayoutGuide
+        self.addSubview(loadingIndicator)
+        NSLayoutConstraint.activate([
+            layoutGuide.centerXAnchor.constraint(equalTo: loadingIndicator.centerXAnchor),
+            layoutGuide.bottomAnchor.constraint(equalTo: loadingIndicator.bottomAnchor, constant: 20)
+        ])
+
     }
+
+    lazy var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        indicator.color = .black
+        return indicator
+    }()
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
