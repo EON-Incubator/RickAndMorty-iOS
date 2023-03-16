@@ -232,6 +232,8 @@
 				544A6CC129BFA5410055FB75 /* Section.swift */,
 				F7C26FF529C119C900903AF2 /* CharacterRowCell.swift */,
 				544A6CC729C0F8A70055FB75 /* RowCell.swift */,
+				5447EE1E29BA5A7900D2D05A /* CharacterGridCell.swift */,
+				54BDF5C429BBC891003F7084 /* AvatarCell.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -310,8 +312,6 @@
 		54BDF5C329BBC757003F7084 /* CollectionViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				5447EE1E29BA5A7900D2D05A /* CharacterGridCell.swift */,
-				54BDF5C429BBC891003F7084 /* AvatarCell.swift */,
 			);
 			path = CollectionViewCell;
 			sourceTree = "<group>";
