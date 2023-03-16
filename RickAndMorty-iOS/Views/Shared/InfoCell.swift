@@ -29,7 +29,7 @@ class InfoCell: UICollectionViewListCell {
     lazy var leftLabel: UILabel = {
         let label = UILabel()
         label.text = "Gender"
-        label.font = .boldSystemFont(ofSize: 14)
+        label.font = .boldSystemFont(ofSize: 15)
         return label
     }()
 
@@ -52,7 +52,7 @@ class InfoCell: UICollectionViewListCell {
 
     func setupConstraints() {
         leftLabel.snp.makeConstraints { make in
-            make.left.equalTo(self).offset(50)
+            make.left.equalTo(self).offset(60)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
             make.width.equalToSuperview().offset(-20).multipliedBy(0.5)
@@ -64,10 +64,10 @@ class InfoCell: UICollectionViewListCell {
             make.width.equalToSuperview().offset(-20).multipliedBy(0.5)
         }
         infoImage.snp.makeConstraints { make in
-            make.left.equalTo(self).offset(10)
-            make.width.equalTo(30)
-            make.height.equalTo(30)
-            make.top.equalTo(self).offset(10)
+            make.left.equalTo(self).offset(25)
+            make.width.equalTo(25)
+            make.height.equalTo(25)
+            make.top.equalTo(self).offset(12)
         }
     }
 
