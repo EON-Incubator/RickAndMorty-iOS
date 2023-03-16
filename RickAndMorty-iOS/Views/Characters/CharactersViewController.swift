@@ -88,7 +88,11 @@ extension CharactersViewController: UICollectionViewDataSource {
 extension CharactersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
-            loadMore()
+            charactersGridView.loadingIndicator.startAnimating()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.loadMore()
+                self.charactersGridView.loadingIndicator.stopAnimating()
+            }
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
