@@ -29,9 +29,10 @@ class CharactersGridView: UIView {
         self.addSubview(loadingIndicator)
         NSLayoutConstraint.activate([
             layoutGuide.centerXAnchor.constraint(equalTo: loadingIndicator.centerXAnchor),
-            layoutGuide.bottomAnchor.constraint(equalTo: loadingIndicator.bottomAnchor, constant: 20)
+            layoutGuide.bottomAnchor.constraint(equalTo: loadingIndicator.bottomAnchor, constant: 10)
         ])
 
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
     }
 
     lazy var loadingIndicator: UIActivityIndicatorView = {
