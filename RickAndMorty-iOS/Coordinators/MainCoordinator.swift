@@ -18,9 +18,29 @@ class MainCoordinator: Coordinator {
     let episodeNavController = UINavigationController()
     let searchNavController = UINavigationController()
 
+    func customNavBarAppearance() -> UINavigationBarAppearance {
+        let customNavBarAppearance = UINavigationBarAppearance()
+
+        let shadow = NSShadow()
+        shadow.shadowColor = UIColor.label
+        shadow.shadowBlurRadius = 0.5
+
+        customNavBarAppearance.largeTitleTextAttributes = [.font: UIFont(name: "Creepster-Regular", size: 34)!,
+                                                           .foregroundColor: UIColor.label,
+                                                           .shadow: shadow]
+        customNavBarAppearance.titleTextAttributes = [.font: UIFont(name: "Creepster-Regular", size: 28)!,
+                                                      .foregroundColor: UIColor.systemCyan,
+                                                      .shadow: shadow]
+
+        customNavBarAppearance.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 5)
+        customNavBarAppearance.setBackIndicatorImage(UIImage(systemName: "arrow.backward.circle"),
+                                                     transitionMaskImage: UIImage(systemName: "arrow.backward.circle"))
+
+        return customNavBarAppearance
+    }
+
     // MARK: - Setup demo tab for experiment
     let demoNavController = UINavigationController()
-
     func setupDemo() {
         tabBarController.addChild(demoNavController)
         demoNavController.tabBarItem.title = "Demo"
@@ -38,27 +58,30 @@ class MainCoordinator: Coordinator {
     func start() {
         // Configure tab bar.
         tabBarController.tabBar.backgroundColor = .systemBackground
+        window.backgroundColor = .systemRed
+
+        let navBarAppearance = customNavBarAppearance()
 
         // Add navigation controllers to the tab bar and set the title and icon for each tab.
         tabBarController.addChild(characterNavController)
         characterNavController.tabBarItem.image = UIImage(systemName: "person.text.rectangle")
         characterNavController.tabBarItem.title = "Characters"
-        characterNavController.customizeNavBar()
+        characterNavController.navigationBar.standardAppearance = navBarAppearance
 
         tabBarController.addChild(locationNavController)
         locationNavController.tabBarItem.image = UIImage(systemName: "map")
         locationNavController.tabBarItem.title = "Locations"
-        locationNavController.customizeNavBar()
+        locationNavController.navigationBar.standardAppearance = navBarAppearance
 
         tabBarController.addChild(episodeNavController)
         episodeNavController.tabBarItem.image = UIImage(systemName: "tv")
         episodeNavController.tabBarItem.title = "Episodes"
-        episodeNavController.customizeNavBar()
+        episodeNavController.navigationBar.standardAppearance = navBarAppearance
 
         tabBarController.addChild(searchNavController)
         searchNavController.tabBarItem.image = UIImage(systemName: "magnifyingglass")
         searchNavController.tabBarItem.title = "Search"
-        searchNavController.customizeNavBar()
+        searchNavController.navigationBar.standardAppearance = navBarAppearance
 
         // Add CharactersViewController to the character navigation controller.
         let charactersViewController = CharactersViewController()
@@ -104,17 +127,4 @@ class MainCoordinator: Coordinator {
         navController.pushViewController(viewController, animated: true)
     }
 
-}
-
-extension UINavigationController {
-    func customizeNavBar() {
-        navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Creepster-Regular", size: 34)!,
-                                                                NSAttributedString.Key.foregroundColor: UIColor.label]
-        navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Creepster-Regular", size: 28)!,
-                                                           NSAttributedString.Key.foregroundColor: UIColor.systemCyan]
-        navigationBar.setTitleVerticalPositionAdjustment(5, for: .default)
-        navigationBar.backIndicatorImage = UIImage(systemName: "arrow.backward.circle")
-        navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.backward.circle")
-        navigationBar.barTintColor = .systemGray4
-    }
 }
