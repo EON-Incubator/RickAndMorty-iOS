@@ -24,6 +24,7 @@ class CharacterDetailsView: UIView {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
         collectionView.accessibilityIdentifier = "CharacterDetailsView"
+        collectionView.showsVerticalScrollIndicator = false
     }
 
     private func setupConstraints() {

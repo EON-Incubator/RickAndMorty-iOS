@@ -23,6 +23,7 @@ class CharactersGridView: UIView {
     private func setupViews() {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
+        collectionView.showsVerticalScrollIndicator = false
     }
 
     lazy var collectionView: UICollectionView = {

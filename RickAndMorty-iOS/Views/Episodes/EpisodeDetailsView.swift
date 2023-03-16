@@ -41,6 +41,7 @@ class EpisodeDetailsView: UIView {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
         collectionView.accessibilityIdentifier = "EpisodeDetailsCollectionView"
+        collectionView.showsVerticalScrollIndicator = false
     }
 
     private func setupConstraints() {
