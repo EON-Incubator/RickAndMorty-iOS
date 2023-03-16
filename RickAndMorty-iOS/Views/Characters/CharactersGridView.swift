@@ -44,10 +44,15 @@ class CharactersGridView: UIView {
     }()
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
-        collectionView.register(CharactersGridCell.self, forCellWithReuseIdentifier: CharactersGridCell.identifier)
-        return collectionView
+        return UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
     }()
+
+    var characterCell = UICollectionView.CellRegistration<CharactersGridCell, RickAndMortyAPI.CharacterBasics> { (cell, _ indexPath, character) in
+        cell.characterNameLabel.text = character.name
+        if let image = character.image {
+            cell.characterImage.sd_setImage(with: URL(string: image))
+        }
+    }
 
     func createLayout() -> UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0))
