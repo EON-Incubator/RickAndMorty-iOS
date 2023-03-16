@@ -117,6 +117,7 @@ extension CharacterDetailsViewController {
                 fatalError()
             }
             headerView.textLabel.text = "\(Section.allCases[indexPath.section])".uppercased()
+            headerView.textLabel.textColor = .lightGray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
         }
