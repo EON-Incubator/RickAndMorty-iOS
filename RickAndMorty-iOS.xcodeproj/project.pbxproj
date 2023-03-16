@@ -309,13 +309,6 @@
 			path = Characters;
 			sourceTree = "<group>";
 		};
-		54BDF5C329BBC757003F7084 /* CollectionViewCell */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = CollectionViewCell;
-			sourceTree = "<group>";
-		};
 		F7604C9C29BF721D003C2906 /* Locations */ = {
 			isa = PBXGroup;
 			children = (
@@ -385,7 +378,6 @@
 				F77E4B8F29B908E700B8B5CE /* CharactersView.swift */,
 				54BDF5BD29BBB2CB003F7084 /* CharacterDetailsViewController.swift */,
 				54BDF5C129BBBEB9003F7084 /* CharacterDetailsView.swift */,
-				54BDF5C329BBC757003F7084 /* CollectionViewCell */,
 			);
 			path = Characters;
 			sourceTree = "<group>";
