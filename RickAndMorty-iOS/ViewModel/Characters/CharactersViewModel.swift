@@ -16,16 +16,8 @@ class CharactersViewModel {
             fetchData(page: currentPage)
         }
     }
-    var currentStatus = "" {
-        didSet {
-            fetchData(page: 1)
-        }
-    }
-    var currentGender = "" {
-        didSet {
-            fetchData(page: 1)
-        }
-    }
+    var currentStatus = ""
+    var currentGender = ""
 
     func fetchData(page: Int) {
         Network.shared.apollo.fetch(

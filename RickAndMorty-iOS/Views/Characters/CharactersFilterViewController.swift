@@ -13,9 +13,6 @@ class CharactersFilterViewController: UIViewController {
     private let statuses = ["alive", "dead", "unknown"]
     private let genders = ["male", "female", "genderless", "unknown"]
 
-    var currentStatus = ""
-    var currentGender = ""
-
     private let charactersFilterView = CharactersFilterView()
     private var viewModel: CharactersViewModel
 
@@ -40,17 +37,31 @@ class CharactersFilterViewController: UIViewController {
 
         charactersFilterView.applyButton.addTarget(self, action: #selector(applyButtonTapped), for: .touchUpInside)
         charactersFilterView.dismissButton.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
+        charactersFilterView.clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
 
+        if let currentStatusIndex = statuses.firstIndex(of: viewModel.currentStatus) {
+            charactersFilterView.statusSegmentControl.selectedSegmentIndex = currentStatusIndex
+        }
+
+        if let currentGenderIndex = genders.firstIndex(of: viewModel.currentGender) {
+            charactersFilterView.genderSegmentControl.selectedSegmentIndex = currentGenderIndex
+        }
     }
 
     @objc private func statusValueChanged() {
         let statusIndex = charactersFilterView.statusSegmentControl.selectedSegmentIndex
-        if statusIndex >= 0 { viewModel.currentStatus = self.statuses[statusIndex] }
+        if statusIndex >= 0 {
+            viewModel.currentStatus = self.statuses[statusIndex]
+            viewModel.currentPage = 1
+        }
     }
 
     @objc private func genderValueChanged() {
         let genderIndex = charactersFilterView.genderSegmentControl.selectedSegmentIndex
-        if genderIndex >= 0 { viewModel.currentGender = self.genders[genderIndex] }
+        if genderIndex >= 0 {
+            viewModel.currentGender = self.genders[genderIndex]
+            viewModel.currentPage = 1
+        }
     }
 
     @objc private func applyButtonTapped() {
@@ -59,5 +70,13 @@ class CharactersFilterViewController: UIViewController {
 
     @objc private func dismissButtonTapped() {
         self.dismiss(animated: true)
+    }
+
+    @objc private func clearButtonTapped() {
+        charactersFilterView.statusSegmentControl.selectedSegmentIndex = -1
+        charactersFilterView.genderSegmentControl.selectedSegmentIndex = -1
+        viewModel.currentStatus = ""
+        viewModel.currentGender = ""
+        viewModel.currentPage = 1
     }
 }
