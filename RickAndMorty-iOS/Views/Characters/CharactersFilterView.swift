@@ -147,7 +147,7 @@ class CharactersFilterView: UIView {
             make.top.equalTo(statusLabel.snp_bottomMargin).offset(16)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
-            make.height.equalTo(40)
+            make.height.equalTo(50)
         }
 
         genderLabel.snp.makeConstraints { make in
@@ -160,7 +160,7 @@ class CharactersFilterView: UIView {
             make.top.equalTo(genderLabel.snp_bottomMargin).offset(16)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
-            make.height.equalTo(40)
+            make.height.equalTo(50)
         }
     }
 }

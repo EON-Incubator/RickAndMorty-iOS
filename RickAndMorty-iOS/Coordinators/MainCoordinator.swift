@@ -121,12 +121,13 @@ class MainCoordinator: Coordinator {
         if let popover = charactersFilterViewController.popoverPresentationController {
             let sheet = popover.adaptiveSheetPresentationController
             sheet.detents = [
-                .custom(identifier: UISheetPresentationController.Detent.Identifier("small")) { context in
-                    0.35 * context.maximumDetentValue
+                .custom(identifier: UISheetPresentationController.Detent.Identifier("small")) { _ in
+                    280
                 }
             ]
             sheet.prefersGrabberVisible = true
             sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+            sheet.prefersEdgeAttachedInCompactHeight = true
         }
         sender.present(charactersFilterViewController, animated: true, completion: nil)
     }

@@ -378,7 +378,6 @@
 		F77E4B9529B934D200B8B5CE /* Characters */ = {
 			isa = PBXGroup;
 			children = (
-				54BDF5C329BBC757003F7084 /* CollectionViewCell */,
 				F77E4B9129B9090900B8B5CE /* CharactersViewController.swift */,
 				F77E4B8F29B908E700B8B5CE /* CharactersView.swift */,
 				54BDF5BD29BBB2CB003F7084 /* CharacterDetailsViewController.swift */,
