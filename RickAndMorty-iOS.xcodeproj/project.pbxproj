@@ -90,6 +90,8 @@
 		F7DB571429BBDF1D000FAB01 /* SearchSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB571329BBDF1D000FAB01 /* SearchSpec.swift */; };
 		F7DB571A29BBDFF0000FAB01 /* SearchUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB571929BBDFF0000FAB01 /* SearchUISpec.swift */; };
 		F7DB571D29BBE024000FAB01 /* EpisodesUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB571729BBDFD2000FAB01 /* EpisodesUISpec.swift */; };
+		F7F240C829C440A0007E34AC /* CharactersFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240C729C440A0007E34AC /* CharactersFilterView.swift */; };
+		F7F240CA29C442CE007E34AC /* CharactersFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240C929C442CE007E34AC /* CharactersFilterViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -189,6 +191,8 @@
 		F7DB571329BBDF1D000FAB01 /* SearchSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSpec.swift; sourceTree = "<group>"; };
 		F7DB571729BBDFD2000FAB01 /* EpisodesUISpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesUISpec.swift; sourceTree = "<group>"; };
 		F7DB571929BBDFF0000FAB01 /* SearchUISpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUISpec.swift; sourceTree = "<group>"; };
+		F7F240C729C440A0007E34AC /* CharactersFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersFilterView.swift; sourceTree = "<group>"; };
+		F7F240C929C442CE007E34AC /* CharactersFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersFilterViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -381,11 +385,13 @@
 		F77E4B9529B934D200B8B5CE /* Characters */ = {
 			isa = PBXGroup;
 			children = (
+				54BDF5C329BBC757003F7084 /* CollectionViewCell */,
 				F77E4B9129B9090900B8B5CE /* CharactersViewController.swift */,
 				F77E4B8F29B908E700B8B5CE /* CharactersGridView.swift */,
 				54BDF5BD29BBB2CB003F7084 /* CharacterDetailsViewController.swift */,
 				54BDF5C129BBBEB9003F7084 /* CharacterDetailsView.swift */,
-				54BDF5C329BBC757003F7084 /* CollectionViewCell */,
+				F7F240C729C440A0007E34AC /* CharactersFilterView.swift */,
+				F7F240C929C442CE007E34AC /* CharactersFilterViewController.swift */,
 			);
 			path = Characters;
 			sourceTree = "<group>";
@@ -804,6 +810,7 @@
 				540F4CF229BEABE700677B82 /* HeaderView.swift in Sources */,
 				540F4CF029BEA1DC00677B82 /* InfoCell.swift in Sources */,
 				F77E4BDA29B9B27900B8B5CE /* RickAndMortyAPI.graphql.swift in Sources */,
+				F7F240CA29C442CE007E34AC /* CharactersFilterViewController.swift in Sources */,
 				F7C26FEC29BF76FF00903AF2 /* LocationRowCell.swift in Sources */,
 				F7C26FE829BF730200903AF2 /* LocationsViewController.swift in Sources */,
 				F77E4B9C29B9364600B8B5CE /* MainCoordinator.swift in Sources */,
@@ -814,6 +821,7 @@
 				F77E4B9A29B9362300B8B5CE /* Coordinator.swift in Sources */,
 				F77E4BD529B9B27900B8B5CE /* Episode.graphql.swift in Sources */,
 				544A6CCD29C106060055FB75 /* EpisodesViewController.swift in Sources */,
+				F7F240C829C440A0007E34AC /* CharactersFilterView.swift in Sources */,
 				F77E4C0129BA4A6100B8B5CE /* DemoViewModel.swift in Sources */,
 				F77E4B9229B9090900B8B5CE /* CharactersViewController.swift in Sources */,
 				F77E4BD329B9B27900B8B5CE /* Location.graphql.swift in Sources */,

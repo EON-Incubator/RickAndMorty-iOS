@@ -36,8 +36,32 @@ class CharactersViewController: UIViewController {
 
     }
 
-    @objc func filterButtonPressed() {
-        print("filterButtonPressed")
+    @objc func filterButtonPressed(sender: AnyObject?) {
+        guard presentedViewController == nil else {
+            dismiss(animated: true, completion: {
+                self.filterButtonPressed(sender: sender)
+            })
+            return
+        }
+
+        let charactersFilterViewController = CharactersFilterViewController()
+        charactersFilterViewController.modalPresentationStyle = .popover
+        if let popover = charactersFilterViewController.popoverPresentationController {
+            let sheet = popover.adaptiveSheetPresentationController
+            sheet.detents = [
+                .custom(identifier: UISheetPresentationController.Detent.Identifier("small")) { context in
+                    0.4 * context.maximumDetentValue
+                }
+            ]
+            sheet.prefersGrabberVisible = true
+            // sheet.largestUndimmedDetentIdentifier = .medium
+            // sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            // sheet.prefersEdgeAttachedInCompactHeight = false
+            // sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+        }
+
+        present(charactersFilterViewController, animated: true, completion: nil)
+
     }
 
     func subscribeToViewModel() {
