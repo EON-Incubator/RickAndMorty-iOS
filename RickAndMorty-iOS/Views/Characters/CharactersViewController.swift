@@ -54,10 +54,7 @@ class CharactersViewController: UIViewController {
                 }
             ]
             sheet.prefersGrabberVisible = true
-            // sheet.largestUndimmedDetentIdentifier = .medium
-            // sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            // sheet.prefersEdgeAttachedInCompactHeight = false
-            // sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
         }
 
         present(charactersFilterViewController, animated: true, completion: nil)
