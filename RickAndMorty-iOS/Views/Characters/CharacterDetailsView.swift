@@ -35,8 +35,8 @@ class CharacterDetailsView: UIView {
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
-        collectionView.register(CharacterDetailsViewAvatarCell.self,
-                                forCellWithReuseIdentifier: CharacterDetailsViewAvatarCell.identifier)
+        collectionView.register(AvatarCell.self,
+                                forCellWithReuseIdentifier: AvatarCell.identifier)
         collectionView.register(InfoCell.self,
                                 forCellWithReuseIdentifier: InfoCell.identifier)
         collectionView.register(HeaderView.self,

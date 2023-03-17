@@ -12,10 +12,20 @@ import SDWebImage
 class CharactersViewController: UIViewController {
 
     weak var coordinator: MainCoordinator?
-    var charactersGridView = CharactersGridView()
+    var charactersGridView = CharactersView()
     let viewModel = CharactersViewModel()
-    var characterInfo: [RickAndMortyAPI.CharacterBasics] = []
+
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, RickAndMortyAPI.CharacterBasics>
+    private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        configureDataSource()
+        subscribeToViewModel()
+        viewModel.currentPage = 1
+    }
 
     override func loadView() {
         view = charactersGridView
@@ -23,26 +33,18 @@ class CharactersViewController: UIViewController {
         title = "Characters"
         navigationItem.rightBarButtonItem = charactersGridView.filterButton(self, action: #selector(filterButtonPressed))
         navigationItem.leftBarButtonItem = charactersGridView.logoView()
+
         charactersGridView.collectionView.delegate = self
-        charactersGridView.collectionView.dataSource = self
         charactersGridView.collectionView.refreshControl = UIRefreshControl()
         charactersGridView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        subscribeToViewModel()
-        viewModel.currentPage = 1
-
-    }
-
     func subscribeToViewModel() {
-        viewModel.characters.sink(receiveValue: { characterInfo in
-            self.characterInfo = []
-            for characterInfo in characterInfo {
-                self.characterInfo.append(characterInfo)
-            }
-            self.charactersGridView.collectionView.reloadData()
+        viewModel.characters.sink(receiveValue: { characters in
+            var snapshot = NSDiffableDataSourceSnapshot<Section, RickAndMortyAPI.CharacterBasics>()
+            snapshot.appendSections([.appearance])
+            snapshot.appendItems(characters, toSection: .appearance)
+            self.dataSource.apply(snapshot, animatingDifferences: true)
             // Dismiss refresh control.
             DispatchQueue.main.async {
                 self.charactersGridView.collectionView.refreshControl?.endRefreshing()
@@ -55,14 +57,12 @@ class CharactersViewController: UIViewController {
     }
 
     @objc func onRefresh() {
-        // characterInfo = []
         viewModel.currentGender = ""
         viewModel.currentStatus = ""
         viewModel.currentPage = 1
     }
 
     func loadMore() {
-        // characterInfo = []
         viewModel.currentPage += 1
     }
 
@@ -72,29 +72,20 @@ class CharactersViewController: UIViewController {
 }
 
 // MARK: - UICollectionViewDataSource
-extension CharactersViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return characterInfo.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharactersGridCell.identifier,
-                                                            for: indexPath) as? CharactersGridCell
-
-        if !characterInfo.isEmpty {
-            let name = self.characterInfo[indexPath.item].name
-            guard let image = characterInfo[indexPath.item].image else { fatalError("Image not found") }
-            cell?.characterNameLabel.text = name
-            cell?.characterImage.sd_setImage(with: URL(string: image))
-        }
-        return cell!
+extension CharactersViewController {
+    private func configureDataSource() {
+        dataSource = DataSource(collectionView: charactersGridView.collectionView, cellProvider: { (collectionView, indexPath, character) -> UICollectionViewCell? in
+            return collectionView.dequeueConfiguredReusableCell(using: self.charactersGridView.characterCell, for: indexPath, item: character)
+        })
     }
 }
 
 // MARK: - UICollectionViewDelegate
 extension CharactersViewController: UICollectionViewDelegate {
+
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
+            // show lazy-loading indicator
             charactersGridView.loadingIndicator.startAnimating()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.loadMore()
@@ -102,8 +93,8 @@ extension CharactersViewController: UICollectionViewDelegate {
             }
         }
     }
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        coordinator?.goCharacterDetails(id: characterInfo[indexPath.item].id!,
-                                        navController: coordinator!.characterNavController)
+        coordinator?.goCharacterDetails(id: viewModel.characters.value[indexPath.row].id!, navController: self.navigationController!)
     }
 }

@@ -44,3 +44,13 @@ class CharactersViewModel {
                 }
     }
 }
+// MARK: Extension for Hashable (Equatable)
+extension RickAndMortyAPI.CharacterBasics: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    public static func == (lhs: RickAndMortyAPI.CharacterBasics, rhs: RickAndMortyAPI.CharacterBasics) -> Bool {
+        lhs.id == rhs.id
+    }
+}

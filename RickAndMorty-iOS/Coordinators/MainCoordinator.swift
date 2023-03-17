@@ -122,7 +122,7 @@ class MainCoordinator: Coordinator {
             let sheet = popover.adaptiveSheetPresentationController
             sheet.detents = [
                 .custom(identifier: UISheetPresentationController.Detent.Identifier("small")) { context in
-                    0.4 * context.maximumDetentValue
+                    0.35 * context.maximumDetentValue
                 }
             ]
             sheet.prefersGrabberVisible = true
