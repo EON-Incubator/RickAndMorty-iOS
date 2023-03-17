@@ -16,14 +16,24 @@ class CharactersViewModel {
             fetchData(page: currentPage)
         }
     }
+    var currentStatus = "" {
+        didSet {
+            fetchData(page: 1)
+        }
+    }
+    var currentGender = "" {
+        didSet {
+            fetchData(page: 1)
+        }
+    }
 
     func fetchData(page: Int) {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetCharactersQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
                 name: nil,
-                status: nil,
-                gender: nil)) { result in
+                status: GraphQLNullable<String>(stringLiteral: self.currentStatus),
+                gender: GraphQLNullable<String>(stringLiteral: self.currentGender))) { result in
 
                     switch result {
                     case .success(let response):

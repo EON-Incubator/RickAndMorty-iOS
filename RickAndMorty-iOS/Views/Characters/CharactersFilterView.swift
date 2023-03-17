@@ -26,8 +26,17 @@ class CharactersFilterView: UIView {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Filter"
-        label.font = UIFont(name: "Creepster-Regular", size: 24) // UIFont.systemFont(ofSize: 24, weight: .bold)
+        label.font = UIFont(name: "Creepster-Regular", size: 24)
         return label
+    }()
+
+    let clearButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Clear", for: .normal)
+        button.titleLabel?.font = UIFont(name: "Chalkboard SE Regular", size: 20)
+        button.setTitleColor(.label, for: .normal)
+        button.setTitleColor(.systemGray, for: .highlighted)
+        return button
     }()
 
     let lineView: UIView = {
@@ -69,7 +78,7 @@ class CharactersFilterView: UIView {
     let applyButton: UIButton = {
         let button = UIButton()
         button.setTitle("Apply", for: .normal)
-        button.titleLabel?.font = UIFont(name: "Chalkboard SE Regular", size: 24)
+        button.titleLabel?.font = UIFont(name: "Chalkboard SE Regular", size: 22)
         button.setTitleColor(.systemBackground, for: .normal)
         button.setTitleColor(.systemGray, for: .highlighted)
         button.backgroundColor = .label
@@ -92,6 +101,7 @@ class CharactersFilterView: UIView {
         insertSubview(blurView, at: 0)
         addSubview(dismissButton)
         addSubview(titleLabel)
+        addSubview(clearButton)
         addSubview(lineView)
         addSubview(statusLabel)
         addSubview(statusSegmentControl)
@@ -114,6 +124,12 @@ class CharactersFilterView: UIView {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).offset(24)
             make.centerX.equalToSuperview()
+        }
+
+        clearButton.snp.makeConstraints { make in
+            make.top.equalTo(safeAreaLayoutGuide).offset(24)
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-20)
+            make.height.equalTo(24)
         }
 
         lineView.snp.makeConstraints { make in

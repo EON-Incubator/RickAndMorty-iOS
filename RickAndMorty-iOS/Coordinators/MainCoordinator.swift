@@ -115,6 +115,22 @@ class MainCoordinator: Coordinator {
         navController.pushViewController(viewController, animated: true)
     }
 
+    func showCharactersFilter(sender: UIViewController, viewModel: CharactersViewModel) {
+        let charactersFilterViewController = CharactersFilterViewController(viewModel: viewModel)
+        charactersFilterViewController.modalPresentationStyle = .popover
+        if let popover = charactersFilterViewController.popoverPresentationController {
+            let sheet = popover.adaptiveSheetPresentationController
+            sheet.detents = [
+                .custom(identifier: UISheetPresentationController.Detent.Identifier("small")) { context in
+                    0.4 * context.maximumDetentValue
+                }
+            ]
+            sheet.prefersGrabberVisible = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+        }
+        sender.present(charactersFilterViewController, animated: true, completion: nil)
+    }
+
     func goLocationDetails(id: String, navController: UINavigationController) {
         let viewController = LocationDetailsViewController(locationId: id)
         viewController.coordinator = self

@@ -36,33 +36,9 @@ class CharactersViewController: UIViewController {
 
     }
 
-    @objc func filterButtonPressed(sender: AnyObject?) {
-        guard presentedViewController == nil else {
-            dismiss(animated: true, completion: {
-                self.filterButtonPressed(sender: sender)
-            })
-            return
-        }
-
-        let charactersFilterViewController = CharactersFilterViewController()
-        charactersFilterViewController.modalPresentationStyle = .popover
-        if let popover = charactersFilterViewController.popoverPresentationController {
-            let sheet = popover.adaptiveSheetPresentationController
-            sheet.detents = [
-                .custom(identifier: UISheetPresentationController.Detent.Identifier("small")) { context in
-                    0.4 * context.maximumDetentValue
-                }
-            ]
-            sheet.prefersGrabberVisible = true
-            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-        }
-
-        present(charactersFilterViewController, animated: true, completion: nil)
-
-    }
-
     func subscribeToViewModel() {
         viewModel.characters.sink(receiveValue: { characterInfo in
+            self.characterInfo = []
             for characterInfo in characterInfo {
                 self.characterInfo.append(characterInfo)
             }
@@ -74,14 +50,24 @@ class CharactersViewController: UIViewController {
         }).store(in: &cancellables)
     }
 
+    func subscribeToFilter() {
+
+    }
+
     @objc func onRefresh() {
-        characterInfo = []
+        // characterInfo = []
+        viewModel.currentGender = ""
+        viewModel.currentStatus = ""
         viewModel.currentPage = 1
     }
 
     func loadMore() {
-        characterInfo = []
+        // characterInfo = []
         viewModel.currentPage += 1
+    }
+
+    @objc func filterButtonPressed(sender: AnyObject?) {
+        coordinator?.showCharactersFilter(sender: self, viewModel: viewModel)
     }
 }
 
