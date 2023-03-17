@@ -107,7 +107,6 @@ class CharactersFilterView: UIView {
         addSubview(statusSegmentControl)
         addSubview(genderLabel)
         addSubview(genderSegmentControl)
-        addSubview(applyButton)
     }
 
     func setupConstraints() {
@@ -148,6 +147,7 @@ class CharactersFilterView: UIView {
             make.top.equalTo(statusLabel.snp_bottomMargin).offset(16)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
+            make.height.equalTo(40)
         }
 
         genderLabel.snp.makeConstraints { make in
@@ -160,13 +160,7 @@ class CharactersFilterView: UIView {
             make.top.equalTo(genderLabel.snp_bottomMargin).offset(16)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
-        }
-
-        applyButton.snp.makeConstraints { make in
-            make.top.equalTo(genderSegmentControl.snp_bottomMargin).offset(36)
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-            make.height.equalTo(46)
+            make.height.equalTo(40)
         }
     }
 }
