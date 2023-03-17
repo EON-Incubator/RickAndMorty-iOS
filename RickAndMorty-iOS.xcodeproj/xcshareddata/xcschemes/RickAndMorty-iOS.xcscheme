@@ -41,9 +41,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "EpisodesSpec">
-               </Test>
-               <Test
                   Identifier = "SearchSpec">
                </Test>
             </SkippedTests>
@@ -59,9 +56,6 @@
                ReferencedContainer = "container:RickAndMorty-iOS.xcodeproj">
             </BuildableReference>
             <SkippedTests>
-               <Test
-                  Identifier = "EpisodesUISpec">
-               </Test>
                <Test
                   Identifier = "SearchsUISpec">
                </Test>

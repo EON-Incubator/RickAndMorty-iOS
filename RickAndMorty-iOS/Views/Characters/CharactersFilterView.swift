@@ -20,6 +20,7 @@ class CharactersFilterView: UIView {
         let button = UIButton()
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.setTitleColor(.systemGray, for: .highlighted)
+        button.accessibilityIdentifier = "DismissButton"
         return button
     }()
 
@@ -97,6 +98,7 @@ class CharactersFilterView: UIView {
     }
 
     func setupViews() {
+        accessibilityIdentifier = "CharactersFilterView"
         backgroundColor = .clear
         insertSubview(blurView, at: 0)
         addSubview(dismissButton)

@@ -21,7 +21,7 @@ final class CharacterGridCellSpec: QuickSpec {
             var label: UILabel!
 
             beforeEach {
-                view = await CharactersGridCell()
+                view = await CharacterGridCell()
                 imageView = await view.characterImage
                 label = await view.characterNameLabel
             }
