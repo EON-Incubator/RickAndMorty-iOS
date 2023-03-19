@@ -17,21 +17,22 @@ class SearchView: UIView {
     }()
 
     var locationCell = UICollectionView.CellRegistration<RowCell, RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result> { (cell, _ indexPath, location) in
-        cell.contentView.backgroundColor = UIColor(red: 0.93, green: 0.95, blue: 1.00, alpha: 0.5)
 
-        cell.lowerRightLabel.backgroundColor = UIColor(red: 1.00,
-                                                  green: 0.92,
-                                                  blue: 0.71,
-                                                  alpha: 0.4)
-        cell.lowerRightLabel.layer.borderWidth = 0.3
-        cell.lowerRightLabel.layer.borderColor = UIColor.gray.cgColor
+        cell.upperLabel.text = location.name
+        cell.lowerLeftLabel.text = location.type
+        cell.lowerRightLabel.text = location.dimension
 
-        cell.lowerLeftLabel.layer.borderWidth = 0.3
-        cell.lowerLeftLabel.layer.borderColor = UIColor.gray.cgColor
-        cell.lowerLeftLabel.backgroundColor = UIColor(red: 1.00,
-                                                 green: 0.75,
-                                                 blue: 0.66,
-                                                 alpha: 0.4)
+        for index in 0...3 {
+            let isIndexValid = location.residents.indices.contains(index)
+            if isIndexValid {
+                let urlString = location.residents[index]?.image ?? ""
+                cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
+            }
+        }
+    }
+
+    var testCell = UICollectionView.CellRegistration<RowCell, RickAndMortyAPI.SearchForQuery.Data.LocationsWithType.Result> { (cell, _ indexPath, location) in
+
         cell.upperLabel.text = location.name
         cell.lowerLeftLabel.text = location.type
         cell.lowerRightLabel.text = location.dimension

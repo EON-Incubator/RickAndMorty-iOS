@@ -46,6 +46,9 @@ class RowCell: UICollectionViewListCell {
         label.textAlignment = .center
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
+        label.layer.borderWidth = 0.3
+        label.layer.borderColor = UIColor.gray.cgColor
+        label.backgroundColor = UIColor(red: 1.00, green: 0.75, blue: 0.66, alpha: 0.4)
         return label
     }()
 
@@ -58,6 +61,9 @@ class RowCell: UICollectionViewListCell {
         label.textAlignment = .center
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
+        label.backgroundColor = UIColor(red: 1.00, green: 0.92, blue: 0.71, alpha: 0.4)
+        label.layer.borderWidth = 0.3
+        label.layer.borderColor = UIColor.gray.cgColor
         return label
     }()
 
@@ -65,7 +71,7 @@ class RowCell: UICollectionViewListCell {
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.gray.cgColor
         self.layer.cornerRadius = 5
-
+        self.contentView.backgroundColor = UIColor(red: 0.93, green: 0.95, blue: 1.00, alpha: 0.5)
         for index in 0...3 {
             let imageView = UIImageView(image: UIImage(systemName: "person.circle"))
             imageView.tintColor = .systemGray3

@@ -20,6 +20,7 @@ class SearchViewController: UIViewController {
     let viewModel = SearchViewModel()
     weak var coordinator: MainCoordinator?
     private var searchController = UISearchController(searchResultsController: nil)
+    var debounceTimer: Timer?
 
     typealias DataSource = UICollectionViewDiffableDataSource<SearchSection, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<SearchSection, AnyHashable>
@@ -42,9 +43,10 @@ class SearchViewController: UIViewController {
     func subscribeToViewModel() {
         viewModel.searchResults.sink(receiveValue: { result in
             var snapshot = Snapshot()
-            snapshot.appendSections([.locationsWithName, .characters])
+            snapshot.appendSections([.locationsWithName, .characters, .locationsWithType])
             snapshot.appendItems((result.locationsWithName?.results)!, toSection: .locationsWithName)
             snapshot.appendItems((result.characters?.results)!, toSection: .characters)
+            snapshot.appendItems((result.locationsWithType?.results)!, toSection: .locationsWithType)
 
             self.dataSource.apply(snapshot, animatingDifferences: true)
         }).store(in: &cancellables)
@@ -74,6 +76,8 @@ class SearchViewController: UIViewController {
 
                     cell = characterRowCell
                 }
+            case 2:
+                cell = collectionView.dequeueConfiguredReusableCell(using: self.searchView.testCell, for: indexPath, item: result as? RickAndMortyAPI.SearchForQuery.Data.LocationsWithType.Result)
             default:
                 cell = UICollectionViewCell()
             }
@@ -96,10 +100,14 @@ extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
 
         if let searchInput = searchController.searchBar.text {
-            if !searchInput.isEmpty {
-                viewModel.searchInput = searchInput
-            } else {
-                viewModel.searchInput = "_"
+            debounceTimer?.invalidate()
+            // debounce search results
+            debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { _ in
+                if !searchInput.isEmpty {
+                    self.viewModel.searchInput = searchInput
+                } else {
+                    self.viewModel.searchInput = "_"
+                }
             }
         }
     }
