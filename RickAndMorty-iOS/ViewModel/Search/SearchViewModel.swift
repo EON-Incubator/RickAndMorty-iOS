@@ -7,13 +7,10 @@
 
 import Foundation
 import Combine
+
 class SearchViewModel {
 
-    var characters = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.Characters.Result], Never>([])
-
-    var locationName = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result], Never>([])
-
-    var locationType = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithType.Result], Never>([])
+    var searchResults = PassthroughSubject<RickAndMortyAPI.SearchForQuery.Data, Never>()
 
     var searchInput = "" {
         didSet {
@@ -24,14 +21,12 @@ class SearchViewModel {
     func fetchData(input: String) {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.SearchForQuery(keyword: GraphQLNullable<String>(stringLiteral: input))) { result in
-                    switch result {
-                    case .success(let response):
-
-                        self.characters.value = (response.data?.characters?.results?.compactMap { $0 })!
-
-                    case .failure(let error):
-                        print(error)
-                    }
+                switch result {
+                case .success(let response):
+                    self.searchResults.send(response.data!)
+                case .failure(let error):
+                    print(error)
                 }
+            }
     }
 }
