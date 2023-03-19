@@ -19,8 +19,10 @@ class SearchViewController: UIViewController {
     let searchView = SearchView()
     let viewModel = SearchViewModel()
     weak var coordinator: MainCoordinator?
+    private var searchController = UISearchController(searchResultsController: nil)
 
     typealias DataSource = UICollectionViewDiffableDataSource<SearchSection, AnyHashable>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<SearchSection, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
 
@@ -29,7 +31,8 @@ class SearchViewController: UIViewController {
 
         configureDataSource()
         subscribeToViewModel()
-        viewModel.searchInput = "planet"
+        configureSearchController()
+        title = "Search"
     }
 
     override func loadView() {
@@ -38,7 +41,7 @@ class SearchViewController: UIViewController {
 
     func subscribeToViewModel() {
         viewModel.searchResults.sink(receiveValue: { result in
-            var snapshot = NSDiffableDataSourceSnapshot<SearchSection, AnyHashable>()
+            var snapshot = Snapshot()
             snapshot.appendSections([.locationsWithName, .characters])
             snapshot.appendItems((result.locationsWithName?.results)!, toSection: .locationsWithName)
             snapshot.appendItems((result.characters?.results)!, toSection: .characters)
@@ -77,5 +80,27 @@ class SearchViewController: UIViewController {
             return cell
         })
     }
+}
 
+// MARK: - UISearchResultsUpdating Delegate
+extension SearchViewController: UISearchResultsUpdating {
+
+    func configureSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+    }
+
+    func updateSearchResults(for searchController: UISearchController) {
+
+        if let searchInput = searchController.searchBar.text {
+            if !searchInput.isEmpty {
+                viewModel.searchInput = searchInput
+            } else {
+                viewModel.searchInput = "_"
+            }
+        }
+    }
 }
