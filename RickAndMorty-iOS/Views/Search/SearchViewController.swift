@@ -43,9 +43,10 @@ class SearchViewController: UIViewController {
     func subscribeToViewModel() {
         viewModel.searchResults.sink(receiveValue: { result in
             var snapshot = Snapshot()
-            snapshot.appendSections([.locationsWithName, .characters, .locationsWithType])
-            snapshot.appendItems((result.locationsWithName?.results)!, toSection: .locationsWithName)
+            snapshot.appendSections([.characters])
             snapshot.appendItems((result.characters?.results)!, toSection: .characters)
+            snapshot.appendSections([.locationsWithName, .locationsWithType])
+            snapshot.appendItems((result.locationsWithName?.results)!, toSection: .locationsWithName)
             snapshot.appendItems((result.locationsWithType?.results)!, toSection: .locationsWithType)
 
             self.dataSource.apply(snapshot, animatingDifferences: true)
@@ -59,9 +60,6 @@ class SearchViewController: UIViewController {
 
             switch indexPath.section {
             case 0:
-                cell = collectionView.dequeueConfiguredReusableCell(using: self.searchView.locationCell, for: indexPath, item: result as? RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result)
-
-            case 1:
                 if let character = result as? RickAndMortyAPI.SearchForQuery.Data.Characters.Result {
 
                     let characterRowCell = (collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell)!
@@ -76,6 +74,8 @@ class SearchViewController: UIViewController {
 
                     cell = characterRowCell
                 }
+            case 1:
+                cell = collectionView.dequeueConfiguredReusableCell(using: self.searchView.locationCell, for: indexPath, item: result as? RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result)
             case 2:
                 cell = collectionView.dequeueConfiguredReusableCell(using: self.searchView.testCell, for: indexPath, item: result as? RickAndMortyAPI.SearchForQuery.Data.LocationsWithType.Result)
             default:
@@ -83,6 +83,17 @@ class SearchViewController: UIViewController {
             }
             return cell
         })
+        // for custom header
+        dataSource.supplementaryViewProvider = { (_ collectionView, _ kind, indexPath) in
+            guard let headerView = self.searchView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
+                fatalError()
+            }
+            let sectionText = indexPath.section == 0 ? "CHARACTERS" : "LOCATIONS"
+            headerView.textLabel.text = sectionText
+            headerView.textLabel.textColor = .lightGray
+            headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+            return headerView
+        }
     }
 }
 
