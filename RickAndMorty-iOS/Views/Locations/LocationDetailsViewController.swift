@@ -15,15 +15,6 @@ class LocationDetailsViewController: UIViewController {
         case residents
     }
 
-    enum CharacterStatus: String {
-        case alive = "Alive"
-        case dead = "Dead"
-        case unknown = "unknown"
-        var description: String {
-            return self.rawValue
-        }
-    }
-
     weak var coordinator: MainCoordinator?
     let locationDetailsView = LocationDetailsView()
     let viewModel = LocationDetailsViewModel()
@@ -118,7 +109,7 @@ extension LocationDetailsViewController {
                     characterRowCell?.lowerLeftLabel.text = character?.gender
                     characterRowCell?.lowerRightLabel.text = character?.species
                     characterRowCell?.characterStatusLabel.text = character?.status
-                    characterRowCell?.characterStatusLabel.backgroundColor = self.statusColor(character?.status ?? "")
+                    characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character?.status ?? "")
 
                     cell = characterRowCell!
                 }
@@ -141,34 +132,15 @@ extension LocationDetailsViewController {
             return headerView
         }
     }
-
-    func statusColor(_ color: String) -> UIColor {
-        switch color {
-        case CharacterStatus.alive.description:
-            return .systemGreen
-        case CharacterStatus.dead.description:
-            return .systemRed
-        case CharacterStatus.unknown.description:
-            return .systemYellow
-        default:
-            return .systemGray
-        }
-    }
 }
 
 // MARK: - CollectionView Delegate
 extension LocationDetailsViewController: UICollectionViewDelegate {
-
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-
-    }
-
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
             coordinator?.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
         }
-
     }
 }
 
