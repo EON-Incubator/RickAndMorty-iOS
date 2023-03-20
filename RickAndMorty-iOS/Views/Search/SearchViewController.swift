@@ -12,8 +12,7 @@ class SearchViewController: UIViewController {
 
     enum SearchSection: Int, CaseIterable {
         case characters
-        case locationsWithName
-        case locationsWithType
+        case locations
     }
 
     let searchView = SearchView()
@@ -43,18 +42,24 @@ class SearchViewController: UIViewController {
     }
 
     func subscribeToViewModel() {
-        viewModel.searchResults.sink(receiveValue: { result in
-            var snapshot = Snapshot()
+           viewModel.searchResults.sink(receiveValue: { result in
+               var snapshot = Snapshot()
 
-            snapshot.appendSections([.characters, .locationsWithName, .locationsWithType])
+               snapshot.appendSections([.characters, .locations])
 
-            snapshot.appendItems((result.characters?.results)!, toSection: .characters)
-            snapshot.appendItems((result.locationsWithName?.results)!, toSection: .locationsWithName)
-            snapshot.appendItems((result.locationsWithType?.results)!, toSection: .locationsWithType)
+               let locationsWithName: [RickAndMortyAPI.LocationDetails] = result.locationsWithName?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
 
-            self.dataSource.apply(snapshot, animatingDifferences: true)
-        }).store(in: &cancellables)
-    }
+               let locationsWithType: [RickAndMortyAPI.LocationDetails] = result.locationsWithType?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
+
+               let locations: [RickAndMortyAPI.LocationDetails] = locationsWithName + locationsWithType
+               let uniqueLocations = Array(Set(locations))
+
+               snapshot.appendItems((result.characters?.results)!, toSection: .characters)
+               snapshot.appendItems(uniqueLocations, toSection: .locations)
+
+               self.dataSource.apply(snapshot, animatingDifferences: true)
+           }).store(in: &cancellables)
+       }
 
     private func configureDataSource() {
         dataSource = DataSource(collectionView: searchView.collectionView, cellProvider: { (collectionView, indexPath, result) -> UICollectionViewCell? in
@@ -78,9 +83,7 @@ class SearchViewController: UIViewController {
                     cell = characterRowCell
                 }
             case 1:
-                cell = collectionView.dequeueConfiguredReusableCell(using: self.searchView.locationCell, for: indexPath, item: result as? RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result)
-            case 2:
-                cell = collectionView.dequeueConfiguredReusableCell(using: self.searchView.testCell, for: indexPath, item: result as? RickAndMortyAPI.SearchForQuery.Data.LocationsWithType.Result)
+                cell = collectionView.dequeueConfiguredReusableCell(using: self.searchView.locationCell, for: indexPath, item: result as? RickAndMortyAPI.LocationDetails)
             default:
                 cell = UICollectionViewCell()
             }

@@ -19,22 +19,7 @@ class SearchView: UIView {
         return collectionView
     }()
 
-    var locationCell = UICollectionView.CellRegistration<RowCell, RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result> { (cell, _ indexPath, location) in
-
-        cell.upperLabel.text = location.name
-        cell.lowerLeftLabel.text = location.type
-        cell.lowerRightLabel.text = location.dimension
-
-        for index in 0...3 {
-            let isIndexValid = location.residents.indices.contains(index)
-            if isIndexValid {
-                let urlString = location.residents[index]?.image ?? ""
-                cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
-            }
-        }
-    }
-
-    var testCell = UICollectionView.CellRegistration<RowCell, RickAndMortyAPI.SearchForQuery.Data.LocationsWithType.Result> { (cell, _ indexPath, location) in
+    var locationCell = UICollectionView.CellRegistration<RowCell, RickAndMortyAPI.LocationDetails> { (cell, _ indexPath, location) in
 
         cell.upperLabel.text = location.name
         cell.lowerLeftLabel.text = location.type
