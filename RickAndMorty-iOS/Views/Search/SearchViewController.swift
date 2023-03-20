@@ -108,7 +108,7 @@ extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        if let location = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result? {
+        if let location = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.LocationDetails? {
             coordinator?.goLocationDetails(id: (location?.id)!, navController: self.navigationController!)
         }
 
@@ -118,11 +118,20 @@ extension SearchViewController: UICollectionViewDelegate {
     }
 }
 
+// MARK: - UISearchBarDelegate
+
+extension SearchViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        print(selectedScope)
+    }
+}
+
 // MARK: - UISearchResultsUpdating Delegate
 extension SearchViewController: UISearchResultsUpdating {
 
     func configureSearchController() {
         searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search"
         navigationItem.searchController = searchController
