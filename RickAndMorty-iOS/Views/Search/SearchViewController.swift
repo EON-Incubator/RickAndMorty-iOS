@@ -38,14 +38,16 @@ class SearchViewController: UIViewController {
 
     override func loadView() {
         view = searchView
+        searchView.collectionView.delegate = self
     }
 
     func subscribeToViewModel() {
         viewModel.searchResults.sink(receiveValue: { result in
             var snapshot = Snapshot()
-            snapshot.appendSections([.characters])
+
+            snapshot.appendSections([.characters, .locationsWithName, .locationsWithType])
+
             snapshot.appendItems((result.characters?.results)!, toSection: .characters)
-            snapshot.appendSections([.locationsWithName, .locationsWithType])
             snapshot.appendItems((result.locationsWithName?.results)!, toSection: .locationsWithName)
             snapshot.appendItems((result.locationsWithType?.results)!, toSection: .locationsWithType)
 
@@ -97,6 +99,17 @@ class SearchViewController: UIViewController {
     }
 }
 
+// MARK: - CollectionView Delegate
+extension SearchViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+
+        if let location = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result? {
+            coordinator?.goLocationDetails(id: (location?.id)!, navController: self.navigationController!)
+        }
+    }
+}
+
 // MARK: - UISearchResultsUpdating Delegate
 extension SearchViewController: UISearchResultsUpdating {
 
@@ -109,7 +122,6 @@ extension SearchViewController: UISearchResultsUpdating {
     }
 
     func updateSearchResults(for searchController: UISearchController) {
-
         if let searchInput = searchController.searchBar.text {
             debounceTimer?.invalidate()
             // debounce search results
