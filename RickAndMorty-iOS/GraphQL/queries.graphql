@@ -93,10 +93,7 @@ query searchFor($keyword: String) {
       ...pageInfo
     }
     results {
-      ...locationBasics
-      residents {
-        image
-      }
+      ...locationDetails
     }
   }
   locationsWithType: locations(filter: {type: $keyword}) {
@@ -104,12 +101,16 @@ query searchFor($keyword: String) {
       ...pageInfo
     }
     results {
-      ...locationBasics
+      ...locationDetails
+    }
+  }
+}
+
+fragment locationDetails on Location {
+   ...locationBasics
       residents {
         image
       }
-    }
-  }
 }
 
 fragment pageInfo on Info{
