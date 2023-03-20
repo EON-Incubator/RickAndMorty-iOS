@@ -19,6 +19,7 @@ class SearchViewController: UIViewController {
     let searchView = SearchView()
     let viewModel = SearchViewModel()
     weak var coordinator: MainCoordinator?
+
     private var searchController = UISearchController(searchResultsController: nil)
     var debounceTimer: Timer?
 
@@ -123,6 +124,8 @@ extension SearchViewController: UISearchResultsUpdating {
         searchController.searchBar.placeholder = "Search"
         navigationItem.searchController = searchController
         definesPresentationContext = true
+        let searchBar = searchController.searchBar
+        searchBar.scopeButtonTitles = ["Character", "Location name", "Location type"]
     }
 
     func updateSearchResults(for searchController: UISearchController) {
