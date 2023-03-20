@@ -28,11 +28,11 @@ class MainCoordinator: Coordinator {
         customNavBarAppearance.largeTitleTextAttributes = [.font: UIFont(name: "Creepster-Regular", size: 34)!,
                                                            .foregroundColor: UIColor.label,
                                                            .shadow: shadow]
-        customNavBarAppearance.titleTextAttributes = [.font: UIFont(name: "Creepster-Regular", size: 28)!,
+        customNavBarAppearance.titleTextAttributes = [.font: UIFont(name: "Creepster-Regular", size: 27)!,
                                                       .foregroundColor: UIColor.systemCyan,
                                                       .shadow: shadow]
 
-        customNavBarAppearance.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 5)
+        customNavBarAppearance.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 4)
         customNavBarAppearance.setBackIndicatorImage(UIImage(systemName: "arrow.backward.circle"),
                                                      transitionMaskImage: UIImage(systemName: "arrow.backward.circle"))
 
