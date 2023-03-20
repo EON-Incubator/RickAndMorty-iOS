@@ -107,6 +107,10 @@ extension SearchViewController: UICollectionViewDelegate {
         if let location = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result? {
             coordinator?.goLocationDetails(id: (location?.id)!, navController: self.navigationController!)
         }
+
+        if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.SearchForQuery.Data.Characters.Result? {
+            coordinator?.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
+        }
     }
 }
 
