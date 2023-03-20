@@ -25,6 +25,7 @@ class SearchViewController: UIViewController {
     typealias DataSource = UICollectionViewDiffableDataSource<SearchSection, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<SearchSection, AnyHashable>
     private var dataSource: DataSource!
+    var snapshot = Snapshot()
     private var cancellables = Set<AnyCancellable>()
 
     override func viewDidLoad() {
@@ -42,24 +43,25 @@ class SearchViewController: UIViewController {
     }
 
     func subscribeToViewModel() {
-           viewModel.searchResults.sink(receiveValue: { result in
-               var snapshot = Snapshot()
+        viewModel.searchResults.sink(receiveValue: { [self] result in
 
-               snapshot.appendSections([.characters, .locations])
+            snapshot.deleteAllItems()
 
-               let locationsWithName: [RickAndMortyAPI.LocationDetails] = result.locationsWithName?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
+            snapshot.appendSections([.characters, .locations])
 
-               let locationsWithType: [RickAndMortyAPI.LocationDetails] = result.locationsWithType?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
+            let locationsWithName: [RickAndMortyAPI.LocationDetails] = result.locationsWithName?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
 
-               let locations: [RickAndMortyAPI.LocationDetails] = locationsWithName + locationsWithType
-               let uniqueLocations = Array(Set(locations))
+            let locationsWithType: [RickAndMortyAPI.LocationDetails] = result.locationsWithType?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
 
-               snapshot.appendItems((result.characters?.results)!, toSection: .characters)
-               snapshot.appendItems(uniqueLocations, toSection: .locations)
+            let locations: [RickAndMortyAPI.LocationDetails] = locationsWithName + locationsWithType
+            let uniqueLocations = Array(Set(locations))
 
-               self.dataSource.apply(snapshot, animatingDifferences: true)
-           }).store(in: &cancellables)
-       }
+            snapshot.appendItems((result.characters?.results)!, toSection: .characters)
+            snapshot.appendItems(uniqueLocations, toSection: .locations)
+
+            dataSource.apply(snapshot, animatingDifferences: true)
+        }).store(in: &cancellables)
+    }
 
     private func configureDataSource() {
         dataSource = DataSource(collectionView: searchView.collectionView, cellProvider: { (collectionView, indexPath, result) -> UICollectionViewCell? in
@@ -95,6 +97,7 @@ class SearchViewController: UIViewController {
                 fatalError()
             }
             let sectionText = indexPath.section == 0 ? "CHARACTERS" : "LOCATIONS"
+
             headerView.textLabel.text = sectionText
             headerView.textLabel.textColor = .lightGray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
@@ -119,10 +122,28 @@ extension SearchViewController: UICollectionViewDelegate {
 }
 
 // MARK: - UISearchBarDelegate
-
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        print(selectedScope)
+        viewModel.searchInput = searchBar.text!
+
+        switch selectedScope {
+        case 1:
+            // remove all items in locations section
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
+                let itemIDs = snapshot.itemIdentifiers(inSection: .locations)
+                snapshot.deleteItems(itemIDs)
+                dataSource.apply(snapshot)
+            }
+        case 2:
+            // remove all items in characters section
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
+                let itemIDs = snapshot.itemIdentifiers(inSection: .characters)
+                snapshot.deleteItems(itemIDs)
+                dataSource.apply(snapshot)
+            }
+        default:
+            dataSource.apply(snapshot)
+        }
     }
 }
 
@@ -137,7 +158,7 @@ extension SearchViewController: UISearchResultsUpdating {
         navigationItem.searchController = searchController
         definesPresentationContext = true
         let searchBar = searchController.searchBar
-        searchBar.scopeButtonTitles = ["Character", "Location name", "Location type"]
+        searchBar.scopeButtonTitles = ["All", "Characters", "Locations"]
     }
 
     func updateSearchResults(for searchController: UISearchController) {
@@ -146,7 +167,9 @@ extension SearchViewController: UISearchResultsUpdating {
             // debounce search results
             debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { _ in
                 if !searchInput.isEmpty {
-                    self.viewModel.searchInput = searchInput
+                    if searchInput != self.viewModel.searchInput {
+                        self.viewModel.searchInput = searchInput
+                    }
                 } else {
                     self.viewModel.searchInput = "_"
                 }
