@@ -54,21 +54,40 @@ class CharactersView: UIView {
         }
     }
 
-    func createLayout() -> UICollectionViewCompositionalLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+    // func createLayout() -> UICollectionViewCompositionalLayout {
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(170))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 2)
+    func createLayout() -> UICollectionViewLayout {
+        let sectionProvider = { (_: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
-        let spacing = CGFloat(10)
-        group.interItemSpacing = .fixed(spacing)
+            let effectiveWidth = layoutEnvironment.container.effectiveContentSize.width
 
-        let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = spacing
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(effectiveWidth > 500 ? 0.33 : 0.5),
+                heightDimension: .fractionalHeight(1.0))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        return UICollectionViewCompositionalLayout(section: section)
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(170))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: effectiveWidth > 500 ? 3 : 2)
+
+            let spacing = CGFloat(10)
+            group.interItemSpacing = .fixed(spacing)
+
+            let section = NSCollectionLayoutSection(group: group)
+            section.interGroupSpacing = spacing
+
+            return section
+        }
+
+        let config = UICollectionViewCompositionalLayoutConfiguration()
+        config.interSectionSpacing = 20
+
+        let layout = UICollectionViewCompositionalLayout(
+            sectionProvider: sectionProvider, configuration: config)
+        return layout
     }
+
+    //     return UICollectionViewCompositionalLayout(section: section)
+    //  }
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in

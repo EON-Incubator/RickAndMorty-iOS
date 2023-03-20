@@ -27,16 +27,19 @@ class AvatarCell: UICollectionViewCell {
     lazy var characterImage: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = self.bounds.height / 2
+        imageView.layer.cornerRadius = 140
         imageView.layer.borderWidth = 1
         imageView.layer.borderColor = UIColor.black.cgColor
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
 
     func setupConstraints() {
         characterImage.snp.makeConstraints { make in
-            make.edges.equalTo(self).inset(UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40))
-
+            // make.edges.equalTo(self).inset(UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
+            make.centerX.centerY.equalToSuperview()
+            make.height.equalTo(280)
+            make.width.equalTo(280)
         }
     }
 }
