@@ -32,7 +32,7 @@ class MainCoordinator: Coordinator {
                                                       .foregroundColor: UIColor.systemCyan,
                                                       .shadow: shadow]
 
-        customNavBarAppearance.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 4)
+        customNavBarAppearance.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 5)
         customNavBarAppearance.setBackIndicatorImage(UIImage(systemName: "arrow.backward.circle"),
                                                      transitionMaskImage: UIImage(systemName: "arrow.backward.circle"))
 
