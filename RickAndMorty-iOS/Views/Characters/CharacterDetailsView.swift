@@ -117,3 +117,38 @@ extension CharacterDetailsView {
         return layout
     }
 }
+
+extension CharacterDetailsView {
+    func titleView(image: String?, title: String!) -> UIView {
+        let titleWithImage = UIView()
+
+        if let imageUrl = image {
+            let imageView = UIImageView()
+            imageView.sd_setImage(with: URL(string: imageUrl))
+            imageView.layer.cornerRadius = 12
+            imageView.clipsToBounds = true
+            titleWithImage.addSubview(imageView)
+            imageView.snp.makeConstraints { make in
+                make.top.equalToSuperview().offset(-10)
+                make.bottom.leading.equalToSuperview()
+                make.width.equalTo(24)
+                make.height.equalTo(24)
+            }
+        }
+
+        let titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.font = UIFont(name: "Creepster-Regular", size: 27)
+        titleLabel.textColor = .systemCyan
+        titleLabel.shadowOffset = CGSize(width: 0.5, height: 1.5)
+        titleLabel.shadowColor = UIColor(white: 0.2, alpha: 0.2)
+        titleWithImage.addSubview(titleLabel)
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(-10)
+            make.bottom.trailing.equalToSuperview()
+            make.leading.equalToSuperview().offset(28)
+        }
+
+        return titleWithImage
+    }
+}

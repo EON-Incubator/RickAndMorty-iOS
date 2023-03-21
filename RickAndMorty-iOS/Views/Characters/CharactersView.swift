@@ -54,9 +54,7 @@ class CharactersView: UIView {
         }
     }
 
-    // func createLayout() -> UICollectionViewCompositionalLayout {
-
-    func createLayout() -> UICollectionViewLayout {
+    func createLayout() -> UICollectionViewCompositionalLayout {
         let sectionProvider = { (_: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
             let effectiveWidth = layoutEnvironment.container.effectiveContentSize.width
@@ -85,9 +83,6 @@ class CharactersView: UIView {
             sectionProvider: sectionProvider, configuration: config)
         return layout
     }
-
-    //     return UICollectionViewCompositionalLayout(section: section)
-    //  }
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
