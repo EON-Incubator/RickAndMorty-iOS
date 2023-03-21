@@ -164,6 +164,14 @@ extension SearchViewController: UISearchResultsUpdating {
     }
 
     func showSuggestions(suggestion: String) {
+        var searchInputs: [String] = []
+        for search in searchSuggestions {
+            searchInputs.append(search.localizedSuggestion!)
+            if searchInputs.contains(suggestion) {
+                searchController.searchSuggestions = searchSuggestions
+                return
+            }
+        }
         if !suggestion.isEmpty {
             searchSuggestions.append(UISearchSuggestionItem(localizedSuggestion: suggestion))
         }
