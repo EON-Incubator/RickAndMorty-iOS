@@ -72,6 +72,9 @@ class SearchViewController: UIViewController {
             }
 
             dataSource.apply(snapshot, animatingDifferences: true)
+
+            // show message if collection view is empty
+            searchView.collectionView.noDataFound(snapshot.numberOfItems, query: viewModel.searchInput)
         }).store(in: &cancellables)
     }
 
@@ -156,6 +159,10 @@ extension SearchViewController: UISearchResultsUpdating {
         searchBar.scopeButtonTitles = ["All", "Characters", "Locations"]
     }
 
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchView.collectionView.noDataFound(5, query: viewModel.searchInput)
+    }
+
     func showSuggestions(suggestion: String) {
         var searchInputs: [String] = []
         for search in searchSuggestions {
@@ -190,6 +197,25 @@ extension SearchViewController: UISearchResultsUpdating {
                     self.showSuggestions(suggestion: self.viewModel.searchInput)
                 }
             }
+        }
+    }
+}
+
+extension UICollectionView {
+    func noDataFound(_ dataCount: Int, query: String) {
+        if dataCount <=  0 {
+            let label = UILabel()
+            label.frame = self.frame
+            label.frame.origin.x = 0
+            label.frame.origin.y = 0
+            label.textAlignment = .center
+            label.font = .boldSystemFont(ofSize: 20)
+            label.lineBreakMode = .byWordWrapping
+            label.numberOfLines = 3
+            label.text = "No results found for '\(query)'"
+            self.backgroundView = label
+        } else {
+            self.backgroundView = nil
         }
     }
 }
