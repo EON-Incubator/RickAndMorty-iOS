@@ -83,8 +83,10 @@ class SearchView: UIView {
             let section = NSCollectionLayoutSection(group: group)
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-            section.boundarySupplementaryItems = [header]
 
+            if self.collectionView.numberOfItems(inSection: sectionIndex) > 0 {
+                section.boundarySupplementaryItems = [header]
+            }
             return section
         }
         return layout
