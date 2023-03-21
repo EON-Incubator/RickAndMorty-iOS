@@ -57,8 +57,19 @@ class SearchViewController: UIViewController {
             let locations: [RickAndMortyAPI.LocationDetails] = locationsWithName + locationsWithType
             let uniqueLocations = Array(Set(locations))
 
-            snapshot.appendItems((result.characters?.results)!, toSection: .characters)
-            snapshot.appendItems(uniqueLocations, toSection: .locations)
+            switch searchController.searchBar.selectedScopeButtonIndex {
+            case 0:
+                snapshot.appendItems((result.characters?.results)!, toSection: .characters)
+                snapshot.appendItems(uniqueLocations, toSection: .locations)
+            case 1:
+                snapshot.appendItems((result.characters?.results)!, toSection: .characters)
+                snapshot.appendItems([], toSection: .locations)
+            case 2:
+                snapshot.appendItems([], toSection: .characters)
+                snapshot.appendItems(uniqueLocations, toSection: .locations)
+            default:
+                print("error")
+            }
 
             dataSource.apply(snapshot, animatingDifferences: true)
         }).store(in: &cancellables)
@@ -126,25 +137,6 @@ extension SearchViewController: UICollectionViewDelegate {
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         viewModel.searchInput = searchBar.text!
-
-        switch selectedScope {
-        case 1:
-            // remove all items in locations section
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
-                let itemIDs = snapshot.itemIdentifiers(inSection: .locations)
-                snapshot.deleteItems(itemIDs)
-                dataSource.apply(snapshot)
-            }
-        case 2:
-            // remove all items in characters section
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
-                let itemIDs = snapshot.itemIdentifiers(inSection: .characters)
-                snapshot.deleteItems(itemIDs)
-                dataSource.apply(snapshot)
-            }
-        default:
-            dataSource.apply(snapshot)
-        }
     }
 }
 
