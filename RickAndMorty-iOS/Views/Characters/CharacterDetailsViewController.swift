@@ -11,15 +11,20 @@ import SDWebImage
 
 class CharacterDetailsViewController: UIViewController {
 
-    weak var coordinator: MainCoordinator?
-    var characterDetailsView = CharacterDetailsView()
     let viewModel = CharacterDetailsViewModel()
-    private var cancellables = Set<AnyCancellable>()
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
-    private var dataSource: DataSource!
-    var characterID: String?
-
     let locationsViewModel = LocationsViewModel()
+    var characterDetailsView = CharacterDetailsView()
+    weak var coordinator: MainCoordinator?
+    private var cancellables = Set<AnyCancellable>()
+    private var dataSource: DataSource!
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
+    var characterID: String?
+    var avatarImageUrl: String?
+    var titleViewState: TitleViewState = .noTitle
+
+    enum TitleViewState {
+        case noTitle, title, titleWithImage
+    }
 
     override func loadView() {
         view = characterDetailsView
@@ -31,6 +36,7 @@ class CharacterDetailsViewController: UIViewController {
         viewModel.selectedCharacter = characterID!
         configureDataSource()
         subscribeToViewModel()
+        updateTitleView()
     }
 
     func subscribeToViewModel() {
@@ -61,6 +67,7 @@ extension CharacterDetailsViewController {
                 if let character = characterInfo as? CharacterDetails {
                     let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell
                     guard let image = character.item.image else { fatalError("Image not found") }
+                    self.avatarImageUrl = image
                     avatarCell?.characterImage.sd_setImage(with: URL(string: image))
                     cell = avatarCell!
                 }
@@ -145,6 +152,49 @@ extension CharacterDetailsViewController: UICollectionViewDelegate {
             }
         }
     }
+
+    // MARK: - Customize the Title View on scroll
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 && indexPath.item == 0 {
+            titleViewState = .titleWithImage
+            updateTitleView()
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 && indexPath.item == 0 {
+            titleViewState = collectionView.contentOffset.y < 3 ? .noTitle : .title
+            updateTitleView()
+        }
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y < 4 {
+            if titleViewState != .noTitle {
+                titleViewState = .noTitle
+                updateTitleView()
+            }
+        } else if scrollView.contentOffset.y < 100 && titleViewState != .title {
+            titleViewState = .title
+            updateTitleView()
+        }
+    }
+
+    func updateTitleView() {
+        switch titleViewState {
+        case .noTitle:
+            navigationItem.titleView?.removeFromSuperview()
+        case .title:
+            let titleWithImage = characterDetailsView.titleView(image: nil, title: title)
+            self.navigationItem.titleView = titleWithImage
+            UIView.transition(with: self.navigationController?.navigationBar ?? UIView(), duration: 0.25, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+        case .titleWithImage:
+            let titleWithImage = characterDetailsView.titleView(image: self.avatarImageUrl, title: title)
+            self.navigationItem.titleView = titleWithImage
+            UIView.transition(with: self.navigationController?.navigationBar ?? UIView(), duration: 0.25, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+        }
+    }
+    // MARK: - 
 }
 
 // MARK: Struct for Diffable DataSource
