@@ -152,11 +152,12 @@ extension SearchViewController: UISearchBarDelegate {
 extension SearchViewController: UISearchResultsUpdating {
 
     func configureSearchController() {
+        searchController.searchBar.searchTextField.accessibilityIdentifier = "SearchTextField"
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search"
-        searchController.automaticallyShowsCancelButton = false
+        searchController.automaticallyShowsCancelButton = true
         navigationItem.searchController = searchController
         definesPresentationContext = true
         let searchBar = searchController.searchBar
@@ -180,6 +181,7 @@ extension SearchViewController: UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController, selecting searchSuggestion: UISearchSuggestion) {
         searchController.searchBar.text = searchSuggestion.localizedSuggestion!
+        searchController.searchBar.endEditing(true)
     }
 
     func updateSearchResults(for searchController: UISearchController) {
@@ -194,7 +196,6 @@ extension SearchViewController: UISearchResultsUpdating {
                     }
                 } else {
                     self.showSuggestions(suggestion: self.viewModel.searchInput)
-                    self.viewModel.searchInput = "_"
                 }
             }
         }
