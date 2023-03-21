@@ -21,6 +21,7 @@ class SearchViewController: UIViewController {
 
     private var searchController = UISearchController(searchResultsController: nil)
     var debounceTimer: Timer?
+    var searchSuggestions: [UISearchSuggestionItem] = []
 
     typealias DataSource = UICollectionViewDiffableDataSource<SearchSection, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<SearchSection, AnyHashable>
@@ -155,10 +156,22 @@ extension SearchViewController: UISearchResultsUpdating {
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search"
+        searchController.automaticallyShowsCancelButton = false
         navigationItem.searchController = searchController
         definesPresentationContext = true
         let searchBar = searchController.searchBar
         searchBar.scopeButtonTitles = ["All", "Characters", "Locations"]
+    }
+
+    func showSuggestions(suggestion: String) {
+        if !suggestion.isEmpty {
+            searchSuggestions.append(UISearchSuggestionItem(localizedSuggestion: suggestion))
+        }
+        searchController.searchSuggestions = searchSuggestions
+    }
+
+    func updateSearchResults(for searchController: UISearchController, selecting searchSuggestion: UISearchSuggestion) {
+        searchController.searchBar.text = searchSuggestion.localizedSuggestion!
     }
 
     func updateSearchResults(for searchController: UISearchController) {
@@ -171,6 +184,7 @@ extension SearchViewController: UISearchResultsUpdating {
                         self.viewModel.searchInput = searchInput
                     }
                 } else {
+                    self.showSuggestions(suggestion: self.viewModel.searchInput)
                     self.viewModel.searchInput = "_"
                 }
             }
