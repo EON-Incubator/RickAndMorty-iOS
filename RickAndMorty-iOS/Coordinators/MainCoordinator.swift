@@ -98,6 +98,11 @@ class MainCoordinator: Coordinator {
         episodesViewController.coordinator = self
         episodeNavController.pushViewController(episodesViewController, animated: false)
 
+        // Add SearchViewController to the search navigation controller.
+        let searchViewController = SearchViewController()
+        searchViewController.coordinator = self
+        searchNavController.pushViewController(searchViewController, animated: false)
+
         // MARK: - Setup demo tab for experiment, remove this from production.
         // setupDemo()
         // MARK: -
