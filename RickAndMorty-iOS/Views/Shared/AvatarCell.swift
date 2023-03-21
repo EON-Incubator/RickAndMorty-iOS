@@ -36,7 +36,6 @@ class AvatarCell: UICollectionViewCell {
 
     func setupConstraints() {
         characterImage.snp.makeConstraints { make in
-            // make.edges.equalTo(self).inset(UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
             make.centerX.centerY.equalToSuperview()
             make.height.equalTo(280)
             make.width.equalTo(280)
