@@ -17,7 +17,7 @@ final class SearchUISpec: QuickSpec {
 
         describe("Given app launch") {
             app.launch()
-            context("when user tap the Search button on Tab Bar") {
+            context("1when user tap the Search button on Tab Bar") {
 
                 beforeEach {
                     DispatchQueue.main.async {
@@ -26,16 +26,17 @@ final class SearchUISpec: QuickSpec {
                 }
 
                 it("should display search bar on the screen") {
-                    let searchTextFields = app.textFields.matching(identifier: "SearchTextField")
+                    let searchTextFields = app.searchFields.matching(identifier: "SearchTextField")
                     await expect(searchTextFields.element.exists).toEventually(beTrue())
                 }
             }
 
-            context("when user search for rick from the searchbar") {
+            context("2when user search for rick from the searchbar") {
 
                 beforeEach {
                     DispatchQueue.main.async {
-                        let searchTextFields = app.textFields.matching(identifier: "SearchTextField")
+                        let searchTextFields = app.searchFields.matching(identifier: "SearchTextField")
+                        searchTextFields.element.tap()
                         searchTextFields.element.typeText("rick")
                         app.keyboards.buttons["Search"].tap()
                     }
@@ -48,7 +49,7 @@ final class SearchUISpec: QuickSpec {
 
                 afterEach {
                     DispatchQueue.main.async {
-                        let searchTextFields = app.textFields.matching(identifier: "SearchTextField")
+                        let searchTextFields =  app.searchFields.matching(identifier: "SearchTextField")
                         searchTextFields.element.buttons["Clear text"].tap()
                     }
                 }
@@ -58,7 +59,8 @@ final class SearchUISpec: QuickSpec {
 
                 beforeEach {
                     DispatchQueue.main.async {
-                        let searchTextFields = app.textFields.matching(identifier: "SearchTextField")
+                        let searchTextFields = app.searchFields.matching(identifier: "SearchTextField")
+                        searchTextFields.element.tap()
                         searchTextFields.element.typeText("jndfslkj")
                         app.keyboards.buttons["Search"].tap()
                     }

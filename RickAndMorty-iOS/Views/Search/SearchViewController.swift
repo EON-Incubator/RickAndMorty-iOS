@@ -57,8 +57,19 @@ class SearchViewController: UIViewController {
             let locations: [RickAndMortyAPI.LocationDetails] = locationsWithName + locationsWithType
             let uniqueLocations = Array(Set(locations))
 
-            snapshot.appendItems((result.characters?.results)!, toSection: .characters)
-            snapshot.appendItems(uniqueLocations, toSection: .locations)
+            switch searchController.searchBar.selectedScopeButtonIndex {
+            case 0:
+                snapshot.appendItems((result.characters?.results)!, toSection: .characters)
+                snapshot.appendItems(uniqueLocations, toSection: .locations)
+            case 1:
+                snapshot.appendItems((result.characters?.results)!, toSection: .characters)
+                snapshot.appendItems([], toSection: .locations)
+            case 2:
+                snapshot.appendItems([], toSection: .characters)
+                snapshot.appendItems(uniqueLocations, toSection: .locations)
+            default:
+                print("error")
+            }
 
             dataSource.apply(snapshot, animatingDifferences: true)
         }).store(in: &cancellables)
@@ -126,25 +137,6 @@ extension SearchViewController: UICollectionViewDelegate {
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         viewModel.searchInput = searchBar.text!
-
-        switch selectedScope {
-        case 1:
-            // remove all items in locations section
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
-                let itemIDs = snapshot.itemIdentifiers(inSection: .locations)
-                snapshot.deleteItems(itemIDs)
-                dataSource.apply(snapshot)
-            }
-        case 2:
-            // remove all items in characters section
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
-                let itemIDs = snapshot.itemIdentifiers(inSection: .characters)
-                snapshot.deleteItems(itemIDs)
-                dataSource.apply(snapshot)
-            }
-        default:
-            dataSource.apply(snapshot)
-        }
     }
 }
 
@@ -152,11 +144,12 @@ extension SearchViewController: UISearchBarDelegate {
 extension SearchViewController: UISearchResultsUpdating {
 
     func configureSearchController() {
+        searchController.searchBar.searchTextField.accessibilityIdentifier = "SearchTextField"
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search"
-        searchController.automaticallyShowsCancelButton = false
+        searchController.automaticallyShowsCancelButton = true
         navigationItem.searchController = searchController
         definesPresentationContext = true
         let searchBar = searchController.searchBar
@@ -180,6 +173,7 @@ extension SearchViewController: UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController, selecting searchSuggestion: UISearchSuggestion) {
         searchController.searchBar.text = searchSuggestion.localizedSuggestion!
+        searchController.searchBar.endEditing(true)
     }
 
     func updateSearchResults(for searchController: UISearchController) {
@@ -194,7 +188,6 @@ extension SearchViewController: UISearchResultsUpdating {
                     }
                 } else {
                     self.showSuggestions(suggestion: self.viewModel.searchInput)
-                    self.viewModel.searchInput = "_"
                 }
             }
         }
