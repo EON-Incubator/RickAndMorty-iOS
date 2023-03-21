@@ -190,6 +190,7 @@ extension SearchViewController: UISearchResultsUpdating {
                 if !searchInput.isEmpty {
                     if searchInput != self.viewModel.searchInput {
                         self.viewModel.searchInput = searchInput
+                        searchController.searchSuggestions = []
                     }
                 } else {
                     self.showSuggestions(suggestion: self.viewModel.searchInput)
