@@ -24,6 +24,7 @@ class CharacterGridCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = self.layer.cornerRadius
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
 
