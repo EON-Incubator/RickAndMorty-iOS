@@ -14,6 +14,7 @@ import SDWebImage
 final class CharacterGridCellSpec: QuickSpec {
 
     override func spec() {
+
         describe("CharacterGridCell") {
 
             var view: CharacterGridCell!
@@ -50,7 +51,6 @@ final class CharacterGridCellSpec: QuickSpec {
             afterEach {
                 print("-- after each context --")
             }
-
         }
     }
 }
