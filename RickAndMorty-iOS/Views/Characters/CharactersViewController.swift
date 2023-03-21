@@ -39,17 +39,12 @@ class CharactersViewController: UIViewController {
         charactersGridView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
     }
 
-    @objc func filterButtonPressed() {
-        print("filterButtonPressed")
-    }
-
     func subscribeToViewModel() {
         viewModel.characters.sink(receiveValue: { characters in
             var snapshot = NSDiffableDataSourceSnapshot<Section, RickAndMortyAPI.CharacterBasics>()
             snapshot.appendSections([.appearance])
             snapshot.appendItems(characters, toSection: .appearance)
             self.dataSource.apply(snapshot, animatingDifferences: true)
-
             // Dismiss refresh control.
             DispatchQueue.main.async {
                 self.charactersGridView.collectionView.refreshControl?.endRefreshing()
@@ -57,12 +52,22 @@ class CharactersViewController: UIViewController {
         }).store(in: &cancellables)
     }
 
+    func subscribeToFilter() {
+
+    }
+
     @objc func onRefresh() {
+        viewModel.currentGender = ""
+        viewModel.currentStatus = ""
         viewModel.currentPage = 1
     }
 
     func loadMore() {
         viewModel.currentPage += 1
+    }
+
+    @objc func filterButtonPressed(sender: AnyObject?) {
+        coordinator?.showCharactersFilter(sender: self, viewModel: viewModel)
     }
 }
 

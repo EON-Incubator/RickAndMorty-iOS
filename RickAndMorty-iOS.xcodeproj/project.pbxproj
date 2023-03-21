@@ -95,6 +95,9 @@
 		F7DB571429BBDF1D000FAB01 /* SearchSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB571329BBDF1D000FAB01 /* SearchSpec.swift */; };
 		F7DB571A29BBDFF0000FAB01 /* SearchUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB571929BBDFF0000FAB01 /* SearchUISpec.swift */; };
 		F7DB571D29BBE024000FAB01 /* EpisodesUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB571729BBDFD2000FAB01 /* EpisodesUISpec.swift */; };
+		F7F240C829C440A0007E34AC /* CharactersFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240C729C440A0007E34AC /* CharactersFilterView.swift */; };
+		F7F240CA29C442CE007E34AC /* CharactersFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240C929C442CE007E34AC /* CharactersFilterViewController.swift */; };
+		F7F240CC29C4FD93007E34AC /* CharactersFilterUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240CB29C4FD93007E34AC /* CharactersFilterUISpec.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -199,6 +202,9 @@
 		F7DB571329BBDF1D000FAB01 /* SearchSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSpec.swift; sourceTree = "<group>"; };
 		F7DB571729BBDFD2000FAB01 /* EpisodesUISpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesUISpec.swift; sourceTree = "<group>"; };
 		F7DB571929BBDFF0000FAB01 /* SearchUISpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUISpec.swift; sourceTree = "<group>"; };
+		F7F240C729C440A0007E34AC /* CharactersFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersFilterView.swift; sourceTree = "<group>"; };
+		F7F240C929C442CE007E34AC /* CharactersFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersFilterViewController.swift; sourceTree = "<group>"; };
+		F7F240CB29C4FD93007E34AC /* CharactersFilterUISpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersFilterUISpec.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,6 +259,7 @@
 			children = (
 				544A6CB929BF73B40055FB75 /* CharacterDetailsUISpec.swift */,
 				544A6CBB29BF7BB90055FB75 /* CharactersGridUISpec.swift */,
+				F7F240CB29C4FD93007E34AC /* CharactersFilterUISpec.swift */,
 			);
 			path = Characters;
 			sourceTree = "<group>";
@@ -477,6 +484,8 @@
 				F77E4B8F29B908E700B8B5CE /* CharactersView.swift */,
 				54BDF5BD29BBB2CB003F7084 /* CharacterDetailsViewController.swift */,
 				54BDF5C129BBBEB9003F7084 /* CharacterDetailsView.swift */,
+				F7F240C729C440A0007E34AC /* CharactersFilterView.swift */,
+				F7F240C929C442CE007E34AC /* CharactersFilterViewController.swift */,
 			);
 			path = Characters;
 			sourceTree = "<group>";
@@ -832,6 +841,8 @@
 				54AC84B229C8A5DE00680F77 /* GetCharactersQuery.graphql.swift in Sources */,
 				540F4CF229BEABE700677B82 /* HeaderView.swift in Sources */,
 				540F4CF029BEA1DC00677B82 /* InfoCell.swift in Sources */,
+				F77E4BDA29B9B27900B8B5CE /* RickAndMortyAPI.graphql.swift in Sources */,
+				F7F240CA29C442CE007E34AC /* CharactersFilterViewController.swift in Sources */,
 				54AC84B829C8A5DE00680F77 /* GetCharacterQuery.graphql.swift in Sources */,
 				F7C26FEC29BF76FF00903AF2 /* LocationRowCell.swift in Sources */,
 				54AC84B329C8A5DE00680F77 /* GetEpisodeQuery.graphql.swift in Sources */,
@@ -850,6 +861,7 @@
 				F7C26FF129C0C10600903AF2 /* LocationDetailsView.swift in Sources */,
 				F77E4B9A29B9362300B8B5CE /* Coordinator.swift in Sources */,
 				544A6CCD29C106060055FB75 /* EpisodesViewController.swift in Sources */,
+				F7F240C829C440A0007E34AC /* CharactersFilterView.swift in Sources */,
 				F77E4C0129BA4A6100B8B5CE /* DemoViewModel.swift in Sources */,
 				F77E4B9229B9090900B8B5CE /* CharactersViewController.swift in Sources */,
 				54AC84AD29C8A5DE00680F77 /* CharacterBasics.graphql.swift in Sources */,
@@ -901,6 +913,7 @@
 				F7DB571D29BBE024000FAB01 /* EpisodesUISpec.swift in Sources */,
 				544A6CBC29BF7BB90055FB75 /* CharactersGridUISpec.swift in Sources */,
 				F7DB570729BBBC62000FAB01 /* DemoUISpec.swift in Sources */,
+				F7F240CC29C4FD93007E34AC /* CharactersFilterUISpec.swift in Sources */,
 				F7DB56FC29BBBBF6000FAB01 /* DemoUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -16,14 +16,16 @@ class CharactersViewModel {
             fetchData(page: currentPage)
         }
     }
+    var currentStatus = ""
+    var currentGender = ""
 
     func fetchData(page: Int) {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetCharactersQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
                 name: nil,
-                status: nil,
-                gender: nil)) { result in
+                status: GraphQLNullable<String>(stringLiteral: self.currentStatus),
+                gender: GraphQLNullable<String>(stringLiteral: self.currentGender))) { result in
 
                     switch result {
                     case .success(let response):
@@ -40,5 +42,15 @@ class CharactersViewModel {
                     }
 
                 }
+    }
+}
+// MARK: Extension for Hashable (Equatable)
+extension RickAndMortyAPI.CharacterBasics: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    public static func == (lhs: RickAndMortyAPI.CharacterBasics, rhs: RickAndMortyAPI.CharacterBasics) -> Bool {
+        lhs.id == rhs.id
     }
 }
