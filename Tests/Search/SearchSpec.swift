@@ -41,6 +41,7 @@ final class SearchSpec: QuickSpec {
 
                 it("should return 0 result from characters") {
                     sut.fetchData(input: "adfjdskjhs")
+                    sleep(1)
                     await expect(sut.characters.value.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10))
                 }
 
