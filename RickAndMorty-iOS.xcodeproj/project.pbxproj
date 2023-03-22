@@ -98,6 +98,7 @@
 		F7EA933A29CB918B00F7F112 /* Characters+Mock.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EA931329CB8F9600F7F112 /* Characters+Mock.graphql.swift */; };
 		F7EA933B29CB918B00F7F112 /* Episodes+Mock.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EA931029CB8F9600F7F112 /* Episodes+Mock.graphql.swift */; };
 		F7EA934729CB91E000F7F112 /* ApolloTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = F7EA934629CB91E000F7F112 /* ApolloTestSupport */; };
+		F7EA936F29CBA3E800F7F112 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = F7EA936E29CBA3E800F7F112 /* Apollo */; };
 		F7F240C829C440A0007E34AC /* CharactersFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240C729C440A0007E34AC /* CharactersFilterView.swift */; };
 		F7F240CA29C442CE007E34AC /* CharactersFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240C929C442CE007E34AC /* CharactersFilterViewController.swift */; };
 		F7F240CC29C4FD93007E34AC /* CharactersFilterUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240CB29C4FD93007E34AC /* CharactersFilterUISpec.swift */; };
@@ -238,6 +239,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7EA936F29CBA3E800F7F112 /* Apollo in Frameworks */,
 				F7DB570929BBBCA1000FAB01 /* Quick in Frameworks */,
 				F7DB570B29BBBCA1000FAB01 /* Nimble in Frameworks */,
 			);
@@ -720,6 +722,7 @@
 			packageProductDependencies = (
 				F7DB570829BBBCA1000FAB01 /* Quick */,
 				F7DB570A29BBBCA1000FAB01 /* Nimble */,
+				F7EA936E29CBA3E800F7F112 /* Apollo */,
 			);
 			productName = "RickAndMorty-iOSUITests";
 			productReference = F7DB56F929BBBBF6000FAB01 /* RickAndMorty-iOSUITests.xctest */;
@@ -1334,6 +1337,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F77E4B9D29B94B9300B8B5CE /* XCRemoteSwiftPackageReference "apollo-ios" */;
 			productName = ApolloTestSupport;
+		};
+		F7EA936E29CBA3E800F7F112 /* Apollo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F77E4B9D29B94B9300B8B5CE /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = Apollo;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
