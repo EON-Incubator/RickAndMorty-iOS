@@ -17,6 +17,13 @@ class InfoCell: UICollectionViewListCell {
         setupConstraints()
     }
 
+    static func configCell(cell: InfoCell, leftLabel: String, rightLabel: String, infoImage: UIImage) -> InfoCell {
+        cell.leftLabel.text = leftLabel
+        cell.rightLabel.text = rightLabel
+        cell.infoImage.image = infoImage
+        return cell
+    }
+
     func setupViews() {
         self.contentView.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         self.layer.borderWidth = 0.5
