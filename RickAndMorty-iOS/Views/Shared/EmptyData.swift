@@ -11,7 +11,9 @@ struct EmptyData: Hashable {
     var id: UUID
 }
 
-func showLoading(currentCell: UICollectionViewCell) {
+private var shimmerLayer: CALayer?
+
+func showLoadingAnimation(currentCell: UICollectionViewCell) {
     let light = UIColor(white: 0, alpha: 0.1).cgColor
 
     let gradient = CAGradientLayer()
@@ -33,8 +35,9 @@ func showLoading(currentCell: UICollectionViewCell) {
     gradient.add(animation, forKey: "shimmer")
 
     currentCell.contentView.layer.addSublayer(gradient)
+    shimmerLayer = gradient
 }
 
-func hideLoading(currentCell: UICollectionViewCell) {
-    currentCell.contentView.layer.removeAnimation(forKey: "locations")
+func hideLoadingAnimation(currentCell: UICollectionViewCell) {
+    shimmerLayer?.removeFromSuperlayer()
 }

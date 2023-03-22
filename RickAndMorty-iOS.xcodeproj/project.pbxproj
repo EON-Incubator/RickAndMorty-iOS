@@ -252,6 +252,7 @@
 				544A6CC729C0F8A70055FB75 /* RowCell.swift */,
 				5447EE1E29BA5A7900D2D05A /* CharacterGridCell.swift */,
 				54BDF5C429BBC891003F7084 /* AvatarCell.swift */,
+				54644B7829CA8AC7007FB8B3 /* EmptyData.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -293,7 +294,6 @@
 				544A6CCE29C1087C0055FB75 /* EpisodesView.swift */,
 				544A6CD329C119170055FB75 /* EpisodeDetailsViewController.swift */,
 				544A6CD529C11AD40055FB75 /* EpisodeDetailsView.swift */,
-				54644B7829CA8AC7007FB8B3 /* EmptyData.swift */,
 			);
 			path = Episodes;
 			sourceTree = "<group>";
