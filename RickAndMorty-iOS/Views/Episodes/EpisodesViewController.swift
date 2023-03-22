@@ -41,7 +41,6 @@ class EpisodesViewController: UIViewController {
     func showEmptyData() {
         snapshot.deleteAllItems()
         snapshot.appendSections([.appearance, .empty])
-        snapshot.appendItems([], toSection: .appearance)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 8), toSection: .empty)
         self.dataSource.apply(snapshot, animatingDifferences: true)
     }
