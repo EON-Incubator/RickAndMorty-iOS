@@ -76,7 +76,7 @@ extension LocationsViewController {
         dataSource = DataSource(collectionView: locationsView.collectionView, cellProvider: { (collectionView, indexPath, data) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationRowCell.identifier, for: indexPath) as? LocationRowCell
 
-            // section with empty episode cells
+            // section with empty location cells
             if indexPath.section == 1 {
                 return cell
             }

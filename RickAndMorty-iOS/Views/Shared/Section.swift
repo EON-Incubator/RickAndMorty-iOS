@@ -20,7 +20,7 @@ enum Section: Int, CaseIterable {
         case .info:
             return 3
         case .location:
-            return 2
+            return 1
         case .episodes:
             return 2
         case .empty:

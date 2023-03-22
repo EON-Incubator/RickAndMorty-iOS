@@ -13,6 +13,8 @@ class EpisodeDetailsViewController: UIViewController {
     enum EpisodeDetailsSection: Int, CaseIterable {
         case info
         case characters
+        case emptyInfo
+        case emptyCharacters
     }
 
     weak var coordinator: MainCoordinator?
@@ -21,8 +23,10 @@ class EpisodeDetailsViewController: UIViewController {
     var episodeId: String
 
     typealias DataSource = UICollectionViewDiffableDataSource<EpisodeDetailsSection, AnyHashable>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<EpisodeDetailsSection, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
+    var snapshot = Snapshot()
 
     init(episodeId: String) {
         self.episodeId = episodeId
@@ -38,33 +42,39 @@ class EpisodeDetailsViewController: UIViewController {
         episodeDetailsView.collectionView.delegate = self
         episodeDetailsView.collectionView.refreshControl = UIRefreshControl()
         episodeDetailsView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
-
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         configureDataSource()
+        showEmptyData()
         subscribeToViewModel()
         viewModel.episodeID = episodeId
     }
 
+    func showEmptyData() {
+        snapshot.deleteAllItems()
+        snapshot.appendSections([.info, .characters, .emptyInfo, .emptyCharacters])
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 2), toSection: .emptyInfo)
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 4), toSection: .emptyCharacters)
+        self.dataSource.apply(snapshot, animatingDifferences: true)
+    }
+
     func subscribeToViewModel() {
-        viewModel.episode.sink(receiveValue: { episode in
-
+        viewModel.episode.sink(receiveValue: { [self] episode in
             self.title = episode.name
-
-            var snapshot = NSDiffableDataSourceSnapshot<EpisodeDetailsSection, AnyHashable>()
-            snapshot.appendSections([.info, .characters])
-            snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
-            snapshot.appendItems(episode.characters, toSection: .characters)
-            self.dataSource.apply(snapshot, animatingDifferences: true)
-
+            if !episode.characters.isEmpty {
+                snapshot.deleteAllItems()
+                snapshot.appendSections([.info, .characters])
+                snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
+                snapshot.appendItems(episode.characters, toSection: .characters)
+                self.dataSource.apply(snapshot, animatingDifferences: true)
+            }
             // Dismiss refresh control.
             DispatchQueue.main.async {
                 self.episodeDetailsView.collectionView.refreshControl?.endRefreshing()
             }
-
         }).store(in: &cancellables)
     }
 
@@ -78,29 +88,15 @@ extension EpisodeDetailsViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: episodeDetailsView.collectionView, cellProvider: { (collectionView, indexPath, episode) -> UICollectionViewCell? in
 
-            var cell = UICollectionViewCell()
+            let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+
+            let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
 
             switch indexPath.section {
             case 0:
-                if let episodeDetails = episode as? EpisodeDetails {
-                    let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
-                    switch indexPath.item {
-                    case 0:
-                        infoCell?.leftLabel.text = "Episode"
-                        infoCell?.rightLabel.text = episodeDetails.item.episode
-                        infoCell?.infoImage.image = UIImage(named: "tv")
-                    case 1:
-                        infoCell?.leftLabel.text = "Air Date"
-                        infoCell?.rightLabel.text = episodeDetails.item.air_date
-                        infoCell?.infoImage.image = UIImage(named: "calendar")
-                    default:
-                        infoCell?.rightLabel.text = "-"
-                    }
-                    cell = infoCell!
-                }
+                return self.configInfoCell(cell: infoCell!, data: episode, itemIndex: indexPath.item)
             case 1:
                 if let character = episode as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
-                    let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
                     let urlString = character?.image ?? ""
                     characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString))
                     characterRowCell?.upperLabel.text = character?.name
@@ -108,14 +104,17 @@ extension EpisodeDetailsViewController {
                     characterRowCell?.lowerRightLabel.text = character?.species
                     characterRowCell?.characterStatusLabel.text = character?.status
                     characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character?.status ?? "")
-
-                    cell = characterRowCell!
+                    return characterRowCell!
                 }
-
+                // empty sections
+            case 2:
+                return infoCell!
+            case 3:
+                return characterRowCell!
             default:
-                cell = UICollectionViewCell()
+                return UICollectionViewCell()
             }
-            return cell
+            return UICollectionViewCell()
         })
 
         // for custom header
@@ -123,11 +122,29 @@ extension EpisodeDetailsViewController {
             guard let headerView = self.episodeDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
                 fatalError()
             }
-            headerView.textLabel.text = "\(EpisodeDetailsSection.allCases[indexPath.section])".uppercased()
+            headerView.textLabel.text = indexPath.section == 0 || indexPath.section == 2 ? "INFO" : "CHARACTERS"
             headerView.textLabel.textColor = .lightGray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
         }
+    }
+    func configInfoCell(cell: InfoCell, data: AnyHashable, itemIndex: Int) -> UICollectionViewCell {
+        if let episodeDetails = data as? EpisodeDetails {
+            switch itemIndex {
+            case 0:
+                cell.leftLabel.text = "Episode"
+                cell.rightLabel.text = episodeDetails.item.episode
+                cell.infoImage.image = UIImage(named: "tv")
+            case 1:
+                cell.leftLabel.text = "Air Date"
+                cell.rightLabel.text = episodeDetails.item.air_date
+                cell.infoImage.image = UIImage(named: "calendar")
+            default:
+                cell.rightLabel.text = "-"
+            }
+            return cell
+        }
+        return UICollectionViewCell()
     }
 }
 

@@ -29,7 +29,6 @@ class InfoCell: UICollectionViewListCell {
 
     lazy var leftLabel: UILabel = {
         let label = UILabel()
-        label.text = "Gender"
         label.textColor = .black
         label.font = .boldSystemFont(ofSize: 15)
         return label
@@ -37,7 +36,6 @@ class InfoCell: UICollectionViewListCell {
 
     lazy var rightLabel: UILabel = {
         let label = UILabel()
-        label.text = "Male"
         label.textColor = .black
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .right
