@@ -23,7 +23,7 @@ final class EpisodesUISpec: QuickSpec {
 
                 beforeEach {
                     DispatchQueue.main.async {
-                        app.tabBars.buttons["Episode"].tap()
+                        app.tabBars.buttons["Episodes"].tap()
                     }
                 }
 

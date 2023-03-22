@@ -25,14 +25,20 @@ class LocationsViewModel {
                 type: nil)) { result in
                     switch result {
                     case .success(let response):
-                        if page == 1 {
-                            self.locations.value = (response.data?.locations?.results?.compactMap { $0 })!
-                        } else {
-                            self.locations.value.append(contentsOf: (response.data?.locations?.results?.compactMap { $0 })! )
+                        if let results = response.data?.locations?.results {
+                            self.mapData(page: page, locations: results)
                         }
                     case .failure(let error):
                         print(error)
                     }
                 }
+    }
+
+    func mapData(page: Int, locations: [RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result?]) {
+        if page == 1 {
+            self.locations.value = (locations.compactMap { $0 })
+        } else {
+            self.locations.value.append(contentsOf: (locations.compactMap { $0 }) )
+        }
     }
 }

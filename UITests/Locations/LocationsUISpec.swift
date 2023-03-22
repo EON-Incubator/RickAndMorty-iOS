@@ -15,7 +15,7 @@ final class LocationsUISpec: QuickSpec {
 
         let app = XCUIApplication()
 
-        describe("Given app launch") {
+        describe("Locations") {
 
             app.launch()
 
