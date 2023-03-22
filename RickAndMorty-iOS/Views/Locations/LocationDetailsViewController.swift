@@ -13,6 +13,8 @@ class LocationDetailsViewController: UIViewController {
     enum LocationDetailsSection: Int, CaseIterable {
         case info
         case residents
+        case emptyInfo
+        case emptyResidents
     }
 
     weak var coordinator: MainCoordinator?
@@ -21,8 +23,10 @@ class LocationDetailsViewController: UIViewController {
     var locationId: String
 
     typealias DataSource = UICollectionViewDiffableDataSource<LocationDetailsSection, AnyHashable>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<LocationDetailsSection, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
+    var snapshot = Snapshot()
 
     init(locationId: String) {
         self.locationId = locationId
@@ -45,21 +49,29 @@ class LocationDetailsViewController: UIViewController {
         super.viewDidLoad()
 
         configureDataSource()
+        showEmptyData()
         subscribeToViewModel()
         viewModel.locationId = locationId
     }
 
+    func showEmptyData() {
+        snapshot.deleteAllItems()
+        snapshot.appendSections([.info, .residents, .emptyInfo, .emptyResidents])
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 2), toSection: .emptyInfo)
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 4), toSection: .emptyResidents)
+        self.dataSource.apply(snapshot, animatingDifferences: true)
+    }
+
     func subscribeToViewModel() {
-        viewModel.location.sink(receiveValue: { location in
-
+        viewModel.location.sink(receiveValue: { [self] location in
             self.title = location.name
-
-            var snapshot = NSDiffableDataSourceSnapshot<LocationDetailsSection, AnyHashable>()
-            snapshot.appendSections([.info, .residents])
-            snapshot.appendItems([LocationDetails(location), LocationDetails(location)], toSection: .info)
-            snapshot.appendItems(location.residents, toSection: .residents)
-            self.dataSource.apply(snapshot, animatingDifferences: true)
-
+            if !location.residents.isEmpty {
+                snapshot.deleteAllItems()
+                snapshot.appendSections([.info, .residents])
+                snapshot.appendItems([LocationDetails(location), LocationDetails(location)], toSection: .info)
+                snapshot.appendItems(location.residents, toSection: .residents)
+                self.dataSource.apply(snapshot, animatingDifferences: true)
+            }
             // Dismiss refresh control.
             DispatchQueue.main.async {
                 self.locationDetailsView.collectionView.refreshControl?.endRefreshing()
@@ -71,7 +83,6 @@ class LocationDetailsViewController: UIViewController {
     @objc func onRefresh() {
         viewModel.locationId = self.locationId
     }
-
 }
 
 // MARK: - CollectionView DataSource
@@ -79,30 +90,14 @@ extension LocationDetailsViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: locationDetailsView.collectionView, cellProvider: { (collectionView, indexPath, location) -> UICollectionViewCell? in
 
-            var cell = UICollectionViewCell()
+            let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+            let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
 
             switch indexPath.section {
             case 0:
-                if let locationDetails = location as? LocationDetails {
-                    let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
-                    switch indexPath.item {
-                    case 0:
-                        infoCell?.leftLabel.text = "Type"
-                        infoCell?.rightLabel.text = locationDetails.item.name
-                        infoCell?.infoImage.image = UIImage(systemName: "globe.asia.australia")
-                    case 1:
-                        infoCell?.leftLabel.text = "Dimension"
-                        infoCell?.rightLabel.text = locationDetails.item.dimension
-                        infoCell?.infoImage.image = UIImage(systemName: "globe")
-                    default:
-                        infoCell?.rightLabel.text = "-"
-                    }
-                    cell = infoCell!
-                }
-
+                return self.configLocationInfoCell(cell: infoCell!, data: location, itemIndex: indexPath.item)
             case 1:
                 if let character = location as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
-                    let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
                     let urlString = character?.image ?? ""
                     characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString))
                     characterRowCell?.upperLabel.text = character?.name
@@ -110,15 +105,16 @@ extension LocationDetailsViewController {
                     characterRowCell?.lowerRightLabel.text = character?.species
                     characterRowCell?.characterStatusLabel.text = character?.status
                     characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character?.status ?? "")
-
-                    cell = characterRowCell!
+                    return characterRowCell!
                 }
-
+            case 2:
+                return infoCell!
+            case 3:
+                return characterRowCell!
             default:
-                cell = UICollectionViewCell()
+                return UICollectionViewCell()
             }
-
-            return cell
+            return UICollectionViewCell()
         })
 
         // for custom header
@@ -126,11 +122,29 @@ extension LocationDetailsViewController {
             guard let headerView = self.locationDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
                 fatalError()
             }
-            headerView.textLabel.text = "\(LocationDetailsSection.allCases[indexPath.section])".uppercased()
+            headerView.textLabel.text = indexPath.section == 0 || indexPath.section == 2 ? "INFO" : "RESIDENTS"
             headerView.textLabel.textColor = .gray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
         }
+    }
+
+    func configLocationInfoCell(cell: InfoCell, data: AnyHashable, itemIndex: Int) -> UICollectionViewListCell {
+        if let locationDetails = data as? LocationDetails {
+            switch itemIndex {
+            case 0:
+                cell.leftLabel.text = "Type"
+                cell.rightLabel.text = locationDetails.item.name
+                cell.infoImage.image = UIImage(systemName: "globe.asia.australia")
+            case 1:
+                cell.leftLabel.text = "Dimension"
+                cell.rightLabel.text = locationDetails.item.dimension
+                cell.infoImage.image = UIImage(systemName: "globe")
+            default:
+                cell.rightLabel.text = "-"
+            }
+        }
+        return cell
     }
 }
 
