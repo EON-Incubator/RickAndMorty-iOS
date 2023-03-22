@@ -12,6 +12,7 @@ enum Section: Int, CaseIterable {
     case info
     case location
     case episodes
+    case empty
     var columnCount: Int {
         switch self {
         case .appearance:
@@ -22,6 +23,9 @@ enum Section: Int, CaseIterable {
             return 2
         case .episodes:
             return 2
+        case .empty:
+            return 2
         }
+
     }
 }

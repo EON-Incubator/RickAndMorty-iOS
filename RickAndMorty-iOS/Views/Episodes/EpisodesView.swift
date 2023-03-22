@@ -13,6 +13,10 @@ class EpisodesView: UIView {
         return UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
     }()
 
+    var emptyCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (cell, _ indexPath, _ itemIdentifier) in
+        showLoading(currentCell: cell)
+    }
+
     var episodeCell = UICollectionView.CellRegistration<RowCell, RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result> { (cell, _ indexPath, episode) in
         cell.contentView.backgroundColor = UIColor(red: 0.93, green: 0.95, blue: 1.00, alpha: 0.5)
 

@@ -14,9 +14,11 @@ class EpisodesViewController: UIViewController {
     let viewModel = EpisodesViewModel()
     weak var coordinator: MainCoordinator?
 
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result>
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
+    var snapshot = Snapshot()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,12 +38,19 @@ class EpisodesViewController: UIViewController {
     }
 
     func subscribeToViewModel() {
-        viewModel.episodes.sink(receiveValue: { episodes in
-            var snapshot = NSDiffableDataSourceSnapshot<Section, RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result>()
-            snapshot.appendSections([.appearance])
-            snapshot.appendItems(episodes, toSection: .appearance)
-            self.dataSource.apply(snapshot, animatingDifferences: true)
+        snapshot.deleteAllItems()
+        snapshot.appendSections([.appearance, .empty])
+        snapshot.appendItems([], toSection: .appearance)
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 8), toSection: .empty)
+        self.dataSource.apply(snapshot, animatingDifferences: false)
 
+        viewModel.episodes.sink(receiveValue: { [self] episodes in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+                snapshot.deleteAllItems()
+                snapshot.appendSections([.appearance])
+                snapshot.appendItems(episodes, toSection: .appearance)
+                self.dataSource.apply(snapshot, animatingDifferences: true)
+            }
             // Dismiss refresh control.
             DispatchQueue.main.async {
                 self.episodesView.collectionView.refreshControl?.endRefreshing()
@@ -63,9 +72,20 @@ class EpisodesViewController: UIViewController {
 extension EpisodesViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: episodesView.collectionView, cellProvider: { (collectionView, indexPath, episode) -> UICollectionViewCell? in
-            return collectionView.dequeueConfiguredReusableCell(using: self.episodesView.episodeCell,
-                                                                for: indexPath,
-                                                                item: episode)
+
+            var cell = UICollectionViewCell()
+
+            if indexPath.section == 1 {
+                cell = collectionView.dequeueConfiguredReusableCell(using: self.episodesView.emptyCell,
+                                                                    for: indexPath,
+                                                                    item: episode as? EmptyData )
+            } else {
+
+                cell = collectionView.dequeueConfiguredReusableCell(using: self.episodesView.episodeCell,
+                                                                    for: indexPath,
+                                                                    item: episode as? RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result)
+            }
+            return cell
         })
     }
 }
@@ -82,5 +102,15 @@ extension EpisodesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         coordinator?.goEpisodeDetails(id: viewModel.episodes.value[indexPath.row].id!, navController: self.navigationController!)
+    }
+}
+
+extension Array {
+    init(repeatingExpression expression: @autoclosure (() -> Element), count: Int) {
+        var temp = [Element]()
+        for _ in 0..<count {
+            temp.append(expression())
+        }
+        self = temp
     }
 }

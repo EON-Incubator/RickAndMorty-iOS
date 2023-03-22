@@ -30,7 +30,6 @@ class RowCell: UICollectionViewListCell {
 
     lazy var upperLabel: UILabel = {
         let label = UILabel()
-        label.text = "Location Name"
         label.font = UIFont(name: "Chalkboard SE Regular", size: 18)
         label.lineBreakMode = .byTruncatingTail
         label.textAlignment = .center
@@ -39,7 +38,6 @@ class RowCell: UICollectionViewListCell {
 
     lazy var lowerLeftLabel: UILabel = {
         let label = UILabel()
-        label.text = "Type"
         label.font = .systemFont(ofSize: 12)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
@@ -54,7 +52,6 @@ class RowCell: UICollectionViewListCell {
 
     lazy var lowerRightLabel: UILabel = {
         let label = UILabel()
-        label.text = "Dimension"
         label.font = .systemFont(ofSize: 12)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
@@ -122,10 +119,10 @@ class RowCell: UICollectionViewListCell {
         }
 
         lowerLeftLabel.snp.makeConstraints { make in
-            make.top.equalTo(upperLabel.snp_bottomMargin).offset(30)
             make.left.equalTo(upperLabel)
             make.height.equalTo(20)
             make.width.equalTo(upperLabel).dividedBy(2).offset(-30)
+            make.bottom.equalToSuperview().offset(-10)
         }
 
         lowerRightLabel.snp.makeConstraints { make in
