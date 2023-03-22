@@ -34,11 +34,28 @@ final class LocationsUISpec: QuickSpec {
                 }
             }
 
-            context("2 when user tap the first location cell") {
+            context("2 when user swipe up for more than 20 cells") {
 
                 beforeEach {
                     DispatchQueue.main.async {
-                        app.collectionViews.element.cells.element(boundBy: 0).tap()
+                        app.collectionViews.element.swipeUp(velocity: .fast)
+                        app.collectionViews.element.swipeUp(velocity: .fast)
+                        app.collectionViews.element.swipeUp(velocity: .slow)
+                        sleep(1)
+                    }
+                }
+
+                it("should display a cell with text \"Signus 5 Expanse\" from page 2 results") {
+
+                    await expect(app.collectionViews.staticTexts["Signus 5 Expanse"].exists).toEventually(beTrue())
+                }
+            }
+
+            context("3 when user tap \"Signus 5 Expanse\" cell") {
+
+                beforeEach {
+                    DispatchQueue.main.async {
+                        app.collectionViews.staticTexts["Signus 5 Expanse"].tap()
                         sleep(1)
                     }
                 }
@@ -46,10 +63,14 @@ final class LocationsUISpec: QuickSpec {
                 it("should show the location details in next screen") {
                     let collectionView = app.collectionViews.element
                     await expect(collectionView.identifier).toEventually(equal("LocationDetailsCollectionView"))
+                    let firstCell = app.collectionViews.element.cells.element(boundBy: 0)
+                    await expect(firstCell.staticTexts["Signus 5 Expanse"].exists).toEventually(beTrue())
+                    let secondCell = app.collectionViews.element.cells.element(boundBy: 1)
+                    await expect(secondCell.staticTexts["Cromulon Dimension"].exists).toEventually(beTrue())
                 }
             }
 
-            context("3 when user tap the first character cell") {
+            context("4 when user tap the first character cell") {
 
                 beforeEach {
                     DispatchQueue.main.async {
@@ -58,9 +79,10 @@ final class LocationsUISpec: QuickSpec {
                     }
                 }
 
-                it("should show the character details in next screen") {
+                it("should show the character details with title \"Armagheadon\" in next screen") {
                     let collectionView = app.collectionViews.element
                     await expect(collectionView.identifier).toEventually(equal("CharacterDetailsView"))
+                    await expect(app.staticTexts["Armagheadon"].exists).toEventually(beTrue())
                 }
             }
         }
