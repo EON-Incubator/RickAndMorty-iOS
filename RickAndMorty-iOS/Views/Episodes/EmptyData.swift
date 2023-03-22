@@ -34,3 +34,7 @@ func showLoading(currentCell: UICollectionViewCell) {
 
     currentCell.contentView.layer.addSublayer(gradient)
 }
+
+func hideLoading(currentCell: UICollectionViewCell) {
+    currentCell.contentView.layer.removeAnimation(forKey: "locations")
+}

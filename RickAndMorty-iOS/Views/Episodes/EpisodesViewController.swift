@@ -43,7 +43,6 @@ class EpisodesViewController: UIViewController {
         snapshot.appendItems([], toSection: .appearance)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 8), toSection: .empty)
         self.dataSource.apply(snapshot, animatingDifferences: false)
-
         viewModel.episodes.sink(receiveValue: { [self] episodes in
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
                 snapshot.deleteAllItems()
@@ -51,6 +50,7 @@ class EpisodesViewController: UIViewController {
                 snapshot.appendItems(episodes, toSection: .appearance)
                 self.dataSource.apply(snapshot, animatingDifferences: true)
             }
+
             // Dismiss refresh control.
             DispatchQueue.main.async {
                 self.episodesView.collectionView.refreshControl?.endRefreshing()
@@ -71,19 +71,30 @@ class EpisodesViewController: UIViewController {
 // MARK: - CollectionView DataSource
 extension EpisodesViewController {
     private func configureDataSource() {
-        dataSource = DataSource(collectionView: episodesView.collectionView, cellProvider: { (collectionView, indexPath, episode) -> UICollectionViewCell? in
+        dataSource = DataSource(collectionView: episodesView.collectionView, cellProvider: { (collectionView, indexPath, data) -> UICollectionViewCell? in
 
-            var cell = UICollectionViewCell()
-
+            // section with empty episode cells
             if indexPath.section == 1 {
-                cell = collectionView.dequeueConfiguredReusableCell(using: self.episodesView.emptyCell,
-                                                                    for: indexPath,
-                                                                    item: episode as? EmptyData )
-            } else {
+                let cell = collectionView.dequeueConfiguredReusableCell(using: self.episodesView.episodeCell, for: indexPath, item: data as? EmptyData )
+                // add loading effect
+                showLoading(currentCell: cell)
+                return cell
+            }
 
-                cell = collectionView.dequeueConfiguredReusableCell(using: self.episodesView.episodeCell,
+            let episode = data as? RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.episodesView.episodeCell,
                                                                     for: indexPath,
-                                                                    item: episode as? RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result)
+                                                                    item: episode)
+            cell.upperLabel.text = episode?.name
+            cell.lowerLeftLabel.text = episode?.episode
+            cell.lowerRightLabel.text = episode?.air_date
+
+            for index in 0...3 {
+                let isIndexValid =  episode?.characters.indices.contains(index)
+                if isIndexValid! {
+                    let urlString = episode?.characters[index]?.image ?? ""
+                    cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
+                }
             }
             return cell
         })
