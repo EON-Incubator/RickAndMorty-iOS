@@ -77,8 +77,7 @@ extension EpisodesViewController {
             // section with empty episode cells
             if indexPath.section == 1 {
                 let cell = collectionView.dequeueConfiguredReusableCell(using: self.episodesView.episodeCell, for: indexPath, item: data as? EmptyData )
-//                showLoadingAnimation(currentCell: cell)
-//                hideLoadingAnimation(currentCell: cell)
+                showLoadingAnimation(currentCell: cell)
                 return cell
             }
 
@@ -97,6 +96,7 @@ extension EpisodesViewController {
                     cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
                 }
             }
+            hideLoadingAnimation(currentCell: cell)
             return cell
         })
     }

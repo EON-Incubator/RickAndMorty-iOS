@@ -94,8 +94,10 @@ extension EpisodeDetailsViewController {
 
             switch indexPath.section {
             case 0:
+                hideLoadingAnimation(currentCell: infoCell!)
                 return self.configInfoCell(cell: infoCell!, data: episode, itemIndex: indexPath.item)
             case 1:
+                hideLoadingAnimation(currentCell: characterRowCell!)
                 if let character = episode as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
                     let urlString = character?.image ?? ""
                     characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString))
@@ -108,8 +110,10 @@ extension EpisodeDetailsViewController {
                 }
                 // empty sections
             case 2:
+                showLoadingAnimation(currentCell: infoCell!)
                 return infoCell!
             case 3:
+                showLoadingAnimation(currentCell: characterRowCell!)
                 return characterRowCell!
             default:
                 return UICollectionViewCell()

@@ -39,5 +39,5 @@ func showLoadingAnimation(currentCell: UICollectionViewCell) {
 }
 
 func hideLoadingAnimation(currentCell: UICollectionViewCell) {
-    shimmerLayer?.removeFromSuperlayer()
+    currentCell.contentView.layer.sublayers?.removeAll()
 }

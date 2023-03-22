@@ -79,6 +79,7 @@ extension CharacterDetailsViewController {
 
             switch indexPath.section {
             case 0:
+                hideLoadingAnimation(currentCell: avatarCell!)
                 if let character = characterInfo as? CharacterDetails {
                     guard let image = character.item.image else { fatalError("Image not found") }
                     self.avatarImageUrl = image
@@ -86,6 +87,7 @@ extension CharacterDetailsViewController {
                     return avatarCell!
                 }
             case 1:
+                hideLoadingAnimation(currentCell: infoCell!)
                 if let character = characterInfo as? CharacterDetails {
                     switch indexPath.item {
                     case 0:
@@ -106,6 +108,7 @@ extension CharacterDetailsViewController {
                     }
                 }
             case 2:
+                hideLoadingAnimation(currentCell: infoCell!)
                 if let character = characterInfo as? CharacterDetails {
                     infoCell?.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
                     switch indexPath.item {
@@ -129,11 +132,14 @@ extension CharacterDetailsViewController {
                                                                         item: episode)
                 }
             case 4:
-                avatarCell?.characterImage.backgroundColor = .lightGray
+                showLoadingAnimation(currentCell: avatarCell!)
+                avatarCell?.characterImage.layer.borderWidth = 0
                 return avatarCell
             case 5:
+                showLoadingAnimation(currentCell: infoCell!)
                 return infoCell
             case 6:
+                showLoadingAnimation(currentCell: infoCell!)
                 return infoCell
             default:
                 return UICollectionViewCell()

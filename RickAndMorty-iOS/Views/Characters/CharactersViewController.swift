@@ -91,6 +91,7 @@ extension CharactersViewController {
             let characterCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterGridCell.identifier, for: indexPath) as? CharacterGridCell
 
             if indexPath.section == 1 {
+                showLoadingAnimation(currentCell: characterCell!)
                 return characterCell
             }
 
@@ -100,6 +101,7 @@ extension CharactersViewController {
                     characterCell!.characterImage.sd_setImage(with: URL(string: image))
                 }
             }
+            hideLoadingAnimation(currentCell: characterCell!)
             return characterCell
         })
     }

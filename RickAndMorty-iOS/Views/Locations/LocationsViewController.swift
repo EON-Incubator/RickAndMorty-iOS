@@ -78,6 +78,7 @@ extension LocationsViewController {
 
             // section with empty location cells
             if indexPath.section == 1 {
+                showLoadingAnimation(currentCell: cell!)
                 return cell
             }
 
@@ -92,6 +93,7 @@ extension LocationsViewController {
                     cell?.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
                 }
             }
+            hideLoadingAnimation(currentCell: cell!)
             return cell
         })
     }
