@@ -39,18 +39,6 @@ class MainCoordinator: Coordinator {
         return customNavBarAppearance
     }
 
-    // MARK: - Setup demo tab for experiment
-    let demoNavController = UINavigationController()
-    func setupDemo() {
-        tabBarController.addChild(demoNavController)
-        demoNavController.tabBarItem.title = "Demo"
-        let demoViewController = DemoViewController()
-        demoViewController.coordinator = self
-        demoNavController.navigationBar.backgroundColor = .systemBackground
-        demoNavController.pushViewController(demoViewController, animated: false)
-    }
-    // MARK: -
-
     init(window: UIWindow) {
         self.window = window
     }
@@ -102,10 +90,6 @@ class MainCoordinator: Coordinator {
         let searchViewController = SearchViewController()
         searchViewController.coordinator = self
         searchNavController.pushViewController(searchViewController, animated: false)
-
-        // MARK: - Setup demo tab for experiment, remove this from production.
-        // setupDemo()
-        // MARK: -
 
         // Set tab bar controller as the root view controller of the UIWindow.
         window.tintColor = .label
