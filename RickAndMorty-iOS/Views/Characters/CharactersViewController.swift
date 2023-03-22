@@ -15,14 +15,17 @@ class CharactersViewController: UIViewController {
     var charactersGridView = CharactersView()
     let viewModel = CharactersViewModel()
 
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, RickAndMortyAPI.CharacterBasics>
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
+    var snapshot = Snapshot()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         configureDataSource()
+        showEmptyData()
         subscribeToViewModel()
         viewModel.currentPage = 1
     }
@@ -39,12 +42,21 @@ class CharactersViewController: UIViewController {
         charactersGridView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
     }
 
+    func showEmptyData() {
+        snapshot.deleteAllItems()
+        snapshot.appendSections([.appearance, .empty])
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 10), toSection: .empty)
+        self.dataSource.apply(snapshot, animatingDifferences: true)
+    }
+
     func subscribeToViewModel() {
-        viewModel.characters.sink(receiveValue: { characters in
-            var snapshot = NSDiffableDataSourceSnapshot<Section, RickAndMortyAPI.CharacterBasics>()
-            snapshot.appendSections([.appearance])
-            snapshot.appendItems(characters, toSection: .appearance)
-            self.dataSource.apply(snapshot, animatingDifferences: true)
+        viewModel.characters.sink(receiveValue: { [self] characters in
+            if !characters.isEmpty {
+                snapshot.deleteAllItems()
+                snapshot.appendSections([.appearance])
+                snapshot.appendItems(characters, toSection: .appearance)
+                self.dataSource.apply(snapshot, animatingDifferences: true)
+            }
             // Dismiss refresh control.
             DispatchQueue.main.async {
                 self.charactersGridView.collectionView.refreshControl?.endRefreshing()
@@ -75,7 +87,20 @@ class CharactersViewController: UIViewController {
 extension CharactersViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: charactersGridView.collectionView, cellProvider: { (collectionView, indexPath, character) -> UICollectionViewCell? in
-            return collectionView.dequeueConfiguredReusableCell(using: self.charactersGridView.characterCell, for: indexPath, item: character)
+
+            let characterCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterGridCell.identifier, for: indexPath) as? CharacterGridCell
+
+            if indexPath.section == 1 {
+                return characterCell
+            }
+
+            if let char = character as? RickAndMortyAPI.CharacterBasics {
+                characterCell!.characterNameLabel.text = char.name
+                if let image = char.image {
+                    characterCell!.characterImage.sd_setImage(with: URL(string: image))
+                }
+            }
+            return characterCell
         })
     }
 }
