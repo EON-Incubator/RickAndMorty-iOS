@@ -40,3 +40,23 @@ class SearchViewModel {
             }
     }
 }
+
+extension RickAndMortyAPI.SearchForQuery.Data.Characters.Result: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    public static func == (lhs: RickAndMortyAPI.SearchForQuery.Data.Characters.Result, rhs: RickAndMortyAPI.SearchForQuery.Data.Characters.Result) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
+extension RickAndMortyAPI.LocationDetails: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    public static func == (lhs: RickAndMortyAPI.LocationDetails, rhs: RickAndMortyAPI.LocationDetails) -> Bool {
+        lhs.id == rhs.id
+    }
+}
