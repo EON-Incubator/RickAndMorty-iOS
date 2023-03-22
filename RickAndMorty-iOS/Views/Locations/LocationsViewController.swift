@@ -14,9 +14,11 @@ class LocationsViewController: UIViewController {
     let viewModel = LocationsViewModel()
     weak var coordinator: MainCoordinator?
 
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result>
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
+    var snapshot = Snapshot()
 
     override func loadView() {
         view = locationsView
@@ -31,17 +33,27 @@ class LocationsViewController: UIViewController {
         super.viewDidLoad()
 
         configureDataSource()
+        showEmptyData()
         subscribeToViewModel()
         viewModel.currentPage = 1
     }
 
-    func subscribeToViewModel() {
-        viewModel.locations.sink(receiveValue: { locations in
-            var snapshot = NSDiffableDataSourceSnapshot<Section, RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result>()
-            snapshot.appendSections([.appearance])
-            snapshot.appendItems(locations, toSection: .appearance)
-            self.dataSource.apply(snapshot, animatingDifferences: true)
+    func showEmptyData() {
+        snapshot.deleteAllItems()
+        snapshot.appendSections([.appearance, .empty])
+        snapshot.appendItems([], toSection: .appearance)
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 8), toSection: .empty)
+        self.dataSource.apply(snapshot, animatingDifferences: true)
+    }
 
+    func subscribeToViewModel() {
+        viewModel.locations.sink(receiveValue: { [self] locations in
+            if !locations.isEmpty {
+                snapshot.deleteAllItems()
+                snapshot.appendSections([.appearance])
+                snapshot.appendItems(locations, toSection: .appearance)
+                self.dataSource.apply(snapshot, animatingDifferences: true)
+            }
             // Dismiss refresh control.
             DispatchQueue.main.async {
                 self.locationsView.collectionView.refreshControl?.endRefreshing()
@@ -57,21 +69,27 @@ class LocationsViewController: UIViewController {
     func loadMore() {
         viewModel.currentPage += 1
     }
-
 }
 
 // MARK: - CollectionView DataSource
 extension LocationsViewController {
     private func configureDataSource() {
-        dataSource = DataSource(collectionView: locationsView.collectionView, cellProvider: { (collectionView, indexPath, location) -> UICollectionViewCell? in
+        dataSource = DataSource(collectionView: locationsView.collectionView, cellProvider: { (collectionView, indexPath, data) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationRowCell.identifier, for: indexPath) as? LocationRowCell
-            cell?.upperLabel.text = location.name
-            cell?.lowerLeftLabel.text = location.type
-            cell?.lowerRightLabel.text = location.dimension
+
+            // section with empty episode cells
+            if indexPath.section == 1 {
+                return cell
+            }
+
+            let location = data as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result
+            cell?.upperLabel.text = location?.name
+            cell?.lowerLeftLabel.text = location?.type
+            cell?.lowerRightLabel.text = location?.dimension
             for index in 0...3 {
-                let isIndexValid = location.residents.indices.contains(index)
-                if isIndexValid {
-                    let urlString = location.residents[index]?.image ?? ""
+                let isIndexValid = location?.residents.indices.contains(index)
+                if isIndexValid! {
+                    let urlString = location?.residents[index]?.image ?? ""
                     cell?.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
                 }
             }
