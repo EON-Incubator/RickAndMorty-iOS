@@ -64,13 +64,7 @@ class CharactersViewController: UIViewController {
         }).store(in: &cancellables)
     }
 
-    func subscribeToFilter() {
-
-    }
-
     @objc func onRefresh() {
-        viewModel.currentGender = ""
-        viewModel.currentStatus = ""
         viewModel.currentPage = 1
     }
 

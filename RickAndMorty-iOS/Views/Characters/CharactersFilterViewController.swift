@@ -16,12 +16,17 @@ class CharactersFilterViewController: UIViewController {
     private let charactersFilterView = CharactersFilterView()
     private var viewModel: CharactersViewModel
 
+    private var currentFilterOptions: CurrentValueSubject<FilterOptions, Never>
+
+    private var cancellables = Set<AnyCancellable>()
+
     required init?(coder: NSCoder) {
         fatalError("This class does not support NSCoder")
     }
 
     init(viewModel: CharactersViewModel) {
         self.viewModel = viewModel
+        self.currentFilterOptions = CurrentValueSubject<FilterOptions, Never>(FilterOptions(status: viewModel.filterOptions.status, gender: viewModel.filterOptions.gender))
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -39,28 +44,32 @@ class CharactersFilterViewController: UIViewController {
         charactersFilterView.dismissButton.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
         charactersFilterView.clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
 
-        if let currentStatusIndex = statuses.firstIndex(of: viewModel.currentStatus) {
+        if let currentStatusIndex = statuses.firstIndex(of: viewModel.filterOptions.status) {
             charactersFilterView.statusSegmentControl.selectedSegmentIndex = currentStatusIndex
         }
 
-        if let currentGenderIndex = genders.firstIndex(of: viewModel.currentGender) {
+        if let currentGenderIndex = genders.firstIndex(of: viewModel.filterOptions.gender) {
             charactersFilterView.genderSegmentControl.selectedSegmentIndex = currentGenderIndex
         }
+
+        currentFilterOptions
+            .receive(on: DispatchQueue.main)
+            .map({ $0 })
+            .assign(to: \.filterOptions, on: self.viewModel)
+            .store(in: &cancellables)
     }
 
     @objc private func statusValueChanged() {
         let statusIndex = charactersFilterView.statusSegmentControl.selectedSegmentIndex
         if statusIndex >= 0 {
-            viewModel.currentStatus = self.statuses[statusIndex]
-            viewModel.currentPage = 1
+            currentFilterOptions.value.status = self.statuses[statusIndex]
         }
     }
 
     @objc private func genderValueChanged() {
         let genderIndex = charactersFilterView.genderSegmentControl.selectedSegmentIndex
         if genderIndex >= 0 {
-            viewModel.currentGender = self.genders[genderIndex]
-            viewModel.currentPage = 1
+            currentFilterOptions.value.gender = self.genders[genderIndex]
         }
     }
 
@@ -75,8 +84,6 @@ class CharactersFilterViewController: UIViewController {
     @objc private func clearButtonTapped() {
         charactersFilterView.statusSegmentControl.selectedSegmentIndex = -1
         charactersFilterView.genderSegmentControl.selectedSegmentIndex = -1
-        viewModel.currentStatus = ""
-        viewModel.currentGender = ""
-        viewModel.currentPage = 1
+        currentFilterOptions.value = FilterOptions(status: "", gender: "")
     }
 }

@@ -8,6 +8,11 @@
 import UIKit
 import Combine
 
+struct FilterOptions {
+    var status: String
+    var gender: String
+}
+
 class CharactersViewModel {
 
     var characters = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
@@ -16,16 +21,20 @@ class CharactersViewModel {
             fetchData(page: currentPage)
         }
     }
-    var currentStatus = ""
-    var currentGender = ""
+
+    var filterOptions = FilterOptions(status: "", gender: "") {
+        didSet {
+            fetchData(page: 1)
+        }
+    }
 
     func fetchData(page: Int) {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetCharactersQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
                 name: nil,
-                status: GraphQLNullable<String>(stringLiteral: self.currentStatus),
-                gender: GraphQLNullable<String>(stringLiteral: self.currentGender))) { result in
+                status: GraphQLNullable<String>(stringLiteral: filterOptions.status),
+                gender: GraphQLNullable<String>(stringLiteral: filterOptions.gender))) { result in
 
                     switch result {
                     case .success(let response):
