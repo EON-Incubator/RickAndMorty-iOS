@@ -39,8 +39,6 @@ class CharactersFilterViewController: UIViewController {
         super.viewDidLoad()
         charactersFilterView.statusSegmentControl.addTarget(self, action: #selector(statusValueChanged), for: .valueChanged)
         charactersFilterView.genderSegmentControl.addTarget(self, action: #selector(genderValueChanged), for: .valueChanged)
-
-        charactersFilterView.applyButton.addTarget(self, action: #selector(applyButtonTapped), for: .touchUpInside)
         charactersFilterView.dismissButton.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
         charactersFilterView.clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
 
@@ -71,10 +69,6 @@ class CharactersFilterViewController: UIViewController {
         if genderIndex >= 0 {
             currentFilterOptions.value.gender = self.genders[genderIndex]
         }
-    }
-
-    @objc private func applyButtonTapped() {
-        self.dismiss(animated: true)
     }
 
     @objc private func dismissButtonTapped() {
