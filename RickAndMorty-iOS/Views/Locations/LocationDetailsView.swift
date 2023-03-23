@@ -49,7 +49,6 @@ class LocationDetailsView: UIView {
             make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
     }
-
 }
 
 // MARK: - CollectionView Layout
@@ -79,8 +78,10 @@ extension LocationDetailsView {
 
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-            section.boundarySupplementaryItems = [header]
 
+            if self.collectionView.numberOfItems(inSection: sectionIndex) > 0 {
+                section.boundarySupplementaryItems = [header]
+            }
             return section
         }
         return layout

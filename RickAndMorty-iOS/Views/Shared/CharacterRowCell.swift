@@ -23,7 +23,6 @@ class CharacterRowCell: UICollectionViewCell {
 
     lazy var characterStatusLabel: UILabel = {
         let label = UILabel()
-        label.text = "Status"
         label.textColor = .black
         label.font = .systemFont(ofSize: 13, weight: .semibold)
         label.adjustsFontSizeToFitWidth = true
@@ -40,7 +39,6 @@ class CharacterRowCell: UICollectionViewCell {
 
     lazy var upperLabel: UILabel = {
         let label = UILabel()
-        label.text = "Character Name"
         label.font = .boldSystemFont(ofSize: 22)
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .left
@@ -49,7 +47,6 @@ class CharacterRowCell: UICollectionViewCell {
 
     lazy var lowerLeftLabel: UILabel = {
         let label = UILabel()
-        label.text = "Gender"
         label.font = .systemFont(ofSize: 14, weight: .bold)
         label.textColor = .systemBackground
         label.adjustsFontSizeToFitWidth = true
@@ -62,7 +59,6 @@ class CharacterRowCell: UICollectionViewCell {
 
     lazy var lowerRightLabel: UILabel = {
         let label = UILabel()
-        label.text = "Species"
         label.font = .systemFont(ofSize: 14, weight: .bold)
         label.textColor = .systemBackground
         label.adjustsFontSizeToFitWidth = true
