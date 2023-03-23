@@ -39,11 +39,6 @@
                BlueprintName = "RickAndMorty-iOSTests"
                ReferencedContainer = "container:RickAndMorty-iOS.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "SearchSpec">
-               </Test>
-            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO"
@@ -55,11 +50,6 @@
                BlueprintName = "RickAndMorty-iOSUITests"
                ReferencedContainer = "container:RickAndMorty-iOS.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "SearchsUISpec">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

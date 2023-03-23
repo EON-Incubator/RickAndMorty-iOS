@@ -31,11 +31,13 @@ final class CharacterDetailsUISpec: QuickSpec {
 
                 it("should show the Character details screen") {
                     let collectionView = app.collectionViews.element
+                    sleep(1)
                     await expect(collectionView.identifier).toEventually(equal("CharacterDetailsView"))
                 }
 
                 it("should display a list of Character Details with at least 1 cell") {
                     let collectionView = app.collectionViews.element
+                    sleep(1)
                     await expect(collectionView.cells.count).toEventually(beGreaterThanOrEqualTo(1))
                 }
             }

@@ -29,20 +29,24 @@ class CharactersViewModel {
 
                     switch result {
                     case .success(let response):
-                        if page == 1 {
-                            self.characters.value = (response.data?.characters?.results?
-                                .compactMap { $0?.fragments.characterBasics })!
-                        } else {
-                            self.characters.value.append(contentsOf: (response.data?.characters?.results?
-                                .compactMap { $0?.fragments.characterBasics })!)
+                        if let results = response.data?.characters?.results {
+                            self.mapData(page: page, characters: results)
                         }
-
                     case .failure(let error):
                         print(error)
                     }
 
                 }
     }
+
+    func mapData(page: Int, characters: [RickAndMortyAPI.GetCharactersQuery.Data.Characters.Result?]) {
+        if page == 1 {
+            self.characters.value = (characters.compactMap { $0?.fragments.characterBasics })
+        } else {
+            self.characters.value.append(contentsOf: (characters.compactMap { $0?.fragments.characterBasics }) )
+        }
+    }
+
 }
 // MARK: Extension for Hashable (Equatable)
 extension RickAndMortyAPI.CharacterBasics: Hashable {

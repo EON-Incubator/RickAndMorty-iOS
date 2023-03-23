@@ -19,11 +19,11 @@ final class EpisodesUISpec: QuickSpec {
 
             app.launch()
 
-            context("when user tap the Episode button on Tab Bar") {
+            context("1 when user tap the Episode button on Tab Bar") {
 
                 beforeEach {
                     DispatchQueue.main.async {
-                        app.tabBars.buttons["Episode"].tap()
+                        app.tabBars.buttons["Episodes"].tap()
                     }
                 }
 
@@ -33,17 +33,56 @@ final class EpisodesUISpec: QuickSpec {
                 }
             }
 
-            context("when user tap the first episode cell") {
+            context("2 when user swipe up for more than 20 cells") {
 
                 beforeEach {
                     DispatchQueue.main.async {
-                        app.collectionViews.element.cells.element(boundBy: 0).tap()
+                        sleep(1)
+                        app.collectionViews.element.swipeUp(velocity: .fast)
+                        app.collectionViews.element.swipeUp(velocity: .fast)
+                        app.collectionViews.element.swipeUp(velocity: .slow)
+                        sleep(1)
+                    }
+                }
+
+                it("should display a cell with text \"The Rickshank Rickdemption\" from page 2 results") {
+
+                    await expect(app.collectionViews.staticTexts["The Rickshank Rickdemption"].exists).toEventually(beTrue())
+                }
+            }
+
+            context("3 when user tap \"The Rickshank Rickdemption\" cell") {
+
+                beforeEach {
+                    DispatchQueue.main.async {
+                        app.collectionViews.staticTexts["The Rickshank Rickdemption"].tap()
+                        sleep(1)
                     }
                 }
 
                 it("should show the episode details in next screen") {
                     let collectionView = app.collectionViews.element
                     await expect(collectionView.identifier).toEventually(equal("EpisodeDetailsCollectionView"))
+                    let firstCell = app.collectionViews.element.cells.element(boundBy: 0)
+                    await expect(firstCell.staticTexts["S03E01"].exists).toEventually(beTrue())
+                    let secondCell = app.collectionViews.element.cells.element(boundBy: 1)
+                    await expect(secondCell.staticTexts["April 1, 2017"].exists).toEventually(beTrue())
+                }
+            }
+
+            context("4 when user tap the first character cell") {
+
+                beforeEach {
+                    DispatchQueue.main.async {
+                        app.collectionViews.element.cells.element(boundBy: 2).tap()
+                        sleep(1)
+                    }
+                }
+
+                it("should show the character details with title \"Rick Sanchez\" in next screen") {
+                    let collectionView = app.collectionViews.element
+                    await expect(collectionView.identifier).toEventually(equal("CharacterDetailsView"))
+                    await expect(app.staticTexts["Rick Sanchez"].exists).toEventually(beTrue())
                 }
             }
         }

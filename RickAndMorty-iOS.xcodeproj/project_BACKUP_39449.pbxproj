@@ -862,8 +862,11 @@
 				F77E4B9C29B9364600B8B5CE /* MainCoordinator.swift in Sources */,
 				F7EA932229CB8F9600F7F112 /* Character.graphql.swift in Sources */,
 				F77E4B7C29B906D400B8B5CE /* AppDelegate.swift in Sources */,
+<<<<<<< HEAD
+=======
 				54AC84C029C8A5DE00680F77 /* Locations.graphql.swift in Sources */,
 				54644B7929CA8AC7007FB8B3 /* EmptyData.swift in Sources */,
+>>>>>>> dev
 				54ECFC4429C546820049ACE3 /* SearchViewModel.swift in Sources */,
 				F7604C9B29BF7219003C2906 /* LocationsView.swift in Sources */,
 				F7EA932429CB8F9600F7F112 /* Location.graphql.swift in Sources */,
