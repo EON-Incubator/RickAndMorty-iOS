@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CharacterRowCell: UICollectionViewCell {
+class CharacterRowCell: UICollectionViewListCell {
 
     static let identifier = "CharacterRowCell"
 
@@ -69,37 +69,30 @@ class CharacterRowCell: UICollectionViewCell {
         return label
     }()
 
-    lazy var disclosureIndicatorImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "chevron.right"))
-        imageView.tintColor = .systemGray2
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
-
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
         setupViews()
         setupConstraints()
     }
 
     func setupViews() {
+        let myView = UIView(frame: self.bounds)
+        myView.backgroundColor = UIColor(named: "characterRowBackgroundColor")
+        self.backgroundView = myView
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.gray.cgColor
         self.layer.cornerRadius = 5
         self.layer.masksToBounds = true
-        self.backgroundColor = UIColor(named: "characterRowBackgroundColor")
-
         self.addSubview(characterAvatarImageView)
         self.addSubview(characterStatusLabel)
         self.addSubview(upperLabel)
         self.addSubview(lowerLeftLabel)
         self.addSubview(lowerRightLabel)
-        self.addSubview(disclosureIndicatorImageView)
-
     }
 
     enum CharacterStatus: String {
@@ -126,7 +119,6 @@ class CharacterRowCell: UICollectionViewCell {
 
     func setupConstraints() {
         characterAvatarImageView.snp.makeConstraints { make in
-            // make.top.left.equalToSuperview().offset(5)
             make.left.equalToSuperview().offset(10)
             make.centerY.equalToSuperview()
             make.height.equalToSuperview().offset(-20)
@@ -159,11 +151,6 @@ class CharacterRowCell: UICollectionViewCell {
             make.left.equalToSuperview().offset(-15)
             make.width.equalTo(80)
             make.height.equalTo(25)
-        }
-
-        disclosureIndicatorImageView.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.right.equalToSuperview().offset(-10)
         }
     }
 }

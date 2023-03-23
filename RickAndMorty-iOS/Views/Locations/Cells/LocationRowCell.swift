@@ -23,8 +23,9 @@ class LocationRowCell: RowCell {
     }
 
     func addStyles() {
-        self.contentView.backgroundColor = UIColor(red: 0.99, green: 0.89, blue: 0.54, alpha: 0.1)
-
+        let myView = UIView(frame: self.bounds)
+        myView.backgroundColor = UIColor(red: 0.99, green: 0.89, blue: 0.54, alpha: 0.1)
+        self.backgroundView = myView
         lowerRightLabel.backgroundColor = UIColor(red: 0.87, green: 0.99, blue: 0.98, alpha: 0.4)
         lowerRightLabel.layer.borderWidth = 0.3
         lowerRightLabel.layer.borderColor = UIColor.gray.cgColor

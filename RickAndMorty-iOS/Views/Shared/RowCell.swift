@@ -24,6 +24,9 @@ class RowCell: UICollectionViewListCell {
         super.init(frame: frame)
 
         self.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
+        let myView = UIView(frame: self.bounds)
+        myView.backgroundColor = UIColor(red: 0.93, green: 0.95, blue: 1.00, alpha: 0.5)
+        self.backgroundView = myView
         setupViews()
         setupConstraints()
     }
@@ -68,7 +71,6 @@ class RowCell: UICollectionViewListCell {
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.gray.cgColor
         self.layer.cornerRadius = 5
-        self.contentView.backgroundColor = UIColor(red: 0.93, green: 0.95, blue: 1.00, alpha: 0.5)
         for index in 0...3 {
             let imageView = UIImageView(image: UIImage(systemName: "person.circle"))
             imageView.tintColor = .systemGray3

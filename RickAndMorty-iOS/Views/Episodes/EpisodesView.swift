@@ -14,8 +14,6 @@ class EpisodesView: UIView {
     }()
 
     var episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (cell, _ indexPath, _ episode) in
-        cell.contentView.backgroundColor = UIColor(red: 0.93, green: 0.95, blue: 1.00, alpha: 0.5)
-
         cell.lowerRightLabel.backgroundColor = UIColor(red: 1.00,
                                                        green: 0.92,
                                                        blue: 0.71,
