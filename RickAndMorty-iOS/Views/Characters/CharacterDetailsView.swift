@@ -49,18 +49,18 @@ class CharacterDetailsView: UIView {
         cell.backgroundColor = UIColor(red: 1.00, green: 0.75, blue: 0.66, alpha: 0.1)
 
         cell.lowerRightLabel.backgroundColor = UIColor(red: 1.00,
-                                                  green: 0.92,
-                                                  blue: 0.71,
-                                                  alpha: 0.4)
+                                                       green: 0.92,
+                                                       blue: 0.71,
+                                                       alpha: 0.4)
         cell.lowerRightLabel.layer.borderWidth = 0.3
         cell.lowerRightLabel.layer.borderColor = UIColor.gray.cgColor
 
         cell.lowerLeftLabel.layer.borderWidth = 0.3
         cell.lowerLeftLabel.layer.borderColor = UIColor.gray.cgColor
         cell.lowerLeftLabel.backgroundColor = UIColor(red: 1.00,
-                                                 green: 0.75,
-                                                 blue: 0.66,
-                                                 alpha: 0.4)
+                                                      green: 0.75,
+                                                      blue: 0.66,
+                                                      alpha: 0.4)
         cell.upperLabel.text = episode.name
         cell.lowerLeftLabel.text = episode.episode
         cell.lowerRightLabel.text = episode.air_date
@@ -93,9 +93,9 @@ extension CharacterDetailsView {
 
             func getGroupHeight() -> NSCollectionLayoutDimension {
                 switch sectionType {
-                case .appearance:
+                case .appearance, .empty:
                     return NSCollectionLayoutDimension.estimated(280)
-                case .info, .location:
+                case .info, .location, .emptyInfo, .emptyLocation:
                     return NSCollectionLayoutDimension.estimated(60)
                 default:
                     return NSCollectionLayoutDimension.estimated(100)
@@ -110,8 +110,9 @@ extension CharacterDetailsView {
 
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-            section.boundarySupplementaryItems = [header]
-
+            if self.collectionView.numberOfItems(inSection: sectionIndex) > 0 {
+                section.boundarySupplementaryItems = [header]
+            }
             return section
         }
         return layout

@@ -15,12 +15,15 @@ class CharacterDetailsViewController: UIViewController {
     let locationsViewModel = LocationsViewModel()
     var characterDetailsView = CharacterDetailsView()
     weak var coordinator: MainCoordinator?
-    private var cancellables = Set<AnyCancellable>()
-    private var dataSource: DataSource!
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     var characterID: String?
     var avatarImageUrl: String?
     var titleViewState: TitleViewState = .noTitle
+
+    private var dataSource: DataSource!
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
+    private var cancellables = Set<AnyCancellable>()
+    var snapshot = Snapshot()
 
     enum TitleViewState {
         case noTitle, title, titleWithImage
@@ -35,21 +38,32 @@ class CharacterDetailsViewController: UIViewController {
         super.viewDidLoad()
         viewModel.selectedCharacter = characterID!
         configureDataSource()
+        showEmptyData()
         subscribeToViewModel()
         updateTitleView()
     }
 
-    func subscribeToViewModel() {
-        viewModel.character.sink(receiveValue: { characterInfo in
-            self.title = characterInfo.name
+    func showEmptyData() {
+        snapshot.deleteAllItems()
+        snapshot.appendSections([.appearance, .info, .location, .episodes, .empty, .emptyInfo, .emptyLocation])
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 1), toSection: .empty)
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 3), toSection: .emptyInfo)
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 2), toSection: .emptyLocation)
+        self.dataSource.apply(snapshot, animatingDifferences: true)
+    }
 
-            var snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
-            snapshot.appendSections([.appearance, .info, .location, .episodes])
-            snapshot.appendItems([CharacterDetails(characterInfo)], toSection: .appearance)
-            snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .info)
-            snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .location)
-            snapshot.appendItems(characterInfo.episode, toSection: .episodes)
-            self.dataSource.apply(snapshot, animatingDifferences: true)
+    func subscribeToViewModel() {
+        viewModel.character.sink(receiveValue: { [self] characterInfo in
+            self.title = characterInfo.name
+            if !characterInfo.episode.isEmpty {
+                snapshot.deleteAllItems()
+                snapshot.appendSections([.appearance, .info, .location, .episodes])
+                snapshot.appendItems([CharacterDetails(characterInfo)], toSection: .appearance)
+                snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .info)
+                snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .location)
+                snapshot.appendItems(characterInfo.episode, toSection: .episodes)
+                self.dataSource.apply(snapshot, animatingDifferences: true)
+            }
         }).store(in: &cancellables)
     }
 }
@@ -60,62 +74,77 @@ extension CharacterDetailsViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: characterDetailsView.collectionView, cellProvider: { (collectionView, indexPath, characterInfo) -> UICollectionViewCell? in
 
-            var cell = UICollectionViewCell()
+            let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell
+            let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
 
             switch indexPath.section {
             case 0:
+                hideLoadingAnimation(currentCell: avatarCell!)
                 if let character = characterInfo as? CharacterDetails {
-                    let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell
                     guard let image = character.item.image else { fatalError("Image not found") }
                     self.avatarImageUrl = image
                     avatarCell?.characterImage.sd_setImage(with: URL(string: image))
-                    cell = avatarCell!
+                    return avatarCell!
                 }
             case 1:
+                hideLoadingAnimation(currentCell: infoCell!)
                 if let character = characterInfo as? CharacterDetails {
-                    let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
                     switch indexPath.item {
                     case 0:
-                        infoCell?.leftLabel.text = "Gender"
-                        infoCell?.rightLabel.text = character.item.gender
-                        infoCell?.infoImage.image = UIImage(named: "gender")
+                        return InfoCell.configCell(cell: infoCell!,
+                                                   leftLabel: "Gender",
+                                                   rightLabel: character.item.gender!,
+                                                   infoImage: UIImage(named: "gender")!)
                     case 1:
-                        infoCell?.leftLabel.text = "Species"
-                        infoCell?.rightLabel.text = character.item.species
-                        infoCell?.infoImage.image = UIImage(named: "dna")
+                        return InfoCell.configCell(cell: infoCell!,
+                                                   leftLabel: "Species",
+                                                   rightLabel: character.item.species!,
+                                                   infoImage: UIImage(named: "dna")!)
                     default:
-                        infoCell?.leftLabel.text = "Status"
-                        infoCell?.rightLabel.text = character.item.status
-                        infoCell?.infoImage.image = UIImage(named: "heart")
+                        return InfoCell.configCell(cell: infoCell!,
+                                                   leftLabel: "Status",
+                                                   rightLabel: character.item.status!,
+                                                   infoImage: UIImage(named: "heart")!)
                     }
-                    cell = infoCell!
                 }
             case 2:
+                hideLoadingAnimation(currentCell: infoCell!)
                 if let character = characterInfo as? CharacterDetails {
-                    let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
                     infoCell?.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
-
                     switch indexPath.item {
                     case 0:
-                        infoCell?.leftLabel.text = "Origin"
-                        infoCell?.rightLabel.text = character.item.origin?.name
-                        infoCell?.infoImage.image = UIImage(named: "chick")
+                        return InfoCell.configCell(cell: infoCell!,
+                                                   leftLabel: "Origin",
+                                                   rightLabel: (character.item.origin?.name)!,
+                                                   infoImage: UIImage(named: "chick")!)
                     default:
-                        infoCell?.leftLabel.text = "Last Seen"
-                        infoCell?.rightLabel.text = character.item.location?.name
-                        infoCell?.infoImage.image = UIImage(named: "map")
+                        return InfoCell.configCell(cell: infoCell!,
+                                                   leftLabel: "Last Seen",
+                                                   rightLabel: (character.item.location?.name)!,
+                                                   infoImage: UIImage(named: "map")!)
                     }
-                    cell = infoCell!
                 }
             case 3:
                 if let episode = characterInfo as?
                     RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode {
-                    cell = collectionView.dequeueConfiguredReusableCell(using: self.characterDetailsView.episodeCell, for: indexPath, item: episode)
+                    return collectionView.dequeueConfiguredReusableCell(using: self.characterDetailsView.episodeCell,
+                                                                        for: indexPath,
+                                                                        item: episode)
                 }
+            case 4:
+                showLoadingAnimation(currentCell: avatarCell!)
+                avatarCell?.characterImage.layer.borderWidth = 0
+                return avatarCell
+            case 5:
+                showLoadingAnimation(currentCell: infoCell!)
+                return infoCell
+            case 6:
+                showLoadingAnimation(currentCell: infoCell!)
+                return infoCell
             default:
-                cell = UICollectionViewCell()
+                return UICollectionViewCell()
             }
-            return cell
+            return UICollectionViewCell()
         })
 
         // for custom header
@@ -123,7 +152,18 @@ extension CharacterDetailsViewController {
             guard let headerView = self.characterDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
                 fatalError()
             }
-            headerView.textLabel.text = "\(Section.allCases[indexPath.section])".uppercased()
+            var headerTitle: String
+            switch indexPath.section {
+            case 4:
+                headerTitle = "APPEARANCE"
+            case 5:
+                headerTitle = "INFO"
+            case 6:
+                headerTitle = "LOCATION"
+            default:
+                headerTitle = "\(Section.allCases[indexPath.section])".uppercased()
+            }
+            headerView.textLabel.text = headerTitle
             headerView.textLabel.textColor = .lightGray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
@@ -194,7 +234,6 @@ extension CharacterDetailsViewController: UICollectionViewDelegate {
             UIView.transition(with: self.navigationController?.navigationBar ?? UIView(), duration: 0.25, options: [.transitionCrossDissolve], animations: nil, completion: nil)
         }
     }
-    // MARK: - 
 }
 
 // MARK: Struct for Diffable DataSource
