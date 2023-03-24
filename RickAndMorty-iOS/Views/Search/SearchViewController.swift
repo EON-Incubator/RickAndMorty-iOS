@@ -13,6 +13,7 @@ class SearchViewController: UIViewController {
     enum SearchSection: Int, CaseIterable {
         case characters
         case locations
+        case loadMore
     }
 
     let searchView = SearchView()
@@ -43,12 +44,17 @@ class SearchViewController: UIViewController {
         searchView.collectionView.delegate = self
     }
 
+    var charactersSearchViewModel = CharactersViewModel()
+
+    var charactersPage = 1
+
     func subscribeToViewModel() {
+
         viewModel.searchResults.sink(receiveValue: { [self] result in
 
             snapshot.deleteAllItems()
 
-            snapshot.appendSections([.characters, .locations])
+            snapshot.appendSections([.characters, .locations, .loadMore])
 
             let locationsWithName: [RickAndMortyAPI.LocationDetails] = result.locationsWithName?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
 
@@ -57,15 +63,20 @@ class SearchViewController: UIViewController {
             let locations: [RickAndMortyAPI.LocationDetails] = locationsWithName + locationsWithType
             let uniqueLocations = Array(Set(locations))
 
+            let characters = result.characters?.results?.compactMap {
+                $0?.fragments.characterBasics
+            } as? [RickAndMortyAPI.CharacterBasics] ?? []
+
+            //            guard let totalCharactersPage = result.characters?.info?.pages else { return }
+
             switch searchController.searchBar.selectedScopeButtonIndex {
             case 0:
-                snapshot.appendItems((result.characters?.results)!, toSection: .characters)
+                snapshot.appendItems(characters, toSection: .characters)
                 snapshot.appendItems(uniqueLocations, toSection: .locations)
             case 1:
-                snapshot.appendItems((result.characters?.results)!, toSection: .characters)
-                snapshot.appendItems([], toSection: .locations)
+                snapshot.appendItems(characters, toSection: .characters)
+                snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMore)
             case 2:
-                snapshot.appendItems([], toSection: .characters)
                 snapshot.appendItems(uniqueLocations, toSection: .locations)
             default:
                 print("error")
@@ -85,7 +96,7 @@ class SearchViewController: UIViewController {
 
             switch indexPath.section {
             case 0:
-                if let character = result as? RickAndMortyAPI.SearchForQuery.Data.Characters.Result {
+                if let character = result as? RickAndMortyAPI.CharacterBasics {
 
                     let characterRowCell = (collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell)!
 
@@ -102,7 +113,7 @@ class SearchViewController: UIViewController {
             case 1:
                 cell = collectionView.dequeueConfiguredReusableCell(using: self.searchView.locationCell, for: indexPath, item: result as? RickAndMortyAPI.LocationDetails)
             default:
-                cell = UICollectionViewCell()
+                cell = (collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell)!
             }
             return cell
         })
@@ -132,6 +143,17 @@ extension SearchViewController: UICollectionViewDelegate {
 
         if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.SearchForQuery.Data.Characters.Result? {
             coordinator?.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
+        }
+
+        if dataSource.itemIdentifier(for: indexPath) is EmptyData {
+            charactersPage += 1
+            charactersSearchViewModel.name = viewModel.searchInput
+            charactersSearchViewModel.currentPage = charactersPage
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+                snapshot.appendItems(charactersSearchViewModel.charactersForSearch.value, toSection: .characters)
+                dataSource.apply(snapshot, animatingDifferences: true)
+            }
         }
     }
 }
