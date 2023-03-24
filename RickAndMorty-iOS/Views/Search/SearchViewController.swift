@@ -162,9 +162,13 @@ extension SearchViewController: UICollectionViewDelegate {
         }
 
         if dataSource.itemIdentifier(for: indexPath) is EmptyData {
-            if searchController.searchBar.selectedScopeButtonIndex == 1 {
+            switch searchController.searchBar.selectedScopeButtonIndex {
+            case 0:
                 loadMoreCharacters()
-            } else {
+                loadMoreLocations()
+            case 1:
+                loadMoreCharacters()
+            default:
                 loadMoreLocations()
             }
         }
