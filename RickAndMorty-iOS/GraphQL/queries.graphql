@@ -37,6 +37,7 @@ query getLocations($page: Int, $name: String, $type: String) {
       ...pageInfo
     }
     results {
+      ...locationDetails
       ...locationBasics
       residents {
         image
