@@ -16,8 +16,8 @@ class SearchView: UIView {
         collectionView.register(HeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: "HeaderView")
-        collectionView.register(InfoCell.self,
-                                forCellWithReuseIdentifier: InfoCell.identifier)
+        collectionView.register(LoadMoreCell.self,
+                                forCellWithReuseIdentifier: LoadMoreCell.identifier)
         return collectionView
     }()
 
@@ -68,14 +68,13 @@ class SearchView: UIView {
             guard let sectionType = Section(rawValue: sectionIndex) else {
                 return nil
             }
-
             let columns = sectionType.columnCount
 
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                   heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-
+            
             let groupHeight = NSCollectionLayoutDimension.estimated(100)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
@@ -86,7 +85,7 @@ class SearchView: UIView {
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
 
-            if self.collectionView.numberOfItems(inSection: sectionIndex) > 0 {
+            if self.collectionView.numberOfItems(inSection: sectionIndex) > 0 && sectionType != Section.location {
                 section.boundarySupplementaryItems = [header]
             }
             return section
