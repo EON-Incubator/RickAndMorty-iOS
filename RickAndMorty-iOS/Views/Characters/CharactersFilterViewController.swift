@@ -26,7 +26,9 @@ class CharactersFilterViewController: UIViewController {
 
     init(viewModel: CharactersViewModel) {
         self.viewModel = viewModel
-        self.currentFilterOptions = CurrentValueSubject<FilterOptions, Never>(FilterOptions(status: viewModel.filterOptions.status, gender: viewModel.filterOptions.gender))
+        self.currentFilterOptions = CurrentValueSubject<FilterOptions, Never>(FilterOptions(
+                                                                              status: viewModel.filterOptions.status,
+                                                                              gender: viewModel.filterOptions.gender))
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -37,24 +39,33 @@ class CharactersFilterViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        addTargets()
+        bindToViewModel()
+        restoreStatesFromViewModel()
+    }
+
+    private func addTargets() {
         charactersFilterView.statusSegmentControl.addTarget(self, action: #selector(statusValueChanged), for: .valueChanged)
         charactersFilterView.genderSegmentControl.addTarget(self, action: #selector(genderValueChanged), for: .valueChanged)
         charactersFilterView.dismissButton.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
         charactersFilterView.clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
+    }
 
-        if let currentStatusIndex = statuses.firstIndex(of: viewModel.filterOptions.status) {
-            charactersFilterView.statusSegmentControl.selectedSegmentIndex = currentStatusIndex
-        }
-
-        if let currentGenderIndex = genders.firstIndex(of: viewModel.filterOptions.gender) {
-            charactersFilterView.genderSegmentControl.selectedSegmentIndex = currentGenderIndex
-        }
-
+    private func bindToViewModel() {
         currentFilterOptions
             .receive(on: DispatchQueue.main)
             .map({ $0 })
             .assign(to: \.filterOptions, on: self.viewModel)
             .store(in: &cancellables)
+    }
+
+    private func restoreStatesFromViewModel() {
+        if let currentStatusIndex = statuses.firstIndex(of: viewModel.filterOptions.status) {
+            charactersFilterView.statusSegmentControl.selectedSegmentIndex = currentStatusIndex
+        }
+        if let currentGenderIndex = genders.firstIndex(of: viewModel.filterOptions.gender) {
+            charactersFilterView.genderSegmentControl.selectedSegmentIndex = currentGenderIndex
+        }
     }
 
     @objc private func statusValueChanged() {
