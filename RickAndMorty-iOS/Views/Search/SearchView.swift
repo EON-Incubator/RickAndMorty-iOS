@@ -70,11 +70,15 @@ class SearchView: UIView {
             }
             let columns = sectionType.columnCount
 
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+            var itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                   heightDimension: .fractionalHeight(1.0))
+            if sectionType == Section.location {
+                itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                  heightDimension: .fractionalHeight(0.5))
+            }
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-            
+
             let groupHeight = NSCollectionLayoutDimension.estimated(100)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
