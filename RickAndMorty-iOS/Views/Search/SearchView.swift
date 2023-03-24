@@ -16,6 +16,8 @@ class SearchView: UIView {
         collectionView.register(HeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: "HeaderView")
+        collectionView.register(InfoCell.self,
+                                forCellWithReuseIdentifier: InfoCell.identifier)
         return collectionView
     }()
 
