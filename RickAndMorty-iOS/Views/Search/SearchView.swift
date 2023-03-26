@@ -72,10 +72,11 @@ class SearchView: UIView {
 
             var itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                   heightDimension: .fractionalHeight(1.0))
-            if sectionType == Section.location {
+            if sectionType == Section.episodes || sectionType == Section.info {
                 itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                   heightDimension: .fractionalHeight(0.5))
             }
+
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
@@ -89,7 +90,7 @@ class SearchView: UIView {
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
 
-            if self.collectionView.numberOfItems(inSection: sectionIndex) > 0 && sectionType != Section.location {
+            if self.collectionView.numberOfItems(inSection: sectionIndex) > 0 && sectionType != Section.episodes && sectionType != Section.info {
                 section.boundarySupplementaryItems = [header]
             }
             return section

@@ -13,7 +13,8 @@ class SearchViewController: UIViewController {
     enum SearchSection: Int, CaseIterable {
         case characters
         case locations
-        case loadMore
+        case loadMoreCharacters
+        case loadMoreLocations
     }
 
     let searchView = SearchView()
@@ -61,7 +62,7 @@ class SearchViewController: UIViewController {
         viewModel.searchResults.sink(receiveValue: { [self] result in
             snapshot.deleteAllItems()
 
-            snapshot.appendSections([.characters, .locations, .loadMore])
+            snapshot.appendSections([.characters, .loadMoreCharacters, .locations, .loadMoreLocations])
 
             let locationsWithName: [RickAndMortyAPI.LocationDetails] = result.locationsWithName?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
 
@@ -80,18 +81,24 @@ class SearchViewController: UIViewController {
             switch searchController.searchBar.selectedScopeButtonIndex {
             case 0:
                 snapshot.appendItems(characters, toSection: .characters)
+                if totalCharactersPage > 1 {
+                    snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreCharacters)
+                }
                 snapshot.appendItems(uniqueLocations, toSection: .locations)
+                if totalLocationsPage > 1 {
+                    snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreLocations)
+                }
             case 1:
                 currentCharactersPage = 1
                 snapshot.appendItems(characters, toSection: .characters)
                 if totalCharactersPage > 1 {
-                    snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMore)
+                    snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreCharacters)
                 }
             case 2:
                 currentLocationsPage = 1
                 snapshot.appendItems(uniqueLocations, toSection: .locations)
                 if totalLocationsPage > 1 {
-                    snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMore)
+                    snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreLocations)
                 }
             default:
                 print("error")
@@ -125,7 +132,7 @@ class SearchViewController: UIViewController {
 
                     cell = characterRowCell
                 }
-            case 1:
+            case 2:
                 cell = collectionView.dequeueConfiguredReusableCell(using: self.searchView.locationCell, for: indexPath, item: result as? RickAndMortyAPI.LocationDetails)
             default:
                 cell = (collectionView.dequeueReusableCell(withReuseIdentifier: LoadMoreCell.identifier, for: indexPath) as? LoadMoreCell)!
@@ -156,19 +163,15 @@ extension SearchViewController: UICollectionViewDelegate {
             coordinator?.goLocationDetails(id: (location?.id)!, navController: self.navigationController!)
         }
 
-        // load-more section
-        if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.SearchForQuery.Data.Characters.Result? {
+        if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics? {
             coordinator?.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
         }
 
+        // load-more section
         if dataSource.itemIdentifier(for: indexPath) is EmptyData {
-            switch searchController.searchBar.selectedScopeButtonIndex {
-            case 0:
+            if indexPath.section == 1 {
                 loadMoreCharacters()
-                loadMoreLocations()
-            case 1:
-                loadMoreCharacters()
-            default:
+            } else {
                 loadMoreLocations()
             }
         }
@@ -176,8 +179,12 @@ extension SearchViewController: UICollectionViewDelegate {
 
     func loadMoreCharacters() {
         currentCharactersPage += 1
+        // remove load-more section
         if currentCharactersPage == totalCharactersPage {
-            snapshot.deleteSections([.loadMore])
+            //            snapshot.deleteSections([.loadMoreCharacters])
+
+            let ids = snapshot.itemIdentifiers(inSection: .loadMoreCharacters)
+            snapshot.deleteItems(ids)
         }
         charactersSearchViewModel.name = viewModel.searchInput
         charactersSearchViewModel.currentPage = currentCharactersPage
@@ -192,7 +199,8 @@ extension SearchViewController: UICollectionViewDelegate {
     func loadMoreLocations() {
         currentLocationsPage += 1
         if currentLocationsPage == totalLocationsPage {
-            snapshot.deleteSections([.loadMore])
+            let ids = snapshot.itemIdentifiers(inSection: .loadMoreLocations)
+            snapshot.deleteItems(ids)
         }
         locationNameViewModel.name = viewModel.searchInput
         locationNameViewModel.currentPage = currentLocationsPage
