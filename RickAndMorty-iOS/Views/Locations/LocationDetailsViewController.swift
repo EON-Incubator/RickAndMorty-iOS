@@ -65,7 +65,7 @@ class LocationDetailsViewController: UIViewController {
     func subscribeToViewModel() {
         viewModel.location.sink(receiveValue: { [self] location in
             self.title = location.name
-            if !location.residents.isEmpty {
+            if location.id != nil {
                 snapshot.deleteAllItems()
                 snapshot.appendSections([.info, .residents])
                 snapshot.appendItems([LocationDetails(location), LocationDetails(location)], toSection: .info)
