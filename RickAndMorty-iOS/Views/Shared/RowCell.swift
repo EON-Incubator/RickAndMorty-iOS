@@ -76,8 +76,8 @@ class RowCell: UICollectionViewListCell {
         self.layer.borderColor = UIColor.gray.cgColor
         self.layer.cornerRadius = 5
         for index in 0...3 {
-            let imageView = UIImageView(image: UIImage(systemName: "person.circle"))
-            imageView.tintColor = .systemGray3
+            let imageView = UIImageView(image: UIImage(systemName: "person.circle")?.withRenderingMode(.alwaysTemplate))
+            imageView.tintColor = .systemFill
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
             imageView.layer.cornerRadius = imageView.frame.width / 2
