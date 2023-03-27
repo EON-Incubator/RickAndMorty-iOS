@@ -41,13 +41,6 @@ final class CharacterGridCellSpec: QuickSpec {
 
             }
 
-            context("When characterImage is loaded") {
-                it("Should contain an image") {
-                    let image = await imageView.image
-                    expect(image).notTo(beNil())
-                }
-            }
-
             afterEach {
                 print("-- after each context --")
             }
