@@ -181,8 +181,6 @@ extension SearchViewController: UICollectionViewDelegate {
         currentCharactersPage += 1
         // remove load-more section
         if currentCharactersPage == totalCharactersPage {
-            //            snapshot.deleteSections([.loadMoreCharacters])
-
             let ids = snapshot.itemIdentifiers(inSection: .loadMoreCharacters)
             snapshot.deleteItems(ids)
         }
@@ -234,7 +232,7 @@ extension SearchViewController: UISearchResultsUpdating {
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search"
+        searchController.searchBar.placeholder = "Search for something"
         searchController.automaticallyShowsCancelButton = true
         navigationItem.searchController = searchController
         definesPresentationContext = true
@@ -270,8 +268,8 @@ extension SearchViewController: UISearchResultsUpdating {
         if let searchInput = searchController.searchBar.text {
             debounceTimer?.invalidate()
             // debounce search results
-            debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { _ in
-                if !searchInput.isEmpty {
+            debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                if searchInput.count >= 2 {
                     if searchInput != self.viewModel.searchInput {
                         self.viewModel.searchInput = searchInput
                         searchController.searchSuggestions = []
