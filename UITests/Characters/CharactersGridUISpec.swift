@@ -15,7 +15,7 @@ final class CharactersGridViewUISpec: QuickSpec {
 
         let app = XCUIApplication()
 
-        describe("Given app launch") {
+        describe("Characters Grid View") {
 
             app.launch()
 

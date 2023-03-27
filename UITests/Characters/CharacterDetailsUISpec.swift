@@ -15,7 +15,7 @@ final class CharacterDetailsUISpec: QuickSpec {
 
         let app = XCUIApplication()
 
-        describe("Given app launch") {
+        describe("Character Details") {
 
             app.launch()
 
