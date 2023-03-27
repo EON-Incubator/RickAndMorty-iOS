@@ -220,6 +220,16 @@ extension SearchViewController: UICollectionViewDelegate {
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         viewModel.searchInput = searchBar.text!
+
+        // change background colors
+        switch selectedScope {
+        case 2:
+            self.searchView.collectionView.backgroundColor = UIColor(named: "LocationView")
+            self.searchView.backgroundColor = UIColor(named: "LocationView")
+        default:
+            self.searchView.collectionView.backgroundColor = UIColor(named: "EpisodeView")
+            self.searchView.backgroundColor = UIColor(named: "EpisodeView")
+        }
     }
 }
 
