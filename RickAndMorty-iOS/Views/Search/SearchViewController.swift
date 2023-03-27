@@ -190,10 +190,12 @@ extension SearchViewController: UICollectionViewDelegate {
         charactersSearchViewModel.name = viewModel.searchInput
         charactersSearchViewModel.currentPage = currentCharactersPage
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
-            let newCharacters = charactersSearchViewModel.charactersForSearch.value
-            snapshot.appendItems(newCharacters, toSection: .characters)
-            dataSource.apply(snapshot, animatingDifferences: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            let newCharacters = self?.charactersSearchViewModel.charactersForSearch.value
+            self?.snapshot.appendItems(newCharacters ?? [], toSection: .characters)
+            if let snapshot = self?.snapshot {
+                self?.dataSource.apply(snapshot, animatingDifferences: true)
+            }
         }
     }
 
@@ -209,13 +211,15 @@ extension SearchViewController: UICollectionViewDelegate {
         locationTypeViewModel.type = viewModel.searchInput
         locationTypeViewModel.currentPage = currentLocationsPage
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
-            uniqueLocations += (locationNameViewModel.locationsNameSearch.value + locationTypeViewModel.locationsTypeSearch.value)
-            let newUniqueLocations = Array(Set(uniqueLocations))
-            let locationsIDs = snapshot.itemIdentifiers(inSection: .locations)
-            snapshot.deleteItems(locationsIDs)
-            snapshot.appendItems(newUniqueLocations, toSection: .locations)
-            dataSource.apply(snapshot, animatingDifferences: false)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.uniqueLocations += ((self?.locationNameViewModel.locationsNameSearch.value ?? []) + (self?.locationTypeViewModel.locationsTypeSearch.value ?? []))
+            let newUniqueLocations = Array(Set((self?.uniqueLocations) ?? []))
+            let locationsIDs = self?.snapshot.itemIdentifiers(inSection: .locations)
+            self?.snapshot.deleteItems(locationsIDs ?? [])
+            self?.snapshot.appendItems(newUniqueLocations, toSection: .locations)
+            if let snapshot = self?.snapshot {
+                self?.dataSource.apply(snapshot, animatingDifferences: false)
+            }
         }
     }
 }

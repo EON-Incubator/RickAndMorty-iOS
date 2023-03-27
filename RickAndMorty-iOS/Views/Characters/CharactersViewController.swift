@@ -109,9 +109,9 @@ extension CharactersViewController: UICollectionViewDelegate {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
             // show lazy-loading indicator
             charactersGridView.loadingIndicator.startAnimating()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.loadMore()
-                self.charactersGridView.loadingIndicator.stopAnimating()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                self?.loadMore()
+                self?.charactersGridView.loadingIndicator.stopAnimating()
             }
         }
     }
