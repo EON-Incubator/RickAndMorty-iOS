@@ -46,16 +46,18 @@ class EpisodesViewController: UIViewController {
     }
 
     func subscribeToViewModel() {
-        viewModel.episodes.sink(receiveValue: { [self] episodes in
+        viewModel.episodes.sink(receiveValue: { [weak self] episodes in
             if !episodes.isEmpty {
-                snapshot.deleteAllItems()
-                snapshot.appendSections([.appearance])
-                snapshot.appendItems(episodes, toSection: .appearance)
-                self.dataSource.apply(snapshot, animatingDifferences: true)
+                if var snapshot = self?.snapshot {
+                    snapshot.deleteAllItems()
+                    snapshot.appendSections([.appearance])
+                    snapshot.appendItems(episodes, toSection: .appearance)
+                    self?.dataSource.apply(snapshot, animatingDifferences: true)
+                }
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {
-                self.episodesView.collectionView.refreshControl?.endRefreshing()
+                self?.episodesView.collectionView.refreshControl?.endRefreshing()
             }
         }).store(in: &cancellables)
     }
@@ -72,17 +74,17 @@ class EpisodesViewController: UIViewController {
 // MARK: - CollectionView DataSource
 extension EpisodesViewController {
     private func configureDataSource() {
-        dataSource = DataSource(collectionView: episodesView.collectionView, cellProvider: { (collectionView, indexPath, data) -> UICollectionViewCell? in
+        dataSource = DataSource(collectionView: episodesView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, data) -> UICollectionViewCell? in
 
             // section with empty episode cells
             if indexPath.section == 1 {
-                let cell = collectionView.dequeueConfiguredReusableCell(using: self.episodesView.episodeCell, for: indexPath, item: data as? EmptyData )
+                let cell = collectionView.dequeueConfiguredReusableCell(using: (self?.episodesView.episodeCell)!, for: indexPath, item: data as? EmptyData )
                 showLoadingAnimation(currentCell: cell)
                 return cell
             }
 
             let episode = data as? RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result
-            let cell = collectionView.dequeueConfiguredReusableCell(using: self.episodesView.episodeCell,
+            let cell = collectionView.dequeueConfiguredReusableCell(using: (self?.episodesView.episodeCell)!,
                                                                     for: indexPath,
                                                                     item: episode)
             cell.upperLabel.text = episode?.name
@@ -93,7 +95,7 @@ extension EpisodesViewController {
                 let isIndexValid =  episode?.characters.indices.contains(index)
                 if isIndexValid! {
                     let urlString = episode?.characters[index]?.image ?? ""
-                    cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
+                    cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
                 }
             }
             hideLoadingAnimation(currentCell: cell)

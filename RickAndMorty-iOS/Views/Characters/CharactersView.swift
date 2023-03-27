@@ -81,7 +81,7 @@ class CharactersView: UIView {
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(self.safeAreaInsets).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+            make.edges.equalTo(safeAreaInsets).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
     }
 }
