@@ -65,12 +65,12 @@ class LocationDetailsViewController: UIViewController {
     func subscribeToViewModel() {
         viewModel.location.sink(receiveValue: { [weak self] location in
             self?.title = location.name
-            if !location.residents.isEmpty {
-                if var snapshot = self?.snapshot {
-                    snapshot.deleteAllItems()
-                    snapshot.appendSections([.info, .residents])
-                    snapshot.appendItems([LocationDetails(location), LocationDetails(location)], toSection: .info)
-                    snapshot.appendItems(location.residents, toSection: .residents)
+            if location.id != nil {
+                self?.snapshot.deleteAllItems()
+                self?.snapshot.appendSections([.info, .residents])
+                self?.snapshot.appendItems([LocationDetails(location), LocationDetails(location)], toSection: .info)
+                self?.snapshot.appendItems(location.residents, toSection: .residents)
+                if let snapshot = self?.snapshot {
                     self?.dataSource.apply(snapshot, animatingDifferences: true)
                 }
             }

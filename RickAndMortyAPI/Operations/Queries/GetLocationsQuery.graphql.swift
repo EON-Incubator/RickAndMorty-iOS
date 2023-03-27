@@ -18,6 +18,7 @@ public extension RickAndMortyAPI {
             }
             results {
               __typename
+              ...locationDetails
               ...locationBasics
               residents {
                 __typename
@@ -27,7 +28,7 @@ public extension RickAndMortyAPI {
           }
         }
         """#,
-        fragments: [PageInfo.self, LocationBasics.self]
+        fragments: [PageInfo.self, LocationDetails.self, LocationBasics.self]
       ))
 
     public var page: GraphQLNullable<Int>
@@ -123,6 +124,7 @@ public extension RickAndMortyAPI {
           public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Location }
           public static var __selections: [ApolloAPI.Selection] { [
             .field("residents", [Resident?].self),
+            .fragment(LocationDetails.self),
             .fragment(LocationBasics.self),
           ] }
 
@@ -141,6 +143,7 @@ public extension RickAndMortyAPI {
             public let __data: DataDict
             public init(data: DataDict) { __data = data }
 
+            public var locationDetails: LocationDetails { _toFragment() }
             public var locationBasics: LocationBasics { _toFragment() }
           }
 

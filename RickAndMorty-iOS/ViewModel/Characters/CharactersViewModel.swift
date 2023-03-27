@@ -16,6 +16,8 @@ struct FilterOptions {
 class CharactersViewModel {
 
     var characters = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
+    var charactersForSearch = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
+
     var currentPage = 0 {
         didSet {
             fetchData(page: currentPage)
@@ -28,11 +30,13 @@ class CharactersViewModel {
         }
     }
 
+    var name = ""
+
     func fetchData(page: Int) {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetCharactersQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
-                name: nil,
+                name: GraphQLNullable<String>(stringLiteral: self.name),
                 status: GraphQLNullable<String>(stringLiteral: filterOptions.status),
                 gender: GraphQLNullable<String>(stringLiteral: filterOptions.gender))) { [weak self] result in
 
@@ -49,6 +53,7 @@ class CharactersViewModel {
     }
 
     func mapData(page: Int, characters: [RickAndMortyAPI.GetCharactersQuery.Data.Characters.Result?]) {
+        self.charactersForSearch.value = (characters.compactMap { $0?.fragments.characterBasics })
         if page == 1 {
             self.characters.value = (characters.compactMap { $0?.fragments.characterBasics })
         } else {

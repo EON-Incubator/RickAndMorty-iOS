@@ -13,6 +13,8 @@ class SearchViewController: UIViewController {
     enum SearchSection: Int, CaseIterable {
         case characters
         case locations
+        case loadMoreCharacters
+        case loadMoreLocations
     }
 
     let searchView = SearchView()
@@ -43,30 +45,61 @@ class SearchViewController: UIViewController {
         searchView.collectionView.delegate = self
     }
 
-    func subscribeToViewModel() {
-        viewModel.searchResults.sink(receiveValue: { [weak self] result in
+    let charactersSearchViewModel = CharactersViewModel()
+    let locationNameViewModel = LocationsViewModel()
+    let locationTypeViewModel = LocationsViewModel()
 
+    var currentCharactersPage = 1
+    var currentLocationsPage = 1
+
+    var totalCharactersPage: Int = 0
+    var totalLocationsPage: Int = 0
+
+    var uniqueLocations: [RickAndMortyAPI.LocationDetails] = []
+
+    func subscribeToViewModel() {
+
+        viewModel.searchResults.sink(receiveValue: { [weak self] result in
             self?.snapshot.deleteAllItems()
 
-            self?.snapshot.appendSections([.characters, .locations])
+            self?.snapshot.appendSections([.characters, .loadMoreCharacters, .locations, .loadMoreLocations])
 
             let locationsWithName: [RickAndMortyAPI.LocationDetails] = result.locationsWithName?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
 
             let locationsWithType: [RickAndMortyAPI.LocationDetails] = result.locationsWithType?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
 
             let locations: [RickAndMortyAPI.LocationDetails] = locationsWithName + locationsWithType
-            let uniqueLocations = Array(Set(locations))
+            self?.uniqueLocations = Array(Set(locations))
+
+            let characters = result.characters?.results?.compactMap {
+                $0?.fragments.characterBasics
+            } as? [RickAndMortyAPI.CharacterBasics] ?? []
+
+            self?.totalCharactersPage = result.characters?.info?.pages ?? 1
+            self?.totalLocationsPage = (result.locationsWithType?.info?.pages ?? 0) + (result.locationsWithName?.info?.pages ?? 0)
 
             switch self?.searchController.searchBar.selectedScopeButtonIndex {
             case 0:
-                self?.snapshot.appendItems((result.characters?.results)!, toSection: .characters)
-                self?.snapshot.appendItems(uniqueLocations, toSection: .locations)
+                self?.snapshot.appendItems(characters, toSection: .characters)
+                if self?.totalCharactersPage ?? 0 > 1 {
+                    self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreCharacters)
+                }
+                self?.snapshot.appendItems(self?.uniqueLocations ?? [], toSection: .locations)
+                if self?.totalLocationsPage ?? 0 > 1 {
+                    self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreLocations)
+                }
             case 1:
-                self?.snapshot.appendItems((result.characters?.results)!, toSection: .characters)
-                self?.snapshot.appendItems([], toSection: .locations)
+                self?.currentCharactersPage = 1
+                self?.snapshot.appendItems(characters, toSection: .characters)
+                if self?.totalCharactersPage ?? 0 > 1 {
+                    self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreCharacters)
+                }
             case 2:
-                self?.snapshot.appendItems([], toSection: .characters)
-                self?.snapshot.appendItems(uniqueLocations, toSection: .locations)
+                self?.currentLocationsPage = 1
+                self?.snapshot.appendItems(self?.uniqueLocations ?? [], toSection: .locations)
+                if self?.totalLocationsPage ?? 0 > 1 {
+                    self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreLocations)
+                }
             default:
                 print("error")
             }
@@ -86,7 +119,7 @@ class SearchViewController: UIViewController {
 
             switch indexPath.section {
             case 0:
-                if let character = result as? RickAndMortyAPI.SearchForQuery.Data.Characters.Result {
+                if let character = result as? RickAndMortyAPI.CharacterBasics {
 
                     weak var characterRowCell = (collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell)!
 
@@ -100,10 +133,10 @@ class SearchViewController: UIViewController {
 
                     cell = characterRowCell ?? CharacterRowCell()
                 }
-            case 1:
+            case 2:
                 cell = collectionView.dequeueConfiguredReusableCell(using: (self?.searchView.locationCell)!, for: indexPath, item: result as? RickAndMortyAPI.LocationDetails)
             default:
-                cell = UICollectionViewCell()
+                cell = (collectionView.dequeueReusableCell(withReuseIdentifier: LoadMoreCell.identifier, for: indexPath) as? LoadMoreCell)!
             }
             return cell
         })
@@ -131,8 +164,58 @@ extension SearchViewController: UICollectionViewDelegate {
             coordinator?.goLocationDetails(id: (location?.id)!, navController: self.navigationController!)
         }
 
-        if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.SearchForQuery.Data.Characters.Result? {
+        if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics? {
             coordinator?.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
+        }
+
+        // load-more section
+        if dataSource.itemIdentifier(for: indexPath) is EmptyData {
+            if indexPath.section == 1 {
+                loadMoreCharacters()
+            } else {
+                loadMoreLocations()
+            }
+        }
+    }
+
+    func loadMoreCharacters() {
+        currentCharactersPage += 1
+        // remove load-more section
+        if currentCharactersPage == totalCharactersPage {
+            //            snapshot.deleteSections([.loadMoreCharacters])
+
+            let ids = snapshot.itemIdentifiers(inSection: .loadMoreCharacters)
+            snapshot.deleteItems(ids)
+        }
+        charactersSearchViewModel.name = viewModel.searchInput
+        charactersSearchViewModel.currentPage = currentCharactersPage
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+            let newCharacters = charactersSearchViewModel.charactersForSearch.value
+            snapshot.appendItems(newCharacters, toSection: .characters)
+            dataSource.apply(snapshot, animatingDifferences: true)
+        }
+    }
+
+    func loadMoreLocations() {
+        currentLocationsPage += 1
+        if currentLocationsPage == totalLocationsPage {
+            let ids = snapshot.itemIdentifiers(inSection: .loadMoreLocations)
+            snapshot.deleteItems(ids)
+        }
+        locationNameViewModel.name = viewModel.searchInput
+        locationNameViewModel.currentPage = currentLocationsPage
+
+        locationTypeViewModel.type = viewModel.searchInput
+        locationTypeViewModel.currentPage = currentLocationsPage
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+            uniqueLocations += (locationNameViewModel.locationsNameSearch.value + locationTypeViewModel.locationsTypeSearch.value)
+            let newUniqueLocations = Array(Set(uniqueLocations))
+            let locationsIDs = snapshot.itemIdentifiers(inSection: .locations)
+            snapshot.deleteItems(locationsIDs)
+            snapshot.appendItems(newUniqueLocations, toSection: .locations)
+            dataSource.apply(snapshot, animatingDifferences: false)
         }
     }
 }
