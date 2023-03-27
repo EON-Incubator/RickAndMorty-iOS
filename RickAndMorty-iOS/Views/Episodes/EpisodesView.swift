@@ -13,20 +13,7 @@ class EpisodesView: UIView {
         return UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
     }()
 
-    var episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (cell, _ indexPath, _ episode) in
-        cell.lowerRightLabel.backgroundColor = UIColor(red: 1.00,
-                                                       green: 0.92,
-                                                       blue: 0.71,
-                                                       alpha: 0.4)
-        cell.lowerRightLabel.layer.borderWidth = 0.3
-        cell.lowerRightLabel.layer.borderColor = UIColor.gray.cgColor
-
-        cell.lowerLeftLabel.layer.borderWidth = 0.3
-        cell.lowerLeftLabel.layer.borderColor = UIColor.gray.cgColor
-        cell.lowerLeftLabel.backgroundColor = UIColor(red: 1.00,
-                                                      green: 0.75,
-                                                      blue: 0.66,
-                                                      alpha: 0.4)
+    var episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (_ cell, _ indexPath, _ episode) in
     }
 
     required init?(coder: NSCoder) {
