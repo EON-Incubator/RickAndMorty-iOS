@@ -29,7 +29,7 @@ class SearchView: UIView {
             let isIndexValid = location.residents.indices.contains(index)
             if isIndexValid {
                 let urlString = location.residents[index]?.image ?? ""
-                cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
+                cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
             }
         }
     }
@@ -56,12 +56,12 @@ class SearchView: UIView {
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+            make.edges.equalTo(safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
     }
 
     private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, _) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, _) -> NSCollectionLayoutSection? in
 
             guard let sectionType = Section(rawValue: sectionIndex) else {
                 return nil
@@ -84,7 +84,7 @@ class SearchView: UIView {
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
 
-            if self.collectionView.numberOfItems(inSection: sectionIndex) > 0 {
+            if (self?.collectionView.numberOfItems(inSection: sectionIndex) ?? 0) > 0 {
                 section.boundarySupplementaryItems = [header]
             }
             return section

@@ -22,11 +22,11 @@ class LocationsViewModel {
             query: RickAndMortyAPI.GetLocationsQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
                 name: nil,
-                type: nil)) { result in
+                type: nil)) { [weak self] result in
                     switch result {
                     case .success(let response):
                         if let results = response.data?.locations?.results {
-                            self.mapData(page: page, locations: results)
+                            self?.mapData(page: page, locations: results)
                         }
                     case .failure(let error):
                         print(error)

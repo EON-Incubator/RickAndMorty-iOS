@@ -29,7 +29,7 @@ class CharacterDetailsView: UIView {
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+            make.edges.equalTo(safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
     }
 
@@ -69,7 +69,7 @@ class CharacterDetailsView: UIView {
             let isIndexValid =  episode.characters.indices.contains(index)
             if isIndexValid {
                 let urlString = episode.characters[index]?.image ?? ""
-                cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
+                cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
             }
         }
     }
@@ -78,7 +78,7 @@ class CharacterDetailsView: UIView {
 // MARK: - CollectionView Layout
 extension CharacterDetailsView {
     private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, _) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, _) -> NSCollectionLayoutSection? in
 
             guard let sectionType = Section(rawValue: sectionIndex) else {
                 return nil
@@ -110,7 +110,7 @@ extension CharacterDetailsView {
 
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-            if self.collectionView.numberOfItems(inSection: sectionIndex) > 0 {
+            if (self?.collectionView.numberOfItems(inSection: sectionIndex) ?? 0) > 0 {
                 section.boundarySupplementaryItems = [header]
             }
             return section
@@ -125,7 +125,7 @@ extension CharacterDetailsView {
 
         if let imageUrl = image {
             let imageView = UIImageView()
-            imageView.sd_setImage(with: URL(string: imageUrl))
+            imageView.sd_setImage(with: URL(string: imageUrl), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
             imageView.layer.cornerRadius = 12
             imageView.clipsToBounds = true
             titleWithImage.addSubview(imageView)

@@ -62,18 +62,20 @@ class EpisodeDetailsViewController: UIViewController {
     }
 
     func subscribeToViewModel() {
-        viewModel.episode.sink(receiveValue: { [self] episode in
-            self.title = episode.name
+        viewModel.episode.sink(receiveValue: { [weak self] episode in
+            self?.title = episode.name
             if !episode.characters.isEmpty {
-                snapshot.deleteAllItems()
-                snapshot.appendSections([.info, .characters])
-                snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
-                snapshot.appendItems(episode.characters, toSection: .characters)
-                self.dataSource.apply(snapshot, animatingDifferences: true)
+                if var snapshot = self?.snapshot {
+                    snapshot.deleteAllItems()
+                    snapshot.appendSections([.info, .characters])
+                    snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
+                    snapshot.appendItems(episode.characters, toSection: .characters)
+                    self?.dataSource.apply(snapshot, animatingDifferences: true)
+                }
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {
-                self.episodeDetailsView.collectionView.refreshControl?.endRefreshing()
+                self?.episodeDetailsView.collectionView.refreshControl?.endRefreshing()
             }
         }).store(in: &cancellables)
     }
@@ -86,7 +88,7 @@ class EpisodeDetailsViewController: UIViewController {
 // MARK: - CollectionView DataSource
 extension EpisodeDetailsViewController {
     private func configureDataSource() {
-        dataSource = DataSource(collectionView: episodeDetailsView.collectionView, cellProvider: { (collectionView, indexPath, episode) -> UICollectionViewCell? in
+        dataSource = DataSource(collectionView: episodeDetailsView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, episode) -> UICollectionViewCell? in
 
             let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
 
@@ -95,12 +97,12 @@ extension EpisodeDetailsViewController {
             switch indexPath.section {
             case 0:
                 hideLoadingAnimation(currentCell: infoCell!)
-                return self.configInfoCell(cell: infoCell!, data: episode, itemIndex: indexPath.item)
+                return self?.configInfoCell(cell: infoCell!, data: episode, itemIndex: indexPath.item)
             case 1:
                 hideLoadingAnimation(currentCell: characterRowCell!)
                 if let character = episode as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
                     let urlString = character?.image ?? ""
-                    characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString))
+                    characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
                     characterRowCell?.upperLabel.text = character?.name
                     characterRowCell?.lowerLeftLabel.text = character?.gender
                     characterRowCell?.lowerRightLabel.text = character?.species
@@ -122,8 +124,8 @@ extension EpisodeDetailsViewController {
         })
 
         // for custom header
-        dataSource.supplementaryViewProvider = { (_ collectionView, _ kind, indexPath) in
-            guard let headerView = self.episodeDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
+        dataSource.supplementaryViewProvider = { [weak self] (_ collectionView, _ kind, indexPath) in
+            guard let headerView = self?.episodeDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
                 fatalError()
             }
             headerView.textLabel.text = indexPath.section == 0 || indexPath.section == 2 ? "INFO" : "CHARACTERS"

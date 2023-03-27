@@ -34,12 +34,12 @@ class CharactersViewModel {
                 page: GraphQLNullable<Int>(integerLiteral: page),
                 name: nil,
                 status: GraphQLNullable<String>(stringLiteral: filterOptions.status),
-                gender: GraphQLNullable<String>(stringLiteral: filterOptions.gender))) { result in
+                gender: GraphQLNullable<String>(stringLiteral: filterOptions.gender))) { [weak self] result in
 
                     switch result {
                     case .success(let response):
                         if let results = response.data?.characters?.results {
-                            self.mapData(page: page, characters: results)
+                            self?.mapData(page: page, characters: results)
                         }
                     case .failure(let error):
                         print(error)

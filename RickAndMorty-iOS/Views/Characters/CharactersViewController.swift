@@ -23,7 +23,6 @@ class CharactersViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         configureDataSource()
         showEmptyData()
         subscribeToViewModel()
@@ -50,16 +49,18 @@ class CharactersViewController: UIViewController {
     }
 
     func subscribeToViewModel() {
-        viewModel.characters.sink(receiveValue: { [self] characters in
+        viewModel.characters.sink(receiveValue: { [weak self] characters in
             if !characters.isEmpty {
-                snapshot.deleteAllItems()
-                snapshot.appendSections([.appearance])
-                snapshot.appendItems(characters, toSection: .appearance)
-                self.dataSource.apply(snapshot, animatingDifferences: true)
+                if var snapshot = self?.snapshot {
+                    snapshot.deleteAllItems()
+                    snapshot.appendSections([.appearance])
+                    snapshot.appendItems(characters, toSection: .appearance)
+                    self?.dataSource.apply(snapshot, animatingDifferences: true)
+                }
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {
-                self.charactersGridView.collectionView.refreshControl?.endRefreshing()
+                self?.charactersGridView.collectionView.refreshControl?.endRefreshing()
             }
         }).store(in: &cancellables)
     }
@@ -92,7 +93,7 @@ extension CharactersViewController {
             if let char = character as? RickAndMortyAPI.CharacterBasics {
                 characterCell!.characterNameLabel.text = char.name
                 if let image = char.image {
-                    characterCell!.characterImage.sd_setImage(with: URL(string: image))
+                    characterCell!.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 200, height: 200)])
                 }
             }
             hideLoadingAnimation(currentCell: characterCell!)
@@ -116,6 +117,6 @@ extension CharactersViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        coordinator?.goCharacterDetails(id: viewModel.characters.value[indexPath.row].id!, navController: self.navigationController!)
+         coordinator?.goCharacterDetails(id: viewModel.characters.value[indexPath.row].id!, navController: self.navigationController!)
     }
 }

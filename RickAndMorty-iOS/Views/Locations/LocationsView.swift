@@ -10,8 +10,8 @@ import SnapKit
 
 class LocationsView: UIView {
 
-    lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+    lazy var collectionView: UICollectionView = { [weak self] in
+        let collectionView = UICollectionView(frame: self?.bounds ?? CGRect.zero, collectionViewLayout: createLayout())
         collectionView.register(LocationRowCell.self,
                                 forCellWithReuseIdentifier: LocationRowCell.identifier)
 
@@ -41,7 +41,7 @@ class LocationsView: UIView {
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+            make.edges.equalTo(safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
     }
 

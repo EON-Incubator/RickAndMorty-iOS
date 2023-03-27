@@ -22,11 +22,11 @@ class EpisodesViewModel {
             query: RickAndMortyAPI.GetEpisodesQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
                 name: nil,
-                episode: nil)) { result in
+                episode: nil)) { [weak self] result in
                     switch result {
                     case .success(let response):
                         if let results = response.data?.episodes?.results {
-                            self.mapData(page: page, episodes: results)
+                            self?.mapData(page: page, episodes: results)
                         }
                     case .failure(let error):
                         print(error)

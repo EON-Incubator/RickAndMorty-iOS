@@ -22,11 +22,11 @@ class LocationDetailsViewModel {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetLocationQuery(
                 locationId: locationId
-                )) { result in
+                )) { [weak self] result in
                     switch result {
                     case .success(let response):
                         if let loc = response.data?.location {
-                            self.location.send(loc)
+                            self?.location.send(loc)
                         }
                     case .failure(let error):
                         print(error)
