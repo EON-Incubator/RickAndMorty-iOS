@@ -43,12 +43,6 @@ class CharacterDetailsViewController: UIViewController {
         updateTitleView()
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-            super.viewDidDisappear(true)
-            self.removeFromParent()
-            self.dismiss(animated: true, completion: nil)
-    }
-
     func showEmptyData() {
         snapshot.deleteAllItems()
         snapshot.appendSections([.appearance, .info, .location, .episodes, .empty, .emptyInfo, .emptyLocation])
