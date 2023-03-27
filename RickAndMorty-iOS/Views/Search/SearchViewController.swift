@@ -37,7 +37,6 @@ class SearchViewController: UIViewController {
         configureDataSource()
         subscribeToViewModel()
         configureSearchController()
-        title = "Search"
     }
 
     override func loadView() {
@@ -232,7 +231,6 @@ extension SearchViewController: UISearchResultsUpdating {
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search for something"
         searchController.automaticallyShowsCancelButton = true
         navigationItem.searchController = searchController
         definesPresentationContext = true
@@ -270,6 +268,8 @@ extension SearchViewController: UISearchResultsUpdating {
             // debounce search results
             debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
                 if searchInput.count >= 2 {
+                    // remove search-for-something label
+                    self.searchView.middleLabel.removeFromSuperview()
                     if searchInput != self.viewModel.searchInput {
                         self.viewModel.searchInput = searchInput
                         searchController.searchSuggestions = []

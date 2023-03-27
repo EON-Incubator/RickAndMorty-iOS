@@ -54,11 +54,25 @@ class SearchView: UIView {
     private func setupViews() {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
+        self.addSubview(middleLabel)
     }
+
+    lazy var middleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Creepster-Regular", size: 30)
+        label.text = "Search for something ..."
+        label.textAlignment = .center
+        return label
+    }()
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+        }
+        middleLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(self.safeAreaLayoutGuide)
+            make.left.equalTo(self.safeAreaLayoutGuide).inset(10)
+            make.right.equalTo(self.safeAreaLayoutGuide).inset(10)
         }
     }
 
