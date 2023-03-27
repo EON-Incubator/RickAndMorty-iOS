@@ -25,7 +25,8 @@ class RowCell: UICollectionViewListCell {
 
         self.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
         let myView = UIView(frame: self.bounds)
-        myView.backgroundColor = UIColor(red: 0.93, green: 0.95, blue: 1.00, alpha: 0.5)
+        myView.backgroundColor = UIColor(named: "EpisodeCell")
+        myView.layer.cornerRadius = 5
         self.backgroundView = myView
         setupViews()
         setupConstraints()
@@ -34,6 +35,7 @@ class RowCell: UICollectionViewListCell {
     lazy var upperLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Chalkboard SE Regular", size: 18)
+        label.textColor = .label
         label.lineBreakMode = .byTruncatingTail
         label.textAlignment = .center
         return label
@@ -42,6 +44,7 @@ class RowCell: UICollectionViewListCell {
     lazy var lowerLeftLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
+        label.textColor = .label
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.textAlignment = .center
@@ -56,6 +59,7 @@ class RowCell: UICollectionViewListCell {
     lazy var lowerRightLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
+        label.textColor = .label
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.textAlignment = .center

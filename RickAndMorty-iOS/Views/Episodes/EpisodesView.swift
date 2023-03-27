@@ -32,7 +32,8 @@ class EpisodesView: UIView {
     }
 
     private func setupViews() {
-        self.backgroundColor = .systemBackground
+        self.backgroundColor = UIColor(named: "EpisodeView")
+        collectionView.backgroundColor = UIColor(named: "EpisodeView")
         self.addSubview(collectionView)
     }
 

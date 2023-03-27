@@ -138,11 +138,13 @@ extension EpisodeDetailsViewController {
             case 0:
                 cell.leftLabel.text = "Episode"
                 cell.rightLabel.text = episodeDetails.item.episode
-                cell.infoImage.image = UIImage(named: "tv")
+                cell.infoImage.image = UIImage(named: "tv")?.withRenderingMode(.alwaysTemplate)
+                cell.infoImage.tintColor = UIColor(named: "InfoCell")
             case 1:
                 cell.leftLabel.text = "Air Date"
                 cell.rightLabel.text = episodeDetails.item.air_date
-                cell.infoImage.image = UIImage(named: "calendar")
+                cell.infoImage.image = UIImage(named: "calendar")?.withRenderingMode(.alwaysTemplate)
+                cell.infoImage.tintColor = UIColor(named: "InfoCell")
             default:
                 cell.rightLabel.text = "-"
             }

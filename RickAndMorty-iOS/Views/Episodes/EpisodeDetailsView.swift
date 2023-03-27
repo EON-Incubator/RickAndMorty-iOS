@@ -38,7 +38,8 @@ class EpisodeDetailsView: UIView {
     }
 
     private func setupViews() {
-        self.backgroundColor = .systemBackground
+        self.backgroundColor = UIColor(named: "EpisodeView")
+        collectionView.backgroundColor = UIColor(named: "EpisodeView")
         self.addSubview(collectionView)
         collectionView.accessibilityIdentifier = "EpisodeDetailsCollectionView"
         collectionView.showsVerticalScrollIndicator = false
