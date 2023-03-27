@@ -134,6 +134,7 @@ extension CharacterDetailsViewController {
             case 4:
                 showLoadingAnimation(currentCell: avatarCell!)
                 avatarCell?.characterImage.layer.borderWidth = 0
+                avatarCell?.backgroundColor = .secondarySystemBackground
                 return avatarCell
             case 5:
                 showLoadingAnimation(currentCell: infoCell!)
