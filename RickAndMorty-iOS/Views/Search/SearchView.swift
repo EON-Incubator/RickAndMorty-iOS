@@ -52,7 +52,8 @@ class SearchView: UIView {
     }
 
     private func setupViews() {
-        self.backgroundColor = .systemBackground
+        self.backgroundColor = UIColor(named: "EpisodeView")
+        self.collectionView.backgroundColor = UIColor(named: "EpisodeView")
         self.addSubview(collectionView)
         self.addSubview(middleLabel)
     }

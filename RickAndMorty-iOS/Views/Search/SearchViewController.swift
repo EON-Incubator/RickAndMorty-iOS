@@ -223,6 +223,9 @@ extension SearchViewController: UISearchBarDelegate {
 
         // change background colors
         switch selectedScope {
+        case 1:
+            self.searchView.collectionView.backgroundColor = UIColor(named: "CharacterView")
+            self.searchView.backgroundColor = UIColor(named: "CharacterView")
         case 2:
             self.searchView.collectionView.backgroundColor = UIColor(named: "LocationView")
             self.searchView.backgroundColor = UIColor(named: "LocationView")
