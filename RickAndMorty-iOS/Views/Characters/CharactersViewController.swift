@@ -96,7 +96,6 @@ extension CharactersViewController {
                     characterCell!.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 200, height: 200)])
                 }
             }
-            hideLoadingAnimation(currentCell: characterCell!)
             return characterCell
         })
     }
