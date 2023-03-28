@@ -91,7 +91,7 @@ class RowCell: UICollectionViewListCell {
         characterAvatarsView.snp.makeConstraints { make in
             make.top.left.equalToSuperview().offset(2)
             make.height.equalToSuperview().offset(-8)
-            make.width.equalTo(self.snp.height).multipliedBy(1.0 / 1.0)
+            make.width.equalTo(snp.height).multipliedBy(1.0 / 1.0)
         }
 
         characterAvatarImageViews[0].snp.makeConstraints { make in

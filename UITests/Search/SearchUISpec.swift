@@ -15,7 +15,7 @@ final class SearchUISpec: QuickSpec {
 
         let app = XCUIApplication()
 
-        describe("Given app launch") {
+        describe("Search") {
             app.launch()
             context("1 when user tap the Search button on Tab Bar") {
 

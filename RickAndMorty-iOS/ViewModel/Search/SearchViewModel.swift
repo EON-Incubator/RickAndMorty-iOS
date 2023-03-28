@@ -25,14 +25,14 @@ class SearchViewModel {
 
     func fetchData(input: String) {
         Network.shared.apollo.fetch(
-            query: RickAndMortyAPI.SearchForQuery(keyword: GraphQLNullable<String>(stringLiteral: input))) { result in
+            query: RickAndMortyAPI.SearchForQuery(keyword: GraphQLNullable<String>(stringLiteral: input))) { [weak self] result in
                 switch result {
                 case .success(let response):
-                    self.searchResults.send(response.data!)
+                    self?.searchResults.send(response.data!)
 
-                    self.characters.value = (response.data?.characters?.results?.compactMap { $0 })!
-                    self.locatonsWithGivenName.value = (response.data?.locationsWithName?.results?.compactMap { $0 })!
-                    self.locationsWithGivenType.value = (response.data?.locationsWithType?.results?.compactMap { $0 })!
+                    self?.characters.value = (response.data?.characters?.results?.compactMap { $0 })!
+                    self?.locatonsWithGivenName.value = (response.data?.locationsWithName?.results?.compactMap { $0 })!
+                    self?.locationsWithGivenType.value = (response.data?.locationsWithType?.results?.compactMap { $0 })!
 
                 case .failure(let error):
                     print(error)

@@ -29,11 +29,11 @@ class LocationsViewModel {
                 page: GraphQLNullable<Int>(integerLiteral: page),
                 name: GraphQLNullable<String>(stringLiteral: name),
                 type: GraphQLNullable<String>(stringLiteral: type)
-            )) { result in
+            )) { [weak self] result in
                 switch result {
                 case .success(let response):
                     if let results = response.data?.locations?.results {
-                        self.mapData(page: page, locations: results)
+                        self?.mapData(page: page, locations: results)
                     }
                 case .failure(let error):
                     print(error)

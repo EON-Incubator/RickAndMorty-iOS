@@ -19,12 +19,12 @@ class EpisodeDetailsViewModel {
 
     func fetchData(epiID: String) {
         Network.shared.apollo.fetch(
-            query: RickAndMortyAPI.GetEpisodeQuery(episodeId: epiID)) { result in
+            query: RickAndMortyAPI.GetEpisodeQuery(episodeId: epiID)) { [weak self] result in
 
                 switch result {
                 case .success(let response):
                     if let epi = response.data?.episode {
-                        self.episode.send(epi)
+                        self?.episode.send(epi)
                     }
                 case .failure(let error):
                     print(error)
