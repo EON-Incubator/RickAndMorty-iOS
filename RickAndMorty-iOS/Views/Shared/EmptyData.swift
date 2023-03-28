@@ -24,7 +24,7 @@ func showLoadingAnimation(currentCell: UICollectionViewCell) {
 
     gradient.frame = CGRect(x: -currentCell.contentView.bounds.width, y: 0, width: currentCell.contentView.bounds.width * 3, height: currentCell.contentView.bounds.height)
 
-    let animation = CABasicAnimation(keyPath: "locations"/Users/singh/Desktop/Simulator Screen Recording - iPhone 14 Pro - 2023-03-09 at 15.18.20.mp4)
+    let animation = CABasicAnimation(keyPath: "locations")
     animation.fromValue = [0.0, 0.1, 0.2]
     animation.toValue = [0.8, 0.9, 1.0]
 
