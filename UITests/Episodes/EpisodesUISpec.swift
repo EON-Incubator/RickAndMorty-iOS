@@ -15,7 +15,7 @@ final class EpisodesUISpec: QuickSpec {
 
         let app = XCUIApplication()
 
-        describe("Given app launch") {
+        describe("Episodes") {
 
             app.launch()
 

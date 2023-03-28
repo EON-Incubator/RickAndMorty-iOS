@@ -45,6 +45,7 @@ class CharactersView: UIView {
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        collectionView.accessibilityIdentifier = "CharactersCollectionView"
         collectionView.register(CharacterGridCell.self, forCellWithReuseIdentifier: CharacterGridCell.identifier)
         return collectionView
     }()
