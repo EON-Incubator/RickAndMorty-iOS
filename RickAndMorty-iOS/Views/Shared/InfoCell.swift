@@ -18,6 +18,11 @@ class InfoCell: UICollectionViewListCell {
         setupConstraints()
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.contentView.layer.sublayers?.removeAll()
+    }
+
     static func configCell(cell: InfoCell, leftLabel: String, rightLabel: String, infoImage: UIImage) -> InfoCell {
         cell.leftLabel.text = leftLabel
         cell.rightLabel.text = rightLabel

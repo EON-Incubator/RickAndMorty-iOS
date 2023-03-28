@@ -11,6 +11,11 @@ class CharacterRowCell: UICollectionViewListCell {
 
     static let identifier = "CharacterRowCell"
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.contentView.layer.sublayers?.removeAll()
+    }
+
     lazy var characterAvatarImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "person.circle"))
         imageView.tintColor = .systemGray3
