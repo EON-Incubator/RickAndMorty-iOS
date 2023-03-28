@@ -56,24 +56,29 @@ final class SearchUISpec: QuickSpec {
             }
 
             context("when user search for jndfslkj from the searchbar") {
+                let collectionView = app.collectionViews.element
+                let searchTextFields = app.searchFields.matching(identifier: "SearchTextField")
 
                 beforeEach {
                     DispatchQueue.main.async {
-                        let searchTextFields = app.searchFields.matching(identifier: "SearchTextField")
+                        searchTextFields.element.buttons["Clear text"].tap()
                         searchTextFields.element.tap()
                         searchTextFields.element.typeText("jndfslkj")
                         app.keyboards.buttons["Search"].tap()
+                        sleep(1)
                     }
                 }
 
                 it("should show at no result in the search result list") {
-                    let collectionView = app.collectionViews.element
                     await expect(collectionView.cells.count).toEventually(equal(0))
+                }
+
+                it("should show \"No results found for 'jndfslkj'\" on the screen") {
+                    await expect(app.staticTexts["No results found for 'jndfslkj'"].exists).toEventually(beTrue())
                 }
 
                 afterEach {
                     DispatchQueue.main.async {
-                        let searchTextFields = app.textFields.matching(identifier: "SearchTextField")
                         searchTextFields.element.buttons["Clear text"].tap()
                     }
                 }
