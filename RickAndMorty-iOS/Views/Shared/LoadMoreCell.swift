@@ -29,9 +29,9 @@ class LoadMoreCell: UICollectionViewListCell {
 
     func setupViews() {
         let myView = UIView(frame: self.bounds)
-        myView.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        myView.layer.opacity = 0.0
         self.backgroundView = myView
-        self.layer.borderWidth = 0.5
+        self.layer.borderWidth = 0.2
         self.layer.borderColor = UIColor.gray.cgColor
         self.layer.cornerRadius = 5
         self.addSubview(centerLabel)
@@ -40,7 +40,7 @@ class LoadMoreCell: UICollectionViewListCell {
     lazy var centerLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.text = "Load More"
+        label.text = "↓    Load More   ↓"
         label.textAlignment = .center
         label.font = .boldSystemFont(ofSize: 20)
         return label
