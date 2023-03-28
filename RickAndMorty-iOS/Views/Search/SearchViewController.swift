@@ -36,10 +36,10 @@ class SearchViewController: UIViewController {
 
         configureDataSource()
         subscribeToViewModel()
-        configureSearchController()
     }
 
     override func loadView() {
+        configureSearchController()
         view = searchView
         searchView.collectionView.delegate = self
     }
