@@ -17,7 +17,7 @@ final class SearchUISpec: QuickSpec {
 
         describe("Search") {
             app.launch()
-            context("1when user tap the Search button on Tab Bar") {
+            context("1. when user tap the Search button on Tab Bar") {
 
                 beforeEach {
                     DispatchQueue.main.async {
@@ -31,7 +31,7 @@ final class SearchUISpec: QuickSpec {
                 }
             }
 
-            context("2when user search for rick from the searchbar") {
+            context("2. when user search for rick from the searchbar") {
 
                 beforeEach {
                     DispatchQueue.main.async {
@@ -55,7 +55,7 @@ final class SearchUISpec: QuickSpec {
                 }
             }
 
-            context("when user search for jndfslkj from the searchbar") {
+            context("3. when user search for jndfslkj from the searchbar") {
                 let collectionView = app.collectionViews.element
                 let searchTextFields = app.searchFields.matching(identifier: "SearchTextField")
 
@@ -81,6 +81,77 @@ final class SearchUISpec: QuickSpec {
                     DispatchQueue.main.async {
                         searchTextFields.element.buttons["Clear text"].tap()
                     }
+                }
+            }
+
+            context("4. when user type 'Rick' in the search bar and select 'Locations' in the search scope") {
+                let searchTextFields = app.searchFields.matching(identifier: "SearchTextField")
+                let collectionView = app.collectionViews.element
+                beforeEach {
+                    DispatchQueue.main.async {
+                        searchTextFields.element.buttons["Clear text"].tap()
+                        searchTextFields.element.tap()
+                        searchTextFields.element.typeText("Rick")
+                        app.keyboards.buttons["Search"].tap()
+                        sleep(1)
+                        app.segmentedControls.buttons["Locations"].tap()
+                        sleep(1)
+                    }
+                }
+
+                it("should show a list of locations with at least 1 result") {
+                    await expect(collectionView.staticTexts["LOCATIONS"].exists).toEventually(beTrue())
+                    await expect(collectionView.cells.count).toEventually(beGreaterThanOrEqualTo(1))
+                }
+            }
+
+            context("5. when user select 'Characters' in the search scope") {
+                let collectionView = app.collectionViews.element
+                beforeEach {
+                    DispatchQueue.main.async {
+                        app.segmentedControls.buttons["Characters"].tap()
+                        sleep(1)
+                    }
+                }
+
+                it("should show a list of characters with at least 1 result") {
+                    await expect(collectionView.staticTexts["CHARACTERS"].exists).toEventually(beTrue())
+                    await expect(collectionView.cells.count).toEventually(beGreaterThanOrEqualTo(1))
+                }
+            }
+
+            context("6. when user select 'All' in the search scope and swipe up until \"Load More\" cell can be seen") {
+                let collectionView = app.collectionViews.element
+                beforeEach {
+                    DispatchQueue.main.async {
+                        app.segmentedControls.buttons["All"].tap()
+                        sleep(1)
+
+                        guard let lastCell = collectionView.cells.allElementsBoundByIndex.last else { return }
+
+                        while !(collectionView.cells.staticTexts["Load More"].exists) || !(lastCell.isHittable) {
+                            collectionView.swipeUp(velocity: .slow)
+                        }
+                    }
+                }
+
+                it("should show 'Load More' button and the header of 'LOCATIONS' at the middle of the lists") {
+                    await expect(collectionView.cells.staticTexts["Load More"].exists).toEventually(beTrue())
+                    await expect(collectionView.staticTexts["LOCATIONS"].exists).toEventually(beTrue())
+                }
+            }
+
+            context("7. when tap on \"Load More\" cell") {
+                let collectionView = app.collectionViews.element
+                beforeEach {
+                    DispatchQueue.main.async {
+                        collectionView.cells.staticTexts["Load More"].tap()
+                        sleep(1)
+                    }
+                }
+
+                it("should expand the Characters list and push LOCATION header out of current screen") {
+                    await expect(collectionView.staticTexts["LOCATIONS"].exists).toEventually(beFalse())
                 }
             }
         }
