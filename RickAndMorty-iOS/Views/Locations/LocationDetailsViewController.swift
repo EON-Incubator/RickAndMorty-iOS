@@ -58,7 +58,6 @@ class LocationDetailsViewController: UIViewController {
         snapshot.deleteAllItems()
         snapshot.appendSections([.info, .residents, .emptyInfo, .emptyResidents])
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 2), toSection: .emptyInfo)
-        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 4), toSection: .emptyResidents)
         self.dataSource.apply(snapshot, animatingDifferences: true)
     }
 

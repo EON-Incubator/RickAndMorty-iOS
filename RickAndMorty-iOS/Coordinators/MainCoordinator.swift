@@ -46,7 +46,6 @@ class MainCoordinator: Coordinator {
     func start() {
         // Configure tab bar.
         tabBarController.tabBar.backgroundColor = .systemBackground
-        window.backgroundColor = .systemRed
 
         let navBarAppearance = customNavBarAppearance()
 
