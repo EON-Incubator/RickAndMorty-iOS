@@ -23,7 +23,6 @@ class CharactersViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         configureDataSource()
         showEmptyData()
         subscribeToViewModel()
@@ -50,27 +49,23 @@ class CharactersViewController: UIViewController {
     }
 
     func subscribeToViewModel() {
-        viewModel.characters.sink(receiveValue: { [self] characters in
+        viewModel.characters.sink(receiveValue: { [weak self] characters in
             if !characters.isEmpty {
-                snapshot.deleteAllItems()
-                snapshot.appendSections([.appearance])
-                snapshot.appendItems(characters, toSection: .appearance)
-                self.dataSource.apply(snapshot, animatingDifferences: true)
+                if var snapshot = self?.snapshot {
+                    snapshot.deleteAllItems()
+                    snapshot.appendSections([.appearance])
+                    snapshot.appendItems(characters, toSection: .appearance)
+                    self?.dataSource.apply(snapshot, animatingDifferences: true)
+                }
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {
-                self.charactersGridView.collectionView.refreshControl?.endRefreshing()
+                self?.charactersGridView.collectionView.refreshControl?.endRefreshing()
             }
         }).store(in: &cancellables)
     }
 
-    func subscribeToFilter() {
-
-    }
-
     @objc func onRefresh() {
-        viewModel.currentGender = ""
-        viewModel.currentStatus = ""
         viewModel.currentPage = 1
     }
 
@@ -98,7 +93,7 @@ extension CharactersViewController {
             if let char = character as? RickAndMortyAPI.CharacterBasics {
                 characterCell!.characterNameLabel.text = char.name
                 if let image = char.image {
-                    characterCell!.characterImage.sd_setImage(with: URL(string: image))
+                    characterCell!.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 200, height: 200)])
                 }
             }
             hideLoadingAnimation(currentCell: characterCell!)
@@ -114,14 +109,14 @@ extension CharactersViewController: UICollectionViewDelegate {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
             // show lazy-loading indicator
             charactersGridView.loadingIndicator.startAnimating()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.loadMore()
-                self.charactersGridView.loadingIndicator.stopAnimating()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                self?.loadMore()
+                self?.charactersGridView.loadingIndicator.stopAnimating()
             }
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        coordinator?.goCharacterDetails(id: viewModel.characters.value[indexPath.row].id!, navController: self.navigationController!)
+         coordinator?.goCharacterDetails(id: viewModel.characters.value[indexPath.row].id!, navController: self.navigationController!)
     }
 }

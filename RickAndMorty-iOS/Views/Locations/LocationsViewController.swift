@@ -46,16 +46,18 @@ class LocationsViewController: UIViewController {
     }
 
     func subscribeToViewModel() {
-        viewModel.locations.sink(receiveValue: { [self] locations in
+        viewModel.locations.sink(receiveValue: { [weak self] locations in
             if !locations.isEmpty {
-                snapshot.deleteAllItems()
-                snapshot.appendSections([.appearance])
-                snapshot.appendItems(locations, toSection: .appearance)
-                self.dataSource.apply(snapshot, animatingDifferences: true)
+                if var snapshot = self?.snapshot {
+                    snapshot.deleteAllItems()
+                    snapshot.appendSections([.appearance])
+                    snapshot.appendItems(locations, toSection: .appearance)
+                    self?.dataSource.apply(snapshot, animatingDifferences: true)
+                }
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {
-                self.locationsView.collectionView.refreshControl?.endRefreshing()
+                self?.locationsView.collectionView.refreshControl?.endRefreshing()
             }
 
         }).store(in: &cancellables)
@@ -90,7 +92,7 @@ extension LocationsViewController {
                 let isIndexValid = location?.residents.indices.contains(index)
                 if isIndexValid! {
                     let urlString = location?.residents[index]?.image ?? ""
-                    cell?.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString))
+                    cell?.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
                 }
             }
             hideLoadingAnimation(currentCell: cell!)

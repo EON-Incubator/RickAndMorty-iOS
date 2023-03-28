@@ -62,22 +62,22 @@ class InfoCell: UICollectionViewListCell {
 
     func setupConstraints() {
         leftLabel.snp.makeConstraints { make in
-            make.left.equalTo(self).offset(60)
+            make.left.equalToSuperview().offset(60)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
             make.width.equalToSuperview().offset(-20).multipliedBy(0.5)
         }
         rightLabel.snp.makeConstraints { make in
-            make.right.equalTo(self).offset(-25)
+            make.right.equalToSuperview().offset(-25)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
             make.width.equalToSuperview().offset(-20).multipliedBy(0.5)
         }
         infoImage.snp.makeConstraints { make in
-            make.left.equalTo(self).offset(25)
+            make.left.equalToSuperview().offset(25)
             make.width.equalTo(25)
             make.height.equalTo(25)
-            make.top.equalTo(self).offset(12)
+            make.top.equalToSuperview().offset(12)
         }
     }
 

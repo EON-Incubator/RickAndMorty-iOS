@@ -133,7 +133,7 @@ class CharacterRowCell: UICollectionViewListCell {
             make.left.equalToSuperview().offset(10)
             make.centerY.equalToSuperview()
             make.height.equalToSuperview().offset(-20)
-            make.width.equalTo(self.snp.height).offset(-20).multipliedBy(1.0 / 1.0)
+            make.width.equalTo(snp.height).offset(-20).multipliedBy(1.0 / 1.0)
         }
 
         upperLabel.snp.makeConstraints { make in

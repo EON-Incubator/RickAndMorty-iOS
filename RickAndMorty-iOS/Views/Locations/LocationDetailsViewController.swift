@@ -62,18 +62,20 @@ class LocationDetailsViewController: UIViewController {
     }
 
     func subscribeToViewModel() {
-        viewModel.location.sink(receiveValue: { [self] location in
-            self.title = location.name
+        viewModel.location.sink(receiveValue: { [weak self] location in
+            self?.title = location.name
             if location.id != nil {
-                snapshot.deleteAllItems()
-                snapshot.appendSections([.info, .residents])
-                snapshot.appendItems([LocationDetails(location), LocationDetails(location)], toSection: .info)
-                snapshot.appendItems(location.residents, toSection: .residents)
-                self.dataSource.apply(snapshot, animatingDifferences: true)
+                self?.snapshot.deleteAllItems()
+                self?.snapshot.appendSections([.info, .residents])
+                self?.snapshot.appendItems([LocationDetails(location), LocationDetails(location)], toSection: .info)
+                self?.snapshot.appendItems(location.residents, toSection: .residents)
+                if let snapshot = self?.snapshot {
+                    self?.dataSource.apply(snapshot, animatingDifferences: true)
+                }
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {
-                self.locationDetailsView.collectionView.refreshControl?.endRefreshing()
+                self?.locationDetailsView.collectionView.refreshControl?.endRefreshing()
             }
 
         }).store(in: &cancellables)
@@ -87,7 +89,7 @@ class LocationDetailsViewController: UIViewController {
 // MARK: - CollectionView DataSource
 extension LocationDetailsViewController {
     private func configureDataSource() {
-        dataSource = DataSource(collectionView: locationDetailsView.collectionView, cellProvider: { (collectionView, indexPath, location) -> UICollectionViewCell? in
+        dataSource = DataSource(collectionView: locationDetailsView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, location) -> UICollectionViewCell? in
 
             let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
             let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
@@ -95,11 +97,11 @@ extension LocationDetailsViewController {
             switch indexPath.section {
             case 0:
                 hideLoadingAnimation(currentCell: infoCell!)
-                return self.configLocationInfoCell(cell: infoCell!, data: location, itemIndex: indexPath.item)
+                return self?.configLocationInfoCell(cell: infoCell!, data: location, itemIndex: indexPath.item)
             case 1:
                 if let character = location as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
                     let urlString = character?.image ?? ""
-                    characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString))
+                    characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
                     characterRowCell?.upperLabel.text = character?.name
                     characterRowCell?.lowerLeftLabel.text = character?.gender
                     characterRowCell?.lowerRightLabel.text = character?.species
@@ -121,8 +123,8 @@ extension LocationDetailsViewController {
         })
 
         // for custom header
-        dataSource.supplementaryViewProvider = { (_ collectionView, _ kind, indexPath) in
-            guard let headerView = self.locationDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
+        dataSource.supplementaryViewProvider = { [weak self] (_ collectionView, _ kind, indexPath) in
+            guard let headerView = self?.locationDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
                 fatalError()
             }
             headerView.textLabel.text = indexPath.section == 0 || indexPath.section == 2 ? "INFO" : "RESIDENTS"

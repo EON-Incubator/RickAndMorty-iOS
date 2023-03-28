@@ -53,16 +53,18 @@ class CharacterDetailsViewController: UIViewController {
     }
 
     func subscribeToViewModel() {
-        viewModel.character.sink(receiveValue: { [self] characterInfo in
-            self.title = characterInfo.name
+        viewModel.character.sink(receiveValue: { [weak self] characterInfo in
+            self?.title = characterInfo.name
             if !characterInfo.episode.isEmpty {
-                snapshot.deleteAllItems()
-                snapshot.appendSections([.appearance, .info, .location, .episodes])
-                snapshot.appendItems([CharacterDetails(characterInfo)], toSection: .appearance)
-                snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .info)
-                snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .location)
-                snapshot.appendItems(characterInfo.episode, toSection: .episodes)
-                self.dataSource.apply(snapshot, animatingDifferences: true)
+                if var snapshot = self?.snapshot {
+                    snapshot.deleteAllItems()
+                    snapshot.appendSections([.appearance, .info, .location, .episodes])
+                    snapshot.appendItems([CharacterDetails(characterInfo)], toSection: .appearance)
+                    snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .info)
+                    snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .location)
+                    snapshot.appendItems(characterInfo.episode, toSection: .episodes)
+                    self?.dataSource.apply(snapshot, animatingDifferences: true)
+                }
             }
         }).store(in: &cancellables)
     }
@@ -72,7 +74,7 @@ class CharacterDetailsViewController: UIViewController {
 extension CharacterDetailsViewController {
     // swiftlint:disable cyclomatic_complexity
     private func configureDataSource() {
-        dataSource = DataSource(collectionView: characterDetailsView.collectionView, cellProvider: { (collectionView, indexPath, characterInfo) -> UICollectionViewCell? in
+        dataSource = DataSource(collectionView: characterDetailsView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, characterInfo) -> UICollectionViewCell? in
 
             let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell
             let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
@@ -82,8 +84,8 @@ extension CharacterDetailsViewController {
                 hideLoadingAnimation(currentCell: avatarCell!)
                 if let character = characterInfo as? CharacterDetails {
                     guard let image = character.item.image else { fatalError("Image not found") }
-                    self.avatarImageUrl = image
-                    avatarCell?.characterImage.sd_setImage(with: URL(string: image))
+                    self?.avatarImageUrl = image
+                    avatarCell?.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 300, height: 300)])
                     return avatarCell!
                 }
             case 1:
@@ -127,7 +129,7 @@ extension CharacterDetailsViewController {
             case 3:
                 if let episode = characterInfo as?
                     RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode {
-                    return collectionView.dequeueConfiguredReusableCell(using: self.characterDetailsView.episodeCell,
+                    return collectionView.dequeueConfiguredReusableCell(using: (self?.characterDetailsView.episodeCell)!,
                                                                         for: indexPath,
                                                                         item: episode)
                 }
@@ -149,8 +151,8 @@ extension CharacterDetailsViewController {
         })
 
         // for custom header
-        dataSource.supplementaryViewProvider = { (_ collectionView, _ kind, indexPath) in
-            guard let headerView = self.characterDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
+        dataSource.supplementaryViewProvider = { [weak self] (_ collectionView, _ kind, indexPath) in
+            guard let headerView = self?.characterDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
                 fatalError()
             }
             var headerTitle: String

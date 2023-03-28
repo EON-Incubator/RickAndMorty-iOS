@@ -76,17 +76,6 @@ class CharactersFilterView: UIView {
         return segmentControl
     }()
 
-    let applyButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Apply", for: .normal)
-        button.titleLabel?.font = UIFont(name: "Chalkboard SE Regular", size: 22)
-        button.setTitleColor(.systemBackground, for: .normal)
-        button.setTitleColor(.systemGray, for: .highlighted)
-        button.backgroundColor = .label
-        button.layer.cornerRadius = 8
-        return button
-    }()
-
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }

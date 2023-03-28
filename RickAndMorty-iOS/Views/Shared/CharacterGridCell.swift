@@ -20,10 +20,10 @@ class CharacterGridCell: UICollectionViewCell {
         return label
     }()
 
-    lazy var characterImage: UIImageView = {
+    lazy var characterImage: UIImageView = { [weak self] in
         let imageView = UIImageView()
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = self.layer.cornerRadius
+        imageView.layer.cornerRadius = self?.layer.cornerRadius ?? 0
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
@@ -43,7 +43,7 @@ class CharacterGridCell: UICollectionViewCell {
 
     func setupConstraints() {
         characterImage.snp.makeConstraints { make in
-            make.edges.equalTo(self)
+            make.edges.equalToSuperview()
         }
 
         characterNameLabel.snp.makeConstraints { make in

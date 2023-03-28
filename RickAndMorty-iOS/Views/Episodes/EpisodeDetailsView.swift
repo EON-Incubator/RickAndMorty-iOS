@@ -47,7 +47,7 @@ class EpisodeDetailsView: UIView {
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+            make.edges.equalTo(safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
     }
 }
@@ -55,7 +55,7 @@ class EpisodeDetailsView: UIView {
 // MARK: - CollectionView Layout
 extension EpisodeDetailsView {
     private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, _) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, _) -> NSCollectionLayoutSection? in
 
             guard let sectionType = Section(rawValue: sectionIndex) else {
                 return nil
@@ -80,7 +80,7 @@ extension EpisodeDetailsView {
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
 
-            if self.collectionView.numberOfItems(inSection: sectionIndex) > 0 {
+            if (self?.collectionView.numberOfItems(inSection: sectionIndex) ?? 0) > 0 {
                 section.boundarySupplementaryItems = [header]
             }
 

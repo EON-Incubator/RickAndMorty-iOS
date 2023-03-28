@@ -20,12 +20,12 @@ class CharacterDetailsViewModel {
 
     func fetchData(charID: String) {
         Network.shared.apollo.fetch(
-            query: RickAndMortyAPI.GetCharacterQuery(characterId: charID)) { result in
+            query: RickAndMortyAPI.GetCharacterQuery(characterId: charID)) { [weak self] result in
 
                 switch result {
                 case .success(let response):
                     if let char = response.data?.character {
-                        self.character.send(char)
+                        self?.character.send(char)
                     }
                 case .failure(let error):
                     print(error)
