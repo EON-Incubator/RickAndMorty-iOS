@@ -29,7 +29,7 @@ class CharacterRowCell: UICollectionViewListCell {
     lazy var characterStatusLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = .systemFont(ofSize: 13, weight: .semibold)
+        label.font = UIFont(name: "Chalkboard SE Bold", size: 13)
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.backgroundColor = .systemGray
@@ -44,9 +44,9 @@ class CharacterRowCell: UICollectionViewListCell {
 
     lazy var upperLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 22)
+        label.font = UIFont(name: "Chalkboard SE Regular", size: 22)
         label.adjustsFontSizeToFitWidth = true
-        label.textAlignment = .left
+        label.textAlignment = .center
         return label
     }()
 
@@ -143,9 +143,9 @@ class CharacterRowCell: UICollectionViewListCell {
 
         upperLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(100)
+            make.right.equalToSuperview().offset(-25)
             make.top.equalToSuperview().offset(10)
             make.height.equalTo(30)
-            make.width.equalToSuperview().offset(-110)
         }
 
         lowerLeftLabel.snp.makeConstraints { make in
