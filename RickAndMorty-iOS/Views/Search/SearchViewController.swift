@@ -294,7 +294,7 @@ extension SearchViewController: UISearchResultsUpdating {
                         searchController.searchSuggestions = []
                     }
                 } else {
-                    self?.showSuggestions(suggestion: self?.viewModel.searchInput ?? "")
+                    self.showSuggestions(suggestion: self.viewModel.searchInput)
                 }
             }
         }

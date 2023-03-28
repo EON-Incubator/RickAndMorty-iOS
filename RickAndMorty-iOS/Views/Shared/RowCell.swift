@@ -11,6 +11,13 @@ class RowCell: UICollectionViewListCell {
 
     lazy var characterAvatarImageViews = [UIImageView]()
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        for index in 0...3 {
+            self.characterAvatarImageViews[index].image = UIImage(systemName: "person.circle")?.withRenderingMode(.alwaysTemplate)
+        }
+    }
+
     lazy var characterAvatarsView: UIView = {
         let view = UIView()
         return view
