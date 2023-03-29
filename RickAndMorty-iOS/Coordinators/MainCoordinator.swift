@@ -77,8 +77,9 @@ class MainCoordinator: Coordinator {
         characterNavController.pushViewController(charactersViewController, animated: false)
 
         // Add LocationsViewController to the location navigation controller.
-        let locationsViewController = LocationsViewController()
-        locationsViewController.coordinator = self
+        let locationsViewModel = LocationsViewModel()
+        locationsViewModel.coordinator = self
+        let locationsViewController = LocationsViewController(viewModel: locationsViewModel)
         locationNavController.pushViewController(locationsViewController, animated: false)
 
         // Add EpisodesViewController to the episode navigation controller.
@@ -130,8 +131,10 @@ class MainCoordinator: Coordinator {
     }
 
     func goLocationDetails(id: String, navController: UINavigationController) {
-        let viewController = LocationDetailsViewController(locationId: id)
-        viewController.coordinator = self
+        let viewModel = LocationDetailsViewModel(locationId: id)
+        viewModel.locationId = id
+        viewModel.coordinator = self
+        let viewController = LocationDetailsViewController(viewModel: viewModel)
         navController.pushViewController(viewController, animated: true)
     }
 

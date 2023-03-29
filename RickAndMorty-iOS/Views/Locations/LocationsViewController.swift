@@ -11,14 +11,22 @@ import Combine
 class LocationsViewController: UIViewController {
 
     let locationsView = LocationsView()
-    let viewModel = LocationsViewModel()
-    weak var coordinator: MainCoordinator?
+    let viewModel: LocationsViewModel
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
     var snapshot = Snapshot()
+
+    init(viewModel: LocationsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func loadView() {
         view = locationsView
@@ -113,6 +121,6 @@ extension LocationsViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        coordinator?.goLocationDetails(id: viewModel.locations.value[indexPath.row].id!, navController: self.navigationController!)
+        viewModel.goLocationDetails(id: viewModel.locations.value[indexPath.row].id!, navController: self.navigationController!)
     }
 }

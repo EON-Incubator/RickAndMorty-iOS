@@ -17,10 +17,8 @@ class LocationDetailsViewController: UIViewController {
         case emptyResidents
     }
 
-    weak var coordinator: MainCoordinator?
     let locationDetailsView = LocationDetailsView()
-    let viewModel = LocationDetailsViewModel()
-    var locationId: String
+    let viewModel: LocationDetailsViewModel
 
     typealias DataSource = UICollectionViewDiffableDataSource<LocationDetailsSection, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<LocationDetailsSection, AnyHashable>
@@ -28,8 +26,8 @@ class LocationDetailsViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     var snapshot = Snapshot()
 
-    init(locationId: String) {
-        self.locationId = locationId
+    init(viewModel: LocationDetailsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -51,7 +49,7 @@ class LocationDetailsViewController: UIViewController {
         configureDataSource()
         showEmptyData()
         subscribeToViewModel()
-        viewModel.locationId = locationId
+        viewModel.fetchData()
     }
 
     func showEmptyData() {
@@ -82,7 +80,7 @@ class LocationDetailsViewController: UIViewController {
     }
 
     @objc func onRefresh() {
-        viewModel.locationId = self.locationId
+        viewModel.fetchData()
     }
 }
 
@@ -156,7 +154,7 @@ extension LocationDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
-            coordinator?.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
+            viewModel.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
         }
     }
 }
