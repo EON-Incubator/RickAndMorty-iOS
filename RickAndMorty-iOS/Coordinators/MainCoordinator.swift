@@ -71,8 +71,9 @@ class MainCoordinator: Coordinator {
         searchNavController.navigationBar.standardAppearance = navBarAppearance
 
         // Add CharactersViewController to the character navigation controller.
-        let charactersViewController = CharactersViewController()
-        charactersViewController.coordinator = self
+        let charactersViewModel = CharactersViewModel()
+        charactersViewModel.coordinator = self
+        let charactersViewController = CharactersViewController(viewModel: charactersViewModel)
         characterNavController.pushViewController(charactersViewController, animated: false)
 
         // Add LocationsViewController to the location navigation controller.
@@ -97,9 +98,9 @@ class MainCoordinator: Coordinator {
     }
 
     func goCharacterDetails(id: String, navController: UINavigationController) {
-        let viewController = CharacterDetailsViewController()
+        let viewModel = CharacterDetailsViewModel(characterId: id)
+        let viewController = CharacterDetailsViewController(viewModel: viewModel)
         viewController.coordinator = self
-        viewController.characterID = id
         navController.pushViewController(viewController, animated: true)
     }
 

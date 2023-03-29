@@ -15,6 +15,7 @@ struct FilterOptions {
 
 class CharactersViewModel {
 
+    weak var coordinator: MainCoordinator?
     var characters = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
     var charactersForSearch = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
 
@@ -59,6 +60,14 @@ class CharactersViewModel {
         } else {
             self.characters.value.append(contentsOf: (characters.compactMap { $0?.fragments.characterBasics }) )
         }
+    }
+
+    func showCharactersFilter(viewController: UIViewController, viewModel: CharactersViewModel, sender: AnyObject, completion: (() -> Void)? = nil) {
+        coordinator?.showCharactersFilter(viewController: viewController, viewModel: viewModel, sender: sender, completion: completion)
+    }
+
+    func goCharacterDetails(id: String, navController: UINavigationController) {
+        coordinator?.goCharacterDetails(id: id, navController: navController)
     }
 
 }

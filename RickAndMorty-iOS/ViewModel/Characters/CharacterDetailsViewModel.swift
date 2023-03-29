@@ -11,16 +11,15 @@ import Combine
 class CharacterDetailsViewModel {
 
     var character = PassthroughSubject<RickAndMortyAPI.GetCharacterQuery.Data.Character, Never>()
+    var characterId: String
 
-    var selectedCharacter = "" {
-        didSet {
-            fetchData(charID: selectedCharacter)
-        }
+    init(characterId: String) {
+        self.characterId = characterId
     }
 
-    func fetchData(charID: String) {
+    func fetchData() {
         Network.shared.apollo.fetch(
-            query: RickAndMortyAPI.GetCharacterQuery(characterId: charID)) { [weak self] result in
+            query: RickAndMortyAPI.GetCharacterQuery(characterId: characterId)) { [weak self] result in
 
                 switch result {
                 case .success(let response):

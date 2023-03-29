@@ -11,7 +11,7 @@ import SDWebImage
 
 class CharacterDetailsViewController: UIViewController {
 
-    let viewModel = CharacterDetailsViewModel()
+    let viewModel: CharacterDetailsViewModel
     let locationsViewModel = LocationsViewModel()
     var characterDetailsView = CharacterDetailsView()
     weak var coordinator: MainCoordinator?
@@ -29,6 +29,15 @@ class CharacterDetailsViewController: UIViewController {
         case noTitle, title, titleWithImage
     }
 
+    init(viewModel: CharacterDetailsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func loadView() {
         view = characterDetailsView
         characterDetailsView.collectionView.delegate = self
@@ -36,11 +45,11 @@ class CharacterDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.selectedCharacter = characterID!
         configureDataSource()
         showEmptyData()
         subscribeToViewModel()
         updateTitleView()
+        viewModel.fetchData()
     }
 
     func showEmptyData() {

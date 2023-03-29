@@ -11,15 +11,23 @@ import SDWebImage
 
 class CharactersViewController: UIViewController {
 
-    weak var coordinator: MainCoordinator?
     var charactersGridView = CharactersView()
-    let viewModel = CharactersViewModel()
+    var viewModel: CharactersViewModel
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
     var snapshot = Snapshot()
+
+    init(viewModel: CharactersViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +85,7 @@ class CharactersViewController: UIViewController {
     @objc func filterButtonPressed(sender: UIButton) {
         let button = sender
         button.backgroundColor = .lightGray
-        coordinator?.showCharactersFilter(viewController: self, viewModel: viewModel, sender: sender, completion: {
+        viewModel.showCharactersFilter(viewController: self, viewModel: viewModel, sender: sender, completion: {
             button.backgroundColor = UIColor(red: 0.65, green: 0.76, blue: 0.81, alpha: 1.00)
         })
     }
@@ -118,6 +126,6 @@ extension CharactersViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        coordinator?.goCharacterDetails(id: viewModel.characters.value[indexPath.row].id!, navController: self.navigationController!)
+        viewModel.goCharacterDetails(id: viewModel.characters.value[indexPath.row].id!, navController: self.navigationController!)
     }
 }
