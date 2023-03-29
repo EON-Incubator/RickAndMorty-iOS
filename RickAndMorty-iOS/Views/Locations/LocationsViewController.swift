@@ -96,6 +96,9 @@ extension LocationsViewController {
                     cell?.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
                 }
             }
+            if location?.dimension == "" {
+                cell?.lowerRightLabel.isHidden = true
+            }
             return cell
         })
     }
