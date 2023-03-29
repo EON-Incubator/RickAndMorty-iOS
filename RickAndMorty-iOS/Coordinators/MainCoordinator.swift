@@ -103,21 +103,29 @@ class MainCoordinator: Coordinator {
         navController.pushViewController(viewController, animated: true)
     }
 
-    func showCharactersFilter(sender: UIViewController, viewModel: CharactersViewModel) {
-        let charactersFilterViewController = CharactersFilterViewController(viewModel: viewModel)
+    func showCharactersFilter(viewController: UIViewController, viewModel: CharactersViewModel, sender: AnyObject, completion: (() -> Void)? = nil) {
+        let charactersFilterViewController = CharactersFilterViewController(viewModel: viewModel, completion: completion)
+
         charactersFilterViewController.modalPresentationStyle = .popover
         if let popover = charactersFilterViewController.popoverPresentationController {
+            popover.sourceView = sender as? UIView
+            popover.sourceRect = sender.bounds
+            popover.delegate = viewController as? UIPopoverPresentationControllerDelegate
             let sheet = popover.adaptiveSheetPresentationController
             sheet.detents = [
                 .custom(identifier: UISheetPresentationController.Detent.Identifier("small")) { _ in
-                    280
+                    return 280
                 }
             ]
             sheet.prefersGrabberVisible = true
             sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
             sheet.prefersEdgeAttachedInCompactHeight = true
         }
-        sender.present(charactersFilterViewController, animated: true, completion: nil)
+        viewController.present(charactersFilterViewController, animated: true, completion: nil)
+    }
+
+    func dismissCharactersFilter(viewController: UIViewController) {
+        viewController.dismiss(animated: true)
     }
 
     func goLocationDetails(id: String, navController: UINavigationController) {

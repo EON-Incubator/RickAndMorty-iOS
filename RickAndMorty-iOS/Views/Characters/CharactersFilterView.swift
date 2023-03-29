@@ -53,9 +53,9 @@ class CharactersFilterView: UIView {
         return label
     }()
 
-    let statusSegmentControl: UISegmentedControl = {
+    let statusSegmentControl: CustomSegmentedControl = {
         let items = ["Alive", "Dead", "Unknown"]
-        let segmentControl = UISegmentedControl(items: items)
+        let segmentControl = CustomSegmentedControl(items: items)
         segmentControl.selectedSegmentTintColor = .systemCyan
         segmentControl.setTitleTextAttributes([.font: UIFont(name: "Chalkboard SE Regular", size: 14)!], for: .normal)
         return segmentControl
@@ -68,9 +68,9 @@ class CharactersFilterView: UIView {
         return label
     }()
 
-    let genderSegmentControl: UISegmentedControl = {
+    let genderSegmentControl: CustomSegmentedControl = {
         let items = ["Male", "Female", "Genderless", "Unknown"]
-        let segmentControl = UISegmentedControl(items: items)
+        let segmentControl = CustomSegmentedControl(items: items)
         segmentControl.selectedSegmentTintColor = .systemCyan
         segmentControl.setTitleTextAttributes([.font: UIFont(name: "Chalkboard SE Regular", size: 14)!], for: .normal)
         return segmentControl
@@ -152,6 +152,19 @@ class CharactersFilterView: UIView {
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
             make.height.equalTo(50)
+        }
+    }
+}
+
+class CustomSegmentedControl: UISegmentedControl {
+    open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let previousIndex = selectedSegmentIndex
+        super.touchesEnded(touches, with: event)
+        if previousIndex == selectedSegmentIndex {
+            let touchLocation = touches.first!.location(in: self)
+            if bounds.contains(touchLocation) {
+                sendActions(for: .valueChanged)
+            }
         }
     }
 }

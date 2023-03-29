@@ -73,8 +73,12 @@ class CharactersViewController: UIViewController {
         viewModel.currentPage += 1
     }
 
-    @objc func filterButtonPressed(sender: AnyObject?) {
-        coordinator?.showCharactersFilter(sender: self, viewModel: viewModel)
+    @objc func filterButtonPressed(sender: UIButton) {
+        let button = sender
+        button.backgroundColor = .lightGray
+        coordinator?.showCharactersFilter(viewController: self, viewModel: viewModel, sender: sender, completion: {
+            button.backgroundColor = UIColor(red: 0.65, green: 0.76, blue: 0.81, alpha: 1.00)
+        })
     }
 }
 
