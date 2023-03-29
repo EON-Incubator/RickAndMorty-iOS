@@ -113,6 +113,9 @@ extension LocationsViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        coordinator?.goLocationDetails(id: viewModel.locations.value[indexPath.row].id!, navController: self.navigationController!)
+
+        if let location = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result {
+            coordinator?.goLocationDetails(id: location.id!, navController: self.navigationController!)
+        }
     }
 }
