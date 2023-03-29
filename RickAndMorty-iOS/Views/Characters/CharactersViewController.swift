@@ -57,6 +57,7 @@ class CharactersViewController: UIViewController {
                     snapshot.appendItems(characters, toSection: .appearance)
                     self?.dataSource.apply(snapshot, animatingDifferences: true)
                 }
+                self?.charactersGridView.loadingIndicator.stopAnimating()
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {
@@ -108,14 +109,11 @@ extension CharactersViewController: UICollectionViewDelegate {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
             // show lazy-loading indicator
             charactersGridView.loadingIndicator.startAnimating()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-                self?.loadMore()
-                self?.charactersGridView.loadingIndicator.stopAnimating()
-            }
+            loadMore()
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-         coordinator?.goCharacterDetails(id: viewModel.characters.value[indexPath.row].id!, navController: self.navigationController!)
+        coordinator?.goCharacterDetails(id: viewModel.characters.value[indexPath.row].id!, navController: self.navigationController!)
     }
 }
