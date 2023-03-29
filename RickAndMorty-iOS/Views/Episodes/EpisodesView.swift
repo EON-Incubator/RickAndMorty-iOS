@@ -9,8 +9,14 @@ import UIKit
 
 class EpisodesView: UIView {
 
+    let loadingView = LoadingView()
+
     lazy var collectionView: UICollectionView = {
-        return UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        collectionView.backgroundColor = UIColor(named: "EpisodeView")
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
+        collectionView.showsVerticalScrollIndicator = false
+        return collectionView
     }()
 
     var episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (_ cell, _ indexPath, _ episode) in
@@ -26,21 +32,21 @@ class EpisodesView: UIView {
 
     init() {
         super.init(frame: .zero)
-        collectionView.showsVerticalScrollIndicator = false
         setupViews()
         setupConstraints()
     }
 
     private func setupViews() {
         self.backgroundColor = UIColor(named: "EpisodeView")
-        collectionView.backgroundColor = UIColor(named: "EpisodeView")
         self.addSubview(collectionView)
+        self.addSubview(loadingView)
     }
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(self.safeAreaInsets).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
+        loadingView.setupConstraints(view: self)
     }
 }
 
