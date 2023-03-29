@@ -54,6 +54,7 @@ class LocationsViewController: UIViewController {
                     snapshot.appendItems(locations, toSection: .appearance)
                     self?.dataSource.apply(snapshot, animatingDifferences: true)
                 }
+                self?.locationsView.loadingView.spinner.stopAnimating()
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {
@@ -105,6 +106,7 @@ extension LocationsViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
+            self.locationsView.loadingView.spinner.startAnimating()
             loadMore()
         }
     }

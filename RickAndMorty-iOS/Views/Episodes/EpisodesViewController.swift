@@ -54,6 +54,7 @@ class EpisodesViewController: UIViewController {
                     snapshot.appendItems(episodes, toSection: .appearance)
                     self?.dataSource.apply(snapshot, animatingDifferences: true)
                 }
+                self?.episodesView.loadingView.spinner.stopAnimating()
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {
@@ -108,6 +109,8 @@ extension EpisodesViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
+
+            self.episodesView.loadingView.spinner.startAnimating()
             loadMore()
         }
     }

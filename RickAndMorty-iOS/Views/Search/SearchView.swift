@@ -78,30 +78,41 @@ class SearchView: UIView {
     }
 
     private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, _) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 
             guard let sectionType = Section(rawValue: sectionIndex) else {
                 return nil
             }
+
+            let effectiveWidth = layoutEnvironment.container.effectiveContentSize.width
+
             let columns = sectionType.columnCount
 
-            var itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                  heightDimension: .fractionalHeight(1.0))
+            var itemWidth = effectiveWidth > 500 ? 0.5 : 1.0
+
+            // width of load more btn
             if sectionType == Section.episodes || sectionType == Section.info {
-                itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                  heightDimension: .fractionalHeight(0.5))
+                itemWidth = 1.0
             }
 
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(itemWidth), heightDimension: .fractionalHeight(1.0))
+
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            let groupHeight = NSCollectionLayoutDimension.estimated(100)
+            let groupHeight = sectionType == Section.episodes || sectionType == Section.info ?  NSCollectionLayoutDimension.estimated(50) : NSCollectionLayoutDimension.estimated(100)
 
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: groupHeight)
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: groupHeight)
+
+            var group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
+
+            if effectiveWidth > 500 {
+                group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 2)
+            }
 
             let section = NSCollectionLayoutSection(group: group)
+
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
 

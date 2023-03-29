@@ -63,16 +63,23 @@ class CharacterDetailsView: UIView {
 // MARK: - CollectionView Layout
 extension CharacterDetailsView {
     private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, _) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 
             guard let sectionType = Section(rawValue: sectionIndex) else {
                 return nil
             }
 
+            let effectiveWidth = layoutEnvironment.container.effectiveContentSize.width
+
             let columns = sectionType.columnCount
 
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                  heightDimension: .fractionalHeight(1.0))
+            var itemWidth = effectiveWidth > 500 ? 0.5 : 1.0
+
+            if sectionType == .appearance || sectionType == .info || sectionType == .empty {
+                itemWidth = 1.0
+            }
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(itemWidth), heightDimension: .fractionalHeight(1.0))
+
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
@@ -89,7 +96,11 @@ extension CharacterDetailsView {
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                    heightDimension: getGroupHeight())
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
+            var group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
+
+            if effectiveWidth > 500 && sectionType != .info {
+                group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 2)
+            }
 
             let section = NSCollectionLayoutSection(group: group)
 

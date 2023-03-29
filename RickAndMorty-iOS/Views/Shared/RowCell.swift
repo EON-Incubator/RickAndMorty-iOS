@@ -80,7 +80,7 @@ class RowCell: UICollectionViewListCell {
         return label
     }()
 
-    func setupViews() {
+    override func layoutSubviews() {
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.gray.cgColor
         self.layer.cornerRadius = 5
@@ -89,6 +89,8 @@ class RowCell: UICollectionViewListCell {
         self.layer.shadowOffset = .zero
         self.layer.shadowOpacity = 0.3
         self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+    }
+    func setupViews() {
         for index in 0...3 {
             let imageView = UIImageView(image: UIImage(systemName: "person.circle")?.withRenderingMode(.alwaysTemplate))
             imageView.tintColor = .systemFill

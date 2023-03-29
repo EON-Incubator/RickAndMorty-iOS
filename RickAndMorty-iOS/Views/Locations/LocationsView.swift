@@ -10,11 +10,17 @@ import SnapKit
 
 class LocationsView: UIView {
 
+    let loadingView = LoadingView()
+
     lazy var collectionView: UICollectionView = { [weak self] in
         let collectionView = UICollectionView(frame: self?.bounds ?? CGRect.zero, collectionViewLayout: createLayout())
         collectionView.register(LocationRowCell.self,
                                 forCellWithReuseIdentifier: LocationRowCell.identifier)
 
+        collectionView.accessibilityIdentifier = "LocationsCollectionView"
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.backgroundColor = UIColor(named: "LocationView")
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
         return collectionView
     }()
 
@@ -34,41 +40,43 @@ class LocationsView: UIView {
 
     private func setupViews() {
         self.backgroundColor = UIColor(named: "LocationView")
-        collectionView.backgroundColor = UIColor(named: "LocationView")
         self.addSubview(collectionView)
-        collectionView.accessibilityIdentifier = "LocationsCollectionView"
-        collectionView.showsVerticalScrollIndicator = false
+        self.addSubview(loadingView)
     }
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(self.safeAreaInsets).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
+        loadingView.setupConstraints(view: self)
     }
-
 }
 
 // MARK: - CollectionView Layout
 extension LocationsView {
     private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, _) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 
             guard let sectionType = Section(rawValue: sectionIndex) else {
                 return nil
             }
 
+            let effectiveWidth = layoutEnvironment.container.effectiveContentSize.width
+
             let columns = sectionType.columnCount
 
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                  heightDimension: .fractionalHeight(1.0))
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(effectiveWidth > 500 ? 0.5 : 1.0), heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            let groupHeight = NSCollectionLayoutDimension.estimated(100)
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
 
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: groupHeight)
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
+            var group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
+
+            if effectiveWidth > 500 {
+                group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 2)
+            }
 
             let section = NSCollectionLayoutSection(group: group)
 

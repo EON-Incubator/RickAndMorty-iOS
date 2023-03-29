@@ -10,6 +10,8 @@ import SnapKit
 
 class CharactersView: UIView {
 
+    let loadingView = LoadingView()
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -23,25 +25,10 @@ class CharactersView: UIView {
     private func setupViews() {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
+        self.addSubview(loadingView)
         collectionView.showsVerticalScrollIndicator = false
-
-        let layoutGuide = self.safeAreaLayoutGuide
-        self.addSubview(loadingIndicator)
-        NSLayoutConstraint.activate([
-            layoutGuide.centerXAnchor.constraint(equalTo: loadingIndicator.centerXAnchor),
-            layoutGuide.bottomAnchor.constraint(equalTo: loadingIndicator.bottomAnchor, constant: 10)
-        ])
-
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
     }
-
-    lazy var loadingIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        indicator.hidesWhenStopped = true
-        indicator.color = .black
-        return indicator
-    }()
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
@@ -84,6 +71,7 @@ class CharactersView: UIView {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaInsets).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
+        loadingView.setupConstraints(view: self)
     }
 }
 
