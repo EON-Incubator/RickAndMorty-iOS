@@ -137,7 +137,7 @@ extension LocationDetailsViewController {
             switch itemIndex {
             case 0:
                 cell.leftLabel.text = "Type"
-                cell.rightLabel.text = locationDetails.item.name
+                cell.rightLabel.text = locationDetails.item.type
                 cell.infoImage.image = UIImage(systemName: "globe.asia.australia")
             case 1:
                 cell.leftLabel.text = "Dimension"
