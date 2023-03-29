@@ -62,8 +62,8 @@ class CharactersViewModel {
         }
     }
 
-    func showCharactersFilter(viewController: UIViewController, viewModel: CharactersViewModel, sender: AnyObject, completion: (() -> Void)? = nil) {
-        coordinator?.showCharactersFilter(viewController: viewController, viewModel: viewModel, sender: sender, completion: completion)
+    func showCharactersFilter(viewController: UIViewController, viewModel: CharactersViewModel, sender: AnyObject, onDismiss: (() -> Void)? = nil) {
+        coordinator?.showCharactersFilter(viewController: viewController, viewModel: viewModel, sender: sender, onDismiss: onDismiss)
     }
 
     func goCharacterDetails(id: String, navController: UINavigationController) {

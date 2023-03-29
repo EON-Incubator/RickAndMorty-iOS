@@ -99,13 +99,13 @@ class MainCoordinator: Coordinator {
 
     func goCharacterDetails(id: String, navController: UINavigationController) {
         let viewModel = CharacterDetailsViewModel(characterId: id)
+        viewModel.coordinator = self
         let viewController = CharacterDetailsViewController(viewModel: viewModel)
-        viewController.coordinator = self
         navController.pushViewController(viewController, animated: true)
     }
 
-    func showCharactersFilter(viewController: UIViewController, viewModel: CharactersViewModel, sender: AnyObject, completion: (() -> Void)? = nil) {
-        let charactersFilterViewController = CharactersFilterViewController(viewModel: viewModel, completion: completion)
+    func showCharactersFilter(viewController: UIViewController, viewModel: CharactersViewModel, sender: AnyObject, onDismiss: (() -> Void)? = nil) {
+        let charactersFilterViewController = CharactersFilterViewController(viewModel: viewModel, onDismiss: onDismiss)
 
         charactersFilterViewController.modalPresentationStyle = .popover
         if let popover = charactersFilterViewController.popoverPresentationController {

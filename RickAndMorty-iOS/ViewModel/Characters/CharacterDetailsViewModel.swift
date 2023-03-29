@@ -10,6 +10,7 @@ import Combine
 
 class CharacterDetailsViewModel {
 
+    weak var coordinator: MainCoordinator?
     var character = PassthroughSubject<RickAndMortyAPI.GetCharacterQuery.Data.Character, Never>()
     var characterId: String
 
@@ -32,4 +33,13 @@ class CharacterDetailsViewModel {
 
             }
     }
+
+    func goLocationDetails(id: String, navController: UINavigationController) {
+        coordinator?.goLocationDetails(id: id, navController: navController)
+    }
+
+    func goEpisodeDetails(id: String, navController: UINavigationController) {
+        coordinator?.goEpisodeDetails(id: id, navController: navController)
+    }
+
 }

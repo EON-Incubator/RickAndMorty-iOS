@@ -23,9 +23,9 @@ class CharactersFilterViewController: UIViewController {
         fatalError("This class does not support NSCoder")
     }
 
-    init(viewModel: CharactersViewModel, completion: (() -> Void)?) {
+    init(viewModel: CharactersViewModel, onDismiss: (() -> Void)?) {
         self.viewModel = viewModel
-        self.dismissHandler = completion
+        self.dismissHandler = onDismiss
         self.currentFilterOptions = CurrentValueSubject<FilterOptions, Never>(FilterOptions(
             status: viewModel.filterOptions.status,
             gender: viewModel.filterOptions.gender))
