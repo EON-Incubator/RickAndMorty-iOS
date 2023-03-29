@@ -51,12 +51,13 @@ class RowCell: UICollectionViewListCell {
     }()
 
     lazy var lowerLeftLabel: UILabel = {
-        let label = UILabel()
+        let label = PaddingLabel()
         label.font = .systemFont(ofSize: 12)
         label.textColor = .label
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
         label.layer.borderWidth = 0.3
@@ -66,12 +67,13 @@ class RowCell: UICollectionViewListCell {
     }()
 
     lazy var lowerRightLabel: UILabel = {
-        let label = UILabel()
+        let label = PaddingLabel()
         label.font = .systemFont(ofSize: 12)
         label.textColor = .label
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
+        label.minimumScaleFactor = 0.7
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
         label.backgroundColor = UIColor(red: 1.00, green: 0.92, blue: 0.71, alpha: 0.4)
@@ -142,7 +144,7 @@ class RowCell: UICollectionViewListCell {
 
         lowerLeftLabel.snp.makeConstraints { make in
             make.left.equalTo(upperLabel)
-            make.height.equalTo(20)
+            make.height.equalTo(25)
             make.width.equalTo(upperLabel).dividedBy(2).offset(-30)
             make.bottom.equalToSuperview().offset(-10)
         }
@@ -153,5 +155,24 @@ class RowCell: UICollectionViewListCell {
             make.height.equalTo(lowerLeftLabel)
             make.width.equalTo(upperLabel).dividedBy(2)
         }
+    }
+}
+
+@IBDesignable class PaddingLabel: UILabel {
+
+    @IBInspectable var topInset: CGFloat = 1
+    @IBInspectable var bottomInset: CGFloat = 1
+    @IBInspectable var leftInset: CGFloat = 3
+    @IBInspectable var rightInset: CGFloat = 3
+
+    override func drawText(in rect: CGRect) {
+        let insets = UIEdgeInsets.init(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
+        super.drawText(in: rect.inset(by: insets))
+    }
+
+    override var intrinsicContentSize: CGSize {
+        let size = super.intrinsicContentSize
+        return CGSize(width: size.width + leftInset + rightInset,
+                      height: size.height + topInset + bottomInset)
     }
 }
