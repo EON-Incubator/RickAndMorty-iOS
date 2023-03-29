@@ -328,17 +328,10 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		54A2EC3929BB7D31006E880E /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				54A2EC3A29BB7D44006E880E /* Characters */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		54A2EC3A29BB7D44006E880E /* Characters */ = {
 			isa = PBXGroup;
 			children = (
+				F77E4BF729BA3C3300B8B5CE /* CharactersSpec.swift */,
 				54A2EC3B29BB7D7C006E880E /* CharactersGridCellSpec.swift */,
 			);
 			path = Characters;
@@ -475,11 +468,10 @@
 		F77E4BE929BA3BA000B8B5CE /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				54A2EC3929BB7D31006E880E /* Views */,
+				54A2EC3A29BB7D44006E880E /* Characters */,
 				F7DB56F229BBBB81000FAB01 /* Locations */,
 				F7DB571529BBDF3C000FAB01 /* Episodes */,
 				F7DB571629BBDF60000FAB01 /* Search */,
-				F77E4BF729BA3C3300B8B5CE /* CharactersSpec.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";

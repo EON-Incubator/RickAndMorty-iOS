@@ -17,7 +17,7 @@ final class SearchUISpec: QuickSpec {
 
         describe("Search") {
             app.launch()
-            context("1when user tap the Search button on Tab Bar") {
+            context("1 when user tap the Search button on Tab Bar") {
 
                 beforeEach {
                     DispatchQueue.main.async {
@@ -31,7 +31,7 @@ final class SearchUISpec: QuickSpec {
                 }
             }
 
-            context("2when user search for rick from the searchbar") {
+            context("2 when user search for rick from the searchbar") {
 
                 beforeEach {
                     DispatchQueue.main.async {
@@ -55,7 +55,7 @@ final class SearchUISpec: QuickSpec {
                 }
             }
 
-            context("when user search for jndfslkj from the searchbar") {
+            context("3 when user search for jndfslkj from the searchbar") {
 
                 beforeEach {
                     DispatchQueue.main.async {
