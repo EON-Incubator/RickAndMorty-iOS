@@ -10,11 +10,17 @@ import SnapKit
 
 class LocationsView: UIView {
 
+    let loadingView = LoadingView()
+
     lazy var collectionView: UICollectionView = { [weak self] in
         let collectionView = UICollectionView(frame: self?.bounds ?? CGRect.zero, collectionViewLayout: createLayout())
         collectionView.register(LocationRowCell.self,
                                 forCellWithReuseIdentifier: LocationRowCell.identifier)
 
+        collectionView.accessibilityIdentifier = "LocationsCollectionView"
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.backgroundColor = UIColor(named: "LocationView")
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
         return collectionView
     }()
 
@@ -34,18 +40,16 @@ class LocationsView: UIView {
 
     private func setupViews() {
         self.backgroundColor = UIColor(named: "LocationView")
-        collectionView.backgroundColor = UIColor(named: "LocationView")
         self.addSubview(collectionView)
-        collectionView.accessibilityIdentifier = "LocationsCollectionView"
-        collectionView.showsVerticalScrollIndicator = false
+        self.addSubview(loadingView)
     }
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(self.safeAreaInsets).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
+        loadingView.setupConstraints(view: self)
     }
-
 }
 
 // MARK: - CollectionView Layout
