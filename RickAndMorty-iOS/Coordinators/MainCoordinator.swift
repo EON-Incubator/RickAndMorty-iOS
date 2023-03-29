@@ -83,8 +83,9 @@ class MainCoordinator: Coordinator {
         locationNavController.pushViewController(locationsViewController, animated: false)
 
         // Add EpisodesViewController to the episode navigation controller.
-        let episodesViewController = EpisodesViewController()
-        episodesViewController.coordinator = self
+        let episodeViewModel = EpisodesViewModel()
+        episodeViewModel.coordinator = self
+        let episodesViewController = EpisodesViewController(viewModel: episodeViewModel)
         episodeNavController.pushViewController(episodesViewController, animated: false)
 
         // Add SearchViewController to the search navigation controller.
