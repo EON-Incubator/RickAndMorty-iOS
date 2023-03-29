@@ -13,20 +13,27 @@ class InfoCell: UICollectionViewListCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
         setupViews()
         setupConstraints()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.contentView.layer.sublayers?.removeAll()
     }
 
     static func configCell(cell: InfoCell, leftLabel: String, rightLabel: String, infoImage: UIImage) -> InfoCell {
         cell.leftLabel.text = leftLabel
         cell.rightLabel.text = rightLabel
-        cell.infoImage.image = infoImage
+        cell.infoImage.image = infoImage.withRenderingMode(.alwaysTemplate)
+        cell.infoImage.tintColor = UIColor(named: "InfoCell")
         return cell
     }
 
     func setupViews() {
         let myView = UIView(frame: self.bounds)
-        myView.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        myView.backgroundColor = .secondarySystemBackground
         self.backgroundView = myView
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.gray.cgColor
@@ -38,14 +45,14 @@ class InfoCell: UICollectionViewListCell {
 
     lazy var leftLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = UIColor(named: "InfoCell")
         label.font = .boldSystemFont(ofSize: 15)
         return label
     }()
 
     lazy var rightLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = UIColor(named: "InfoCell")
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .right
         label.minimumScaleFactor = 0.5
@@ -55,8 +62,6 @@ class InfoCell: UICollectionViewListCell {
 
     lazy var infoImage: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(systemName: "person.circle")
-        image.tintColor = .label
         return image
     }()
 

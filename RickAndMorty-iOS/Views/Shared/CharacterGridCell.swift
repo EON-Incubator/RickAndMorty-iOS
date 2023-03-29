@@ -12,6 +12,11 @@ class CharacterGridCell: UICollectionViewCell {
 
     static let identifier = "CharacterCell"
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.contentView.layer.sublayers?.removeAll()
+    }
+
     lazy var characterNameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center

@@ -11,6 +11,15 @@ class RowCell: UICollectionViewListCell {
 
     lazy var characterAvatarImageViews = [UIImageView]()
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        for index in 0...3 {
+            self.characterAvatarImageViews[index].image = UIImage(systemName: "person.circle")?.withRenderingMode(.alwaysTemplate)
+        }
+
+        self.contentView.layer.sublayers?.removeAll()
+    }
+
     lazy var characterAvatarsView: UIView = {
         let view = UIView()
         return view
@@ -25,7 +34,8 @@ class RowCell: UICollectionViewListCell {
 
         self.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
         let myView = UIView(frame: self.bounds)
-        myView.backgroundColor = UIColor(red: 0.93, green: 0.95, blue: 1.00, alpha: 0.5)
+        myView.backgroundColor = UIColor(named: "EpisodeCell")
+        myView.layer.cornerRadius = 5
         self.backgroundView = myView
         setupViews()
         setupConstraints()
@@ -34,6 +44,7 @@ class RowCell: UICollectionViewListCell {
     lazy var upperLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Chalkboard SE Regular", size: 18)
+        label.textColor = .label
         label.lineBreakMode = .byTruncatingTail
         label.textAlignment = .center
         return label
@@ -42,6 +53,7 @@ class RowCell: UICollectionViewListCell {
     lazy var lowerLeftLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
+        label.textColor = .label
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.textAlignment = .center
@@ -56,6 +68,7 @@ class RowCell: UICollectionViewListCell {
     lazy var lowerRightLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
+        label.textColor = .label
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.textAlignment = .center
@@ -71,9 +84,14 @@ class RowCell: UICollectionViewListCell {
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.gray.cgColor
         self.layer.cornerRadius = 5
+        // setup-shadows
+        self.layer.shadowRadius = 2
+        self.layer.shadowOffset = .zero
+        self.layer.shadowOpacity = 0.3
+        self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
         for index in 0...3 {
-            let imageView = UIImageView(image: UIImage(systemName: "person.circle"))
-            imageView.tintColor = .systemGray3
+            let imageView = UIImageView(image: UIImage(systemName: "person.circle")?.withRenderingMode(.alwaysTemplate))
+            imageView.tintColor = .systemFill
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
             imageView.layer.cornerRadius = imageView.frame.width / 2

@@ -96,10 +96,8 @@ extension EpisodeDetailsViewController {
 
             switch indexPath.section {
             case 0:
-                hideLoadingAnimation(currentCell: infoCell!)
                 return self?.configInfoCell(cell: infoCell!, data: episode, itemIndex: indexPath.item)
             case 1:
-                hideLoadingAnimation(currentCell: characterRowCell!)
                 if let character = episode as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
                     let urlString = character?.image ?? ""
                     characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
@@ -140,11 +138,13 @@ extension EpisodeDetailsViewController {
             case 0:
                 cell.leftLabel.text = "Episode"
                 cell.rightLabel.text = episodeDetails.item.episode
-                cell.infoImage.image = UIImage(named: "tv")
+                cell.infoImage.image = UIImage(named: "tv")?.withRenderingMode(.alwaysTemplate)
+                cell.infoImage.tintColor = UIColor(named: "InfoCell")
             case 1:
                 cell.leftLabel.text = "Air Date"
                 cell.rightLabel.text = episodeDetails.item.air_date
-                cell.infoImage.image = UIImage(named: "calendar")
+                cell.infoImage.image = UIImage(named: "calendar")?.withRenderingMode(.alwaysTemplate)
+                cell.infoImage.tintColor = UIColor(named: "InfoCell")
             default:
                 cell.rightLabel.text = "-"
             }

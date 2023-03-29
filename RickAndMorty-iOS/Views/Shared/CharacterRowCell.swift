@@ -11,6 +11,11 @@ class CharacterRowCell: UICollectionViewListCell {
 
     static let identifier = "CharacterRowCell"
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.contentView.layer.sublayers?.removeAll()
+    }
+
     lazy var characterAvatarImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "person.circle"))
         imageView.tintColor = .systemGray3
@@ -48,10 +53,12 @@ class CharacterRowCell: UICollectionViewListCell {
     lazy var lowerLeftLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14, weight: .bold)
-        label.textColor = .systemBackground
+        label.textColor = .label
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.backgroundColor = UIColor(red: 0.40, green: 0.20, blue: 0.50, alpha: 0.9)
+        label.backgroundColor = UIColor(red: 0.87, green: 0.96, blue: 0.95, alpha: 0.6)
+        label.layer.borderWidth = 0.3
+        label.layer.borderColor = UIColor.gray.cgColor
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
         return label
@@ -60,10 +67,12 @@ class CharacterRowCell: UICollectionViewListCell {
     lazy var lowerRightLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14, weight: .bold)
-        label.textColor = .systemBackground
+        label.textColor = .label
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.backgroundColor = UIColor(red: 0.87, green: 0.47, blue: 0.34, alpha: 0.9)
+        label.backgroundColor = UIColor(red: 0.98, green: 0.99, blue: 0.76, alpha: 0.5)
+        label.layer.borderWidth = 0.3
+        label.layer.borderColor = UIColor.gray.cgColor
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
         return label
@@ -82,12 +91,18 @@ class CharacterRowCell: UICollectionViewListCell {
 
     func setupViews() {
         let myView = UIView(frame: self.bounds)
-        myView.backgroundColor = UIColor(named: "characterRowBackgroundColor")
+        myView.backgroundColor = UIColor(named: "characterRowBackgroundColor")?.withAlphaComponent(0.7)
         self.backgroundView = myView
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.gray.cgColor
         self.layer.cornerRadius = 5
         self.layer.masksToBounds = true
+
+        myView.layer.shadowRadius = 2
+        myView.layer.shadowOffset = .zero
+        myView.layer.shadowOpacity = 0.3
+        myView.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+
         self.addSubview(characterAvatarImageView)
         self.addSubview(characterStatusLabel)
         self.addSubview(upperLabel)
@@ -107,13 +122,14 @@ class CharacterRowCell: UICollectionViewListCell {
     func statusColor(_ color: String) -> UIColor {
         switch color {
         case CharacterStatus.alive.description:
-            return .systemGreen
+            return .systemGreen.withAlphaComponent(0.8)
         case CharacterStatus.dead.description:
-            return .systemRed
+            characterStatusLabel.textColor = .white
+            return .systemRed.withAlphaComponent(0.8)
         case CharacterStatus.unknown.description:
-            return .systemYellow
+            return .systemYellow.withAlphaComponent(0.8)
         default:
-            return .systemGray
+            return .systemGray.withAlphaComponent(0.8)
         }
     }
 

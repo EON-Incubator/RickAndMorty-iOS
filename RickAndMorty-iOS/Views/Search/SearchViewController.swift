@@ -37,7 +37,6 @@ class SearchViewController: UIViewController {
         configureDataSource()
         subscribeToViewModel()
         configureSearchController()
-        title = "Search"
     }
 
     override func loadView() {
@@ -170,6 +169,7 @@ extension SearchViewController: UICollectionViewDelegate {
 
         // load-more section
         if dataSource.itemIdentifier(for: indexPath) is EmptyData {
+            showLoadingAnimation(currentCell: collectionView.cellForItem(at: indexPath)!)
             if indexPath.section == 1 {
                 loadMoreCharacters()
             } else {
@@ -182,8 +182,6 @@ extension SearchViewController: UICollectionViewDelegate {
         currentCharactersPage += 1
         // remove load-more section
         if currentCharactersPage == totalCharactersPage {
-            //            snapshot.deleteSections([.loadMoreCharacters])
-
             let ids = snapshot.itemIdentifiers(inSection: .loadMoreCharacters)
             snapshot.deleteItems(ids)
         }
@@ -228,6 +226,19 @@ extension SearchViewController: UICollectionViewDelegate {
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         viewModel.searchInput = searchBar.text!
+
+        // change background colors
+        switch selectedScope {
+        case 1:
+            self.searchView.collectionView.backgroundColor = UIColor(named: "CharacterView")
+            self.searchView.backgroundColor = UIColor(named: "CharacterView")
+        case 2:
+            self.searchView.collectionView.backgroundColor = UIColor(named: "LocationView")
+            self.searchView.backgroundColor = UIColor(named: "LocationView")
+        default:
+            self.searchView.collectionView.backgroundColor = UIColor(named: "EpisodeView")
+            self.searchView.backgroundColor = UIColor(named: "EpisodeView")
+        }
     }
 }
 
@@ -239,7 +250,6 @@ extension SearchViewController: UISearchResultsUpdating {
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search"
         searchController.automaticallyShowsCancelButton = true
         navigationItem.searchController = searchController
         definesPresentationContext = true
@@ -276,14 +286,16 @@ extension SearchViewController: UISearchResultsUpdating {
         if let searchInput = searchController.searchBar.text {
             debounceTimer?.invalidate()
             // debounce search results
-            debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [weak self] _ in
-                if !searchInput.isEmpty {
-                    if searchInput != self?.viewModel.searchInput {
-                        self?.viewModel.searchInput = searchInput
+            debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                if searchInput.count >= 2 {
+                    // remove search-for-something label
+                    self.searchView.middleLabel.removeFromSuperview()
+                    if searchInput != self.viewModel.searchInput {
+                        self.viewModel.searchInput = searchInput
                         searchController.searchSuggestions = []
                     }
                 } else {
-                    self?.showSuggestions(suggestion: self?.viewModel.searchInput ?? "")
+                    self.showSuggestions(suggestion: self.viewModel.searchInput)
                 }
             }
         }

@@ -98,7 +98,6 @@ extension EpisodesViewController {
                     cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
                 }
             }
-            hideLoadingAnimation(currentCell: cell)
             return cell
         })
     }

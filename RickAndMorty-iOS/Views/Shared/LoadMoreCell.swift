@@ -18,6 +18,11 @@ class LoadMoreCell: UICollectionViewListCell {
         setupConstraints()
     }
 
+    override func prepareForReuse() {
+            super.prepareForReuse()
+            self.contentView.layer.sublayers?.removeAll()
+        }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

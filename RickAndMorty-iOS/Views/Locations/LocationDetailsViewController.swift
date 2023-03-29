@@ -58,7 +58,6 @@ class LocationDetailsViewController: UIViewController {
         snapshot.deleteAllItems()
         snapshot.appendSections([.info, .residents, .emptyInfo, .emptyResidents])
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 2), toSection: .emptyInfo)
-        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 4), toSection: .emptyResidents)
         self.dataSource.apply(snapshot, animatingDifferences: true)
     }
 
@@ -97,7 +96,6 @@ extension LocationDetailsViewController {
 
             switch indexPath.section {
             case 0:
-                hideLoadingAnimation(currentCell: infoCell!)
                 return self?.configLocationInfoCell(cell: infoCell!, data: location, itemIndex: indexPath.item)
             case 1:
                 if let character = location as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
@@ -108,7 +106,6 @@ extension LocationDetailsViewController {
                     characterRowCell?.lowerRightLabel.text = character?.species
                     characterRowCell?.characterStatusLabel.text = character?.status
                     characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character?.status ?? "")
-                    hideLoadingAnimation(currentCell: characterRowCell!)
                     return characterRowCell!
                 }
             case 2:
