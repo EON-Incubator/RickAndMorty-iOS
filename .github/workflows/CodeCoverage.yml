@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v3
         
       - name: build and test
-        run: xcodebuild test -project RickAndMorty-iOS.xcodeproj -scheme RickAndMorty-iOS -destination 'platform=iOS Simulator,name=iPhone 14 Pro,OS=16.2' build test
-
+        run: xcodebuild -project RickAndMorty-iOS.xcodeproj -scheme RickAndMorty-iOS -derivedDataPath Build/ -destination 'platform=iOS Simulator,name=iPhone 14 Pro,OS=16.2' -enableCodeCoverage YES clean build test CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO && xcrun xccov view --report Build/Logs/Test/*.xcresult --json  
+          
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
