@@ -92,19 +92,19 @@ extension CharacterDetailsViewController {
                     switch indexPath.item {
                     case 0:
                         return InfoCell.configCell(cell: infoCell!,
-                                                   leftLabel: "Gender",
+                                                   leftLabel: K.Info.gender,
                                                    rightLabel: character.item.gender!,
-                                                   infoImage: UIImage(named: "gender")!)
+                                                   infoImage: UIImage(named: K.Images.gender)!)
                     case 1:
                         return InfoCell.configCell(cell: infoCell!,
-                                                   leftLabel: "Species",
+                                                   leftLabel: K.Info.species,
                                                    rightLabel: character.item.species!,
-                                                   infoImage: UIImage(named: "dna")!)
+                                                   infoImage: UIImage(named: K.Images.species)!)
                     default:
                         return InfoCell.configCell(cell: infoCell!,
-                                                   leftLabel: "Status",
+                                                   leftLabel: K.Info.status,
                                                    rightLabel: character.item.status!,
-                                                   infoImage: UIImage(named: "heart")!)
+                                                   infoImage: UIImage(named: K.Images.status)!)
                     }
                 }
             case 2:
@@ -113,14 +113,14 @@ extension CharacterDetailsViewController {
                     switch indexPath.item {
                     case 0:
                         return InfoCell.configCell(cell: infoCell!,
-                                                   leftLabel: "Origin",
+                                                   leftLabel: K.Info.origin,
                                                    rightLabel: (character.item.origin?.name)!,
-                                                   infoImage: UIImage(named: "chick")!)
+                                                   infoImage: UIImage(named: K.Images.origin)!)
                     default:
                         return InfoCell.configCell(cell: infoCell!,
-                                                   leftLabel: "Last Seen",
+                                                   leftLabel: K.Info.lastSeen,
                                                    rightLabel: (character.item.location?.name)!,
-                                                   infoImage: UIImage(named: "map")!)
+                                                   infoImage: UIImage(named: K.Images.lastSeen)!)
                     }
                 }
             case 3:
@@ -149,17 +149,17 @@ extension CharacterDetailsViewController {
 
         // for custom header
         dataSource.supplementaryViewProvider = { [weak self] (_ collectionView, _ kind, indexPath) in
-            guard let headerView = self?.characterDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
+            guard let headerView = self?.characterDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
             }
             var headerTitle: String
             switch indexPath.section {
             case 4:
-                headerTitle = "APPEARANCE"
+                headerTitle = K.Headers.appearance
             case 5:
-                headerTitle = "INFO"
+                headerTitle = K.Headers.info
             case 6:
-                headerTitle = "LOCATION"
+                headerTitle = K.Headers.locations
             default:
                 headerTitle = "\(Section.allCases[indexPath.section])".uppercased()
             }

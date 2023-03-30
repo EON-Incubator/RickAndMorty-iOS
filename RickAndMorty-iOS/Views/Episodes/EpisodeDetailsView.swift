@@ -14,7 +14,7 @@ class EpisodeDetailsView: UIView {
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
         collectionView.register(HeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: "HeaderView")
+                                withReuseIdentifier: K.Headers.identifier)
         collectionView.register(InfoCell.self,
                                 forCellWithReuseIdentifier: InfoCell.identifier)
         collectionView.register(CharacterRowCell.self,
@@ -38,10 +38,10 @@ class EpisodeDetailsView: UIView {
     }
 
     private func setupViews() {
-        self.backgroundColor = UIColor(named: "EpisodeView")
-        collectionView.backgroundColor = UIColor(named: "EpisodeView")
+        self.backgroundColor = UIColor(named: K.Colors.episodeView)
+        collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
         self.addSubview(collectionView)
-        collectionView.accessibilityIdentifier = "EpisodeDetailsCollectionView"
+        collectionView.accessibilityIdentifier = K.Identifiers.episodeDetails
         collectionView.showsVerticalScrollIndicator = false
     }
 

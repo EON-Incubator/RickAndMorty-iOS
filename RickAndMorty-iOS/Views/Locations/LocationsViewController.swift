@@ -23,7 +23,7 @@ class LocationsViewController: UIViewController {
     override func loadView() {
         view = locationsView
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Locations"
+        title = K.Titles.locations
         locationsView.collectionView.delegate = self
         locationsView.collectionView.refreshControl = UIRefreshControl()
         locationsView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)

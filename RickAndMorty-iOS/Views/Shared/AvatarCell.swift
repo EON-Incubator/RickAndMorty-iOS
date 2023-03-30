@@ -8,7 +8,7 @@
 import UIKit
 
 class AvatarCell: UICollectionViewCell {
-    static let identifier = "CharacterAvatarCell"
+    static let identifier = K.Identifiers.characterAvatarCell
 
     override init(frame: CGRect) {
         super.init(frame: frame)

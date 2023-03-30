@@ -14,7 +14,7 @@ class RowCell: UICollectionViewListCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         for index in 0...3 {
-            self.characterAvatarImageViews[index].image = UIImage(systemName: "person.circle")?.withRenderingMode(.alwaysTemplate)
+            self.characterAvatarImageViews[index].image = UIImage(systemName: K.Images.systemPerson)?.withRenderingMode(.alwaysTemplate)
         }
 
         self.contentView.layer.sublayers?.removeAll()
@@ -34,7 +34,7 @@ class RowCell: UICollectionViewListCell {
 
         self.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
         let myView = UIView(frame: self.bounds)
-        myView.backgroundColor = UIColor(named: "EpisodeCell")
+        myView.backgroundColor = UIColor(named: K.Colors.episodeCell)
         myView.layer.cornerRadius = 5
         self.backgroundView = myView
         setupViews()
@@ -43,7 +43,7 @@ class RowCell: UICollectionViewListCell {
 
     lazy var upperLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Chalkboard SE Regular", size: 18)
+        label.font = UIFont(name: K.Fonts.secondary, size: 18)
         label.textColor = .label
         label.lineBreakMode = .byTruncatingTail
         label.textAlignment = .center
@@ -61,7 +61,7 @@ class RowCell: UICollectionViewListCell {
         label.clipsToBounds = true
         label.layer.borderWidth = 0.3
         label.layer.borderColor = UIColor.gray.cgColor
-        label.backgroundColor = UIColor(red: 1.00, green: 0.75, blue: 0.66, alpha: 0.4)
+        label.backgroundColor = K.Colors.episodeNumber
         return label
     }()
 
@@ -74,7 +74,7 @@ class RowCell: UICollectionViewListCell {
         label.textAlignment = .center
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
-        label.backgroundColor = UIColor(red: 1.00, green: 0.92, blue: 0.71, alpha: 0.4)
+        label.backgroundColor = K.Colors.episodeDate
         label.layer.borderWidth = 0.3
         label.layer.borderColor = UIColor.gray.cgColor
         return label
@@ -92,7 +92,7 @@ class RowCell: UICollectionViewListCell {
     }
     func setupViews() {
         for index in 0...3 {
-            let imageView = UIImageView(image: UIImage(systemName: "person.circle")?.withRenderingMode(.alwaysTemplate))
+            let imageView = UIImageView(image: UIImage(systemName: K.Images.systemPerson)?.withRenderingMode(.alwaysTemplate))
             imageView.tintColor = .systemFill
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true

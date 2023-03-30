@@ -17,9 +17,9 @@ class LocationsView: UIView {
         collectionView.register(LocationRowCell.self,
                                 forCellWithReuseIdentifier: LocationRowCell.identifier)
 
-        collectionView.accessibilityIdentifier = "LocationsCollectionView"
+        collectionView.accessibilityIdentifier = K.Identifiers.locations
         collectionView.showsVerticalScrollIndicator = false
-        collectionView.backgroundColor = UIColor(named: "LocationView")
+        collectionView.backgroundColor = UIColor(named: K.Colors.locationsView)
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
         return collectionView
     }()
@@ -39,7 +39,7 @@ class LocationsView: UIView {
     }
 
     private func setupViews() {
-        self.backgroundColor = UIColor(named: "LocationView")
+        self.backgroundColor = UIColor(named: K.Colors.locationsView)
         self.addSubview(collectionView)
         self.addSubview(loadingView)
     }

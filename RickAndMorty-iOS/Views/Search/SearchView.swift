@@ -15,7 +15,7 @@ class SearchView: UIView {
                                 forCellWithReuseIdentifier: CharacterRowCell.identifier)
         collectionView.register(HeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: "HeaderView")
+                                withReuseIdentifier: K.Headers.identifier)
         collectionView.register(LoadMoreCell.self,
                                 forCellWithReuseIdentifier: LoadMoreCell.identifier)
         return collectionView
@@ -52,15 +52,15 @@ class SearchView: UIView {
     }
 
     private func setupViews() {
-        self.backgroundColor = UIColor(named: "EpisodeView")
-        self.collectionView.backgroundColor = UIColor(named: "EpisodeView")
+        self.backgroundColor = UIColor(named: K.Colors.episodeView)
+        self.collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
         self.addSubview(collectionView)
         self.addSubview(middleLabel)
     }
 
     lazy var middleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Creepster-Regular", size: 30)
+        label.font = UIFont(name: K.Fonts.primary, size: 30)
         label.text = "Search for something ..."
         label.textAlignment = .center
         return label

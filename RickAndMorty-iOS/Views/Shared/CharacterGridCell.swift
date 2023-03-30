@@ -10,7 +10,7 @@ import SnapKit
 
 class CharacterGridCell: UICollectionViewCell {
 
-    static let identifier = "CharacterCell"
+    static let identifier = K.Identifiers.characterCell
 
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -20,7 +20,7 @@ class CharacterGridCell: UICollectionViewCell {
     lazy var characterNameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.backgroundColor = UIColor(red: 0.98, green: 0.96, blue: 0.92, alpha: 0.7)
+        label.backgroundColor = K.Colors.characterNameLabel
         label.textColor = .black
         return label
     }()

@@ -10,7 +10,7 @@ import SnapKit
 
 class LoadMoreCell: UICollectionViewListCell {
 
-    static let identifier = "LoadMoreCell"
+    static let identifier = K.Identifiers.loadMoreCell
 
     override init(frame: CGRect) {
         super.init(frame: frame)
