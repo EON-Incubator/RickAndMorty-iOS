@@ -27,6 +27,10 @@ class SearchView: UIView {
         cell.lowerLeftLabel.text = location.type
         cell.lowerRightLabel.text = location.dimension
 
+        if location.dimension == "" {
+            cell.lowerRightLabel.isHidden = true
+        }
+
         for index in 0...3 {
             let isIndexValid = location.residents.indices.contains(index)
             if isIndexValid {

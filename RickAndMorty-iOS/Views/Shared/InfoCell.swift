@@ -16,6 +16,7 @@ class InfoCell: UICollectionViewListCell {
 
         setupViews()
         setupConstraints()
+        self.isUserInteractionEnabled = false
     }
 
     override func prepareForReuse() {
@@ -28,6 +29,10 @@ class InfoCell: UICollectionViewListCell {
         cell.rightLabel.text = rightLabel
         cell.infoImage.image = infoImage.withRenderingMode(.alwaysTemplate)
         cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
+        if (leftLabel == "Origin" || leftLabel == "Last Seen") && (rightLabel != "unknown") {
+            cell.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
+            cell.isUserInteractionEnabled = true
+        }
         return cell
     }
 

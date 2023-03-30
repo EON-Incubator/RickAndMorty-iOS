@@ -109,7 +109,6 @@ extension CharacterDetailsViewController {
                 }
             case 2:
                 if let character = characterInfo as? CharacterDetails {
-                    infoCell?.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
                     switch indexPath.item {
                     case 0:
                         return InfoCell.configCell(cell: infoCell!,

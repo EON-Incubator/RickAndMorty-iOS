@@ -139,6 +139,7 @@ extension LocationDetailsViewController {
                 cell.leftLabel.text = K.Info.type
                 cell.rightLabel.text = locationDetails.item.name
                 cell.infoImage.image = UIImage(systemName: K.Images.systemGlobeHalf)
+
             case 1:
                 cell.leftLabel.text = K.Info.dimension
                 cell.rightLabel.text = locationDetails.item.dimension

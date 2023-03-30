@@ -118,6 +118,9 @@ extension CharactersViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        coordinator?.goCharacterDetails(id: viewModel.characters.value[indexPath.row].id!, navController: self.navigationController!)
+
+        if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics {
+            coordinator?.goCharacterDetails(id: character.id!, navController: self.navigationController!)
+        }
     }
 }
