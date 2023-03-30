@@ -89,8 +89,9 @@ class MainCoordinator: Coordinator {
         episodeNavController.pushViewController(episodesViewController, animated: false)
 
         // Add SearchViewController to the search navigation controller.
-        let searchViewController = SearchViewController()
-        searchViewController.coordinator = self
+        let searchViewModel = SearchViewModel()
+        searchViewModel.coordinator = self
+        let searchViewController = SearchViewController(viewModel: searchViewModel)
         searchNavController.pushViewController(searchViewController, animated: false)
 
         // Set tab bar controller as the root view controller of the UIWindow.
@@ -140,8 +141,10 @@ class MainCoordinator: Coordinator {
     }
 
     func goEpisodeDetails(id: String, navController: UINavigationController) {
-        let viewController = EpisodeDetailsViewController(episodeId: id)
-        viewController.coordinator = self
+        let viewModel = EpisodeDetailsViewModel(episodeId: id)
+        viewModel.episodeId = id
+        viewModel.coordinator = self
+        let viewController = EpisodeDetailsViewController(viewModel: viewModel)
         navController.pushViewController(viewController, animated: true)
     }
 

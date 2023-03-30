@@ -18,8 +18,7 @@ class SearchViewController: UIViewController {
     }
 
     let searchView = SearchView()
-    let viewModel = SearchViewModel()
-    weak var coordinator: MainCoordinator?
+    let viewModel: SearchViewModel
 
     private var searchController = UISearchController(searchResultsController: nil)
     weak var debounceTimer: Timer?
@@ -30,6 +29,15 @@ class SearchViewController: UIViewController {
     private var dataSource: DataSource!
     var snapshot = Snapshot()
     private var cancellables = Set<AnyCancellable>()
+
+    init(viewModel: SearchViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -160,11 +168,11 @@ extension SearchViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         if let location = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.LocationDetails? {
-            coordinator?.goLocationDetails(id: (location?.id)!, navController: self.navigationController!)
+            viewModel.goLocationDetails(id: (location?.id)!, navController: self.navigationController!)
         }
 
         if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics? {
-            coordinator?.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
+            viewModel.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
         }
 
         // load-more section
