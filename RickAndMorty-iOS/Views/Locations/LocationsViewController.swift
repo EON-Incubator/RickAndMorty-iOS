@@ -39,7 +39,7 @@ class LocationsViewController: BaseViewController {
         configureDataSource()
         showEmptyData()
         subscribeToViewModel()
-        viewModel.currentPage = 1
+        viewModel.refresh()
     }
 
     func showEmptyData() {

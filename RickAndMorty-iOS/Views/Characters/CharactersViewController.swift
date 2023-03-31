@@ -30,7 +30,7 @@ class CharactersViewController: BaseViewController {
         configureDataSource()
         showEmptyData()
         subscribeToViewModel()
-        viewModel.currentPage = 1
+        viewModel.refresh()
     }
 
     override func loadView() {
