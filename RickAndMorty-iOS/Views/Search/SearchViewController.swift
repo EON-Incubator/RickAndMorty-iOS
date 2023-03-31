@@ -21,7 +21,7 @@ class SearchViewController: UIViewController {
     let viewModel = SearchViewModel()
     weak var coordinator: MainCoordinator?
 
-    private var searchController = UISearchController(searchResultsController: nil)
+    private let searchController = UISearchController(searchResultsController: nil)
     weak var debounceTimer: Timer?
     var searchSuggestions: [UISearchSuggestionItem] = []
 

@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 class EpisodeDetailsViewModel {
-    var episode = PassthroughSubject<RickAndMortyAPI.GetEpisodeQuery.Data.Episode, Never>()
+    let episode = PassthroughSubject<RickAndMortyAPI.GetEpisodeQuery.Data.Episode, Never>()
 
     var episodeID = "" {
         didSet {

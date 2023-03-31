@@ -18,7 +18,7 @@ class EpisodeDetailsViewController: UIViewController {
     }
 
     weak var coordinator: MainCoordinator?
-    var episodeDetailsView = EpisodeDetailsView()
+    let episodeDetailsView = EpisodeDetailsView()
     let viewModel = EpisodeDetailsViewModel()
     var episodeId: String
 
@@ -166,8 +166,8 @@ extension EpisodeDetailsViewController: UICollectionViewDelegate {
 
 // MARK: Struct for Diffable DataSource
 struct EpisodeDetails: Hashable {
-    var id: UUID
-    var item: RickAndMortyAPI.GetEpisodeQuery.Data.Episode
+    let id: UUID
+    let item: RickAndMortyAPI.GetEpisodeQuery.Data.Episode
     init(id: UUID = UUID(), _ item: RickAndMortyAPI.GetEpisodeQuery.Data.Episode) {
         self.id = id
         self.item = item

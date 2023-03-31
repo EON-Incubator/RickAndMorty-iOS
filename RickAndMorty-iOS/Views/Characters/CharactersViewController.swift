@@ -12,7 +12,7 @@ import SDWebImage
 class CharactersViewController: UIViewController {
 
     weak var coordinator: MainCoordinator?
-    var charactersGridView = CharactersView()
+    let charactersGridView = CharactersView()
     let viewModel = CharactersViewModel()
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>

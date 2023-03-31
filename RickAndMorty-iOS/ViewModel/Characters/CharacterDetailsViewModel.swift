@@ -10,7 +10,7 @@ import Combine
 
 class CharacterDetailsViewModel {
 
-    var character = PassthroughSubject<RickAndMortyAPI.GetCharacterQuery.Data.Character, Never>()
+    let character = PassthroughSubject<RickAndMortyAPI.GetCharacterQuery.Data.Character, Never>()
 
     var selectedCharacter = "" {
         didSet {

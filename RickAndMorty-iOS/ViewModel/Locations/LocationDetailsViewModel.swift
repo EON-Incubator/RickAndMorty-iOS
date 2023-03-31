@@ -10,7 +10,7 @@ import Combine
 
 class LocationDetailsViewModel {
 
-    var location = PassthroughSubject<RickAndMortyAPI.GetLocationQuery.Data.Location, Never>()
+    let location = PassthroughSubject<RickAndMortyAPI.GetLocationQuery.Data.Location, Never>()
 
     var locationId = "" {
         didSet {
