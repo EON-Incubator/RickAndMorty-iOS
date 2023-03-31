@@ -14,10 +14,10 @@ class RowCell: UICollectionViewListCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         for index in 0...3 {
-            self.characterAvatarImageViews[index].image = UIImage(systemName: K.Images.systemPerson)?.withRenderingMode(.alwaysTemplate)
+            characterAvatarImageViews[index].image = UIImage(systemName: K.Images.systemPerson)?.withRenderingMode(.alwaysTemplate)
         }
 
-        self.contentView.layer.sublayers?.removeAll()
+        contentView.layer.sublayers?.removeAll()
     }
 
     lazy var characterAvatarsView: UIView = {
@@ -32,11 +32,11 @@ class RowCell: UICollectionViewListCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
-        let myView = UIView(frame: self.bounds)
+        accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
+        let myView = UIView(frame: bounds)
         myView.backgroundColor = UIColor(named: K.Colors.episodeCell)
         myView.layer.cornerRadius = 5
-        self.backgroundView = myView
+        backgroundView = myView
         setupViews()
         setupConstraints()
     }
@@ -83,14 +83,14 @@ class RowCell: UICollectionViewListCell {
     }()
 
     override func layoutSubviews() {
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = UIColor.gray.cgColor
-        self.layer.cornerRadius = 5
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.gray.cgColor
+        layer.cornerRadius = 5
         // setup-shadows
-        self.layer.shadowRadius = 2
-        self.layer.shadowOffset = .zero
-        self.layer.shadowOpacity = 0.3
-        self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+        layer.shadowRadius = 2
+        layer.shadowOffset = .zero
+        layer.shadowOpacity = 0.3
+        layer.shadowPath = UIBezierPath(rect: bounds).cgPath
     }
     func setupViews() {
         for index in 0...3 {
@@ -103,10 +103,10 @@ class RowCell: UICollectionViewListCell {
             characterAvatarsView.addSubview(characterAvatarImageViews[index])
         }
 
-        self.addSubview(characterAvatarsView)
-        self.addSubview(upperLabel)
-        self.addSubview(lowerLeftLabel)
-        self.addSubview(lowerRightLabel)
+        addSubview(characterAvatarsView)
+        addSubview(upperLabel)
+        addSubview(lowerLeftLabel)
+        addSubview(lowerRightLabel)
     }
 
     func setupConstraints() {

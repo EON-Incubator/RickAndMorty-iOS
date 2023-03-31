@@ -31,9 +31,9 @@ class LocationsView: BaseView {
     }
 
     private func setupViews() {
-        self.backgroundColor = UIColor(named: K.Colors.locationsView)
-        self.addSubview(collectionView)
-        self.addSubview(loadingView)
+        backgroundColor = UIColor(named: K.Colors.locationsView)
+        addSubview(collectionView)
+        addSubview(loadingView)
     }
 
     private func setupConstraints() {
