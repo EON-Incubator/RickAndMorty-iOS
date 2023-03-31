@@ -14,7 +14,7 @@ class CharacterGridCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.contentView.layer.sublayers?.removeAll()
+        contentView.layer.sublayers?.removeAll()
     }
 
     lazy var characterNameLabel: UILabel = {
@@ -40,10 +40,10 @@ class CharacterGridCell: UICollectionViewCell {
     }
 
     func setupViews() {
-        self.backgroundColor = .lightGray
-        self.layer.cornerRadius = 10
-        self.addSubview(characterImage)
-        self.addSubview(characterNameLabel)
+        backgroundColor = .lightGray
+        layer.cornerRadius = 10
+        addSubview(characterImage)
+        addSubview(characterNameLabel)
     }
 
     func setupConstraints() {

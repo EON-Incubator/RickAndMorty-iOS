@@ -11,14 +11,14 @@ import SDWebImage
 
 class CharactersViewController: BaseViewController {
 
-    let charactersGridView = CharactersView()
-    var viewModel: CharactersViewModel
+    private let charactersGridView = CharactersView()
+    private var viewModel: CharactersViewModel
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
-    private var dataSource: DataSource!
+    private var dataSource: DataSource?
     private var cancellables = Set<AnyCancellable>()
-    var snapshot = Snapshot()
+    private var snapshot = Snapshot()
 
     init(viewModel: CharactersViewModel) {
         self.viewModel = viewModel
@@ -49,7 +49,7 @@ class CharactersViewController: BaseViewController {
         snapshot.deleteAllItems()
         snapshot.appendSections([.appearance, .empty])
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 10), toSection: .empty)
-        self.dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
 
     func subscribeToViewModel() {
@@ -59,7 +59,7 @@ class CharactersViewController: BaseViewController {
                     snapshot.deleteAllItems()
                     snapshot.appendSections([.appearance])
                     snapshot.appendItems(characters, toSection: .appearance)
-                    self?.dataSource.apply(snapshot, animatingDifferences: true)
+                    self?.dataSource?.apply(snapshot, animatingDifferences: true)
                 }
                 self?.charactersGridView.loadingView.spinner.stopAnimating()
             }
@@ -88,17 +88,17 @@ extension CharactersViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: charactersGridView.collectionView, cellProvider: { (collectionView, indexPath, character) -> UICollectionViewCell? in
 
-            let characterCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterGridCell.identifier, for: indexPath) as? CharacterGridCell
+            guard let characterCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterGridCell.identifier, for: indexPath) as? CharacterGridCell else { return nil }
 
             if indexPath.section == 1 {
-                showLoadingAnimation(currentCell: characterCell!)
+                showLoadingAnimation(currentCell: characterCell)
                 return characterCell
             }
 
             if let char = character as? RickAndMortyAPI.CharacterBasics {
-                characterCell!.characterNameLabel.text = char.name
+                characterCell.characterNameLabel.text = char.name
                 if let image = char.image {
-                    characterCell!.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 200, height: 200)])
+                    characterCell.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 200, height: 200)])
                 }
             }
             return characterCell
@@ -112,15 +112,15 @@ extension CharactersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
             // show lazy-loading indicator
-            self.charactersGridView.loadingView.spinner.startAnimating()
+            charactersGridView.loadingView.spinner.startAnimating()
             viewModel.loadMore()
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
-        if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics {
-            viewModel.goCharacterDetails(id: character.id!, navController: self.navigationController!)
+        if let character = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics {
+            viewModel.goCharacterDetails(id: character.id ?? "", navController: navigationController ?? UINavigationController())
         }
     }
 }

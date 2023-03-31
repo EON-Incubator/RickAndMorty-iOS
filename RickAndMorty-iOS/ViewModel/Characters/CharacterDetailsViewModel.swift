@@ -12,7 +12,7 @@ class CharacterDetailsViewModel {
 
     weak var coordinator: MainCoordinator?
     let character = PassthroughSubject<RickAndMortyAPI.GetCharacterQuery.Data.Character, Never>()
-    var characterId: String
+    private var characterId: String
 
     init(characterId: String) {
         self.characterId = characterId

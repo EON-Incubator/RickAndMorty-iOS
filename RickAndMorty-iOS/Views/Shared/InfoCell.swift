@@ -16,12 +16,12 @@ class InfoCell: UICollectionViewListCell {
 
         setupViews()
         setupConstraints()
-        self.isUserInteractionEnabled = false
+        isUserInteractionEnabled = false
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.contentView.layer.sublayers?.removeAll()
+        contentView.layer.sublayers?.removeAll()
     }
 
     static func configCell(cell: InfoCell, leftLabel: String, rightLabel: String, infoImage: UIImage) -> InfoCell {
@@ -37,15 +37,15 @@ class InfoCell: UICollectionViewListCell {
     }
 
     func setupViews() {
-        let myView = UIView(frame: self.bounds)
+        let myView = UIView(frame: bounds)
         myView.backgroundColor = .secondarySystemBackground
-        self.backgroundView = myView
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = UIColor.gray.cgColor
-        self.layer.cornerRadius = 5
-        self.addSubview(leftLabel)
-        self.addSubview(rightLabel)
-        self.addSubview(infoImage)
+        backgroundView = myView
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.gray.cgColor
+        layer.cornerRadius = 5
+        addSubview(leftLabel)
+        addSubview(rightLabel)
+        addSubview(infoImage)
     }
 
     lazy var leftLabel: UILabel = {

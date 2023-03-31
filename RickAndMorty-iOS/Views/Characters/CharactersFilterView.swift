@@ -10,7 +10,7 @@ import SnapKit
 
 class CharactersFilterView: BaseView {
 
-    let blurView: UIVisualEffectView = {
+    private let blurView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .systemThinMaterial)
         let view = UIVisualEffectView(effect: effect)
         return view
@@ -24,7 +24,7 @@ class CharactersFilterView: BaseView {
         return button
     }()
 
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = K.FilterLabels.title
         label.font = UIFont(name: K.Fonts.primary, size: 24)
@@ -40,13 +40,13 @@ class CharactersFilterView: BaseView {
         return button
     }()
 
-    let lineView: UIView = {
+    private let lineView: UIView = {
         let view = UIView()
         view.backgroundColor = .gray
         return view
     }()
 
-    let statusLabel: UILabel = {
+    private let statusLabel: UILabel = {
         let label = UILabel()
         label.text = K.FilterLabels.status
         label.font = UIFont(name: K.Fonts.secondary, size: 14)
@@ -57,11 +57,11 @@ class CharactersFilterView: BaseView {
         let items = [K.FilterLabels.alive, K.FilterLabels.dead, K.FilterLabels.unknown]
         let segmentControl = CustomSegmentedControl(items: items)
         segmentControl.selectedSegmentTintColor = .systemCyan
-        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14)!], for: .normal)
+        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14) as Any], for: .normal)
         return segmentControl
     }()
 
-    let genderLabel: UILabel = {
+    private let genderLabel: UILabel = {
         let label = UILabel()
         label.text = K.FilterLabels.gender
         label.font = UIFont(name: K.Fonts.secondary, size: 14)
@@ -72,7 +72,7 @@ class CharactersFilterView: BaseView {
         let items = [K.FilterLabels.male, K.FilterLabels.female, K.FilterLabels.genderless, K.FilterLabels.unknown]
         let segmentControl = CustomSegmentedControl(items: items)
         segmentControl.selectedSegmentTintColor = .systemCyan
-        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14)!], for: .normal)
+        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14) as Any], for: .normal)
         return segmentControl
     }()
 
@@ -157,7 +157,7 @@ class CustomSegmentedControl: UISegmentedControl {
         let previousIndex = selectedSegmentIndex
         super.touchesEnded(touches, with: event)
         if previousIndex == selectedSegmentIndex {
-            let touchLocation = touches.first!.location(in: self)
+            guard let touchLocation = touches.first?.location(in: self) else { return }
             if bounds.contains(touchLocation) {
                 sendActions(for: .valueChanged)
             }

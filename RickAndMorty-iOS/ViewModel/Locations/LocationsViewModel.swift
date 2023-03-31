@@ -44,8 +44,8 @@ class LocationsViewModel {
     }
 
     func mapData(page: Int, locations: [RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result?]) {
-        self.locationsNameSearch.value = (locations.compactMap { $0?.fragments.locationDetails })
-        self.locationsTypeSearch.value = (locations.compactMap { $0?.fragments.locationDetails })
+        locationsNameSearch.value = (locations.compactMap { $0?.fragments.locationDetails })
+        locationsTypeSearch.value = (locations.compactMap { $0?.fragments.locationDetails })
         if page == 1 {
             self.locations.value = (locations.compactMap { $0 })
         } else {

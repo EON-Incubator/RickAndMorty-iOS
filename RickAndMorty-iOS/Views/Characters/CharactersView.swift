@@ -19,15 +19,15 @@ class CharactersView: BaseView {
     }
 
     private func setupViews() {
-        self.backgroundColor = .systemBackground
-        self.addSubview(collectionView)
-        self.addSubview(loadingView)
+        backgroundColor = .systemBackground
+        addSubview(collectionView)
+        addSubview(loadingView)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
     }
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
         collectionView.accessibilityIdentifier = K.Identifiers.characters
         collectionView.register(CharacterGridCell.self, forCellWithReuseIdentifier: CharacterGridCell.identifier)
         return collectionView

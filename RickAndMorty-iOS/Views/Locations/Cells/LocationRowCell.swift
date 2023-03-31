@@ -21,9 +21,9 @@ class LocationRowCell: RowCell {
     }
 
     func addStyles() {
-        let myView = UIView(frame: self.bounds)
+        let myView = UIView(frame: bounds)
         myView.backgroundColor = UIColor(named: K.Colors.locationCell)
-        self.backgroundView = myView
+        backgroundView = myView
         lowerRightLabel.backgroundColor = K.Colors.dimension
         lowerRightLabel.layer.borderWidth = 0.3
         lowerRightLabel.layer.borderColor = UIColor.gray.cgColor
