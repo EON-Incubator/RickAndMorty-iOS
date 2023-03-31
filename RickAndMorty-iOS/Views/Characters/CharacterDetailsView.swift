@@ -23,7 +23,7 @@ class CharacterDetailsView: UIView {
     private func setupViews() {
         self.backgroundColor = .systemBackground
         self.addSubview(collectionView)
-        collectionView.accessibilityIdentifier = "CharacterDetailsView"
+        collectionView.accessibilityIdentifier = K.Identifiers.characterDetails
         collectionView.showsVerticalScrollIndicator = false
     }
 
@@ -41,7 +41,7 @@ class CharacterDetailsView: UIView {
                                 forCellWithReuseIdentifier: InfoCell.identifier)
         collectionView.register(HeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: "HeaderView")
+                                withReuseIdentifier: K.Headers.identifier)
         return collectionView
     }()
 
@@ -135,7 +135,7 @@ extension CharacterDetailsView {
 
         let titleLabel = UILabel()
         titleLabel.text = title
-        titleLabel.font = UIFont(name: "Creepster-Regular", size: 27)
+        titleLabel.font = UIFont(name: K.Fonts.primary, size: 27)
         titleLabel.textColor = .systemCyan
         titleLabel.shadowOffset = CGSize(width: 0.5, height: 1.5)
         titleLabel.shadowColor = UIColor(white: 0.2, alpha: 0.2)

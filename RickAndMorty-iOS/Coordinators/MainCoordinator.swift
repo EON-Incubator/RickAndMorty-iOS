@@ -25,16 +25,16 @@ class MainCoordinator: Coordinator {
         shadow.shadowColor = UIColor.label
         shadow.shadowBlurRadius = 0.5
 
-        customNavBarAppearance.largeTitleTextAttributes = [.font: UIFont(name: "Creepster-Regular", size: 34)!,
+        customNavBarAppearance.largeTitleTextAttributes = [.font: UIFont(name: K.Fonts.primary, size: 34)!,
                                                            .foregroundColor: UIColor.label,
                                                            .shadow: shadow]
-        customNavBarAppearance.titleTextAttributes = [.font: UIFont(name: "Creepster-Regular", size: 27)!,
+        customNavBarAppearance.titleTextAttributes = [.font: UIFont(name: K.Fonts.primary, size: 27)!,
                                                       .foregroundColor: UIColor.systemCyan,
                                                       .shadow: shadow]
 
         customNavBarAppearance.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 5)
-        customNavBarAppearance.setBackIndicatorImage(UIImage(systemName: "arrow.backward.circle"),
-                                                     transitionMaskImage: UIImage(systemName: "arrow.backward.circle"))
+        customNavBarAppearance.setBackIndicatorImage(UIImage(systemName: K.Images.systemBackArrow),
+                                                     transitionMaskImage: UIImage(systemName: K.Images.systemBackArrow))
 
         return customNavBarAppearance
     }
@@ -51,23 +51,23 @@ class MainCoordinator: Coordinator {
 
         // Add navigation controllers to the tab bar and set the title and icon for each tab.
         tabBarController.addChild(characterNavController)
-        characterNavController.tabBarItem.image = UIImage(systemName: "person.text.rectangle")
-        characterNavController.tabBarItem.title = "Characters"
+        characterNavController.tabBarItem.image = UIImage(systemName: K.Images.systemCharacters)
+        characterNavController.tabBarItem.title = K.Titles.characters
         characterNavController.navigationBar.standardAppearance = navBarAppearance
 
         tabBarController.addChild(locationNavController)
-        locationNavController.tabBarItem.image = UIImage(systemName: "map")
-        locationNavController.tabBarItem.title = "Locations"
+        locationNavController.tabBarItem.image = UIImage(systemName: K.Images.map)
+        locationNavController.tabBarItem.title = K.Titles.locations
         locationNavController.navigationBar.standardAppearance = navBarAppearance
 
         tabBarController.addChild(episodeNavController)
-        episodeNavController.tabBarItem.image = UIImage(systemName: "tv")
-        episodeNavController.tabBarItem.title = "Episodes"
+        episodeNavController.tabBarItem.image = UIImage(systemName: K.Images.television)
+        episodeNavController.tabBarItem.title = K.Titles.episodes
         episodeNavController.navigationBar.standardAppearance = navBarAppearance
 
         tabBarController.addChild(searchNavController)
-        searchNavController.tabBarItem.image = UIImage(systemName: "magnifyingglass")
-        searchNavController.tabBarItem.title = "Search"
+        searchNavController.tabBarItem.image = UIImage(systemName: K.Images.systemMagnifyingGlass)
+        searchNavController.tabBarItem.title = K.Titles.search
         searchNavController.navigationBar.standardAppearance = navBarAppearance
 
         // Add CharactersViewController to the character navigation controller.

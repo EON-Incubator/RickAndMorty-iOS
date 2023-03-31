@@ -9,7 +9,7 @@ import UIKit
 
 class CharacterRowCell: UICollectionViewListCell {
 
-    static let identifier = "CharacterRowCell"
+    static let identifier = K.Identifiers.characterRowCell
 
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -17,7 +17,7 @@ class CharacterRowCell: UICollectionViewListCell {
     }
 
     lazy var characterAvatarImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "person.circle"))
+        let imageView = UIImageView(image: UIImage(systemName: K.Images.systemPerson))
         imageView.tintColor = .systemGray3
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .systemGray6
@@ -29,7 +29,8 @@ class CharacterRowCell: UICollectionViewListCell {
     lazy var characterStatusLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: "Chalkboard SE Bold", size: 13)
+        label.font = UIFont(name: K.Fonts.secondaryBold, size: 13)
+
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.backgroundColor = .systemGray
@@ -44,7 +45,7 @@ class CharacterRowCell: UICollectionViewListCell {
 
     lazy var upperLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Chalkboard SE Regular", size: 22)
+        label.font = UIFont(name: K.Fonts.secondary, size: 22)
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         return label
@@ -56,7 +57,7 @@ class CharacterRowCell: UICollectionViewListCell {
         label.textColor = .label
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.backgroundColor = UIColor(red: 0.87, green: 0.96, blue: 0.95, alpha: 0.6)
+        label.backgroundColor = K.Colors.gender
         label.layer.borderWidth = 0.3
         label.layer.borderColor = UIColor.gray.cgColor
         label.layer.cornerRadius = 5
@@ -70,7 +71,7 @@ class CharacterRowCell: UICollectionViewListCell {
         label.textColor = .label
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.backgroundColor = UIColor(red: 0.98, green: 0.99, blue: 0.76, alpha: 0.5)
+        label.backgroundColor = K.Colors.species
         label.layer.borderWidth = 0.3
         label.layer.borderColor = UIColor.gray.cgColor
         label.layer.cornerRadius = 5
@@ -100,7 +101,7 @@ class CharacterRowCell: UICollectionViewListCell {
 
     func setupViews() {
         let myView = UIView(frame: self.bounds)
-        myView.backgroundColor = UIColor(named: "characterRowBackgroundColor")?.withAlphaComponent(0.7)
+        myView.backgroundColor = UIColor(named: K.Colors.characterRow)?.withAlphaComponent(0.7)
         self.backgroundView = myView
 
         self.addSubview(characterAvatarImageView)

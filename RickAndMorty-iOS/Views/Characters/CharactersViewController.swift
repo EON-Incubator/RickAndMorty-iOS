@@ -32,7 +32,7 @@ class CharactersViewController: UIViewController {
     override func loadView() {
         view = charactersGridView
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Characters"
+        title = K.Titles.characters
         navigationItem.rightBarButtonItem = charactersGridView.filterButton(self, action: #selector(filterButtonPressed))
         navigationItem.leftBarButtonItem = charactersGridView.logoView()
 
@@ -78,7 +78,7 @@ class CharactersViewController: UIViewController {
         let button = sender
         button.backgroundColor = .lightGray
         coordinator?.showCharactersFilter(viewController: self, viewModel: viewModel, sender: sender, completion: {
-            button.backgroundColor = UIColor(red: 0.65, green: 0.76, blue: 0.81, alpha: 1.00)
+            button.backgroundColor = K.Colors.filterButtonActive
         })
     }
 }

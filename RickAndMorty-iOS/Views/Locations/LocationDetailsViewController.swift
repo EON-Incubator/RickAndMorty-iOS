@@ -122,10 +122,10 @@ extension LocationDetailsViewController {
 
         // for custom header
         dataSource.supplementaryViewProvider = { [weak self] (_ collectionView, _ kind, indexPath) in
-            guard let headerView = self?.locationDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
+            guard let headerView = self?.locationDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
             }
-            headerView.textLabel.text = indexPath.section == 0 || indexPath.section == 2 ? "INFO" : "RESIDENTS"
+            headerView.textLabel.text = indexPath.section == 0 || indexPath.section == 2 ? K.Headers.info : K.Headers.residents
             headerView.textLabel.textColor = .gray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
@@ -136,13 +136,14 @@ extension LocationDetailsViewController {
         if let locationDetails = data as? LocationDetails {
             switch itemIndex {
             case 0:
-                cell.leftLabel.text = "Type"
-                cell.rightLabel.text = locationDetails.item.type
-                cell.infoImage.image = UIImage(systemName: "globe.asia.australia")
+                cell.leftLabel.text = K.Info.type
+                cell.rightLabel.text = locationDetails.item.name
+                cell.infoImage.image = UIImage(systemName: K.Images.systemGlobeHalf)
+
             case 1:
-                cell.leftLabel.text = "Dimension"
+                cell.leftLabel.text = K.Info.dimension
                 cell.rightLabel.text = locationDetails.item.dimension
-                cell.infoImage.image = UIImage(systemName: "globe")
+                cell.infoImage.image = UIImage(systemName: K.Images.systemGlobeFull)
             default:
                 cell.rightLabel.text = "-"
             }

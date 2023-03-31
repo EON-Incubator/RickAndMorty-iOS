@@ -18,23 +18,23 @@ class CharactersFilterView: UIView {
 
     let dismissButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        button.setImage(UIImage(systemName: K.Images.systemClose), for: .normal)
         button.setTitleColor(.systemGray, for: .highlighted)
-        button.accessibilityIdentifier = "DismissButton"
+        button.accessibilityIdentifier = K.Identifiers.dismissButton
         return button
     }()
 
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Filter"
-        label.font = UIFont(name: "Creepster-Regular", size: 24)
+        label.text = K.FilterLabels.title
+        label.font = UIFont(name: K.Fonts.primary, size: 24)
         return label
     }()
 
     let clearButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Clear", for: .normal)
-        button.titleLabel?.font = UIFont(name: "Chalkboard SE Regular", size: 20)
+        button.setTitle(K.Titles.clearButton, for: .normal)
+        button.titleLabel?.font = UIFont(name: K.Fonts.secondary, size: 20)
         button.setTitleColor(.label, for: .normal)
         button.setTitleColor(.systemGray, for: .highlighted)
         return button
@@ -48,31 +48,31 @@ class CharactersFilterView: UIView {
 
     let statusLabel: UILabel = {
         let label = UILabel()
-        label.text = "STATUS"
-        label.font = UIFont(name: "Chalkboard SE Regular", size: 14)
+        label.text = K.FilterLabels.status
+        label.font = UIFont(name: K.Fonts.secondary, size: 14)
         return label
     }()
 
     let statusSegmentControl: CustomSegmentedControl = {
-        let items = ["Alive", "Dead", "Unknown"]
+        let items = [K.FilterLabels.alive, K.FilterLabels.dead, K.FilterLabels.unknown]
         let segmentControl = CustomSegmentedControl(items: items)
         segmentControl.selectedSegmentTintColor = .systemCyan
-        segmentControl.setTitleTextAttributes([.font: UIFont(name: "Chalkboard SE Regular", size: 14)!], for: .normal)
+        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14)!], for: .normal)
         return segmentControl
     }()
 
     let genderLabel: UILabel = {
         let label = UILabel()
-        label.text = "GENDER"
-        label.font = UIFont(name: "Chalkboard SE Regular", size: 14)
+        label.text = K.FilterLabels.gender
+        label.font = UIFont(name: K.Fonts.secondary, size: 14)
         return label
     }()
 
     let genderSegmentControl: CustomSegmentedControl = {
-        let items = ["Male", "Female", "Genderless", "Unknown"]
+        let items = [K.FilterLabels.male, K.FilterLabels.female, K.FilterLabels.genderless, K.FilterLabels.unknown]
         let segmentControl = CustomSegmentedControl(items: items)
         segmentControl.selectedSegmentTintColor = .systemCyan
-        segmentControl.setTitleTextAttributes([.font: UIFont(name: "Chalkboard SE Regular", size: 14)!], for: .normal)
+        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14)!], for: .normal)
         return segmentControl
     }()
 
@@ -87,7 +87,7 @@ class CharactersFilterView: UIView {
     }
 
     func setupViews() {
-        accessibilityIdentifier = "CharactersFilterView"
+        accessibilityIdentifier = K.Identifiers.filter
         backgroundColor = .clear
         insertSubview(blurView, at: 0)
         addSubview(dismissButton)

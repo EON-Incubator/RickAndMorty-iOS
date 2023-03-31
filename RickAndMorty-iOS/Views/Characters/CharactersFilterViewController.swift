@@ -10,8 +10,8 @@ import Combine
 
 class CharactersFilterViewController: UIViewController {
 
-    private let statuses = ["alive", "dead", "unknown"]
-    private let genders = ["male", "female", "genderless", "unknown"]
+    private let statuses = [K.FilterLabels.alive, K.FilterLabels.dead, K.FilterLabels.unknown]
+    private let genders = [K.FilterLabels.male, K.FilterLabels.female, K.FilterLabels.genderless, K.FilterLabels.unknown]
 
     private let charactersFilterView = CharactersFilterView()
     private var viewModel: CharactersViewModel

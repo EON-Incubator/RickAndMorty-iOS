@@ -32,7 +32,7 @@ class EpisodesViewController: UIViewController {
     override func loadView() {
         view = episodesView
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Episodes"
+        title = K.Titles.episodes
         episodesView.collectionView.delegate = self
         episodesView.collectionView.refreshControl = UIRefreshControl()
         episodesView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
