@@ -7,18 +7,19 @@
 
 import Foundation
 import Combine
+import UIKit
 
 class LocationDetailsViewModel {
 
+    weak var coordinator: MainCoordinator?
     let location = PassthroughSubject<RickAndMortyAPI.GetLocationQuery.Data.Location, Never>()
+    var locationId: String
 
-    var locationId = "" {
-        didSet {
-            fetchData(locationId: locationId)
-        }
+    init(locationId: String) {
+        self.locationId = locationId
     }
 
-    func fetchData(locationId: String) {
+    func fetchData() {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetLocationQuery(
                 locationId: locationId
@@ -32,5 +33,9 @@ class LocationDetailsViewModel {
                         print(error)
                     }
                 }
+    }
+
+    func goCharacterDetails(id: String, navController: UINavigationController) {
+        coordinator?.goCharacterDetails(id: id, navController: navController)
     }
 }

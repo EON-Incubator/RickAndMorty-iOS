@@ -17,10 +17,8 @@ class EpisodeDetailsViewController: UIViewController {
         case emptyCharacters
     }
 
-    weak var coordinator: MainCoordinator?
     let episodeDetailsView = EpisodeDetailsView()
-    let viewModel = EpisodeDetailsViewModel()
-    var episodeId: String
+    let viewModel: EpisodeDetailsViewModel
 
     typealias DataSource = UICollectionViewDiffableDataSource<EpisodeDetailsSection, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<EpisodeDetailsSection, AnyHashable>
@@ -28,8 +26,8 @@ class EpisodeDetailsViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     var snapshot = Snapshot()
 
-    init(episodeId: String) {
-        self.episodeId = episodeId
+    init(viewModel: EpisodeDetailsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -50,7 +48,7 @@ class EpisodeDetailsViewController: UIViewController {
         configureDataSource()
         showEmptyData()
         subscribeToViewModel()
-        viewModel.episodeID = episodeId
+        viewModel.fetchData()
     }
 
     func showEmptyData() {
@@ -81,7 +79,7 @@ class EpisodeDetailsViewController: UIViewController {
     }
 
     @objc func onRefresh() {
-        viewModel.episodeID = self.episodeId
+        viewModel.fetchData()
     }
 }
 
@@ -159,7 +157,7 @@ extension EpisodeDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
-            coordinator?.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
+            viewModel.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
         }
     }
 }

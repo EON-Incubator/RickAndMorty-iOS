@@ -11,15 +11,23 @@ import SDWebImage
 
 class CharactersViewController: UIViewController {
 
-    weak var coordinator: MainCoordinator?
     let charactersGridView = CharactersView()
-    let viewModel = CharactersViewModel()
+    var viewModel: CharactersViewModel
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
     var snapshot = Snapshot()
+
+    init(viewModel: CharactersViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +85,7 @@ class CharactersViewController: UIViewController {
     @objc func filterButtonPressed(sender: UIButton) {
         let button = sender
         button.backgroundColor = .lightGray
-        coordinator?.showCharactersFilter(viewController: self, viewModel: viewModel, sender: sender, completion: {
+        viewModel.showCharactersFilter(viewController: self, viewModel: viewModel, sender: sender, onDismiss: {
             button.backgroundColor = K.Colors.filterButtonActive
         })
     }
@@ -120,7 +128,7 @@ extension CharactersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
         if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics {
-            coordinator?.goCharacterDetails(id: character.id!, navController: self.navigationController!)
+            viewModel.goCharacterDetails(id: character.id!, navController: self.navigationController!)
         }
     }
 }

@@ -7,9 +7,11 @@
 
 import Foundation
 import Combine
+import UIKit
 
 class SearchViewModel {
 
+    weak var coordinator: MainCoordinator?
     let searchResults = PassthroughSubject<RickAndMortyAPI.SearchForQuery.Data, Never>()
 
     // for viewModel testing
@@ -38,6 +40,14 @@ class SearchViewModel {
                     print(error)
                 }
             }
+    }
+
+    func goCharacterDetails(id: String, navController: UINavigationController) {
+        coordinator?.goCharacterDetails(id: id, navController: navController)
+    }
+
+    func goLocationDetails(id: String, navController: UINavigationController) {
+        coordinator?.goLocationDetails(id: id, navController: navController)
     }
 }
 
