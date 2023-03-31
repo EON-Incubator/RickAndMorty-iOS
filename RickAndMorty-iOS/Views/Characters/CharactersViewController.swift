@@ -71,11 +71,7 @@ class CharactersViewController: BaseViewController {
     }
 
     @objc func onRefresh() {
-        viewModel.currentPage = 1
-    }
-
-    func loadMore() {
-        viewModel.currentPage += 1
+        viewModel.refresh()
     }
 
     @objc func filterButtonPressed(sender: UIButton) {
@@ -117,7 +113,7 @@ extension CharactersViewController: UICollectionViewDelegate {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
             // show lazy-loading indicator
             self.charactersGridView.loadingView.spinner.startAnimating()
-            loadMore()
+            viewModel.loadMore()
         }
     }
 

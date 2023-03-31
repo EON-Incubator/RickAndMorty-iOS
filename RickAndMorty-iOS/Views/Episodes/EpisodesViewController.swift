@@ -67,11 +67,7 @@ class EpisodesViewController: BaseViewController {
     }
 
     @objc func onRefresh() {
-        viewModel.currentPage = 1
-    }
-
-    func loadMore() {
-        viewModel.currentPage += 1
+        viewModel.refresh()
     }
 }
 
@@ -114,7 +110,7 @@ extension EpisodesViewController: UICollectionViewDelegate {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
 
             self.episodesView.loadingView.spinner.startAnimating()
-            loadMore()
+            viewModel.loadMore()
         }
     }
 

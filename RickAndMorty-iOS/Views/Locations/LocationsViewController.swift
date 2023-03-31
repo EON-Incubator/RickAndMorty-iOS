@@ -69,11 +69,7 @@ class LocationsViewController: BaseViewController {
     }
 
     @objc func onRefresh() {
-        viewModel.currentPage = 1
-    }
-
-    func loadMore() {
-        viewModel.currentPage += 1
+        viewModel.refresh()
     }
 }
 
@@ -114,7 +110,7 @@ extension LocationsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
             self.locationsView.loadingView.spinner.startAnimating()
-            loadMore()
+            viewModel.loadMore()
         }
     }
 

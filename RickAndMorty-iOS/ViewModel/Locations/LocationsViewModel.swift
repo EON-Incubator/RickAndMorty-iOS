@@ -53,6 +53,14 @@ class LocationsViewModel {
         }
     }
 
+    func refresh() {
+        currentPage = 1
+    }
+
+    func loadMore() {
+        currentPage += 1
+    }
+
     func goLocationDetails(id: String, navController: UINavigationController) {
         coordinator?.goLocationDetails(id: id, navController: navController)
     }

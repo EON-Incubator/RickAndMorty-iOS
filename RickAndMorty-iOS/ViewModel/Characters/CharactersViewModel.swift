@@ -62,6 +62,14 @@ class CharactersViewModel {
         }
     }
 
+    func refresh() {
+        currentPage = 1
+    }
+
+    func loadMore() {
+        currentPage += 1
+    }
+
     func showCharactersFilter(viewController: UIViewController, viewModel: CharactersViewModel, sender: AnyObject, onDismiss: (() -> Void)? = nil) {
         coordinator?.showCharactersFilter(viewController: viewController, viewModel: viewModel, sender: sender, onDismiss: onDismiss)
     }
