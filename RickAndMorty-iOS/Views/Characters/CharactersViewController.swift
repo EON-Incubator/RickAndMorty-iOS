@@ -11,7 +11,7 @@ import SDWebImage
 
 class CharactersViewController: UIViewController {
 
-    var charactersGridView = CharactersView()
+    let charactersGridView = CharactersView()
     var viewModel: CharactersViewModel
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>

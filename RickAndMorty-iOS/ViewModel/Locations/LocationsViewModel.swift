@@ -13,8 +13,8 @@ class LocationsViewModel {
 
     weak var coordinator: MainCoordinator?
     var locations = CurrentValueSubject<[RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result], Never>([])
-    var locationsNameSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
-    var locationsTypeSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
+    let locationsNameSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
+    let locationsTypeSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
 
     var currentPage = 0 {
         didSet {

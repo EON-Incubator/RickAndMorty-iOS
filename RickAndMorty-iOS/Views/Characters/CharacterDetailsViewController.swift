@@ -13,7 +13,7 @@ class CharacterDetailsViewController: UIViewController {
 
     let viewModel: CharacterDetailsViewModel
     let locationsViewModel = LocationsViewModel()
-    var characterDetailsView = CharacterDetailsView()
+    let characterDetailsView = CharacterDetailsView()
     var characterID: String?
     var avatarImageUrl: String?
     var titleViewState: TitleViewState = .noTitle
@@ -246,8 +246,8 @@ extension CharacterDetailsViewController: UICollectionViewDelegate {
 
 // MARK: Struct for Diffable DataSource
 struct CharacterDetails: Hashable {
-    var id: UUID
-    var item: RickAndMortyAPI.GetCharacterQuery.Data.Character
+    let id: UUID
+    let item: RickAndMortyAPI.GetCharacterQuery.Data.Character
     init(id: UUID = UUID(), _ item: RickAndMortyAPI.GetCharacterQuery.Data.Character) {
         self.id = id
         self.item = item

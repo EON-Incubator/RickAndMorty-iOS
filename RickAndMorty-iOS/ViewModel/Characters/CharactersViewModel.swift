@@ -17,7 +17,7 @@ class CharactersViewModel {
 
     weak var coordinator: MainCoordinator?
     var characters = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
-    var charactersForSearch = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
+    let charactersForSearch = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
 
     var currentPage = 0 {
         didSet {

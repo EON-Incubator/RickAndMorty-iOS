@@ -8,7 +8,7 @@ import Foundation
 import UIKit
 
 struct EmptyData: Hashable {
-    var id: UUID
+    let id: UUID
 }
 
 private var shimmerLayer: CALayer?

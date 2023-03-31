@@ -12,12 +12,12 @@ import UIKit
 class SearchViewModel {
 
     weak var coordinator: MainCoordinator?
-    var searchResults = PassthroughSubject<RickAndMortyAPI.SearchForQuery.Data, Never>()
+    let searchResults = PassthroughSubject<RickAndMortyAPI.SearchForQuery.Data, Never>()
 
     // for viewModel testing
-    var characters = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.Characters.Result], Never>([])
-    var locatonsWithGivenName = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result], Never>([])
-    var locationsWithGivenType = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithType.Result], Never>([])
+    let characters = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.Characters.Result], Never>([])
+    let locatonsWithGivenName = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result], Never>([])
+    let locationsWithGivenType = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithType.Result], Never>([])
 
     var searchInput = "" {
         didSet {

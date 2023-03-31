@@ -20,7 +20,7 @@ class SearchViewController: UIViewController {
     let searchView = SearchView()
     let viewModel: SearchViewModel
 
-    private var searchController = UISearchController(searchResultsController: nil)
+    private let searchController = UISearchController(searchResultsController: nil)
     weak var debounceTimer: Timer?
     var searchSuggestions: [UISearchSuggestionItem] = []
 

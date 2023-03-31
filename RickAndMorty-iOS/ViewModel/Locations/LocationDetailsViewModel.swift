@@ -12,7 +12,7 @@ import UIKit
 class LocationDetailsViewModel {
 
     weak var coordinator: MainCoordinator?
-    var location = PassthroughSubject<RickAndMortyAPI.GetLocationQuery.Data.Location, Never>()
+    let location = PassthroughSubject<RickAndMortyAPI.GetLocationQuery.Data.Location, Never>()
     var locationId: String
 
     init(locationId: String) {

@@ -21,7 +21,7 @@ class SearchView: UIView {
         return collectionView
     }()
 
-    var locationCell = UICollectionView.CellRegistration<LocationRowCell, RickAndMortyAPI.LocationDetails> { (cell, _ indexPath, location) in
+    let locationCell = UICollectionView.CellRegistration<LocationRowCell, RickAndMortyAPI.LocationDetails> { (cell, _ indexPath, location) in
 
         cell.upperLabel.text = location.name
         cell.lowerLeftLabel.text = location.type
