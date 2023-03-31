@@ -11,7 +11,7 @@ import Combine
 class CharacterDetailsViewModel {
 
     weak var coordinator: MainCoordinator?
-    var character = PassthroughSubject<RickAndMortyAPI.GetCharacterQuery.Data.Character, Never>()
+    let character = PassthroughSubject<RickAndMortyAPI.GetCharacterQuery.Data.Character, Never>()
     var characterId: String
 
     init(characterId: String) {

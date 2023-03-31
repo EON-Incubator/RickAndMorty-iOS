@@ -162,8 +162,8 @@ extension LocationDetailsViewController: UICollectionViewDelegate {
 
 // MARK: Struct for Diffable DataSource
 struct LocationDetails: Hashable {
-    var id: UUID
-    var item: RickAndMortyAPI.GetLocationQuery.Data.Location
+    let id: UUID
+    let item: RickAndMortyAPI.GetLocationQuery.Data.Location
     init(id: UUID = UUID(), _ item: RickAndMortyAPI.GetLocationQuery.Data.Location) {
         self.id = id
         self.item = item

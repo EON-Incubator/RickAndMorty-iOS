@@ -19,7 +19,7 @@ class EpisodesView: UIView {
         return collectionView
     }()
 
-    var episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (_ cell, _ indexPath, _ episode) in
+    let episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (_ cell, _ indexPath, _ episode) in
     }
 
     required init?(coder: NSCoder) {

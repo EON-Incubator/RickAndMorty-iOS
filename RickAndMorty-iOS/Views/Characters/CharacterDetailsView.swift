@@ -45,7 +45,7 @@ class CharacterDetailsView: UIView {
         return collectionView
     }()
 
-    var episodeCell = UICollectionView.CellRegistration<RowCell, RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode> { (cell, _ indexPath, episode) in
+    let episodeCell = UICollectionView.CellRegistration<RowCell, RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode> { (cell, _ indexPath, episode) in
         cell.upperLabel.text = episode.name
         cell.lowerLeftLabel.text = episode.episode
         cell.lowerRightLabel.text = episode.air_date

@@ -17,7 +17,7 @@ class EpisodeDetailsViewController: UIViewController {
         case emptyCharacters
     }
 
-    var episodeDetailsView = EpisodeDetailsView()
+    let episodeDetailsView = EpisodeDetailsView()
     let viewModel: EpisodeDetailsViewModel
 
     typealias DataSource = UICollectionViewDiffableDataSource<EpisodeDetailsSection, AnyHashable>
@@ -164,8 +164,8 @@ extension EpisodeDetailsViewController: UICollectionViewDelegate {
 
 // MARK: Struct for Diffable DataSource
 struct EpisodeDetails: Hashable {
-    var id: UUID
-    var item: RickAndMortyAPI.GetEpisodeQuery.Data.Episode
+    let id: UUID
+    let item: RickAndMortyAPI.GetEpisodeQuery.Data.Episode
     init(id: UUID = UUID(), _ item: RickAndMortyAPI.GetEpisodeQuery.Data.Episode) {
         self.id = id
         self.item = item

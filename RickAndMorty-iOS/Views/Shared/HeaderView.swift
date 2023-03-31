@@ -8,7 +8,7 @@
 import UIKit
 
 class HeaderView: UICollectionReusableView {
-    public var textLabel: UILabel = {
+    public let textLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
         label.font = UIFont.preferredFont(forTextStyle: .headline)

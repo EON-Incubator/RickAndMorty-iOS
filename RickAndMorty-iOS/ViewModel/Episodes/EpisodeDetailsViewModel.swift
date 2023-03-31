@@ -11,7 +11,7 @@ import Combine
 class EpisodeDetailsViewModel {
 
     weak var coordinator: MainCoordinator?
-    var episode = PassthroughSubject<RickAndMortyAPI.GetEpisodeQuery.Data.Episode, Never>()
+    let episode = PassthroughSubject<RickAndMortyAPI.GetEpisodeQuery.Data.Episode, Never>()
     var episodeId: String
 
     init(episodeId: String) {

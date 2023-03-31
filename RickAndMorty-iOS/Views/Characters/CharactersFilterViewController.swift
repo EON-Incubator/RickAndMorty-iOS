@@ -14,9 +14,9 @@ class CharactersFilterViewController: UIViewController {
     private let genders = [K.FilterLabels.male, K.FilterLabels.female, K.FilterLabels.genderless, K.FilterLabels.unknown]
 
     private let charactersFilterView = CharactersFilterView()
-    private var viewModel: CharactersViewModel
-    private var dismissHandler: (() -> Void)?
-    private var currentFilterOptions: CurrentValueSubject<FilterOptions, Never>
+    private let viewModel: CharactersViewModel
+    private let dismissHandler: (() -> Void)?
+    private let currentFilterOptions: CurrentValueSubject<FilterOptions, Never>
     private var cancellables = Set<AnyCancellable>()
 
     required init?(coder: NSCoder) {
