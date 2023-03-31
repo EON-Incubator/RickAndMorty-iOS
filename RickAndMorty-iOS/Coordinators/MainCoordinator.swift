@@ -29,7 +29,7 @@ class MainCoordinator: Coordinator {
                                                            .foregroundColor: UIColor.label,
                                                            .shadow: shadow]
         customNavBarAppearance.titleTextAttributes = [.font: UIFont(name: K.Fonts.primary, size: 27) as Any,
-                                                      .foregroundColor: UIColor.systemCyan,
+                                                      .foregroundColor: UIColor.label,
                                                       .shadow: shadow]
 
         customNavBarAppearance.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 5)
