@@ -8,14 +8,10 @@
 import UIKit
 import SnapKit
 
-class CharacterDetailsView: UIView {
+class CharacterDetailsView: BaseView {
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    init() {
-        super.init(frame: .zero)
+    override init() {
+        super.init()
         setupViews()
         setupConstraints()
     }

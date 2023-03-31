@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class EpisodeDetailsViewController: UIViewController {
+class EpisodeDetailsViewController: BaseViewController {
 
     enum EpisodeDetailsSection: Int, CaseIterable {
         case info
@@ -28,11 +28,7 @@ class EpisodeDetailsViewController: UIViewController {
 
     init(viewModel: EpisodeDetailsViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init()
     }
 
     override func loadView() {

@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import SDWebImage
 
-class CharactersViewController: UIViewController {
+class CharactersViewController: BaseViewController {
 
     private let charactersGridView = CharactersView()
     private var viewModel: CharactersViewModel
@@ -22,11 +22,7 @@ class CharactersViewController: UIViewController {
 
     init(viewModel: CharactersViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init()
     }
 
     override func viewDidLoad() {

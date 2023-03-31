@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LoadingView: UIView {
+class LoadingView: BaseView {
 
     lazy var spinner: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
@@ -17,9 +17,8 @@ class LoadingView: UIView {
         return indicator
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
+    override init() {
+        super.init()
         addSubview(spinner)
     }
 
@@ -35,10 +34,6 @@ class LoadingView: UIView {
             make.right.equalTo(view).offset(-30)
             make.left.equalTo(view).offset(30)
         }
-    }
-
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
 }

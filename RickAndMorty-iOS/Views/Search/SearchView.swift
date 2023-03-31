@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchView: UIView {
+class SearchView: BaseView {
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
@@ -40,16 +40,8 @@ class SearchView: UIView {
         }
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    init() {
-        super.init(frame: .zero)
+    override init() {
+        super.init()
         collectionView.showsVerticalScrollIndicator = false
         setupViews()
         setupConstraints()
