@@ -57,7 +57,7 @@ class CharactersFilterView: UIView {
         let items = [K.FilterLabels.alive, K.FilterLabels.dead, K.FilterLabels.unknown]
         let segmentControl = CustomSegmentedControl(items: items)
         segmentControl.selectedSegmentTintColor = .systemCyan
-        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14)!], for: .normal)
+        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14) as Any], for: .normal)
         return segmentControl
     }()
 
@@ -72,7 +72,7 @@ class CharactersFilterView: UIView {
         let items = [K.FilterLabels.male, K.FilterLabels.female, K.FilterLabels.genderless, K.FilterLabels.unknown]
         let segmentControl = CustomSegmentedControl(items: items)
         segmentControl.selectedSegmentTintColor = .systemCyan
-        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14)!], for: .normal)
+        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14) as Any], for: .normal)
         return segmentControl
     }()
 
@@ -161,7 +161,7 @@ class CustomSegmentedControl: UISegmentedControl {
         let previousIndex = selectedSegmentIndex
         super.touchesEnded(touches, with: event)
         if previousIndex == selectedSegmentIndex {
-            let touchLocation = touches.first!.location(in: self)
+            guard let touchLocation = touches.first?.location(in: self) else { return }
             if bounds.contains(touchLocation) {
                 sendActions(for: .valueChanged)
             }

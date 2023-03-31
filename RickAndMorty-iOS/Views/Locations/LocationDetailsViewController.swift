@@ -22,7 +22,7 @@ class LocationDetailsViewController: UIViewController {
 
     typealias DataSource = UICollectionViewDiffableDataSource<LocationDetailsSection, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<LocationDetailsSection, AnyHashable>
-    private var dataSource: DataSource!
+    private var dataSource: DataSource?
     private var cancellables = Set<AnyCancellable>()
     private var snapshot = Snapshot()
 
@@ -68,7 +68,7 @@ class LocationDetailsViewController: UIViewController {
                 self?.snapshot.appendItems([LocationDetails(location), LocationDetails(location)], toSection: .info)
                 self?.snapshot.appendItems(location.residents, toSection: .residents)
                 if let snapshot = self?.snapshot {
-                    self?.dataSource.apply(snapshot, animatingDifferences: true)
+                    self?.dataSource?.apply(snapshot, animatingDifferences: true)
                 }
             }
             // Dismiss refresh control.
@@ -89,29 +89,29 @@ extension LocationDetailsViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: locationDetailsView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, location) -> UICollectionViewCell? in
 
-            let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
-            let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
+            guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
+            guard let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell else { return nil }
 
             switch indexPath.section {
             case 0:
-                return self?.configLocationInfoCell(cell: infoCell!, data: location, itemIndex: indexPath.item)
+                return self?.configLocationInfoCell(cell: infoCell, data: location, itemIndex: indexPath.item)
             case 1:
                 if let character = location as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
                     let urlString = character?.image ?? ""
-                    characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
-                    characterRowCell?.upperLabel.text = character?.name
-                    characterRowCell?.lowerLeftLabel.text = character?.gender
-                    characterRowCell?.lowerRightLabel.text = character?.species
-                    characterRowCell?.characterStatusLabel.text = character?.status
-                    characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character?.status ?? "")
-                    return characterRowCell!
+                    characterRowCell.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
+                    characterRowCell.upperLabel.text = character?.name
+                    characterRowCell.lowerLeftLabel.text = character?.gender
+                    characterRowCell.lowerRightLabel.text = character?.species
+                    characterRowCell.characterStatusLabel.text = character?.status
+                    characterRowCell.characterStatusLabel.backgroundColor = characterRowCell.statusColor(character?.status ?? "")
+                    return characterRowCell
                 }
             case 2:
-                showLoadingAnimation(currentCell: infoCell!)
-                return infoCell!
+                showLoadingAnimation(currentCell: infoCell)
+                return infoCell
             case 3:
-                showLoadingAnimation(currentCell: characterRowCell!)
-                return characterRowCell!
+                showLoadingAnimation(currentCell: characterRowCell)
+                return characterRowCell
             default:
                 return UICollectionViewCell()
             }
@@ -119,7 +119,7 @@ extension LocationDetailsViewController {
         })
 
         // for custom header
-        dataSource.supplementaryViewProvider = { [weak self] (_ collectionView, _ kind, indexPath) in
+        dataSource?.supplementaryViewProvider = { [weak self] (_ collectionView, _ kind, indexPath) in
             guard let headerView = self?.locationDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
             }
@@ -154,8 +154,8 @@ extension LocationDetailsViewController {
 extension LocationDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
-            viewModel.goCharacterDetails(id: (character?.id)!, navController: navigationController!)
+        if let character = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
+            viewModel.goCharacterDetails(id: character?.id ?? "", navController: navigationController ?? UINavigationController())
         }
     }
 }

@@ -15,7 +15,7 @@ class LocationsViewController: UIViewController {
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
-    private var dataSource: DataSource!
+    private var dataSource: DataSource?
     private var cancellables = Set<AnyCancellable>()
     private var snapshot = Snapshot()
 
@@ -60,7 +60,7 @@ class LocationsViewController: UIViewController {
                     snapshot.deleteAllItems()
                     snapshot.appendSections([.appearance])
                     snapshot.appendItems(locations, toSection: .appearance)
-                    self?.dataSource.apply(snapshot, animatingDifferences: true)
+                    self?.dataSource?.apply(snapshot, animatingDifferences: true)
                 }
                 self?.locationsView.loadingView.spinner.stopAnimating()
             }
@@ -85,27 +85,28 @@ class LocationsViewController: UIViewController {
 extension LocationsViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: locationsView.collectionView, cellProvider: { (collectionView, indexPath, data) -> UICollectionViewCell? in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationRowCell.identifier, for: indexPath) as? LocationRowCell
+
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationRowCell.identifier, for: indexPath) as? LocationRowCell else { return nil }
 
             // section with empty location cells
             if indexPath.section == 1 {
-                showLoadingAnimation(currentCell: cell!)
+                showLoadingAnimation(currentCell: cell)
                 return cell
             }
 
             let location = data as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result
-            cell?.upperLabel.text = location?.name
-            cell?.lowerLeftLabel.text = location?.type
-            cell?.lowerRightLabel.text = location?.dimension
+            cell.upperLabel.text = location?.name
+            cell.lowerLeftLabel.text = location?.type
+            cell.lowerRightLabel.text = location?.dimension
             for index in 0...3 {
                 let isIndexValid = location?.residents.indices.contains(index)
-                if isIndexValid! {
+                if isIndexValid ?? false {
                     let urlString = location?.residents[index]?.image ?? ""
-                    cell?.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
+                    cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
                 }
             }
             if location?.dimension == "" {
-                cell?.lowerRightLabel.isHidden = true
+                cell.lowerRightLabel.isHidden = true
             }
             return cell
         })
@@ -125,8 +126,8 @@ extension LocationsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        if let location = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result {
-            viewModel.goLocationDetails(id: location.id!, navController: navigationController!)
+        if let location = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result {
+            viewModel.goLocationDetails(id: location.id ?? "", navController: navigationController ?? UINavigationController())
         }
     }
 }
