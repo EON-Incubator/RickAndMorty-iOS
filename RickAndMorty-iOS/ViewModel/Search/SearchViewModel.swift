@@ -30,11 +30,16 @@ class SearchViewModel {
             query: RickAndMortyAPI.SearchForQuery(keyword: GraphQLNullable<String>(stringLiteral: input))) { [weak self] result in
                 switch result {
                 case .success(let response):
-                    self?.searchResults.send(response.data!)
+                    guard let data = response.data else { return }
+                    guard let charactersData = data.characters?.results else { return }
+                    guard let locationsWithNameData = data.locationsWithName?.results else { return }
+                    guard let locationsWithTypeData = data.locationsWithType?.results else { return }
 
-                    self?.characters.value = (response.data?.characters?.results?.compactMap { $0 })!
-                    self?.locatonsWithGivenName.value = (response.data?.locationsWithName?.results?.compactMap { $0 })!
-                    self?.locationsWithGivenType.value = (response.data?.locationsWithType?.results?.compactMap { $0 })!
+                    self?.searchResults.send(data)
+
+                    self?.characters.value = charactersData.compactMap { $0 }
+                    self?.locatonsWithGivenName.value = locationsWithNameData.compactMap { $0 }
+                    self?.locationsWithGivenType.value = locationsWithTypeData.compactMap { $0 }
 
                 case .failure(let error):
                     print(error)

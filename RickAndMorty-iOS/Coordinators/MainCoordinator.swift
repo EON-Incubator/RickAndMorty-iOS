@@ -25,10 +25,10 @@ class MainCoordinator: Coordinator {
         shadow.shadowColor = UIColor.label
         shadow.shadowBlurRadius = 0.5
 
-        customNavBarAppearance.largeTitleTextAttributes = [.font: UIFont(name: K.Fonts.primary, size: 34)!,
+        customNavBarAppearance.largeTitleTextAttributes = [.font: UIFont(name: K.Fonts.primary, size: 34) as Any,
                                                            .foregroundColor: UIColor.label,
                                                            .shadow: shadow]
-        customNavBarAppearance.titleTextAttributes = [.font: UIFont(name: K.Fonts.primary, size: 27)!,
+        customNavBarAppearance.titleTextAttributes = [.font: UIFont(name: K.Fonts.primary, size: 27) as Any,
                                                       .foregroundColor: UIColor.systemCyan,
                                                       .shadow: shadow]
 

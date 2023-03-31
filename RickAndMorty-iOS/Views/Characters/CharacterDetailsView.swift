@@ -116,7 +116,7 @@ extension CharacterDetailsView {
 }
 
 extension CharacterDetailsView {
-    func titleView(image: String?, title: String!) -> UIView {
+    func titleView(image: String?, title: String) -> UIView {
         let titleWithImage = UIView()
 
         if let imageUrl = image {
