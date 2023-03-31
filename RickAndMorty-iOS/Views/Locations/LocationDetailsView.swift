@@ -14,7 +14,7 @@ class LocationDetailsView: UIView {
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
         collectionView.register(HeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: "HeaderView")
+                                withReuseIdentifier: K.Headers.identifier)
         collectionView.register(InfoCell.self,
                                 forCellWithReuseIdentifier: InfoCell.identifier)
         collectionView.register(CharacterRowCell.self,
@@ -38,10 +38,10 @@ class LocationDetailsView: UIView {
     }
 
     private func setupViews() {
-        self.backgroundColor = UIColor(named: "LocationView")
-        collectionView.backgroundColor = UIColor(named: "LocationView")
+        self.backgroundColor = UIColor(named: K.Colors.locationsView)
+        collectionView.backgroundColor = UIColor(named: K.Colors.locationsView)
         self.addSubview(collectionView)
-        collectionView.accessibilityIdentifier = "LocationDetailsCollectionView"
+        collectionView.accessibilityIdentifier = K.Identifiers.locationDetails
         collectionView.showsVerticalScrollIndicator = false
     }
 

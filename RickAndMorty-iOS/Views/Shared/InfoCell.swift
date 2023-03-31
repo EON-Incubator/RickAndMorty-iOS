@@ -9,13 +9,14 @@ import UIKit
 import SnapKit
 
 class InfoCell: UICollectionViewListCell {
-    static let identifier = "InfoCell"
+    static let identifier = K.Info.identifier
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         setupViews()
         setupConstraints()
+        self.isUserInteractionEnabled = false
     }
 
     override func prepareForReuse() {
@@ -27,7 +28,11 @@ class InfoCell: UICollectionViewListCell {
         cell.leftLabel.text = leftLabel
         cell.rightLabel.text = rightLabel
         cell.infoImage.image = infoImage.withRenderingMode(.alwaysTemplate)
-        cell.infoImage.tintColor = UIColor(named: "InfoCell")
+        cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
+        if (leftLabel == "Origin" || leftLabel == "Last Seen") && (rightLabel != "unknown") {
+            cell.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
+            cell.isUserInteractionEnabled = true
+        }
         return cell
     }
 
@@ -45,14 +50,14 @@ class InfoCell: UICollectionViewListCell {
 
     lazy var leftLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(named: "InfoCell")
+        label.textColor = UIColor(named: K.Colors.infoCell)
         label.font = .boldSystemFont(ofSize: 15)
         return label
     }()
 
     lazy var rightLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(named: "InfoCell")
+        label.textColor = UIColor(named: K.Colors.infoCell)
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .right
         label.minimumScaleFactor = 0.5

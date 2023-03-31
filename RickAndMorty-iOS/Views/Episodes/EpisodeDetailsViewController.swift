@@ -121,10 +121,10 @@ extension EpisodeDetailsViewController {
 
         // for custom header
         dataSource.supplementaryViewProvider = { [weak self] (_ collectionView, _ kind, indexPath) in
-            guard let headerView = self?.episodeDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
+            guard let headerView = self?.episodeDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
             }
-            headerView.textLabel.text = indexPath.section == 0 || indexPath.section == 2 ? "INFO" : "CHARACTERS"
+            headerView.textLabel.text = indexPath.section == 0 || indexPath.section == 2 ? K.Headers.info : K.Headers.characters
             headerView.textLabel.textColor = .lightGray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
@@ -134,15 +134,15 @@ extension EpisodeDetailsViewController {
         if let episodeDetails = data as? EpisodeDetails {
             switch itemIndex {
             case 0:
-                cell.leftLabel.text = "Episode"
+                cell.leftLabel.text = K.Info.episode
                 cell.rightLabel.text = episodeDetails.item.episode
-                cell.infoImage.image = UIImage(named: "tv")?.withRenderingMode(.alwaysTemplate)
-                cell.infoImage.tintColor = UIColor(named: "InfoCell")
+                cell.infoImage.image = UIImage(named: K.Images.television)?.withRenderingMode(.alwaysTemplate)
+                cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
             case 1:
-                cell.leftLabel.text = "Air Date"
+                cell.leftLabel.text = K.Info.airDate
                 cell.rightLabel.text = episodeDetails.item.air_date
-                cell.infoImage.image = UIImage(named: "calendar")?.withRenderingMode(.alwaysTemplate)
-                cell.infoImage.tintColor = UIColor(named: "InfoCell")
+                cell.infoImage.image = UIImage(named: K.Images.calendar)?.withRenderingMode(.alwaysTemplate)
+                cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
             default:
                 cell.rightLabel.text = "-"
             }

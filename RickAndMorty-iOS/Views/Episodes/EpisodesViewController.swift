@@ -39,7 +39,7 @@ class EpisodesViewController: UIViewController {
     override func loadView() {
         view = episodesView
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Episodes"
+        title = K.Titles.episodes
         episodesView.collectionView.delegate = self
         episodesView.collectionView.refreshControl = UIRefreshControl()
         episodesView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
@@ -124,7 +124,10 @@ extension EpisodesViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        viewModel.goEpisodeDetails(id: viewModel.episodes.value[indexPath.row].id!, navController: self.navigationController!)
+
+        if let episode = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result {
+            viewModel.goEpisodeDetails(id: episode.id!, navController: self.navigationController!)
+        }
     }
 }
 

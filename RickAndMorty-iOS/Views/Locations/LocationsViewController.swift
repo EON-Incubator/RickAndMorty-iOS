@@ -31,7 +31,7 @@ class LocationsViewController: UIViewController {
     override func loadView() {
         view = locationsView
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Locations"
+        title = K.Titles.locations
         locationsView.collectionView.delegate = self
         locationsView.collectionView.refreshControl = UIRefreshControl()
         locationsView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
@@ -104,6 +104,9 @@ extension LocationsViewController {
                     cell?.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
                 }
             }
+            if location?.dimension == "" {
+                cell?.lowerRightLabel.isHidden = true
+            }
             return cell
         })
     }
@@ -121,6 +124,9 @@ extension LocationsViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        viewModel.goLocationDetails(id: viewModel.locations.value[indexPath.row].id!, navController: self.navigationController!)
+
+        if let location = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result {
+            viewModel.goLocationDetails(id: location.id!, navController: self.navigationController!)
+        }
     }
 }

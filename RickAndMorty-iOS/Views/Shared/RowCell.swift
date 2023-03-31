@@ -14,7 +14,7 @@ class RowCell: UICollectionViewListCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         for index in 0...3 {
-            self.characterAvatarImageViews[index].image = UIImage(systemName: "person.circle")?.withRenderingMode(.alwaysTemplate)
+            self.characterAvatarImageViews[index].image = UIImage(systemName: K.Images.systemPerson)?.withRenderingMode(.alwaysTemplate)
         }
 
         self.contentView.layer.sublayers?.removeAll()
@@ -34,7 +34,7 @@ class RowCell: UICollectionViewListCell {
 
         self.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
         let myView = UIView(frame: self.bounds)
-        myView.backgroundColor = UIColor(named: "EpisodeCell")
+        myView.backgroundColor = UIColor(named: K.Colors.episodeCell)
         myView.layer.cornerRadius = 5
         self.backgroundView = myView
         setupViews()
@@ -43,7 +43,7 @@ class RowCell: UICollectionViewListCell {
 
     lazy var upperLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Chalkboard SE Regular", size: 18)
+        label.font = UIFont(name: K.Fonts.secondary, size: 18)
         label.textColor = .label
         label.lineBreakMode = .byTruncatingTail
         label.textAlignment = .center
@@ -51,30 +51,32 @@ class RowCell: UICollectionViewListCell {
     }()
 
     lazy var lowerLeftLabel: UILabel = {
-        let label = UILabel()
+        let label = PaddingLabel()
         label.font = .systemFont(ofSize: 12)
         label.textColor = .label
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
         label.layer.borderWidth = 0.3
         label.layer.borderColor = UIColor.gray.cgColor
-        label.backgroundColor = UIColor(red: 1.00, green: 0.75, blue: 0.66, alpha: 0.4)
+        label.backgroundColor = K.Colors.episodeNumber
         return label
     }()
 
     lazy var lowerRightLabel: UILabel = {
-        let label = UILabel()
+        let label = PaddingLabel()
         label.font = .systemFont(ofSize: 12)
         label.textColor = .label
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
+        label.minimumScaleFactor = 0.7
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
-        label.backgroundColor = UIColor(red: 1.00, green: 0.92, blue: 0.71, alpha: 0.4)
+        label.backgroundColor = K.Colors.episodeDate
         label.layer.borderWidth = 0.3
         label.layer.borderColor = UIColor.gray.cgColor
         return label
@@ -92,7 +94,7 @@ class RowCell: UICollectionViewListCell {
     }
     func setupViews() {
         for index in 0...3 {
-            let imageView = UIImageView(image: UIImage(systemName: "person.circle")?.withRenderingMode(.alwaysTemplate))
+            let imageView = UIImageView(image: UIImage(systemName: K.Images.systemPerson)?.withRenderingMode(.alwaysTemplate))
             imageView.tintColor = .systemFill
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
@@ -142,7 +144,7 @@ class RowCell: UICollectionViewListCell {
 
         lowerLeftLabel.snp.makeConstraints { make in
             make.left.equalTo(upperLabel)
-            make.height.equalTo(20)
+            make.height.equalTo(25)
             make.width.equalTo(upperLabel).dividedBy(2).offset(-30)
             make.bottom.equalToSuperview().offset(-10)
         }
@@ -153,5 +155,24 @@ class RowCell: UICollectionViewListCell {
             make.height.equalTo(lowerLeftLabel)
             make.width.equalTo(upperLabel).dividedBy(2)
         }
+    }
+}
+
+@IBDesignable class PaddingLabel: UILabel {
+
+    @IBInspectable var topInset: CGFloat = 1
+    @IBInspectable var bottomInset: CGFloat = 1
+    @IBInspectable var leftInset: CGFloat = 3
+    @IBInspectable var rightInset: CGFloat = 3
+
+    override func drawText(in rect: CGRect) {
+        let insets = UIEdgeInsets.init(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
+        super.drawText(in: rect.inset(by: insets))
+    }
+
+    override var intrinsicContentSize: CGSize {
+        let size = super.intrinsicContentSize
+        return CGSize(width: size.width + leftInset + rightInset,
+                      height: size.height + topInset + bottomInset)
     }
 }

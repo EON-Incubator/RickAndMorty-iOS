@@ -149,10 +149,10 @@ class SearchViewController: UIViewController {
         })
         // for custom header
         dataSource.supplementaryViewProvider = { [weak self] (_ collectionView, _ kind, indexPath) in
-            guard let headerView = self?.searchView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
+            guard let headerView = self?.searchView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
             }
-            let sectionText = indexPath.section == 0 ? "CHARACTERS" : "LOCATIONS"
+            let sectionText = indexPath.section == 0 ? K.Headers.characters : K.Headers.locations
 
             headerView.textLabel.text = sectionText
             headerView.textLabel.textColor = .lightGray
@@ -238,14 +238,14 @@ extension SearchViewController: UISearchBarDelegate {
         // change background colors
         switch selectedScope {
         case 1:
-            self.searchView.collectionView.backgroundColor = UIColor(named: "CharacterView")
-            self.searchView.backgroundColor = UIColor(named: "CharacterView")
+            self.searchView.collectionView.backgroundColor = UIColor(named: K.Colors.characterView)
+            self.searchView.backgroundColor = UIColor(named: K.Colors.characterView)
         case 2:
-            self.searchView.collectionView.backgroundColor = UIColor(named: "LocationView")
-            self.searchView.backgroundColor = UIColor(named: "LocationView")
+            self.searchView.collectionView.backgroundColor = UIColor(named: K.Colors.locationsView)
+            self.searchView.backgroundColor = UIColor(named: K.Colors.locationsView)
         default:
-            self.searchView.collectionView.backgroundColor = UIColor(named: "EpisodeView")
-            self.searchView.backgroundColor = UIColor(named: "EpisodeView")
+            self.searchView.collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
+            self.searchView.backgroundColor = UIColor(named: K.Colors.episodeView)
         }
     }
 }
@@ -254,7 +254,7 @@ extension SearchViewController: UISearchBarDelegate {
 extension SearchViewController: UISearchResultsUpdating {
 
     func configureSearchController() {
-        searchController.searchBar.searchTextField.accessibilityIdentifier = "SearchTextField"
+        searchController.searchBar.searchTextField.accessibilityIdentifier = K.Identifiers.search
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -262,7 +262,7 @@ extension SearchViewController: UISearchResultsUpdating {
         navigationItem.searchController = searchController
         definesPresentationContext = true
         let searchBar = searchController.searchBar
-        searchBar.scopeButtonTitles = ["All", "Characters", "Locations"]
+        searchBar.scopeButtonTitles = ["All", K.Titles.characters, K.Titles.locations]
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
