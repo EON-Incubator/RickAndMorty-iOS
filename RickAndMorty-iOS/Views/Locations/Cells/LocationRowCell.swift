@@ -27,9 +27,7 @@ class LocationRowCell: RowCell {
         lowerRightLabel.backgroundColor = K.Colors.dimension
         lowerRightLabel.layer.borderWidth = 0.3
         lowerRightLabel.layer.borderColor = UIColor.gray.cgColor
-        lowerRightLabel.textColor = .black
 
-        lowerLeftLabel.textColor = .black
         lowerLeftLabel.layer.borderWidth = 0.3
         lowerLeftLabel.layer.borderColor = UIColor.gray.cgColor
         lowerLeftLabel.backgroundColor = K.Colors.type
