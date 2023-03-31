@@ -11,10 +11,9 @@ import SDWebImage
 
 class CharacterDetailsViewController: UIViewController {
 
-    let viewModel = CharacterDetailsViewModel()
+    let viewModel: CharacterDetailsViewModel
     let locationsViewModel = LocationsViewModel()
     var characterDetailsView = CharacterDetailsView()
-    weak var coordinator: MainCoordinator?
     var characterID: String?
     var avatarImageUrl: String?
     var titleViewState: TitleViewState = .noTitle
@@ -29,6 +28,15 @@ class CharacterDetailsViewController: UIViewController {
         case noTitle, title, titleWithImage
     }
 
+    init(viewModel: CharacterDetailsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func loadView() {
         view = characterDetailsView
         characterDetailsView.collectionView.delegate = self
@@ -36,11 +44,11 @@ class CharacterDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.selectedCharacter = characterID!
         configureDataSource()
         showEmptyData()
         subscribeToViewModel()
         updateTitleView()
+        viewModel.fetchData()
     }
 
     func showEmptyData() {
@@ -177,16 +185,16 @@ extension CharacterDetailsViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
         if indexPath.section > 1 {
             if let episode = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode? {
-                coordinator?.goEpisodeDetails(id: (episode?.id)!, navController: self.navigationController!)
+                viewModel.goEpisodeDetails(id: (episode?.id)!, navController: self.navigationController!)
             }
             if let character = dataSource.itemIdentifier(for: indexPath) as? CharacterDetails {
                 switch indexPath.row {
                 case 0:
                     if let originID = character.item.origin?.id {
-                        coordinator?.goLocationDetails(id: originID, navController: self.navigationController!)
+                        viewModel.goLocationDetails(id: originID, navController: self.navigationController!)
                     }
                 default:
-                    coordinator?.goLocationDetails(id: (character.item.location?.id)!, navController: self.navigationController!)
+                    viewModel.goLocationDetails(id: (character.item.location?.id)!, navController: self.navigationController!)
                 }
             }
         }

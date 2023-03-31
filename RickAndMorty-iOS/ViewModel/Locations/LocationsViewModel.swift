@@ -7,9 +7,11 @@
 
 import Foundation
 import Combine
+import UIKit
 
 class LocationsViewModel {
 
+    weak var coordinator: MainCoordinator?
     var locations = CurrentValueSubject<[RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result], Never>([])
     var locationsNameSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
     var locationsTypeSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
@@ -49,5 +51,9 @@ class LocationsViewModel {
         } else {
             self.locations.value.append(contentsOf: (locations.compactMap { $0 }) )
         }
+    }
+
+    func goLocationDetails(id: String, navController: UINavigationController) {
+        coordinator?.goLocationDetails(id: id, navController: navController)
     }
 }

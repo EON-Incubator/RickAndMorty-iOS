@@ -71,23 +71,27 @@ class MainCoordinator: Coordinator {
         searchNavController.navigationBar.standardAppearance = navBarAppearance
 
         // Add CharactersViewController to the character navigation controller.
-        let charactersViewController = CharactersViewController()
-        charactersViewController.coordinator = self
+        let charactersViewModel = CharactersViewModel()
+        charactersViewModel.coordinator = self
+        let charactersViewController = CharactersViewController(viewModel: charactersViewModel)
         characterNavController.pushViewController(charactersViewController, animated: false)
 
         // Add LocationsViewController to the location navigation controller.
-        let locationsViewController = LocationsViewController()
-        locationsViewController.coordinator = self
+        let locationsViewModel = LocationsViewModel()
+        locationsViewModel.coordinator = self
+        let locationsViewController = LocationsViewController(viewModel: locationsViewModel)
         locationNavController.pushViewController(locationsViewController, animated: false)
 
         // Add EpisodesViewController to the episode navigation controller.
-        let episodesViewController = EpisodesViewController()
-        episodesViewController.coordinator = self
+        let episodeViewModel = EpisodesViewModel()
+        episodeViewModel.coordinator = self
+        let episodesViewController = EpisodesViewController(viewModel: episodeViewModel)
         episodeNavController.pushViewController(episodesViewController, animated: false)
 
         // Add SearchViewController to the search navigation controller.
-        let searchViewController = SearchViewController()
-        searchViewController.coordinator = self
+        let searchViewModel = SearchViewModel()
+        searchViewModel.coordinator = self
+        let searchViewController = SearchViewController(viewModel: searchViewModel)
         searchNavController.pushViewController(searchViewController, animated: false)
 
         // Set tab bar controller as the root view controller of the UIWindow.
@@ -97,14 +101,14 @@ class MainCoordinator: Coordinator {
     }
 
     func goCharacterDetails(id: String, navController: UINavigationController) {
-        let viewController = CharacterDetailsViewController()
-        viewController.coordinator = self
-        viewController.characterID = id
+        let viewModel = CharacterDetailsViewModel(characterId: id)
+        viewModel.coordinator = self
+        let viewController = CharacterDetailsViewController(viewModel: viewModel)
         navController.pushViewController(viewController, animated: true)
     }
 
-    func showCharactersFilter(viewController: UIViewController, viewModel: CharactersViewModel, sender: AnyObject, completion: (() -> Void)? = nil) {
-        let charactersFilterViewController = CharactersFilterViewController(viewModel: viewModel, completion: completion)
+    func showCharactersFilter(viewController: UIViewController, viewModel: CharactersViewModel, sender: AnyObject, onDismiss: (() -> Void)? = nil) {
+        let charactersFilterViewController = CharactersFilterViewController(viewModel: viewModel, onDismiss: onDismiss)
 
         charactersFilterViewController.modalPresentationStyle = .popover
         if let popover = charactersFilterViewController.popoverPresentationController {
@@ -129,14 +133,18 @@ class MainCoordinator: Coordinator {
     }
 
     func goLocationDetails(id: String, navController: UINavigationController) {
-        let viewController = LocationDetailsViewController(locationId: id)
-        viewController.coordinator = self
+        let viewModel = LocationDetailsViewModel(locationId: id)
+        viewModel.locationId = id
+        viewModel.coordinator = self
+        let viewController = LocationDetailsViewController(viewModel: viewModel)
         navController.pushViewController(viewController, animated: true)
     }
 
     func goEpisodeDetails(id: String, navController: UINavigationController) {
-        let viewController = EpisodeDetailsViewController(episodeId: id)
-        viewController.coordinator = self
+        let viewModel = EpisodeDetailsViewModel(episodeId: id)
+        viewModel.episodeId = id
+        viewModel.coordinator = self
+        let viewController = EpisodeDetailsViewController(viewModel: viewModel)
         navController.pushViewController(viewController, animated: true)
     }
 

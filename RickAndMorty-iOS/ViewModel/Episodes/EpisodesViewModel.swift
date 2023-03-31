@@ -7,9 +7,11 @@
 
 import Foundation
 import Combine
+import UIKit
 
 class EpisodesViewModel {
 
+    weak var coordinator: MainCoordinator?
     var episodes = CurrentValueSubject<[RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result], Never>([])
     var currentPage = 0 {
         didSet {
@@ -41,4 +43,9 @@ class EpisodesViewModel {
             self.episodes.value.append(contentsOf: (episodes.compactMap { $0 }) )
         }
     }
+
+    func goEpisodeDetails(id: String, navController: UINavigationController) {
+        coordinator?.goEpisodeDetails(id: id, navController: navController)
+    }
+
 }

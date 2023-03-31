@@ -10,17 +10,17 @@ import Combine
 
 class CharacterDetailsViewModel {
 
+    weak var coordinator: MainCoordinator?
     var character = PassthroughSubject<RickAndMortyAPI.GetCharacterQuery.Data.Character, Never>()
+    var characterId: String
 
-    var selectedCharacter = "" {
-        didSet {
-            fetchData(charID: selectedCharacter)
-        }
+    init(characterId: String) {
+        self.characterId = characterId
     }
 
-    func fetchData(charID: String) {
+    func fetchData() {
         Network.shared.apollo.fetch(
-            query: RickAndMortyAPI.GetCharacterQuery(characterId: charID)) { [weak self] result in
+            query: RickAndMortyAPI.GetCharacterQuery(characterId: characterId)) { [weak self] result in
 
                 switch result {
                 case .success(let response):
@@ -33,4 +33,13 @@ class CharacterDetailsViewModel {
 
             }
     }
+
+    func goLocationDetails(id: String, navController: UINavigationController) {
+        coordinator?.goLocationDetails(id: id, navController: navController)
+    }
+
+    func goEpisodeDetails(id: String, navController: UINavigationController) {
+        coordinator?.goEpisodeDetails(id: id, navController: navController)
+    }
+
 }

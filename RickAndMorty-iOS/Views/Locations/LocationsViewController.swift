@@ -11,14 +11,22 @@ import Combine
 class LocationsViewController: UIViewController {
 
     let locationsView = LocationsView()
-    let viewModel = LocationsViewModel()
-    weak var coordinator: MainCoordinator?
+    let viewModel: LocationsViewModel
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
     var snapshot = Snapshot()
+
+    init(viewModel: LocationsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func loadView() {
         view = locationsView
@@ -118,7 +126,7 @@ extension LocationsViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         if let location = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result {
-            coordinator?.goLocationDetails(id: location.id!, navController: self.navigationController!)
+            viewModel.goLocationDetails(id: location.id!, navController: self.navigationController!)
         }
     }
 }
