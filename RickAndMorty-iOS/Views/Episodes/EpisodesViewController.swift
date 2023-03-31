@@ -49,7 +49,7 @@ class EpisodesViewController: UIViewController {
         snapshot.deleteAllItems()
         snapshot.appendSections([.appearance, .empty])
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 8), toSection: .empty)
-        dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
 
     func subscribeToViewModel() {

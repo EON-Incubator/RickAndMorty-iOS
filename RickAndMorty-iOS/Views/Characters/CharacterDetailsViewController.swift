@@ -57,7 +57,7 @@ class CharacterDetailsViewController: UIViewController {
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 1), toSection: .empty)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 3), toSection: .emptyInfo)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 2), toSection: .emptyLocation)
-        self.dataSource?.apply(snapshot, animatingDifferences: true)
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
 
     func subscribeToViewModel() {
@@ -84,19 +84,17 @@ extension CharacterDetailsViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: characterDetailsView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, characterInfo) -> UICollectionViewCell? in
 
-            guard let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell else { return nil}
-            guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
-            guard let episodeCell = self?.characterDetailsView.episodeCell else { return nil }
-
             switch indexPath.section {
             case 0:
+                let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell
                 if let character = characterInfo as? CharacterDetails {
                     guard let image = character.item.image else { fatalError("Image not found") }
                     self?.avatarImageUrl = image
-                    avatarCell.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 300, height: 300)])
+                    avatarCell?.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 300, height: 300)])
                     return avatarCell
                 }
             case 1:
+                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 if let character = characterInfo as? CharacterDetails {
                     switch indexPath.item {
                     case 0:
@@ -117,6 +115,7 @@ extension CharacterDetailsViewController {
                     }
                 }
             case 2:
+                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 if let character = characterInfo as? CharacterDetails {
                     switch indexPath.item {
                     case 0:
@@ -132,6 +131,7 @@ extension CharacterDetailsViewController {
                     }
                 }
             case 3:
+                guard let episodeCell = self?.characterDetailsView.episodeCell else { return nil }
                 if let episode = characterInfo as?
                     RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode {
                     return collectionView.dequeueConfiguredReusableCell(using: episodeCell,
@@ -139,14 +139,17 @@ extension CharacterDetailsViewController {
                                                                         item: episode)
                 }
             case 4:
+                guard let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell else { return nil}
                 showLoadingAnimation(currentCell: avatarCell)
                 avatarCell.characterImage.layer.borderWidth = 0
                 avatarCell.backgroundColor = .secondarySystemBackground
                 return avatarCell
             case 5:
+                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 showLoadingAnimation(currentCell: infoCell)
                 return infoCell
             case 6:
+                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 showLoadingAnimation(currentCell: infoCell)
                 return infoCell
             default:

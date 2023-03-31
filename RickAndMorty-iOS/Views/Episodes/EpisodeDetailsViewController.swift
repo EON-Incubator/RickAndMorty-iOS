@@ -88,14 +88,12 @@ extension EpisodeDetailsViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: episodeDetailsView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, episode) -> UICollectionViewCell? in
 
-            guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
-
-            guard let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell else { return nil }
-
             switch indexPath.section {
             case 0:
+                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 return self?.configInfoCell(cell: infoCell, data: episode, itemIndex: indexPath.item)
             case 1:
+                guard let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell else { return nil }
                 if let character = episode as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
                     let urlString = character?.image ?? ""
                     characterRowCell.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
@@ -108,9 +106,11 @@ extension EpisodeDetailsViewController {
                 }
                 // empty sections
             case 2:
+                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 showLoadingAnimation(currentCell: infoCell)
                 return infoCell
             case 3:
+                guard let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell else { return nil }
                 showLoadingAnimation(currentCell: characterRowCell)
                 return characterRowCell
             default:
@@ -118,8 +118,10 @@ extension EpisodeDetailsViewController {
             }
             return UICollectionViewCell()
         })
+        applyHeaderView()
+    }
 
-        // for custom header
+    func applyHeaderView() {
         dataSource?.supplementaryViewProvider = { [weak self] (_ collectionView, _ kind, indexPath) in
             guard let headerView = self?.episodeDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
@@ -130,6 +132,7 @@ extension EpisodeDetailsViewController {
             return headerView
         }
     }
+
     func configInfoCell(cell: InfoCell, data: AnyHashable, itemIndex: Int) -> UICollectionViewCell {
         if let episodeDetails = data as? EpisodeDetails {
             switch itemIndex {

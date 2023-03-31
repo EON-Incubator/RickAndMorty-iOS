@@ -56,7 +56,7 @@ class LocationDetailsViewController: UIViewController {
         snapshot.deleteAllItems()
         snapshot.appendSections([.info, .residents, .emptyInfo, .emptyResidents])
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 2), toSection: .emptyInfo)
-        dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
 
     func subscribeToViewModel() {
@@ -89,13 +89,12 @@ extension LocationDetailsViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: locationDetailsView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, location) -> UICollectionViewCell? in
 
-            guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
-            guard let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell else { return nil }
-
             switch indexPath.section {
             case 0:
+                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 return self?.configLocationInfoCell(cell: infoCell, data: location, itemIndex: indexPath.item)
             case 1:
+                guard let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell else { return nil }
                 if let character = location as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
                     let urlString = character?.image ?? ""
                     characterRowCell.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
@@ -107,9 +106,11 @@ extension LocationDetailsViewController {
                     return characterRowCell
                 }
             case 2:
+                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 showLoadingAnimation(currentCell: infoCell)
                 return infoCell
             case 3:
+                guard let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell else { return nil }
                 showLoadingAnimation(currentCell: characterRowCell)
                 return characterRowCell
             default:
@@ -117,17 +118,7 @@ extension LocationDetailsViewController {
             }
             return UICollectionViewCell()
         })
-
-        // for custom header
-        dataSource?.supplementaryViewProvider = { [weak self] (_ collectionView, _ kind, indexPath) in
-            guard let headerView = self?.locationDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
-                fatalError()
-            }
-            headerView.textLabel.text = indexPath.section == 0 || indexPath.section == 2 ? K.Headers.info : K.Headers.residents
-            headerView.textLabel.textColor = .gray
-            headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-            return headerView
-        }
+        applySupplementaryHeader()
     }
 
     func configLocationInfoCell(cell: InfoCell, data: AnyHashable, itemIndex: Int) -> UICollectionViewListCell {
@@ -147,6 +138,19 @@ extension LocationDetailsViewController {
             }
         }
         return cell
+    }
+
+    func applySupplementaryHeader() {
+        // for custom header
+        dataSource?.supplementaryViewProvider = { [weak self] (_ collectionView, _ kind, indexPath) in
+            guard let headerView = self?.locationDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
+                fatalError()
+            }
+            headerView.textLabel.text = indexPath.section == 0 || indexPath.section == 2 ? K.Headers.info : K.Headers.residents
+            headerView.textLabel.textColor = .gray
+            headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+            return headerView
+        }
     }
 }
 
