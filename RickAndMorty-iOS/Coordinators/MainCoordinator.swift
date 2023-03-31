@@ -50,25 +50,10 @@ class MainCoordinator: Coordinator {
         let navBarAppearance = customNavBarAppearance()
 
         // Add navigation controllers to the tab bar and set the title and icon for each tab.
-        tabBarController.addChild(characterNavController)
-        characterNavController.tabBarItem.image = UIImage(systemName: K.Images.systemCharacters)
-        characterNavController.tabBarItem.title = K.Titles.characters
-        characterNavController.navigationBar.standardAppearance = navBarAppearance
-
-        tabBarController.addChild(locationNavController)
-        locationNavController.tabBarItem.image = UIImage(systemName: K.Images.map)
-        locationNavController.tabBarItem.title = K.Titles.locations
-        locationNavController.navigationBar.standardAppearance = navBarAppearance
-
-        tabBarController.addChild(episodeNavController)
-        episodeNavController.tabBarItem.image = UIImage(systemName: K.Images.television)
-        episodeNavController.tabBarItem.title = K.Titles.episodes
-        episodeNavController.navigationBar.standardAppearance = navBarAppearance
-
-        tabBarController.addChild(searchNavController)
-        searchNavController.tabBarItem.image = UIImage(systemName: K.Images.systemMagnifyingGlass)
-        searchNavController.tabBarItem.title = K.Titles.search
-        searchNavController.navigationBar.standardAppearance = navBarAppearance
+        configureTab(navController: characterNavController, image: UIImage(systemName: K.Images.systemCharacters), title: K.Titles.characters, barAppearance: navBarAppearance)
+        configureTab(navController: locationNavController, image: UIImage(systemName: K.Images.map), title: K.Titles.locations, barAppearance: navBarAppearance)
+        configureTab(navController: episodeNavController, image: UIImage(systemName: K.Images.television), title: K.Titles.episodes, barAppearance: navBarAppearance)
+        configureTab(navController: searchNavController, image: UIImage(systemName: K.Images.systemMagnifyingGlass), title: K.Titles.search, barAppearance: navBarAppearance)
 
         // Add CharactersViewController to the character navigation controller.
         let charactersViewModel = CharactersViewModel()
@@ -98,6 +83,13 @@ class MainCoordinator: Coordinator {
         window.tintColor = .label
         window.rootViewController = tabBarController
         window.makeKeyAndVisible()
+    }
+
+    func configureTab(navController: UINavigationController, image: UIImage?, title: String, barAppearance: UINavigationBarAppearance) {
+        tabBarController.addChild(navController)
+        navController.tabBarItem.image = image
+        navController.tabBarItem.title = title
+        navController.navigationBar.standardAppearance = barAppearance
     }
 
     func goCharacterDetails(id: String, navController: UINavigationController) {

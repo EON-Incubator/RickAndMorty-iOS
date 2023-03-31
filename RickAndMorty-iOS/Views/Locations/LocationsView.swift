@@ -12,8 +12,8 @@ class LocationsView: UIView {
 
     let loadingView = LoadingView()
 
-    lazy var collectionView: UICollectionView = { [weak self] in
-        let collectionView = UICollectionView(frame: self?.bounds ?? CGRect.zero, collectionViewLayout: createLayout())
+    lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
         collectionView.register(LocationRowCell.self,
                                 forCellWithReuseIdentifier: LocationRowCell.identifier)
 
