@@ -17,17 +17,17 @@ class SearchViewController: UIViewController {
         case loadMoreLocations
     }
 
-    let searchView = SearchView()
-    let viewModel: SearchViewModel
+    private let searchView = SearchView()
+    private let viewModel: SearchViewModel
 
     private let searchController = UISearchController(searchResultsController: nil)
-    weak var debounceTimer: Timer?
-    var searchSuggestions: [UISearchSuggestionItem] = []
+    private weak var debounceTimer: Timer?
+    private var searchSuggestions: [UISearchSuggestionItem] = []
 
     typealias DataSource = UICollectionViewDiffableDataSource<SearchSection, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<SearchSection, AnyHashable>
     private var dataSource: DataSource!
-    var snapshot = Snapshot()
+    private var snapshot = Snapshot()
     private var cancellables = Set<AnyCancellable>()
 
     init(viewModel: SearchViewModel) {
@@ -52,17 +52,17 @@ class SearchViewController: UIViewController {
         searchView.collectionView.delegate = self
     }
 
-    let charactersSearchViewModel = CharactersViewModel()
-    let locationNameViewModel = LocationsViewModel()
-    let locationTypeViewModel = LocationsViewModel()
+    private let charactersSearchViewModel = CharactersViewModel()
+    private let locationNameViewModel = LocationsViewModel()
+    private let locationTypeViewModel = LocationsViewModel()
 
-    var currentCharactersPage = 1
-    var currentLocationsPage = 1
+    private var currentCharactersPage = 1
+    private var currentLocationsPage = 1
 
-    var totalCharactersPage: Int = 0
-    var totalLocationsPage: Int = 0
+    private var totalCharactersPage: Int = 0
+    private var totalLocationsPage: Int = 0
 
-    var uniqueLocations: [RickAndMortyAPI.LocationDetails] = []
+    private var uniqueLocations: [RickAndMortyAPI.LocationDetails] = []
 
     func subscribeToViewModel() {
 

@@ -10,7 +10,7 @@ import SnapKit
 
 class CharactersFilterView: UIView {
 
-    let blurView: UIVisualEffectView = {
+    private let blurView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .systemThinMaterial)
         let view = UIVisualEffectView(effect: effect)
         return view
@@ -24,7 +24,7 @@ class CharactersFilterView: UIView {
         return button
     }()
 
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = K.FilterLabels.title
         label.font = UIFont(name: K.Fonts.primary, size: 24)
@@ -40,13 +40,13 @@ class CharactersFilterView: UIView {
         return button
     }()
 
-    let lineView: UIView = {
+    private let lineView: UIView = {
         let view = UIView()
         view.backgroundColor = .gray
         return view
     }()
 
-    let statusLabel: UILabel = {
+    private let statusLabel: UILabel = {
         let label = UILabel()
         label.text = K.FilterLabels.status
         label.font = UIFont(name: K.Fonts.secondary, size: 14)
@@ -61,7 +61,7 @@ class CharactersFilterView: UIView {
         return segmentControl
     }()
 
-    let genderLabel: UILabel = {
+    private let genderLabel: UILabel = {
         let label = UILabel()
         label.text = K.FilterLabels.gender
         label.font = UIFont(name: K.Fonts.secondary, size: 14)

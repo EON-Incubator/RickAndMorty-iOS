@@ -9,14 +9,14 @@ import UIKit
 
 class MainCoordinator: Coordinator {
 
-    let window: UIWindow
+    private let window: UIWindow
 
-    var tabBarController = UITabBarController()
+    private var tabBarController = UITabBarController()
 
-    let characterNavController = UINavigationController()
-    let locationNavController = UINavigationController()
-    let episodeNavController = UINavigationController()
-    let searchNavController = UINavigationController()
+    private let characterNavController = UINavigationController()
+    private let locationNavController = UINavigationController()
+    private let episodeNavController = UINavigationController()
+    private let searchNavController = UINavigationController()
 
     func customNavBarAppearance() -> UINavigationBarAppearance {
         let customNavBarAppearance = UINavigationBarAppearance()

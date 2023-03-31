@@ -17,14 +17,14 @@ class LocationDetailsViewController: UIViewController {
         case emptyResidents
     }
 
-    let locationDetailsView = LocationDetailsView()
-    let viewModel: LocationDetailsViewModel
+    private let locationDetailsView = LocationDetailsView()
+    private let viewModel: LocationDetailsViewModel
 
     typealias DataSource = UICollectionViewDiffableDataSource<LocationDetailsSection, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<LocationDetailsSection, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
-    var snapshot = Snapshot()
+    private var snapshot = Snapshot()
 
     init(viewModel: LocationDetailsViewModel) {
         self.viewModel = viewModel

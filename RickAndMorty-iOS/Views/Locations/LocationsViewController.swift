@@ -10,14 +10,14 @@ import Combine
 
 class LocationsViewController: UIViewController {
 
-    let locationsView = LocationsView()
-    let viewModel: LocationsViewModel
+    private let locationsView = LocationsView()
+    private let viewModel: LocationsViewModel
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
-    var snapshot = Snapshot()
+    private var snapshot = Snapshot()
 
     init(viewModel: LocationsViewModel) {
         self.viewModel = viewModel

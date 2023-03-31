@@ -11,18 +11,18 @@ import SDWebImage
 
 class CharacterDetailsViewController: UIViewController {
 
-    let viewModel: CharacterDetailsViewModel
-    let locationsViewModel = LocationsViewModel()
-    let characterDetailsView = CharacterDetailsView()
-    var characterID: String?
-    var avatarImageUrl: String?
-    var titleViewState: TitleViewState = .noTitle
+    private let viewModel: CharacterDetailsViewModel
+    private let locationsViewModel = LocationsViewModel()
+    private let characterDetailsView = CharacterDetailsView()
+    private var characterID: String?
+    private var avatarImageUrl: String?
+    private var titleViewState: TitleViewState = .noTitle
 
     private var dataSource: DataSource!
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
     private var cancellables = Set<AnyCancellable>()
-    var snapshot = Snapshot()
+    private var snapshot = Snapshot()
 
     enum TitleViewState {
         case noTitle, title, titleWithImage

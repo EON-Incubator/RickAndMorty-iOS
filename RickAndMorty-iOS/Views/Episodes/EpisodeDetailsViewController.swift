@@ -17,14 +17,14 @@ class EpisodeDetailsViewController: UIViewController {
         case emptyCharacters
     }
 
-    let episodeDetailsView = EpisodeDetailsView()
-    let viewModel: EpisodeDetailsViewModel
+    private let episodeDetailsView = EpisodeDetailsView()
+    private let viewModel: EpisodeDetailsViewModel
 
     typealias DataSource = UICollectionViewDiffableDataSource<EpisodeDetailsSection, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<EpisodeDetailsSection, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
-    var snapshot = Snapshot()
+    private var snapshot = Snapshot()
 
     init(viewModel: EpisodeDetailsViewModel) {
         self.viewModel = viewModel

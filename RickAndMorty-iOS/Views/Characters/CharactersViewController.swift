@@ -11,14 +11,14 @@ import SDWebImage
 
 class CharactersViewController: UIViewController {
 
-    let charactersGridView = CharactersView()
-    var viewModel: CharactersViewModel
+    private let charactersGridView = CharactersView()
+    private var viewModel: CharactersViewModel
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
     private var dataSource: DataSource!
     private var cancellables = Set<AnyCancellable>()
-    var snapshot = Snapshot()
+    private var snapshot = Snapshot()
 
     init(viewModel: CharactersViewModel) {
         self.viewModel = viewModel
