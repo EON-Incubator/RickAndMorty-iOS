@@ -56,7 +56,7 @@ class LocationDetailsViewController: UIViewController {
         snapshot.deleteAllItems()
         snapshot.appendSections([.info, .residents, .emptyInfo, .emptyResidents])
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 2), toSection: .emptyInfo)
-        self.dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     func subscribeToViewModel() {
@@ -155,7 +155,7 @@ extension LocationDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
-            viewModel.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
+            viewModel.goCharacterDetails(id: (character?.id)!, navController: navigationController!)
         }
     }
 }

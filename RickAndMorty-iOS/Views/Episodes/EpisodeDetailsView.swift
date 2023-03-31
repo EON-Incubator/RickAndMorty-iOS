@@ -11,7 +11,7 @@ import SnapKit
 class EpisodeDetailsView: UIView {
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
         collectionView.register(HeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: K.Headers.identifier)
@@ -38,9 +38,9 @@ class EpisodeDetailsView: UIView {
     }
 
     private func setupViews() {
-        self.backgroundColor = UIColor(named: K.Colors.episodeView)
+        backgroundColor = UIColor(named: K.Colors.episodeView)
         collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
-        self.addSubview(collectionView)
+        addSubview(collectionView)
         collectionView.accessibilityIdentifier = K.Identifiers.episodeDetails
         collectionView.showsVerticalScrollIndicator = false
     }

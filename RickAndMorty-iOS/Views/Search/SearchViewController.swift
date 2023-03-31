@@ -168,11 +168,11 @@ extension SearchViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         if let location = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.LocationDetails? {
-            viewModel.goLocationDetails(id: (location?.id)!, navController: self.navigationController!)
+            viewModel.goLocationDetails(id: (location?.id)!, navController: navigationController!)
         }
 
         if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics? {
-            viewModel.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
+            viewModel.goCharacterDetails(id: (character?.id)!, navController: navigationController!)
         }
 
         // load-more section
@@ -238,14 +238,14 @@ extension SearchViewController: UISearchBarDelegate {
         // change background colors
         switch selectedScope {
         case 1:
-            self.searchView.collectionView.backgroundColor = UIColor(named: K.Colors.characterView)
-            self.searchView.backgroundColor = UIColor(named: K.Colors.characterView)
+            searchView.collectionView.backgroundColor = UIColor(named: K.Colors.characterView)
+            searchView.backgroundColor = UIColor(named: K.Colors.characterView)
         case 2:
-            self.searchView.collectionView.backgroundColor = UIColor(named: K.Colors.locationsView)
-            self.searchView.backgroundColor = UIColor(named: K.Colors.locationsView)
+            searchView.collectionView.backgroundColor = UIColor(named: K.Colors.locationsView)
+            searchView.backgroundColor = UIColor(named: K.Colors.locationsView)
         default:
-            self.searchView.collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
-            self.searchView.backgroundColor = UIColor(named: K.Colors.episodeView)
+            searchView.collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
+            searchView.backgroundColor = UIColor(named: K.Colors.episodeView)
         }
     }
 }
@@ -314,7 +314,7 @@ extension UICollectionView {
     func noDataFound(_ dataCount: Int, query: String) {
         if dataCount <=  0 {
             let label = UILabel()
-            label.frame = self.frame
+            label.frame = frame
             label.frame.origin.x = 0
             label.frame.origin.y = 0
             label.textAlignment = .center
@@ -322,9 +322,9 @@ extension UICollectionView {
             label.lineBreakMode = .byWordWrapping
             label.numberOfLines = 3
             label.text = "No results found for '\(query)'"
-            self.backgroundView = label
+            backgroundView = label
         } else {
-            self.backgroundView = nil
+            backgroundView = nil
         }
     }
 }

@@ -10,7 +10,7 @@ import UIKit
 class SearchView: UIView {
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
         collectionView.register(CharacterRowCell.self,
                                 forCellWithReuseIdentifier: CharacterRowCell.identifier)
         collectionView.register(HeaderView.self,
@@ -56,10 +56,10 @@ class SearchView: UIView {
     }
 
     private func setupViews() {
-        self.backgroundColor = UIColor(named: K.Colors.episodeView)
-        self.collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
-        self.addSubview(collectionView)
-        self.addSubview(middleLabel)
+        backgroundColor = UIColor(named: K.Colors.episodeView)
+        collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
+        addSubview(collectionView)
+        addSubview(middleLabel)
     }
 
     lazy var middleLabel: UILabel = {
@@ -75,9 +75,9 @@ class SearchView: UIView {
             make.edges.equalTo(safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
         middleLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(self.safeAreaLayoutGuide)
-            make.left.equalTo(self.safeAreaLayoutGuide).inset(10)
-            make.right.equalTo(self.safeAreaLayoutGuide).inset(10)
+            make.centerY.equalTo(safeAreaLayoutGuide)
+            make.left.equalTo(safeAreaLayoutGuide).inset(10)
+            make.right.equalTo(safeAreaLayoutGuide).inset(10)
         }
     }
 

@@ -57,7 +57,7 @@ class CharacterDetailsViewController: UIViewController {
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 1), toSection: .empty)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 3), toSection: .emptyInfo)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 2), toSection: .emptyLocation)
-        self.dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     func subscribeToViewModel() {
@@ -185,16 +185,16 @@ extension CharacterDetailsViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
         if indexPath.section > 1 {
             if let episode = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode? {
-                viewModel.goEpisodeDetails(id: (episode?.id)!, navController: self.navigationController!)
+                viewModel.goEpisodeDetails(id: (episode?.id)!, navController: navigationController!)
             }
             if let character = dataSource.itemIdentifier(for: indexPath) as? CharacterDetails {
                 switch indexPath.row {
                 case 0:
                     if let originID = character.item.origin?.id {
-                        viewModel.goLocationDetails(id: originID, navController: self.navigationController!)
+                        viewModel.goLocationDetails(id: originID, navController: navigationController!)
                     }
                 default:
-                    viewModel.goLocationDetails(id: (character.item.location?.id)!, navController: self.navigationController!)
+                    viewModel.goLocationDetails(id: (character.item.location?.id)!, navController: navigationController!)
                 }
             }
         }
@@ -233,12 +233,12 @@ extension CharacterDetailsViewController: UICollectionViewDelegate {
             navigationItem.titleView?.removeFromSuperview()
         case .title:
             let titleWithImage = characterDetailsView.titleView(image: nil, title: title)
-            self.navigationItem.titleView = titleWithImage
-            UIView.transition(with: self.navigationController?.navigationBar ?? UIView(), duration: 0.25, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+            navigationItem.titleView = titleWithImage
+            UIView.transition(with: navigationController?.navigationBar ?? UIView(), duration: 0.25, options: [.transitionCrossDissolve], animations: nil, completion: nil)
         case .titleWithImage:
-            let titleWithImage = characterDetailsView.titleView(image: self.avatarImageUrl, title: title)
-            self.navigationItem.titleView = titleWithImage
-            UIView.transition(with: self.navigationController?.navigationBar ?? UIView(), duration: 0.25, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+            let titleWithImage = characterDetailsView.titleView(image: avatarImageUrl, title: title)
+            navigationItem.titleView = titleWithImage
+            UIView.transition(with: navigationController?.navigationBar ?? UIView(), duration: 0.25, options: [.transitionCrossDissolve], animations: nil, completion: nil)
         }
     }
 }

@@ -50,7 +50,7 @@ class LocationsViewController: UIViewController {
         snapshot.deleteAllItems()
         snapshot.appendSections([.appearance, .empty])
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 8), toSection: .empty)
-        self.dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     func subscribeToViewModel() {
@@ -117,7 +117,7 @@ extension LocationsViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
-            self.locationsView.loadingView.spinner.startAnimating()
+            locationsView.loadingView.spinner.startAnimating()
             loadMore()
         }
     }
@@ -126,7 +126,7 @@ extension LocationsViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         if let location = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result {
-            viewModel.goLocationDetails(id: location.id!, navController: self.navigationController!)
+            viewModel.goLocationDetails(id: location.id!, navController: navigationController!)
         }
     }
 }

@@ -13,7 +13,7 @@ class CharacterRowCell: UICollectionViewListCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.contentView.layer.sublayers?.removeAll()
+        contentView.layer.sublayers?.removeAll()
     }
 
     lazy var characterAvatarImageView: UIImageView = {
@@ -85,7 +85,7 @@ class CharacterRowCell: UICollectionViewListCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
+        accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
         setupViews()
         setupConstraints()
     }
@@ -93,22 +93,22 @@ class CharacterRowCell: UICollectionViewListCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = UIColor.gray.cgColor
-        self.layer.cornerRadius = 5
-        self.layer.masksToBounds = true
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.gray.cgColor
+        layer.cornerRadius = 5
+        layer.masksToBounds = true
     }
 
     func setupViews() {
-        let myView = UIView(frame: self.bounds)
+        let myView = UIView(frame: bounds)
         myView.backgroundColor = UIColor(named: K.Colors.characterRow)?.withAlphaComponent(0.7)
-        self.backgroundView = myView
+        backgroundView = myView
 
-        self.addSubview(characterAvatarImageView)
-        self.addSubview(characterStatusLabel)
-        self.addSubview(upperLabel)
-        self.addSubview(lowerLeftLabel)
-        self.addSubview(lowerRightLabel)
+        addSubview(characterAvatarImageView)
+        addSubview(characterStatusLabel)
+        addSubview(upperLabel)
+        addSubview(lowerLeftLabel)
+        addSubview(lowerRightLabel)
     }
 
     enum CharacterStatus: String {
@@ -116,7 +116,7 @@ class CharacterRowCell: UICollectionViewListCell {
         case dead = "Dead"
         case unknown = "unknown"
         var description: String {
-            return self.rawValue
+            return rawValue
         }
     }
 

@@ -11,7 +11,7 @@ import SnapKit
 class LocationDetailsView: UIView {
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
         collectionView.register(HeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: K.Headers.identifier)
@@ -38,9 +38,9 @@ class LocationDetailsView: UIView {
     }
 
     private func setupViews() {
-        self.backgroundColor = UIColor(named: K.Colors.locationsView)
+        backgroundColor = UIColor(named: K.Colors.locationsView)
         collectionView.backgroundColor = UIColor(named: K.Colors.locationsView)
-        self.addSubview(collectionView)
+        addSubview(collectionView)
         collectionView.accessibilityIdentifier = K.Identifiers.locationDetails
         collectionView.showsVerticalScrollIndicator = false
     }

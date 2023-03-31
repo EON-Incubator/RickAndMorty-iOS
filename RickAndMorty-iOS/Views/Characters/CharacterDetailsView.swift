@@ -21,8 +21,8 @@ class CharacterDetailsView: UIView {
     }
 
     private func setupViews() {
-        self.backgroundColor = .systemBackground
-        self.addSubview(collectionView)
+        backgroundColor = .systemBackground
+        addSubview(collectionView)
         collectionView.accessibilityIdentifier = K.Identifiers.characterDetails
         collectionView.showsVerticalScrollIndicator = false
     }
@@ -34,7 +34,7 @@ class CharacterDetailsView: UIView {
     }
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
         collectionView.register(AvatarCell.self,
                                 forCellWithReuseIdentifier: AvatarCell.identifier)
         collectionView.register(InfoCell.self,

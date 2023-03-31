@@ -20,11 +20,11 @@ class LoadingView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.addSubview(spinner)
+        addSubview(spinner)
     }
 
     func setupConstraints(view: UIView) {
-        let layoutGuide = self.safeAreaLayoutGuide
+        let layoutGuide = safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             layoutGuide.centerXAnchor.constraint(equalTo: spinner.centerXAnchor),
             layoutGuide.bottomAnchor.constraint(equalTo: spinner.bottomAnchor, constant: 10)

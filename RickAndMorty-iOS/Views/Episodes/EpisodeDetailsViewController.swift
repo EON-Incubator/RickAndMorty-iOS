@@ -157,7 +157,7 @@ extension EpisodeDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
-            viewModel.goCharacterDetails(id: (character?.id)!, navController: self.navigationController!)
+            viewModel.goCharacterDetails(id: (character?.id)!, navController: navigationController!)
         }
     }
 }

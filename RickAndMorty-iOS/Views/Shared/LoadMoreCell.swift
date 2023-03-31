@@ -20,7 +20,7 @@ class LoadMoreCell: UICollectionViewListCell {
 
     override func prepareForReuse() {
             super.prepareForReuse()
-            self.contentView.layer.sublayers?.removeAll()
+            contentView.layer.sublayers?.removeAll()
         }
 
     required init?(coder: NSCoder) {
@@ -28,13 +28,13 @@ class LoadMoreCell: UICollectionViewListCell {
     }
 
     func setupViews() {
-        let myView = UIView(frame: self.bounds)
+        let myView = UIView(frame: bounds)
         myView.layer.opacity = 0.0
-        self.backgroundView = myView
-        self.layer.borderWidth = 0.2
-        self.layer.borderColor = UIColor.gray.cgColor
-        self.layer.cornerRadius = 5
-        self.addSubview(centerLabel)
+        backgroundView = myView
+        layer.borderWidth = 0.2
+        layer.borderColor = UIColor.gray.cgColor
+        layer.cornerRadius = 5
+        addSubview(centerLabel)
     }
 
     lazy var centerLabel: UILabel = {

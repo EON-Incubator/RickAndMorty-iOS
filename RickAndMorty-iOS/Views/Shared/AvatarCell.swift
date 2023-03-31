@@ -21,7 +21,7 @@ class AvatarCell: UICollectionViewCell {
     }
 
     func setupViews() {
-        self.addSubview(characterImage)
+        addSubview(characterImage)
     }
 
     lazy var characterImage: UIImageView = {

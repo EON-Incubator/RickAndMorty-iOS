@@ -12,7 +12,7 @@ class EpisodesView: UIView {
     let loadingView = LoadingView()
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
         collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
         collectionView.showsVerticalScrollIndicator = false
@@ -37,14 +37,14 @@ class EpisodesView: UIView {
     }
 
     private func setupViews() {
-        self.backgroundColor = UIColor(named: K.Colors.episodeView)
-        self.addSubview(collectionView)
-        self.addSubview(loadingView)
+        backgroundColor = UIColor(named: K.Colors.episodeView)
+        addSubview(collectionView)
+        addSubview(loadingView)
     }
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(self.safeAreaInsets).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+            make.edges.equalTo(safeAreaInsets).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
         loadingView.setupConstraints(view: self)
     }

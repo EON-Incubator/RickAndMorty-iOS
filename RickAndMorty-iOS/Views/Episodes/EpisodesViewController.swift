@@ -49,7 +49,7 @@ class EpisodesViewController: UIViewController {
         snapshot.deleteAllItems()
         snapshot.appendSections([.appearance, .empty])
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 8), toSection: .empty)
-        self.dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     func subscribeToViewModel() {
@@ -117,7 +117,7 @@ extension EpisodesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
 
-            self.episodesView.loadingView.spinner.startAnimating()
+            episodesView.loadingView.spinner.startAnimating()
             loadMore()
         }
     }
@@ -126,7 +126,7 @@ extension EpisodesViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         if let episode = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result {
-            viewModel.goEpisodeDetails(id: episode.id!, navController: self.navigationController!)
+            viewModel.goEpisodeDetails(id: episode.id!, navController: navigationController!)
         }
     }
 }
