@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class CharactersFilterView: UIView {
+class CharactersFilterView: BaseView {
 
     let blurView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .systemThinMaterial)
@@ -76,12 +76,8 @@ class CharactersFilterView: UIView {
         return segmentControl
     }()
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init() {
+        super.init()
         setupViews()
         setupConstraints()
     }

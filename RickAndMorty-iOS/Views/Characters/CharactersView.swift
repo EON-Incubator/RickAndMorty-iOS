@@ -8,16 +8,12 @@
 import UIKit
 import SnapKit
 
-class CharactersView: UIView {
+class CharactersView: BaseView {
 
     let loadingView = LoadingView()
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    init() {
-        super.init(frame: .zero)
+    override init() {
+        super.init()
         setupViews()
         setupConstraints()
     }

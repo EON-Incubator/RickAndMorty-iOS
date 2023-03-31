@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EpisodesView: UIView {
+class EpisodesView: BaseView {
 
     let loadingView = LoadingView()
 
@@ -22,16 +22,8 @@ class EpisodesView: UIView {
     var episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (_ cell, _ indexPath, _ episode) in
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    init() {
-        super.init(frame: .zero)
+    override init() {
+        super.init()
         setupViews()
         setupConstraints()
     }
