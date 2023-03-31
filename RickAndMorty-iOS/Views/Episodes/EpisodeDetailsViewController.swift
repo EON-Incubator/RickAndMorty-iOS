@@ -89,25 +89,25 @@ extension EpisodeDetailsViewController {
                 guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 return self?.configInfoCell(cell: infoCell, data: episode, itemIndex: indexPath.item)
             case 1:
-                guard let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell else { return nil }
+                let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
                 if let character = episode as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
                     let urlString = character?.image ?? ""
-                    characterRowCell.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
-                    characterRowCell.upperLabel.text = character?.name
-                    characterRowCell.lowerLeftLabel.text = character?.gender
-                    characterRowCell.lowerRightLabel.text = character?.species
-                    characterRowCell.characterStatusLabel.text = character?.status
-                    characterRowCell.characterStatusLabel.backgroundColor = characterRowCell.statusColor(character?.status ?? "")
+                    characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
+                    characterRowCell?.upperLabel.text = character?.name
+                    characterRowCell?.lowerLeftLabel.text = character?.gender
+                    characterRowCell?.lowerRightLabel.text = character?.species
+                    characterRowCell?.characterStatusLabel.text = character?.status
+                    characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character?.status ?? "")
                     return characterRowCell
                 }
                 // empty sections
             case 2:
-                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
-                showLoadingAnimation(currentCell: infoCell)
+                let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+                infoCell?.showLoadingAnimation()
                 return infoCell
             case 3:
-                guard let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell else { return nil }
-                showLoadingAnimation(currentCell: characterRowCell)
+                let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
+                characterRowCell?.showLoadingAnimation()
                 return characterRowCell
             default:
                 return UICollectionViewCell()

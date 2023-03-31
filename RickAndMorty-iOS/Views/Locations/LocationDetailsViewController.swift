@@ -102,12 +102,12 @@ extension LocationDetailsViewController {
                     return characterRowCell
                 }
             case 2:
-                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
-                showLoadingAnimation(currentCell: infoCell)
+                let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+                infoCell?.showLoadingAnimation()
                 return infoCell
             case 3:
-                guard let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell else { return nil }
-                showLoadingAnimation(currentCell: characterRowCell)
+                let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
+                characterRowCell?.showLoadingAnimation()
                 return characterRowCell
             default:
                 return UICollectionViewCell()

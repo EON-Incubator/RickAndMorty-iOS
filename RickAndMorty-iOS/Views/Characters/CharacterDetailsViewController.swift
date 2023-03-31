@@ -135,18 +135,18 @@ extension CharacterDetailsViewController {
                                                                         item: episode)
                 }
             case 4:
-                guard let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell else { return nil}
-                showLoadingAnimation(currentCell: avatarCell)
-                avatarCell.characterImage.layer.borderWidth = 0
-                avatarCell.backgroundColor = .secondarySystemBackground
+                let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell
+                avatarCell?.showLoadingAnimation()
+                avatarCell?.characterImage.layer.borderWidth = 0
+                avatarCell?.backgroundColor = .secondarySystemBackground
                 return avatarCell
             case 5:
-                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
-                showLoadingAnimation(currentCell: infoCell)
+                let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+                infoCell?.showLoadingAnimation()
                 return infoCell
             case 6:
-                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
-                showLoadingAnimation(currentCell: infoCell)
+                let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+                infoCell?.showLoadingAnimation()
                 return infoCell
             default:
                 return UICollectionViewCell()

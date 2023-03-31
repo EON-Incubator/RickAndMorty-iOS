@@ -85,7 +85,7 @@ extension EpisodesViewController {
             // section with empty episode cells
             if indexPath.section == 1 {
                 let cell = collectionView.dequeueConfiguredReusableCell(using: episodeCell, for: indexPath, item: data as? EmptyData )
-                showLoadingAnimation(currentCell: cell)
+                cell.showLoadingAnimation()
                 return cell
             }
 
