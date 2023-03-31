@@ -1,0 +1,30 @@
+{
+  "schemaName" : "RickAndMortyAPI",
+  "input" : {
+    "operationSearchPaths" : [
+      "**/*.graphql"
+    ],
+    "schemaSearchPaths" : [
+      "**/*.graphqls"
+    ]
+  },
+  "output" : {
+    "testMocks" : {
+      "absolute" : {
+          "path" : "./RickAndMortyAPI/TestMocks"
+      }
+    },
+    "schemaTypes" : {
+      "path" : "./RickAndMortyAPI",
+      "moduleType" : {
+        "embeddedInTarget" : {
+          "name" : "RickAndMorty-iOS"
+        }
+      }
+    },
+    "operations" : {
+      "inSchemaModule" : {
+      }
+    }
+  }
+}
