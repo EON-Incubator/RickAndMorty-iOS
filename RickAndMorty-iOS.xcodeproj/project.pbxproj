@@ -106,6 +106,7 @@
 		F7F240C829C440A0007E34AC /* CharactersFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240C729C440A0007E34AC /* CharactersFilterView.swift */; };
 		F7F240CA29C442CE007E34AC /* CharactersFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240C929C442CE007E34AC /* CharactersFilterViewController.swift */; };
 		F7F240CC29C4FD93007E34AC /* CharactersFilterUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240CB29C4FD93007E34AC /* CharactersFilterUISpec.swift */; };
+		F7FA2DC129D748ED00CEF68C /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FA2DC029D748ED00CEF68C /* BaseViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -219,6 +220,7 @@
 		F7F240C729C440A0007E34AC /* CharactersFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersFilterView.swift; sourceTree = "<group>"; };
 		F7F240C929C442CE007E34AC /* CharactersFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersFilterViewController.swift; sourceTree = "<group>"; };
 		F7F240CB29C4FD93007E34AC /* CharactersFilterUISpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersFilterUISpec.swift; sourceTree = "<group>"; };
+		F7FA2DC029D748ED00CEF68C /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -418,6 +420,7 @@
 		F77E4B9429B934C300B8B5CE /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F7FA2DC029D748ED00CEF68C /* BaseViewController.swift */,
 				54ECFC3D29C545810049ACE3 /* Search */,
 				540F4CEE29BEA1A600677B82 /* Shared */,
 				F77E4B9529B934D200B8B5CE /* Characters */,
@@ -893,6 +896,7 @@
 				F7EA932529CB8F9600F7F112 /* Query.graphql.swift in Sources */,
 				5447EE1F29BA5A7900D2D05A /* CharacterGridCell.swift in Sources */,
 				F77E4B7E29B906D400B8B5CE /* SceneDelegate.swift in Sources */,
+				F7FA2DC129D748ED00CEF68C /* BaseViewController.swift in Sources */,
 				F7C26FEF29C0C0EE00903AF2 /* LocationDetailsViewController.swift in Sources */,
 				F7EA931C29CB8F9600F7F112 /* GetEpisodesQuery.graphql.swift in Sources */,
 				F7C26FF629C119C900903AF2 /* CharacterRowCell.swift in Sources */,

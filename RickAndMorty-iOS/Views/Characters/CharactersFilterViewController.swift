@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class CharactersFilterViewController: UIViewController {
+class CharactersFilterViewController: BaseViewController {
 
     private let statuses = [K.FilterLabels.alive, K.FilterLabels.dead, K.FilterLabels.unknown]
     private let genders = [K.FilterLabels.male, K.FilterLabels.female, K.FilterLabels.genderless, K.FilterLabels.unknown]
@@ -19,17 +19,13 @@ class CharactersFilterViewController: UIViewController {
     private var currentFilterOptions: CurrentValueSubject<FilterOptions, Never>
     private var cancellables = Set<AnyCancellable>()
 
-    required init?(coder: NSCoder) {
-        fatalError("This class does not support NSCoder")
-    }
-
     init(viewModel: CharactersViewModel, onDismiss: (() -> Void)?) {
         self.viewModel = viewModel
         self.dismissHandler = onDismiss
         self.currentFilterOptions = CurrentValueSubject<FilterOptions, Never>(FilterOptions(
             status: viewModel.filterOptions.status,
             gender: viewModel.filterOptions.gender))
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
 
     override func loadView() {
