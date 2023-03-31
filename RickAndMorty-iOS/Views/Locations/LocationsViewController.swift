@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class LocationsViewController: UIViewController {
+class LocationsViewController: BaseViewController {
 
     private let locationsView = LocationsView()
     private let viewModel: LocationsViewModel
@@ -21,11 +21,7 @@ class LocationsViewController: UIViewController {
 
     init(viewModel: LocationsViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init()
     }
 
     override func loadView() {

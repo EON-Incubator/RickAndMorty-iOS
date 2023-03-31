@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class EpisodesViewController: UIViewController {
+class EpisodesViewController: BaseViewController {
 
     private let episodesView = EpisodesView()
     private let viewModel: EpisodesViewModel
@@ -20,11 +20,7 @@ class EpisodesViewController: UIViewController {
 
     init(viewModel: EpisodesViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init()
     }
 
     override func viewDidLoad() {

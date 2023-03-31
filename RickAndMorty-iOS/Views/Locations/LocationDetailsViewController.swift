@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class LocationDetailsViewController: UIViewController {
+class LocationDetailsViewController: BaseViewController {
 
     enum LocationDetailsSection: Int, CaseIterable {
         case info
@@ -28,11 +28,7 @@ class LocationDetailsViewController: UIViewController {
 
     init(viewModel: LocationDetailsViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init()
     }
 
     override func loadView() {

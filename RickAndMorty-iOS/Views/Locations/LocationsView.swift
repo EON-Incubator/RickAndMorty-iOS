@@ -8,12 +8,12 @@
 import UIKit
 import SnapKit
 
-class LocationsView: UIView {
+class LocationsView: BaseView {
 
     let loadingView = LoadingView()
 
-    lazy var collectionView: UICollectionView = { [weak self] in
-        let collectionView = UICollectionView(frame: self?.bounds ?? CGRect.zero, collectionViewLayout: createLayout())
+    lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
         collectionView.register(LocationRowCell.self,
                                 forCellWithReuseIdentifier: LocationRowCell.identifier)
 
@@ -24,16 +24,8 @@ class LocationsView: UIView {
         return collectionView
     }()
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    init() {
-        super.init(frame: .zero)
+    override init() {
+        super.init()
         setupViews()
         setupConstraints()
     }

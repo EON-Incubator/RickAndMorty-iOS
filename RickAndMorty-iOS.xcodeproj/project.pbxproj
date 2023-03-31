@@ -106,6 +106,8 @@
 		F7F240C829C440A0007E34AC /* CharactersFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240C729C440A0007E34AC /* CharactersFilterView.swift */; };
 		F7F240CA29C442CE007E34AC /* CharactersFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240C929C442CE007E34AC /* CharactersFilterViewController.swift */; };
 		F7F240CC29C4FD93007E34AC /* CharactersFilterUISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F240CB29C4FD93007E34AC /* CharactersFilterUISpec.swift */; };
+		F7FA2DC129D748ED00CEF68C /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FA2DC029D748ED00CEF68C /* BaseViewController.swift */; };
+		F7FA2DC329D74D2000CEF68C /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FA2DC229D74D2000CEF68C /* BaseView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -219,6 +221,8 @@
 		F7F240C729C440A0007E34AC /* CharactersFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersFilterView.swift; sourceTree = "<group>"; };
 		F7F240C929C442CE007E34AC /* CharactersFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersFilterViewController.swift; sourceTree = "<group>"; };
 		F7F240CB29C4FD93007E34AC /* CharactersFilterUISpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersFilterUISpec.swift; sourceTree = "<group>"; };
+		F7FA2DC029D748ED00CEF68C /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		F7FA2DC229D74D2000CEF68C /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,6 +263,8 @@
 		540F4CEE29BEA1A600677B82 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				F7FA2DC229D74D2000CEF68C /* BaseView.swift */,
+				F7FA2DC029D748ED00CEF68C /* BaseViewController.swift */,
 				540F4CEF29BEA1DC00677B82 /* InfoCell.swift */,
 				540F4CF129BEABE700677B82 /* HeaderView.swift */,
 				544A6CC129BFA5410055FB75 /* Section.swift */,
@@ -875,6 +881,7 @@
 				F77E4B7C29B906D400B8B5CE /* AppDelegate.swift in Sources */,
 				54644B7929CA8AC7007FB8B3 /* EmptyData.swift in Sources */,
 				54ECFC4429C546820049ACE3 /* SearchViewModel.swift in Sources */,
+				F7FA2DC329D74D2000CEF68C /* BaseView.swift in Sources */,
 				F7604C9B29BF7219003C2906 /* LocationsView.swift in Sources */,
 				F7EA932429CB8F9600F7F112 /* Location.graphql.swift in Sources */,
 				F7EA931829CB8F9600F7F112 /* EpisodeBasics.graphql.swift in Sources */,
@@ -893,6 +900,7 @@
 				F7EA932529CB8F9600F7F112 /* Query.graphql.swift in Sources */,
 				5447EE1F29BA5A7900D2D05A /* CharacterGridCell.swift in Sources */,
 				F77E4B7E29B906D400B8B5CE /* SceneDelegate.swift in Sources */,
+				F7FA2DC129D748ED00CEF68C /* BaseViewController.swift in Sources */,
 				F7C26FEF29C0C0EE00903AF2 /* LocationDetailsViewController.swift in Sources */,
 				F7EA931C29CB8F9600F7F112 /* GetEpisodesQuery.graphql.swift in Sources */,
 				F7C26FF629C119C900903AF2 /* CharacterRowCell.swift in Sources */,
