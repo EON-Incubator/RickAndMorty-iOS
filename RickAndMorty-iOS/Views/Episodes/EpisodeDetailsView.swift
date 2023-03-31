@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class EpisodeDetailsView: UIView {
+class EpisodeDetailsView: BaseView {
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
@@ -23,16 +23,8 @@ class EpisodeDetailsView: UIView {
         return collectionView
     }()
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    init() {
-        super.init(frame: .zero)
+    override init() {
+        super.init()
         setupViews()
         setupConstraints()
     }

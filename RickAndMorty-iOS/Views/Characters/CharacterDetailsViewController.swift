@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import SDWebImage
 
-class CharacterDetailsViewController: UIViewController {
+class CharacterDetailsViewController: BaseViewController {
 
     let viewModel: CharacterDetailsViewModel
     let locationsViewModel = LocationsViewModel()
@@ -30,11 +30,7 @@ class CharacterDetailsViewController: UIViewController {
 
     init(viewModel: CharacterDetailsViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init()
     }
 
     override func loadView() {

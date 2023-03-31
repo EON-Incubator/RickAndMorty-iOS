@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class LocationsView: UIView {
+class LocationsView: BaseView {
 
     let loadingView = LoadingView()
 
@@ -24,16 +24,8 @@ class LocationsView: UIView {
         return collectionView
     }()
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    init() {
-        super.init(frame: .zero)
+    override init() {
+        super.init()
         setupViews()
         setupConstraints()
     }

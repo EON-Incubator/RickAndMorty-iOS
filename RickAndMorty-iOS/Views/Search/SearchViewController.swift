@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class SearchViewController: UIViewController {
+class SearchViewController: BaseViewController {
 
     enum SearchSection: Int, CaseIterable {
         case characters
@@ -32,11 +32,7 @@ class SearchViewController: UIViewController {
 
     init(viewModel: SearchViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init()
     }
 
     override func viewDidLoad() {
