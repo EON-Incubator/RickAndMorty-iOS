@@ -43,6 +43,7 @@ class SearchViewModel {
 
                 case .failure(let error):
                     print(error)
+                    self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                 }
             }
     }

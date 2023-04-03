@@ -92,6 +92,8 @@ class MainCoordinator: Coordinator {
         navController.navigationBar.standardAppearance = barAppearance
     }
 
+    // MARK: - Navigations
+
     func goCharacterDetails(id: String, navController: UINavigationController) {
         let viewModel = CharacterDetailsViewModel(characterId: id)
         viewModel.coordinator = self
@@ -140,4 +142,13 @@ class MainCoordinator: Coordinator {
         navController.pushViewController(viewController, animated: true)
     }
 
+    func presentNetworkTimoutAlert(_ message: String?) {
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+
+        tabBarController.present(alertController, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
+                alertController.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
 }
