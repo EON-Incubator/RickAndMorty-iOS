@@ -44,6 +44,14 @@ class EpisodesViewModel {
         }
     }
 
+    func refresh() {
+        currentPage = 1
+    }
+
+    func loadMore() {
+        currentPage += 1
+    }
+
     func goEpisodeDetails(id: String, navController: UINavigationController) {
         coordinator?.goEpisodeDetails(id: id, navController: navController)
     }
