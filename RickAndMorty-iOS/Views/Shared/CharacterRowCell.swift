@@ -29,7 +29,7 @@ class CharacterRowCell: UICollectionViewListCell {
     lazy var characterStatusLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: K.Fonts.secondaryBold, size: 13)
+        label.font = UIFont(name: K.Fonts.secondary, size: 13)
 
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
@@ -53,8 +53,8 @@ class CharacterRowCell: UICollectionViewListCell {
 
     lazy var lowerLeftLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .bold)
-        label.textColor = .label
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .black
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.backgroundColor = K.Colors.gender
@@ -67,8 +67,8 @@ class CharacterRowCell: UICollectionViewListCell {
 
     lazy var lowerRightLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .bold)
-        label.textColor = .label
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .black
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.backgroundColor = K.Colors.species

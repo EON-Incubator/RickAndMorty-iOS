@@ -22,7 +22,7 @@ class SearchView: BaseView {
     }()
 
     let locationCell = UICollectionView.CellRegistration<LocationRowCell, RickAndMortyAPI.LocationDetails> { (cell, _ indexPath, location) in
-
+        cell.lowerRightLabel.isHidden = false
         cell.upperLabel.text = location.name
         cell.lowerLeftLabel.text = location.type
         cell.lowerRightLabel.text = location.dimension
