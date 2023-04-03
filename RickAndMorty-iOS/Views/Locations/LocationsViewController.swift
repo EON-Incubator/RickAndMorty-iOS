@@ -78,27 +78,27 @@ extension LocationsViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: locationsView.collectionView, cellProvider: { (collectionView, indexPath, data) -> UICollectionViewCell? in
 
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationRowCell.identifier, for: indexPath) as? LocationRowCell else { return nil }
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationRowCell.identifier, for: indexPath) as? LocationRowCell
 
             // section with empty location cells
             if indexPath.section == 1 {
-                showLoadingAnimation(currentCell: cell)
+                cell?.showLoadingAnimation()
                 return cell
             }
 
             let location = data as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result
-            cell.upperLabel.text = location?.name
-            cell.lowerLeftLabel.text = location?.type
-            cell.lowerRightLabel.text = location?.dimension
+            cell?.upperLabel.text = location?.name
+            cell?.lowerLeftLabel.text = location?.type
+            cell?.lowerRightLabel.text = location?.dimension
             for index in 0...3 {
                 let isIndexValid = location?.residents.indices.contains(index)
                 if isIndexValid ?? false {
                     let urlString = location?.residents[index]?.image ?? ""
-                    cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
+                    cell?.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
                 }
             }
             if location?.dimension == "" {
-                cell.lowerRightLabel.isHidden = true
+                cell?.lowerRightLabel.isHidden = true
             }
             return cell
         })

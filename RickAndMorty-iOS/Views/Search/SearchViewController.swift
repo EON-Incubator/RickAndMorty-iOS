@@ -175,7 +175,8 @@ extension SearchViewController: UICollectionViewDelegate {
 
         // load-more section
         if dataSource?.itemIdentifier(for: indexPath) is EmptyData {
-            showLoadingAnimation(currentCell: collectionView.cellForItem(at: indexPath) ?? UICollectionViewCell())
+            let cell = collectionView.cellForItem(at: indexPath) ?? UICollectionViewCell()
+            cell.showLoadingAnimation()
             if indexPath.section == 1 {
                 loadMoreCharacters()
             } else {

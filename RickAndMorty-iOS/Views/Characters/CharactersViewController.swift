@@ -88,17 +88,17 @@ extension CharactersViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: charactersGridView.collectionView, cellProvider: { (collectionView, indexPath, character) -> UICollectionViewCell? in
 
-            guard let characterCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterGridCell.identifier, for: indexPath) as? CharacterGridCell else { return nil }
+            let characterCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterGridCell.identifier, for: indexPath) as? CharacterGridCell
 
             if indexPath.section == 1 {
-                showLoadingAnimation(currentCell: characterCell)
+                characterCell?.showLoadingAnimation()
                 return characterCell
             }
 
             if let char = character as? RickAndMortyAPI.CharacterBasics {
-                characterCell.characterNameLabel.text = char.name
+                characterCell?.characterNameLabel.text = char.name
                 if let image = char.image {
-                    characterCell.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 200, height: 200)])
+                    characterCell?.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 200, height: 200)])
                 }
             }
             return characterCell
