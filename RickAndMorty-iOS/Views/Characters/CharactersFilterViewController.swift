@@ -12,11 +12,11 @@ class CharactersFilterViewController: BaseViewController {
 
     private let statuses = [K.FilterLabels.alive, K.FilterLabels.dead, K.FilterLabels.unknown]
     private let genders = [K.FilterLabels.male, K.FilterLabels.female, K.FilterLabels.genderless, K.FilterLabels.unknown]
-
     private let charactersFilterView = CharactersFilterView()
     private let viewModel: CharactersViewModel
     private let dismissHandler: (() -> Void)?
     private let currentFilterOptions: CurrentValueSubject<FilterOptions, Never>
+
     private var cancellables = Set<AnyCancellable>()
 
     init(viewModel: CharactersViewModel, onDismiss: (() -> Void)?) {

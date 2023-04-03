@@ -10,6 +10,9 @@ import Combine
 
 class EpisodeDetailsViewController: BaseViewController {
 
+    typealias DataSource = UICollectionViewDiffableDataSource<EpisodeDetailsSection, AnyHashable>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<EpisodeDetailsSection, AnyHashable>
+
     enum EpisodeDetailsSection: Int, CaseIterable {
         case info
         case characters
@@ -20,8 +23,6 @@ class EpisodeDetailsViewController: BaseViewController {
     private let episodeDetailsView = EpisodeDetailsView()
     private let viewModel: EpisodeDetailsViewModel
 
-    typealias DataSource = UICollectionViewDiffableDataSource<EpisodeDetailsSection, AnyHashable>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<EpisodeDetailsSection, AnyHashable>
     private var dataSource: DataSource?
     private var cancellables = Set<AnyCancellable>()
     private var snapshot = Snapshot()

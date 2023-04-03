@@ -9,18 +9,6 @@ import UIKit
 
 class SearchView: BaseView {
 
-    lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
-        collectionView.register(CharacterRowCell.self,
-                                forCellWithReuseIdentifier: CharacterRowCell.identifier)
-        collectionView.register(HeaderView.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: K.Headers.identifier)
-        collectionView.register(LoadMoreCell.self,
-                                forCellWithReuseIdentifier: LoadMoreCell.identifier)
-        return collectionView
-    }()
-
     let locationCell = UICollectionView.CellRegistration<LocationRowCell, RickAndMortyAPI.LocationDetails> { (cell, _ indexPath, location) in
         cell.lowerRightLabel.isHidden = false
         cell.upperLabel.text = location.name
@@ -40,6 +28,26 @@ class SearchView: BaseView {
         }
     }
 
+    lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
+        collectionView.register(CharacterRowCell.self,
+                                forCellWithReuseIdentifier: CharacterRowCell.identifier)
+        collectionView.register(HeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: K.Headers.identifier)
+        collectionView.register(LoadMoreCell.self,
+                                forCellWithReuseIdentifier: LoadMoreCell.identifier)
+        return collectionView
+    }()
+
+    lazy var middleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: K.Fonts.primary, size: 30)
+        label.text = "Search for something ..."
+        label.textAlignment = .center
+        return label
+    }()
+
     override init() {
         super.init()
         collectionView.showsVerticalScrollIndicator = false
@@ -53,14 +61,6 @@ class SearchView: BaseView {
         addSubview(collectionView)
         addSubview(middleLabel)
     }
-
-    lazy var middleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: K.Fonts.primary, size: 30)
-        label.text = "Search for something ..."
-        label.textAlignment = .center
-        return label
-    }()
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in

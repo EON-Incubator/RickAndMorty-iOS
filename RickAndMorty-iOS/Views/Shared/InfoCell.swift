@@ -9,7 +9,34 @@ import UIKit
 import SnapKit
 
 class InfoCell: UICollectionViewListCell {
+
     static let identifier = K.Info.identifier
+
+    lazy var leftLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(named: K.Colors.infoCell)
+        label.font = .boldSystemFont(ofSize: 15)
+        return label
+    }()
+
+    lazy var rightLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(named: K.Colors.infoCell)
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .right
+        label.minimumScaleFactor = 0.5
+        label.numberOfLines = 0
+        return label
+    }()
+
+    lazy var infoImage: UIImageView = {
+        let image = UIImageView()
+        return image
+    }()
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -48,28 +75,6 @@ class InfoCell: UICollectionViewListCell {
         addSubview(infoImage)
     }
 
-    lazy var leftLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor(named: K.Colors.infoCell)
-        label.font = .boldSystemFont(ofSize: 15)
-        return label
-    }()
-
-    lazy var rightLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor(named: K.Colors.infoCell)
-        label.adjustsFontSizeToFitWidth = true
-        label.textAlignment = .right
-        label.minimumScaleFactor = 0.5
-        label.numberOfLines = 0
-        return label
-    }()
-
-    lazy var infoImage: UIImageView = {
-        let image = UIImageView()
-        return image
-    }()
-
     func setupConstraints() {
         leftLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(60)
@@ -89,9 +94,5 @@ class InfoCell: UICollectionViewListCell {
             make.height.equalTo(25)
             make.top.equalToSuperview().offset(12)
         }
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

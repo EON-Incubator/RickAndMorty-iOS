@@ -10,6 +10,9 @@ import Combine
 
 class SearchViewController: BaseViewController {
 
+    typealias DataSource = UICollectionViewDiffableDataSource<SearchSection, AnyHashable>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<SearchSection, AnyHashable>
+
     enum SearchSection: Int, CaseIterable {
         case characters
         case locations
@@ -18,17 +21,23 @@ class SearchViewController: BaseViewController {
     }
 
     private let searchView = SearchView()
-    private let viewModel: SearchViewModel
-
     private let searchController = UISearchController(searchResultsController: nil)
-    private weak var debounceTimer: Timer?
-    private var searchSuggestions: [UISearchSuggestionItem] = []
+    private let viewModel: SearchViewModel
+    private let charactersSearchViewModel = CharactersViewModel()
+    private let locationNameViewModel = LocationsViewModel()
+    private let locationTypeViewModel = LocationsViewModel()
 
-    typealias DataSource = UICollectionViewDiffableDataSource<SearchSection, AnyHashable>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<SearchSection, AnyHashable>
+    private var searchSuggestions: [UISearchSuggestionItem] = []
     private var dataSource: DataSource?
     private var snapshot = Snapshot()
     private var cancellables = Set<AnyCancellable>()
+    private var currentCharactersPage = 1
+    private var currentLocationsPage = 1
+    private var totalCharactersPage: Int = 0
+    private var totalLocationsPage: Int = 0
+    private var uniqueLocations: [RickAndMortyAPI.LocationDetails] = []
+
+    private weak var debounceTimer: Timer?
 
     init(viewModel: SearchViewModel) {
         self.viewModel = viewModel
@@ -47,18 +56,6 @@ class SearchViewController: BaseViewController {
         view = searchView
         searchView.collectionView.delegate = self
     }
-
-    private let charactersSearchViewModel = CharactersViewModel()
-    private let locationNameViewModel = LocationsViewModel()
-    private let locationTypeViewModel = LocationsViewModel()
-
-    private var currentCharactersPage = 1
-    private var currentLocationsPage = 1
-
-    private var totalCharactersPage: Int = 0
-    private var totalLocationsPage: Int = 0
-
-    private var uniqueLocations: [RickAndMortyAPI.LocationDetails] = []
 
     func subscribeToViewModel() {
 

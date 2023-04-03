@@ -12,11 +12,6 @@ class CharacterGridCell: UICollectionViewCell {
 
     static let identifier = K.Identifiers.characterCell
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        contentView.layer.sublayers?.removeAll()
-    }
-
     lazy var characterNameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -33,10 +28,19 @@ class CharacterGridCell: UICollectionViewCell {
         return imageView
     }()
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         setupConstraints()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        contentView.layer.sublayers?.removeAll()
     }
 
     func setupViews() {
@@ -57,9 +61,5 @@ class CharacterGridCell: UICollectionViewCell {
             make.right.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

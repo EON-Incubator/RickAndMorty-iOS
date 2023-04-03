@@ -11,13 +11,13 @@ import UIKit
 
 class EpisodesViewModel {
 
-    weak var coordinator: MainCoordinator?
     var episodes = CurrentValueSubject<[RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result], Never>([])
     var currentPage = 0 {
         didSet {
             fetchData(page: currentPage)
         }
     }
+    weak var coordinator: MainCoordinator?
 
     func fetchData(page: Int) {
         Network.shared.apollo.fetch(

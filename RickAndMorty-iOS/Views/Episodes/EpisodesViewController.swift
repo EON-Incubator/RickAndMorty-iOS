@@ -10,10 +10,12 @@ import Combine
 
 class EpisodesViewController: BaseViewController {
 
-    private let episodesView = EpisodesView()
-    private let viewModel: EpisodesViewModel
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
+
+    private let episodesView = EpisodesView()
+    private let viewModel: EpisodesViewModel
+
     private var dataSource: DataSource?
     private var cancellables = Set<AnyCancellable>()
     private var snapshot = Snapshot()

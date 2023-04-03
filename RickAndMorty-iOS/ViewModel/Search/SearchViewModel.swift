@@ -11,9 +11,7 @@ import UIKit
 
 class SearchViewModel {
 
-    weak var coordinator: MainCoordinator?
     let searchResults = PassthroughSubject<RickAndMortyAPI.SearchForQuery.Data, Never>()
-
     // for viewModel testing
     let characters = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.Characters.Result], Never>([])
     let locatonsWithGivenName = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result], Never>([])
@@ -24,6 +22,7 @@ class SearchViewModel {
             fetchData(input: searchInput)
         }
     }
+    weak var coordinator: MainCoordinator?
 
     func fetchData(input: String) {
         Network.shared.apollo.fetch(

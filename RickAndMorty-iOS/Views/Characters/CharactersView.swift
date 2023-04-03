@@ -12,26 +12,18 @@ class CharactersView: BaseView {
 
     let loadingView = LoadingView()
 
-    override init() {
-        super.init()
-        setupViews()
-        setupConstraints()
-    }
-
-    private func setupViews() {
-        backgroundColor = .systemBackground
-        addSubview(collectionView)
-        addSubview(loadingView)
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
-    }
-
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
         collectionView.accessibilityIdentifier = K.Identifiers.characters
         collectionView.register(CharacterGridCell.self, forCellWithReuseIdentifier: CharacterGridCell.identifier)
         return collectionView
     }()
+
+    override init() {
+        super.init()
+        setupViews()
+        setupConstraints()
+    }
 
     func createLayout() -> UICollectionViewCompositionalLayout {
         let sectionProvider = { (_: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
@@ -61,6 +53,14 @@ class CharactersView: BaseView {
         let layout = UICollectionViewCompositionalLayout(
             sectionProvider: sectionProvider, configuration: config)
         return layout
+    }
+
+    private func setupViews() {
+        backgroundColor = .systemBackground
+        addSubview(collectionView)
+        addSubview(loadingView)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
     }
 
     private func setupConstraints() {

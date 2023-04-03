@@ -12,6 +12,19 @@ class LoadMoreCell: UICollectionViewListCell {
 
     static let identifier = K.Identifiers.loadMoreCell
 
+    lazy var centerLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .black
+        label.text = "↓    Load More   ↓"
+        label.textAlignment = .center
+        label.font = .boldSystemFont(ofSize: 20)
+        return label
+    }()
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -23,10 +36,6 @@ class LoadMoreCell: UICollectionViewListCell {
             contentView.layer.sublayers?.removeAll()
         }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     func setupViews() {
         let myView = UIView(frame: bounds)
         myView.layer.opacity = 0.0
@@ -36,15 +45,6 @@ class LoadMoreCell: UICollectionViewListCell {
         layer.cornerRadius = 5
         addSubview(centerLabel)
     }
-
-    lazy var centerLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.text = "↓    Load More   ↓"
-        label.textAlignment = .center
-        label.font = .boldSystemFont(ofSize: 20)
-        return label
-    }()
 
     func setupConstraints() {
         centerLabel.snp.makeConstraints { make in
