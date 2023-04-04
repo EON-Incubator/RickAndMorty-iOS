@@ -33,7 +33,6 @@ class LocationDetailsViewController: BaseViewController {
 
     override func loadView() {
         view = locationDetailsView
-        navigationController?.navigationBar.prefersLargeTitles = true
         locationDetailsView.collectionView.delegate = self
         locationDetailsView.collectionView.refreshControl = UIRefreshControl()
         locationDetailsView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
@@ -122,7 +121,7 @@ extension LocationDetailsViewController {
             switch itemIndex {
             case 0:
                 cell.leftLabel.text = K.Info.type
-                cell.rightLabel.text = locationDetails.item.name
+                cell.rightLabel.text = locationDetails.item.type
                 cell.infoImage.image = UIImage(systemName: K.Images.systemGlobeHalf)
 
             case 1:

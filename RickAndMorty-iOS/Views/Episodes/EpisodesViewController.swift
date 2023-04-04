@@ -36,6 +36,7 @@ class EpisodesViewController: BaseViewController {
         view = episodesView
         navigationController?.navigationBar.prefersLargeTitles = true
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         title = K.Titles.episodes
         episodesView.collectionView.delegate = self
         episodesView.collectionView.refreshControl = UIRefreshControl()

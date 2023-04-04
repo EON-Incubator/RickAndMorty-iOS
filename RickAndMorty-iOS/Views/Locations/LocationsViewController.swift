@@ -28,6 +28,7 @@ class LocationsViewController: BaseViewController {
         view = locationsView
         navigationController?.navigationBar.prefersLargeTitles = true
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         title = K.Titles.locations
         locationsView.collectionView.delegate = self
         locationsView.collectionView.refreshControl = UIRefreshControl()
