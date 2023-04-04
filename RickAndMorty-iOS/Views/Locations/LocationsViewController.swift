@@ -121,7 +121,7 @@ extension LocationsViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         if let location = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result {
-            viewModel.goLocationDetails(id: location.id ?? "", navController: navigationController ?? UINavigationController())
+            viewModel.goLocationDetails(id: location.id ?? "", navController: navigationController ?? UINavigationController(), residentCount: location.residents.count)
         }
     }
 }

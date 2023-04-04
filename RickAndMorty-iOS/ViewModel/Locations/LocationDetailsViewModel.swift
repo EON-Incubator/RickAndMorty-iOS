@@ -19,6 +19,12 @@ class LocationDetailsViewModel {
         self.locationId = locationId
     }
 
+    var residentCount = 0
+
+    func getResidentCount() -> Int {
+        return residentCount
+    }
+
     func fetchData() {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetLocationQuery(
