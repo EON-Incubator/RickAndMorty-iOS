@@ -20,6 +20,8 @@ class CharactersViewController: BaseViewController {
     private var cancellables = Set<AnyCancellable>()
     private var snapshot = Snapshot()
 
+    private var viewOrientation = K.Orientation.potrait
+
     init(viewModel: CharactersViewModel) {
         self.viewModel = viewModel
         super.init()
@@ -33,6 +35,8 @@ class CharactersViewController: BaseViewController {
         charactersGridView.collectionView.delegate = self
         charactersGridView.collectionView.refreshControl = UIRefreshControl()
         charactersGridView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+
+        viewOrientation = UIDevice.current.orientation.isLandscape ? K.Orientation.landscape : K.Orientation.potrait
     }
 
     override func viewDidLoad() {
@@ -44,24 +48,52 @@ class CharactersViewController: BaseViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        setupFilterButton()
+        if viewOrientation == K.Orientation.landscape {
+            setupFilterButton(bottom: 5, height: 25)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         removeFilterButton()
     }
 
-    private func setupFilterButton() {
-        let rightButton = charactersGridView.filterButton(self, action: #selector(filterButtonPressed)).customView
-        rightButton?.tag = 1
-        navigationController?.navigationBar.addSubview(rightButton ?? UIButton())
+    private func setupFilterButton(bottom: Int = 17, height: Int = 30) {
+        let rightButton = charactersGridView.filterButton(self, action: #selector(filterButtonPressed)).customView!
+        rightButton.tag = 1
+        navigationController?.navigationBar.addSubview(rightButton )
         let targetView = self.navigationController?.navigationBar
-        rightButton?.snp.makeConstraints({ make in
-            make.height.equalTo(25)
+        rightButton.snp.makeConstraints({ make in
+            make.height.equalTo(height)
             make.width.equalTo(80)
             make.trailing.equalTo(targetView?.snp_trailingMargin ?? view.snp_trailingMargin).inset(5)
-            make.bottom.equalToSuperview().inset(5)
+            make.bottom.equalToSuperview().inset(bottom)
         })
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        removeFilterButton()
+        if UIDevice.current.orientation.isLandscape {
+            setupFilterButton(bottom: 5, height: 25)
+            viewOrientation = K.Orientation.landscape
+        }
+
+        if UIDevice.current.orientation.isPortrait {
+            setupFilterButton(bottom: 17, height: 30)
+            viewOrientation = K.Orientation.potrait
+        }
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let navBarHeight = navigationController?.navigationBar.frame.height else { return }
+        if viewOrientation == K.Orientation.potrait {
+            if navBarHeight > 44.0 {
+                removeFilterButton()
+                setupFilterButton(bottom: 17, height: 30)
+            } else {
+                removeFilterButton()
+                setupFilterButton(bottom: 10, height: 25)
+            }
+        }
     }
 
     private func removeFilterButton() {

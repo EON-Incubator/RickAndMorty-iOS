@@ -114,5 +114,10 @@ struct K {
         static let dimension = UIColor(red: 0.87, green: 0.99, blue: 0.98, alpha: 0.4)
         static let type = UIColor(red: 1.00, green: 0.75, blue: 0.66, alpha: 0.4)
     }
+
+    struct Orientation {
+        static let landscape = "landscape"
+        static let potrait = "potrait"
+    }
 }
 // swiftlint: enable type_name
