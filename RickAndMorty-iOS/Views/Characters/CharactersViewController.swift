@@ -25,6 +25,16 @@ class CharactersViewController: BaseViewController {
         super.init()
     }
 
+    override func loadView() {
+        view = charactersGridView
+        navigationController?.navigationBar.prefersLargeTitles = true
+        title = K.Titles.characters
+        navigationItem.leftBarButtonItem = charactersGridView.logoView()
+        charactersGridView.collectionView.delegate = self
+        charactersGridView.collectionView.refreshControl = UIRefreshControl()
+        charactersGridView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureDataSource()
@@ -33,16 +43,36 @@ class CharactersViewController: BaseViewController {
         viewModel.refresh()
     }
 
-    override func loadView() {
-        view = charactersGridView
-        navigationController?.navigationBar.prefersLargeTitles = true
-        title = K.Titles.characters
-        navigationItem.rightBarButtonItem = charactersGridView.filterButton(self, action: #selector(filterButtonPressed))
-        navigationItem.leftBarButtonItem = charactersGridView.logoView()
+    override func viewWillAppear(_ animated: Bool) {
+        setupFilterButton()
+    }
 
-        charactersGridView.collectionView.delegate = self
-        charactersGridView.collectionView.refreshControl = UIRefreshControl()
-        charactersGridView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+    override func viewWillDisappear(_ animated: Bool) {
+        removeFilterButton()
+    }
+
+    private func setupFilterButton() {
+        let rightButton = charactersGridView.filterButton(self, action: #selector(filterButtonPressed)).customView
+        rightButton?.tag = 1
+        navigationController?.navigationBar.addSubview(rightButton ?? UIButton())
+        let targetView = self.navigationController?.navigationBar
+        rightButton?.snp.makeConstraints({ make in
+            make.height.equalTo(25)
+            make.width.equalTo(80)
+            make.trailing.equalTo(targetView?.snp_trailingMargin ?? view.snp_trailingMargin).inset(5)
+            make.bottom.equalToSuperview().inset(5)
+        })
+    }
+
+    private func removeFilterButton() {
+        guard let subviews = self.navigationController?.navigationBar.subviews else { return }
+        for view in subviews where view.tag != 0 {
+            UIView.animate(withDuration: 0.2,
+                           animations: { view.alpha = 0.0 },
+                           completion: { _ in
+                view.removeFromSuperview()
+            })
+        }
     }
 
     func showEmptyData() {
