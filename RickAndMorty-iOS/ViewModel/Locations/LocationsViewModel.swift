@@ -22,10 +22,7 @@ class LocationsViewModel {
         }
     }
 
-    var name = ""
-    var type = ""
-
-    func fetchData(page: Int) {
+    func fetchData(page: Int, name: String = "", type: String = "") {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetLocationsQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
