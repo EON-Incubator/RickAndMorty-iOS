@@ -18,10 +18,11 @@ class CharacterGridCell: UICollectionViewCell {
     }
 
     lazy var characterNameLabel: UILabel = {
-        let label = UILabel()
+        let label = PaddingLabel()
         label.textAlignment = .center
         label.backgroundColor = K.Colors.characterNameLabel
         label.textColor = .black
+        label.font = UIFont(name: K.Fonts.secondary, size: 18)
         return label
     }()
 
