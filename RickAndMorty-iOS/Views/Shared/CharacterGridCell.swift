@@ -42,6 +42,8 @@ class CharacterGridCell: UICollectionViewCell {
     func setupViews() {
         backgroundColor = .lightGray
         layer.cornerRadius = 10
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.gray.cgColor
         addSubview(characterImage)
         addSubview(characterNameLabel)
     }
