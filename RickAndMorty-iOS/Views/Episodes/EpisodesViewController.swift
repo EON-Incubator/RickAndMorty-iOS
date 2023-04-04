@@ -35,6 +35,7 @@ class EpisodesViewController: BaseViewController {
     override func loadView() {
         view = episodesView
         navigationController?.navigationBar.prefersLargeTitles = true
+        UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
         title = K.Titles.episodes
         episodesView.collectionView.delegate = self
         episodesView.collectionView.refreshControl = UIRefreshControl()

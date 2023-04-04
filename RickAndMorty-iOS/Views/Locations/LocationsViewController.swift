@@ -27,6 +27,7 @@ class LocationsViewController: BaseViewController {
     override func loadView() {
         view = locationsView
         navigationController?.navigationBar.prefersLargeTitles = true
+        UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
         title = K.Titles.locations
         locationsView.collectionView.delegate = self
         locationsView.collectionView.refreshControl = UIRefreshControl()
