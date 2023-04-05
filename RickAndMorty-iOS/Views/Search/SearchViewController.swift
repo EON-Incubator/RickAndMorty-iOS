@@ -105,7 +105,7 @@ class SearchViewController: BaseViewController {
                 print("error")
             }
             if let snapshot = self?.snapshot {
-                self?.dataSource?.apply(snapshot, animatingDifferences: false)
+                self?.dataSource?.apply(snapshot, animatingDifferences: true)
             }
 
             // show message if collection view is empty
@@ -227,6 +227,7 @@ extension SearchViewController: UICollectionViewDelegate {
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
 
+        searchView.loadingView.spinner.stopAnimating()
         viewModel.refresh(input: searchBar.text ?? "")
 
         // change background colors
@@ -240,6 +241,13 @@ extension SearchViewController: UISearchBarDelegate {
         default:
             searchView.collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
             searchView.backgroundColor = UIColor(named: K.Colors.episodeView)
+        }
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            snapshot.deleteAllItems()
+            dataSource?.apply(snapshot)
         }
     }
 }
@@ -286,12 +294,14 @@ extension SearchViewController: UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController) {
         if let searchInput = searchController.searchBar.text {
+            searchView.loadingView.spinner.startAnimating()
             debounceTimer?.invalidate()
+            self.searchView.middleLabel.removeFromSuperview()
             // debounce search results
             debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                self.searchView.loadingView.spinner.stopAnimating()
                 if searchInput.count >= 2 {
                     // remove search-for-something label
-                    self.searchView.middleLabel.removeFromSuperview()
                     if searchInput != self.viewModel.searchInput {
                         self.viewModel.refresh(input: searchInput)
                         searchController.searchSuggestions = []

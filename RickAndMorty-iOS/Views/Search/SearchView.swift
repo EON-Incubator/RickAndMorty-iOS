@@ -9,6 +9,8 @@ import UIKit
 
 class SearchView: BaseView {
 
+    let loadingView = LoadingView()
+
     let locationCell = UICollectionView.CellRegistration<LocationRowCell, RickAndMortyAPI.LocationDetails> { (cell, _ indexPath, location) in
         cell.lowerRightLabel.isHidden = false
         cell.upperLabel.text = location.name
@@ -60,6 +62,7 @@ class SearchView: BaseView {
         collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
         addSubview(collectionView)
         addSubview(middleLabel)
+        addSubview(loadingView)
     }
 
     private func setupConstraints() {
@@ -71,6 +74,7 @@ class SearchView: BaseView {
             make.left.equalTo(safeAreaLayoutGuide).inset(10)
             make.right.equalTo(safeAreaLayoutGuide).inset(10)
         }
+        loadingView.setupConstraints(view: self)
     }
 
     private func createLayout() -> UICollectionViewLayout {
