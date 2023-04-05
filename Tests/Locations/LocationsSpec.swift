@@ -31,7 +31,17 @@ final class LocationsSpec: QuickSpec {
                 it("should return 20 results") {
                     sut.fetchData(page: 1)
                     sleep(1)
-                    await expect(sut.locations.value.count).toEventually(equal(20), timeout: DispatchTimeInterval.seconds(10))
+                    await expect(sut.locations.value.count).toEventually(equal(20), timeout: DispatchTimeInterval.seconds(3))
+                }
+
+            }
+
+            context("when data fetching is called with page 7") {
+
+                it("should return 6 results") {
+                    sut.fetchData(page: 7)
+                    sleep(1)
+                    await expect(sut.locations.value.count).toEventually(equal(6), timeout: DispatchTimeInterval.seconds(3))
                 }
 
             }
@@ -41,7 +51,7 @@ final class LocationsSpec: QuickSpec {
                 it("should return 0 results") {
                     sut.fetchData(page: 999)
                     sleep(1)
-                    await expect(sut.locations.value.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10))
+                    await expect(sut.locations.value.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(3))
                 }
 
             }

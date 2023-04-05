@@ -34,6 +34,16 @@ final class EpisodesSpec: QuickSpec {
 
                 }
 
+                context("when data fetching is called with page 3") {
+
+                    it("should return 11 results") {
+                        sut.fetchData(page: 3)
+                        sleep(1)
+                        await expect(sut.episodes.value.count).toEventually(equal(11), timeout: DispatchTimeInterval.seconds(3))
+                    }
+
+                }
+
                 context("when data fetching is called with page 99") {
 
                     it("should return 0 results") {
