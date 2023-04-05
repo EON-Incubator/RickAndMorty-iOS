@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Coverage-87.2%25-brightgreen" />
+  <img src="https://img.shields.io/badge/Coverage-90.3%25-brightgreen" />
   <img src="https://img.shields.io/badge/SwiftLint-%E2%9C%94-orange" />
 </p>
 
