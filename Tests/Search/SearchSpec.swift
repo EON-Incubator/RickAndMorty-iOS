@@ -51,7 +51,7 @@ final class SearchSpec: QuickSpec {
                     await expect(sut.locatonsWithGivenName.value.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(3))
                 }
 
-                it("should return 0 result from locations with given name") {
+                it("should return 0 result from locations with given type") {
                     sut.fetchData(input: "adfjdskjhs")
                     sleep(1)
                     await expect(sut.locationsWithGivenType.value.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(3))

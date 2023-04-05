@@ -38,10 +38,13 @@ final class LocationsUISpec: QuickSpec {
 
                 beforeEach {
                     DispatchQueue.main.async {
-                        app.collectionViews.element.swipeUp(velocity: .fast)
-                        app.collectionViews.element.swipeUp(velocity: .fast)
-                        app.collectionViews.element.swipeUp(velocity: .slow)
-                        sleep(1)
+                        var tryCount = 0
+                        while !(app.collectionViews.staticTexts["Signus 5 Expanse"].exists) && tryCount <= 5 {
+                            app.collectionViews.element.swipeUp(velocity: .default)
+                            sleep(1)
+                            tryCount += 1
+                        }
+
                     }
                 }
 
