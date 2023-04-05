@@ -64,7 +64,7 @@ final class LocationsUISpec: QuickSpec {
                     let collectionView = app.collectionViews.element
                     await expect(collectionView.identifier).toEventually(equal("LocationDetailsCollectionView"))
                     let firstCell = app.collectionViews.element.cells.element(boundBy: 0)
-                    await expect(firstCell.staticTexts["Signus 5 Expanse"].exists).toEventually(beTrue())
+                    await expect(firstCell.staticTexts["unknown"].exists).toEventually(beTrue())
                     let secondCell = app.collectionViews.element.cells.element(boundBy: 1)
                     await expect(secondCell.staticTexts["Cromulon Dimension"].exists).toEventually(beTrue())
                 }

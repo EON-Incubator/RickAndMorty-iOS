@@ -9,12 +9,16 @@ import UIKit
 
 class CharacterRowCell: UICollectionViewListCell {
 
-    static let identifier = K.Identifiers.characterRowCell
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        contentView.layer.sublayers?.removeAll()
+    enum CharacterStatus: String {
+        case alive = "Alive"
+        case dead = "Dead"
+        case unknown = "unknown"
+        var description: String {
+            return rawValue
+        }
     }
+
+    static let identifier = K.Identifiers.characterRowCell
 
     lazy var characterAvatarImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: K.Images.systemPerson))
@@ -90,6 +94,11 @@ class CharacterRowCell: UICollectionViewListCell {
         setupConstraints()
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        contentView.layer.sublayers?.removeAll()
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -109,15 +118,6 @@ class CharacterRowCell: UICollectionViewListCell {
         addSubview(upperLabel)
         addSubview(lowerLeftLabel)
         addSubview(lowerRightLabel)
-    }
-
-    enum CharacterStatus: String {
-        case alive = "Alive"
-        case dead = "Dead"
-        case unknown = "unknown"
-        var description: String {
-            return rawValue
-        }
     }
 
     func statusColor(_ color: String) -> UIColor {

@@ -15,21 +15,20 @@ struct FilterOptions {
 
 class CharactersViewModel {
 
-    weak var coordinator: MainCoordinator?
-    var characters = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
     let charactersForSearch = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
-
+    var characters = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
+    var name = ""
     var currentPage = 0 {
         didSet {
             fetchData(page: currentPage)
         }
     }
-
     var filterOptions = FilterOptions(status: "", gender: "") {
         didSet {
             fetchData(page: 1)
         }
     }
+    weak var coordinator: MainCoordinator?
 
     func fetchData(page: Int, name: String = "") {
         Network.shared.apollo.fetch(

@@ -11,16 +11,18 @@ import UIKit
 
 class LocationsViewModel {
 
-    weak var coordinator: MainCoordinator?
-    var locations = CurrentValueSubject<[RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result], Never>([])
     let locationsNameSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
     let locationsTypeSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
 
+    var locations = CurrentValueSubject<[RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result], Never>([])
     var currentPage = 0 {
         didSet {
             fetchData(page: currentPage)
         }
     }
+    var name = ""
+    var type = ""
+    weak var coordinator: MainCoordinator?
 
     func fetchData(page: Int, name: String = "", type: String = "") {
         Network.shared.apollo.fetch(

@@ -10,6 +10,9 @@ import Combine
 
 class LocationDetailsViewController: BaseViewController {
 
+    typealias DataSource = UICollectionViewDiffableDataSource<LocationDetailsSection, AnyHashable>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<LocationDetailsSection, AnyHashable>
+
     enum LocationDetailsSection: Int, CaseIterable {
         case info
         case residents
@@ -20,8 +23,6 @@ class LocationDetailsViewController: BaseViewController {
     private let locationDetailsView = LocationDetailsView()
     private let viewModel: LocationDetailsViewModel
 
-    typealias DataSource = UICollectionViewDiffableDataSource<LocationDetailsSection, AnyHashable>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<LocationDetailsSection, AnyHashable>
     private var dataSource: DataSource?
     private var cancellables = Set<AnyCancellable>()
     private var snapshot = Snapshot()

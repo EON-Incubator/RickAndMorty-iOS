@@ -11,22 +11,23 @@ import SDWebImage
 
 class CharacterDetailsViewController: BaseViewController {
 
-    private let viewModel: CharacterDetailsViewModel
-    private let locationsViewModel = LocationsViewModel()
-    private let characterDetailsView = CharacterDetailsView()
-    private var characterID: String?
-    private var avatarImageUrl: String?
-    private var titleViewState: TitleViewState = .noTitle
-
-    private var dataSource: DataSource?
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
-    private var cancellables = Set<AnyCancellable>()
-    private var snapshot = Snapshot()
 
     enum TitleViewState {
         case noTitle, title, titleWithImage
     }
+
+    private let viewModel: CharacterDetailsViewModel
+    private let locationsViewModel = LocationsViewModel()
+    private let characterDetailsView = CharacterDetailsView()
+
+    private var characterID: String?
+    private var avatarImageUrl: String?
+    private var titleViewState: TitleViewState = .noTitle
+    private var dataSource: DataSource?
+    private var cancellables = Set<AnyCancellable>()
+    private var snapshot = Snapshot()
 
     init(viewModel: CharacterDetailsViewModel) {
         self.viewModel = viewModel
@@ -200,7 +201,7 @@ extension CharacterDetailsViewController: UICollectionViewDelegate {
         }
     }
 
-    // MARK: - Customize the Title View on scroll
+// MARK: - Customize the Title View on scroll
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.section == 0 && indexPath.item == 0 {
             titleViewState = .titleWithImage

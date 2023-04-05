@@ -10,6 +10,7 @@ import UIKit
 class EpisodesView: BaseView {
 
     let loadingView = LoadingView()
+    let episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (_ cell, _ indexPath, _ episode) in }
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
@@ -18,9 +19,6 @@ class EpisodesView: BaseView {
         collectionView.showsVerticalScrollIndicator = false
         return collectionView
     }()
-
-    let episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (_ cell, _ indexPath, _ episode) in
-    }
 
     override init() {
         super.init()

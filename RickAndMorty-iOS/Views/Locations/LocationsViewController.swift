@@ -10,11 +10,12 @@ import Combine
 
 class LocationsViewController: BaseViewController {
 
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
+
     private let locationsView = LocationsView()
     private let viewModel: LocationsViewModel
 
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
     private var dataSource: DataSource?
     private var cancellables = Set<AnyCancellable>()
     private var snapshot = Snapshot()

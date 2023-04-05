@@ -11,35 +11,10 @@ class RowCell: UICollectionViewListCell {
 
     lazy var characterAvatarImageViews = [UIImageView]()
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        for index in 0...3 {
-            characterAvatarImageViews[index].image = UIImage(systemName: K.Images.systemPerson)?.withRenderingMode(.alwaysTemplate)
-        }
-
-        contentView.layer.sublayers?.removeAll()
-    }
-
     lazy var characterAvatarsView: UIView = {
         let view = UIView()
         return view
     }()
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
-        let myView = UIView(frame: bounds)
-        myView.backgroundColor = UIColor(named: K.Colors.episodeCell)
-        myView.layer.cornerRadius = 5
-        backgroundView = myView
-        setupViews()
-        setupConstraints()
-    }
 
     lazy var upperLabel: UILabel = {
         let label = UILabel()
@@ -82,6 +57,31 @@ class RowCell: UICollectionViewListCell {
         return label
     }()
 
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
+        let myView = UIView(frame: bounds)
+        myView.backgroundColor = UIColor(named: K.Colors.episodeCell)
+        myView.layer.cornerRadius = 5
+        backgroundView = myView
+        setupViews()
+        setupConstraints()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        for index in 0...3 {
+            characterAvatarImageViews[index].image = UIImage(systemName: K.Images.systemPerson)?.withRenderingMode(.alwaysTemplate)
+        }
+
+        contentView.layer.sublayers?.removeAll()
+    }
+
     override func layoutSubviews() {
         layer.borderWidth = 0.5
         layer.borderColor = UIColor.gray.cgColor
@@ -92,6 +92,7 @@ class RowCell: UICollectionViewListCell {
         layer.shadowOpacity = 0.3
         layer.shadowPath = UIBezierPath(rect: bounds).cgPath
     }
+
     func setupViews() {
         for index in 0...3 {
             let imageView = UIImageView(image: UIImage(systemName: K.Images.systemPerson)?.withRenderingMode(.alwaysTemplate))

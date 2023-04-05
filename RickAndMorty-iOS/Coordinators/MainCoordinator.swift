@@ -10,13 +10,15 @@ import UIKit
 class MainCoordinator: Coordinator {
 
     private let window: UIWindow
-
-    private var tabBarController = UITabBarController()
-
+    private let tabBarController = UITabBarController()
     private let characterNavController = UINavigationController()
     private let locationNavController = UINavigationController()
     private let episodeNavController = UINavigationController()
     private let searchNavController = UINavigationController()
+
+    init(window: UIWindow) {
+        self.window = window
+    }
 
     func customNavBarAppearance() -> UINavigationBarAppearance {
         let customNavBarAppearance = UINavigationBarAppearance()
@@ -37,10 +39,6 @@ class MainCoordinator: Coordinator {
                                                      transitionMaskImage: UIImage(systemName: K.Images.systemBackArrow))
 
         return customNavBarAppearance
-    }
-
-    init(window: UIWindow) {
-        self.window = window
     }
 
     func start() {
