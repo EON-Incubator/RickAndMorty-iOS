@@ -25,6 +25,10 @@ class SearchViewModel {
         }
     }
 
+    func refresh(input: String) {
+        searchInput = input
+    }
+
     func fetchData(input: String) {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.SearchForQuery(keyword: GraphQLNullable<String>(stringLiteral: input))) { [weak self] result in

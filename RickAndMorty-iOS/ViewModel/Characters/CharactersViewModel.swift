@@ -31,9 +31,7 @@ class CharactersViewModel {
         }
     }
 
-    var name = ""
-
-    func fetchData(page: Int) {
+    func fetchData(page: Int, name: String = "") {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetCharactersQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
