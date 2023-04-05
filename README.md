@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="https://img.shields.io/badge/Coverage-87.2%25-brightgreen" />
+  <img src="https://img.shields.io/badge/SwiftLint-%E2%9C%94-orange" />
+</p>
+
 # Rick And Morty App
 
 iOS app created by using UIKit (No Storyboard) and RickAndMorty GraphQL API.
@@ -43,5 +48,3 @@ iOS app created by using UIKit (No Storyboard) and RickAndMorty GraphQL API.
 
 - [Calvin Pak](https://github.com/CalvinPak)
 - [Gagandeep Singh](https://github.com/GSingh1994)
-
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
