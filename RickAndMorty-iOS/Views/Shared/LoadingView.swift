@@ -13,7 +13,7 @@ class LoadingView: BaseView {
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.hidesWhenStopped = true
-        indicator.color = .black
+        indicator.color = .label
         return indicator
     }()
 

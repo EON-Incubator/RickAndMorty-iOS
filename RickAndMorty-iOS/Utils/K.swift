@@ -18,6 +18,7 @@ struct K {
         static let search = "Search"
         static let filter = "Filter"
         static let clearButton = "Clear"
+        static let loadMore = "↓    Load More   ↓"
     }
 
     struct Identifiers {

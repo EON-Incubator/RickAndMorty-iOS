@@ -14,8 +14,8 @@ class LoadMoreCell: UICollectionViewListCell {
 
     lazy var centerLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
-        label.text = "↓    Load More   ↓"
+        label.textColor = .label
+        label.text = K.Titles.loadMore
         label.textAlignment = .center
         label.font = .boldSystemFont(ofSize: 20)
         return label
