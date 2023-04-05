@@ -46,6 +46,7 @@ class SearchViewController: BaseViewController {
         configureSearchController()
         view = searchView
         searchView.collectionView.delegate = self
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
 
     private let charactersSearchViewModel = CharactersViewModel()
@@ -166,7 +167,7 @@ extension SearchViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         if let location = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.LocationDetails? {
-            viewModel.goLocationDetails(id: (location?.id) ?? "", navController: navigationController ?? UINavigationController())
+            viewModel.goLocationDetails(id: (location?.id) ?? "", navController: navigationController ?? UINavigationController(), residentCount: location?.residents.count ?? 0)
         }
 
         if let character = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics? {

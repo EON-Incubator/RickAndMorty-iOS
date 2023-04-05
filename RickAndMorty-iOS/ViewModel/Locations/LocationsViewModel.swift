@@ -59,7 +59,7 @@ class LocationsViewModel {
         currentPage += 1
     }
 
-    func goLocationDetails(id: String, navController: UINavigationController) {
-        coordinator?.goLocationDetails(id: id, navController: navController)
+    func goLocationDetails(id: String, navController: UINavigationController, residentCount: Int) {
+        coordinator?.goLocationDetails(id: id, navController: navController, residentCount: residentCount)
     }
 }

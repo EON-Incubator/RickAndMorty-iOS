@@ -28,6 +28,7 @@ class CharactersViewController: BaseViewController {
     override func loadView() {
         view = charactersGridView
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         title = K.Titles.characters
         navigationItem.leftBarButtonItem = charactersGridView.logoView()
         charactersGridView.collectionView.delegate = self
