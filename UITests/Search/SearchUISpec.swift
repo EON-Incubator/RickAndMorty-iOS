@@ -126,17 +126,20 @@ final class SearchUISpec: QuickSpec {
                     DispatchQueue.main.async {
                         app.segmentedControls.buttons["All"].tap()
                         sleep(1)
-
-                        guard let lastCell = collectionView.cells.allElementsBoundByIndex.last else { return }
-
-                        while !(collectionView.cells.staticTexts["Load More"].exists) || !(lastCell.isHittable) {
+                        let predicate = NSPredicate(format: "label CONTAINS[c] %@", "Load More")
+                        let buttons = collectionView.cells.staticTexts.containing(predicate)
+                        var tryCount = 0
+                        while !(buttons.count > 0) && tryCount <= 5 {
                             collectionView.swipeUp(velocity: .slow)
+                            tryCount += 1
                         }
                     }
                 }
 
                 it("should show 'Load More' button and the header of 'LOCATIONS' at the middle of the lists") {
-                    await expect(collectionView.cells.staticTexts["Load More"].exists).toEventually(beTrue())
+                    let predicate = NSPredicate(format: "label CONTAINS[c] %@", "Load More")
+                    let buttons = collectionView.cells.staticTexts.containing(predicate)
+                    await expect(buttons.count).toEventually(beGreaterThan(0))
                     await expect(collectionView.staticTexts["LOCATIONS"].exists).toEventually(beTrue())
                 }
             }
@@ -145,7 +148,9 @@ final class SearchUISpec: QuickSpec {
                 let collectionView = app.collectionViews.element
                 beforeEach {
                     DispatchQueue.main.async {
-                        collectionView.cells.staticTexts["Load More"].tap()
+                        let predicate = NSPredicate(format: "label CONTAINS[c] %@", "Load More")
+                        let buttons = collectionView.cells.staticTexts.containing(predicate)
+                        buttons.element.tap()
                         sleep(1)
                     }
                 }
