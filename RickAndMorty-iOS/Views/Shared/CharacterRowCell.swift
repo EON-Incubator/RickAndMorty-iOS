@@ -70,7 +70,7 @@ class CharacterRowCell: UICollectionViewListCell {
     }()
 
     lazy var lowerRightLabel: UILabel = {
-        let label = UILabel()
+        let label = PaddingLabel()
         label.font = .systemFont(ofSize: 14, weight: .medium)
         label.textColor = .black
         label.adjustsFontSizeToFitWidth = true
@@ -125,7 +125,6 @@ class CharacterRowCell: UICollectionViewListCell {
         case CharacterStatus.alive.description:
             return .systemGreen.withAlphaComponent(0.8)
         case CharacterStatus.dead.description:
-            characterStatusLabel.textColor = .white
             return .systemRed.withAlphaComponent(0.8)
         case CharacterStatus.unknown.description:
             return .systemYellow.withAlphaComponent(0.8)
