@@ -30,7 +30,7 @@ class CharactersViewModel {
     }
     weak var coordinator: MainCoordinator?
 
-    func fetchData(page: Int) {
+    func fetchData(page: Int, name: String = "") {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetCharactersQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),

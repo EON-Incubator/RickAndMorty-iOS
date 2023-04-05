@@ -24,7 +24,7 @@ class LocationsViewModel {
     var type = ""
     weak var coordinator: MainCoordinator?
 
-    func fetchData(page: Int) {
+    func fetchData(page: Int, name: String = "", type: String = "") {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetLocationsQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
@@ -61,7 +61,7 @@ class LocationsViewModel {
         currentPage += 1
     }
 
-    func goLocationDetails(id: String, navController: UINavigationController) {
-        coordinator?.goLocationDetails(id: id, navController: navController)
+    func goLocationDetails(id: String, navController: UINavigationController, residentCount: Int) {
+        coordinator?.goLocationDetails(id: id, navController: navController, residentCount: residentCount)
     }
 }

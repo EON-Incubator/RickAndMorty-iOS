@@ -55,6 +55,7 @@ class SearchViewController: BaseViewController {
         configureSearchController()
         view = searchView
         searchView.collectionView.delegate = self
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
 
     func subscribeToViewModel() {
@@ -104,7 +105,7 @@ class SearchViewController: BaseViewController {
                 print("error")
             }
             if let snapshot = self?.snapshot {
-                self?.dataSource?.apply(snapshot, animatingDifferences: true)
+                self?.dataSource?.apply(snapshot, animatingDifferences: false)
             }
 
             // show message if collection view is empty
@@ -163,7 +164,7 @@ extension SearchViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         if let location = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.LocationDetails? {
-            viewModel.goLocationDetails(id: (location?.id) ?? "", navController: navigationController ?? UINavigationController())
+            viewModel.goLocationDetails(id: (location?.id) ?? "", navController: navigationController ?? UINavigationController(), residentCount: location?.residents.count ?? 0)
         }
 
         if let character = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics? {
@@ -189,8 +190,7 @@ extension SearchViewController: UICollectionViewDelegate {
             let ids = snapshot.itemIdentifiers(inSection: .loadMoreCharacters)
             snapshot.deleteItems(ids)
         }
-        charactersSearchViewModel.name = viewModel.searchInput
-        charactersSearchViewModel.currentPage = currentCharactersPage
+        charactersSearchViewModel.fetchData(page: currentCharactersPage, name: viewModel.searchInput)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             let newCharacters = self?.charactersSearchViewModel.charactersForSearch.value
@@ -207,11 +207,8 @@ extension SearchViewController: UICollectionViewDelegate {
             let ids = snapshot.itemIdentifiers(inSection: .loadMoreLocations)
             snapshot.deleteItems(ids)
         }
-        locationNameViewModel.name = viewModel.searchInput
-        locationNameViewModel.currentPage = currentLocationsPage
-
-        locationTypeViewModel.type = viewModel.searchInput
-        locationTypeViewModel.currentPage = currentLocationsPage
+        locationNameViewModel.fetchData(page: currentLocationsPage, name: viewModel.searchInput)
+        locationTypeViewModel.fetchData(page: currentLocationsPage, type: viewModel.searchInput)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             self?.uniqueLocations += ((self?.locationNameViewModel.locationsNameSearch.value ?? []) + (self?.locationTypeViewModel.locationsTypeSearch.value ?? []))
@@ -229,7 +226,8 @@ extension SearchViewController: UICollectionViewDelegate {
 // MARK: - UISearchBarDelegate
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        viewModel.searchInput = searchBar.text ?? ""
+
+        viewModel.refresh(input: searchBar.text ?? "")
 
         // change background colors
         switch selectedScope {
@@ -295,7 +293,7 @@ extension SearchViewController: UISearchResultsUpdating {
                     // remove search-for-something label
                     self.searchView.middleLabel.removeFromSuperview()
                     if searchInput != self.viewModel.searchInput {
-                        self.viewModel.searchInput = searchInput
+                        self.viewModel.refresh(input: searchInput)
                         searchController.searchSuggestions = []
                     }
                 } else {

@@ -28,6 +28,8 @@ class LocationsViewController: BaseViewController {
     override func loadView() {
         view = locationsView
         navigationController?.navigationBar.prefersLargeTitles = true
+        UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         title = K.Titles.locations
         locationsView.collectionView.delegate = self
         locationsView.collectionView.refreshControl = UIRefreshControl()
@@ -120,7 +122,7 @@ extension LocationsViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         if let location = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result {
-            viewModel.goLocationDetails(id: location.id ?? "", navController: navigationController ?? UINavigationController())
+            viewModel.goLocationDetails(id: location.id ?? "", navController: navigationController ?? UINavigationController(), residentCount: location.residents.count)
         }
     }
 }

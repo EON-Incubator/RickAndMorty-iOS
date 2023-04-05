@@ -24,6 +24,10 @@ class SearchViewModel {
     }
     weak var coordinator: MainCoordinator?
 
+    func refresh(input: String) {
+        searchInput = input
+    }
+
     func fetchData(input: String) {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.SearchForQuery(keyword: GraphQLNullable<String>(stringLiteral: input))) { [weak self] result in
@@ -51,8 +55,8 @@ class SearchViewModel {
         coordinator?.goCharacterDetails(id: id, navController: navController)
     }
 
-    func goLocationDetails(id: String, navController: UINavigationController) {
-        coordinator?.goLocationDetails(id: id, navController: navController)
+    func goLocationDetails(id: String, navController: UINavigationController, residentCount: Int) {
+        coordinator?.goLocationDetails(id: id, navController: navController, residentCount: residentCount)
     }
 }
 

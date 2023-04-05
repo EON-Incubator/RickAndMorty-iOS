@@ -73,8 +73,8 @@ class CharactersView: BaseView {
 
 extension CharactersView {
     func filterButton(_ target: Any?, action: Selector) -> UIBarButtonItem {
-        let filterButton = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 30))
-        filterButton.layer.cornerRadius = 15
+        let filterButton = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 25))
+        filterButton.layer.cornerRadius = 12.5
         filterButton.tintColor = .black
         filterButton.backgroundColor = K.Colors.filterButton
         filterButton.setTitle(K.Titles.filter, for: .normal)

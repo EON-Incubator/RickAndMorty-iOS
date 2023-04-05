@@ -36,7 +36,7 @@ class CharacterDetailsViewModel {
     }
 
     func goLocationDetails(id: String, navController: UINavigationController) {
-        coordinator?.goLocationDetails(id: id, navController: navController)
+        coordinator?.goLocationDetails(id: id, navController: navController, residentCount: 0)
     }
 
     func goEpisodeDetails(id: String, navController: UINavigationController) {

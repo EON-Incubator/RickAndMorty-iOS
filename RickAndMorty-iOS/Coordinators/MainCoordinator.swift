@@ -124,9 +124,10 @@ class MainCoordinator: Coordinator {
         viewController.dismiss(animated: true)
     }
 
-    func goLocationDetails(id: String, navController: UINavigationController) {
+    func goLocationDetails(id: String, navController: UINavigationController, residentCount: Int) {
         let viewModel = LocationDetailsViewModel(locationId: id)
         viewModel.locationId = id
+        viewModel.residentCount = residentCount
         viewModel.coordinator = self
         let viewController = LocationDetailsViewController(viewModel: viewModel)
         navController.pushViewController(viewController, animated: true)
