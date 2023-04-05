@@ -18,10 +18,11 @@ class CharacterGridCell: UICollectionViewCell {
     }
 
     lazy var characterNameLabel: UILabel = {
-        let label = UILabel()
+        let label = PaddingLabel()
         label.textAlignment = .center
         label.backgroundColor = K.Colors.characterNameLabel
         label.textColor = .black
+        label.font = UIFont(name: K.Fonts.secondary, size: 18)
         return label
     }()
 
@@ -42,6 +43,8 @@ class CharacterGridCell: UICollectionViewCell {
     func setupViews() {
         backgroundColor = .lightGray
         layer.cornerRadius = 10
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.gray.cgColor
         addSubview(characterImage)
         addSubview(characterNameLabel)
     }

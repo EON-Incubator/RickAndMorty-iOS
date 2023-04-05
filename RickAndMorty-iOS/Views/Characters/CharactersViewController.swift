@@ -36,6 +36,7 @@ class CharactersViewController: BaseViewController {
     override func loadView() {
         view = charactersGridView
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         title = K.Titles.characters
         navigationItem.rightBarButtonItem = charactersGridView.filterButton(self, action: #selector(filterButtonPressed))
         navigationItem.leftBarButtonItem = charactersGridView.logoView()
