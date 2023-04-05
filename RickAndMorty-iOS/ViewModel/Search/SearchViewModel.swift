@@ -7,37 +7,56 @@
 
 import Foundation
 import Combine
+import UIKit
 
 class SearchViewModel {
 
-    var searchResults = PassthroughSubject<RickAndMortyAPI.SearchForQuery.Data, Never>()
-
+    let searchResults = PassthroughSubject<RickAndMortyAPI.SearchForQuery.Data, Never>()
     // for viewModel testing
-    var characters = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.Characters.Result], Never>([])
-    var locatonsWithGivenName = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result], Never>([])
-    var locationsWithGivenType = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithType.Result], Never>([])
+    let characters = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.Characters.Result], Never>([])
+    let locatonsWithGivenName = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result], Never>([])
+    let locationsWithGivenType = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithType.Result], Never>([])
 
     var searchInput = "" {
         didSet {
             fetchData(input: searchInput)
         }
     }
+    weak var coordinator: MainCoordinator?
+
+    func refresh(input: String) {
+        searchInput = input
+    }
 
     func fetchData(input: String) {
         Network.shared.apollo.fetch(
-            query: RickAndMortyAPI.SearchForQuery(keyword: GraphQLNullable<String>(stringLiteral: input))) { result in
+            query: RickAndMortyAPI.SearchForQuery(keyword: GraphQLNullable<String>(stringLiteral: input))) { [weak self] result in
                 switch result {
                 case .success(let response):
-                    self.searchResults.send(response.data!)
+                    guard let data = response.data else { return }
+                    guard let charactersData = data.characters?.results else { return }
+                    guard let locationsWithNameData = data.locationsWithName?.results else { return }
+                    guard let locationsWithTypeData = data.locationsWithType?.results else { return }
 
-                    self.characters.value = (response.data?.characters?.results?.compactMap { $0 })!
-                    self.locatonsWithGivenName.value = (response.data?.locationsWithName?.results?.compactMap { $0 })!
-                    self.locationsWithGivenType.value = (response.data?.locationsWithType?.results?.compactMap { $0 })!
+                    self?.searchResults.send(data)
+
+                    self?.characters.value = charactersData.compactMap { $0 }
+                    self?.locatonsWithGivenName.value = locationsWithNameData.compactMap { $0 }
+                    self?.locationsWithGivenType.value = locationsWithTypeData.compactMap { $0 }
 
                 case .failure(let error):
                     print(error)
+                    self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                 }
             }
+    }
+
+    func goCharacterDetails(id: String, navController: UINavigationController) {
+        coordinator?.goCharacterDetails(id: id, navController: navController)
+    }
+
+    func goLocationDetails(id: String, navController: UINavigationController, residentCount: Int) {
+        coordinator?.goLocationDetails(id: id, navController: navController, residentCount: residentCount)
     }
 }
 

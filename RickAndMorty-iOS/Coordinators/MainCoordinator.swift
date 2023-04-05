@@ -9,14 +9,16 @@ import UIKit
 
 class MainCoordinator: Coordinator {
 
-    let window: UIWindow
+    private let window: UIWindow
+    private let tabBarController = UITabBarController()
+    private let characterNavController = UINavigationController()
+    private let locationNavController = UINavigationController()
+    private let episodeNavController = UINavigationController()
+    private let searchNavController = UINavigationController()
 
-    var tabBarController = UITabBarController()
-
-    let characterNavController = UINavigationController()
-    let locationNavController = UINavigationController()
-    let episodeNavController = UINavigationController()
-    let searchNavController = UINavigationController()
+    init(window: UIWindow) {
+        self.window = window
+    }
 
     func customNavBarAppearance() -> UINavigationBarAppearance {
         let customNavBarAppearance = UINavigationBarAppearance()
@@ -25,70 +27,54 @@ class MainCoordinator: Coordinator {
         shadow.shadowColor = UIColor.label
         shadow.shadowBlurRadius = 0.5
 
-        customNavBarAppearance.largeTitleTextAttributes = [.font: UIFont(name: "Creepster-Regular", size: 34)!,
+        customNavBarAppearance.largeTitleTextAttributes = [.font: UIFont(name: K.Fonts.primary, size: 34) as Any,
                                                            .foregroundColor: UIColor.label,
                                                            .shadow: shadow]
-        customNavBarAppearance.titleTextAttributes = [.font: UIFont(name: "Creepster-Regular", size: 27)!,
-                                                      .foregroundColor: UIColor.systemCyan,
+        customNavBarAppearance.titleTextAttributes = [.font: UIFont(name: K.Fonts.primary, size: 27) as Any,
+                                                      .foregroundColor: UIColor.label,
                                                       .shadow: shadow]
 
         customNavBarAppearance.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 5)
-        customNavBarAppearance.setBackIndicatorImage(UIImage(systemName: "arrow.backward.circle"),
-                                                     transitionMaskImage: UIImage(systemName: "arrow.backward.circle"))
+        customNavBarAppearance.setBackIndicatorImage(UIImage(systemName: K.Images.systemBackArrow),
+                                                     transitionMaskImage: UIImage(systemName: K.Images.systemBackArrow))
 
         return customNavBarAppearance
-    }
-
-    init(window: UIWindow) {
-        self.window = window
     }
 
     func start() {
         // Configure tab bar.
         tabBarController.tabBar.backgroundColor = .systemBackground
-        window.backgroundColor = .systemRed
 
         let navBarAppearance = customNavBarAppearance()
 
         // Add navigation controllers to the tab bar and set the title and icon for each tab.
-        tabBarController.addChild(characterNavController)
-        characterNavController.tabBarItem.image = UIImage(systemName: "person.text.rectangle")
-        characterNavController.tabBarItem.title = "Characters"
-        characterNavController.navigationBar.standardAppearance = navBarAppearance
-
-        tabBarController.addChild(locationNavController)
-        locationNavController.tabBarItem.image = UIImage(systemName: "map")
-        locationNavController.tabBarItem.title = "Locations"
-        locationNavController.navigationBar.standardAppearance = navBarAppearance
-
-        tabBarController.addChild(episodeNavController)
-        episodeNavController.tabBarItem.image = UIImage(systemName: "tv")
-        episodeNavController.tabBarItem.title = "Episodes"
-        episodeNavController.navigationBar.standardAppearance = navBarAppearance
-
-        tabBarController.addChild(searchNavController)
-        searchNavController.tabBarItem.image = UIImage(systemName: "magnifyingglass")
-        searchNavController.tabBarItem.title = "Search"
-        searchNavController.navigationBar.standardAppearance = navBarAppearance
+        configureTab(navController: characterNavController, image: UIImage(systemName: K.Images.systemCharacters), title: K.Titles.characters, barAppearance: navBarAppearance)
+        configureTab(navController: locationNavController, image: UIImage(systemName: K.Images.map), title: K.Titles.locations, barAppearance: navBarAppearance)
+        configureTab(navController: episodeNavController, image: UIImage(systemName: K.Images.television), title: K.Titles.episodes, barAppearance: navBarAppearance)
+        configureTab(navController: searchNavController, image: UIImage(systemName: K.Images.systemMagnifyingGlass), title: K.Titles.search, barAppearance: navBarAppearance)
 
         // Add CharactersViewController to the character navigation controller.
-        let charactersViewController = CharactersViewController()
-        charactersViewController.coordinator = self
+        let charactersViewModel = CharactersViewModel()
+        charactersViewModel.coordinator = self
+        let charactersViewController = CharactersViewController(viewModel: charactersViewModel)
         characterNavController.pushViewController(charactersViewController, animated: false)
 
         // Add LocationsViewController to the location navigation controller.
-        let locationsViewController = LocationsViewController()
-        locationsViewController.coordinator = self
+        let locationsViewModel = LocationsViewModel()
+        locationsViewModel.coordinator = self
+        let locationsViewController = LocationsViewController(viewModel: locationsViewModel)
         locationNavController.pushViewController(locationsViewController, animated: false)
 
         // Add EpisodesViewController to the episode navigation controller.
-        let episodesViewController = EpisodesViewController()
-        episodesViewController.coordinator = self
+        let episodeViewModel = EpisodesViewModel()
+        episodeViewModel.coordinator = self
+        let episodesViewController = EpisodesViewController(viewModel: episodeViewModel)
         episodeNavController.pushViewController(episodesViewController, animated: false)
 
         // Add SearchViewController to the search navigation controller.
-        let searchViewController = SearchViewController()
-        searchViewController.coordinator = self
+        let searchViewModel = SearchViewModel()
+        searchViewModel.coordinator = self
+        let searchViewController = SearchViewController(viewModel: searchViewModel)
         searchNavController.pushViewController(searchViewController, animated: false)
 
         // Set tab bar controller as the root view controller of the UIWindow.
@@ -97,40 +83,71 @@ class MainCoordinator: Coordinator {
         window.makeKeyAndVisible()
     }
 
+    func configureTab(navController: UINavigationController, image: UIImage?, title: String, barAppearance: UINavigationBarAppearance) {
+        tabBarController.addChild(navController)
+        navController.tabBarItem.image = image
+        navController.tabBarItem.title = title
+        navController.navigationBar.standardAppearance = barAppearance
+    }
+
+    // MARK: - Navigations
+
     func goCharacterDetails(id: String, navController: UINavigationController) {
-        let viewController = CharacterDetailsViewController()
-        viewController.coordinator = self
-        viewController.characterID = id
+        let viewModel = CharacterDetailsViewModel(characterId: id)
+        viewModel.coordinator = self
+        let viewController = CharacterDetailsViewController(viewModel: viewModel)
         navController.pushViewController(viewController, animated: true)
     }
 
-    func showCharactersFilter(sender: UIViewController, viewModel: CharactersViewModel) {
-        let charactersFilterViewController = CharactersFilterViewController(viewModel: viewModel)
+    func showCharactersFilter(viewController: UIViewController, viewModel: CharactersViewModel, sender: AnyObject, onDismiss: (() -> Void)? = nil) {
+        let charactersFilterViewController = CharactersFilterViewController(viewModel: viewModel, onDismiss: onDismiss)
+
         charactersFilterViewController.modalPresentationStyle = .popover
         if let popover = charactersFilterViewController.popoverPresentationController {
+            popover.sourceView = sender as? UIView
+            popover.sourceRect = sender.bounds
+            popover.delegate = viewController as? UIPopoverPresentationControllerDelegate
             let sheet = popover.adaptiveSheetPresentationController
             sheet.detents = [
                 .custom(identifier: UISheetPresentationController.Detent.Identifier("small")) { _ in
-                    280
+                    return 280
                 }
             ]
             sheet.prefersGrabberVisible = true
             sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
             sheet.prefersEdgeAttachedInCompactHeight = true
         }
-        sender.present(charactersFilterViewController, animated: true, completion: nil)
+        viewController.present(charactersFilterViewController, animated: true, completion: nil)
     }
 
-    func goLocationDetails(id: String, navController: UINavigationController) {
-        let viewController = LocationDetailsViewController(locationId: id)
-        viewController.coordinator = self
+    func dismissCharactersFilter(viewController: UIViewController) {
+        viewController.dismiss(animated: true)
+    }
+
+    func goLocationDetails(id: String, navController: UINavigationController, residentCount: Int) {
+        let viewModel = LocationDetailsViewModel(locationId: id)
+        viewModel.locationId = id
+        viewModel.residentCount = residentCount
+        viewModel.coordinator = self
+        let viewController = LocationDetailsViewController(viewModel: viewModel)
         navController.pushViewController(viewController, animated: true)
     }
 
     func goEpisodeDetails(id: String, navController: UINavigationController) {
-        let viewController = EpisodeDetailsViewController(episodeId: id)
-        viewController.coordinator = self
+        let viewModel = EpisodeDetailsViewModel(episodeId: id)
+        viewModel.episodeId = id
+        viewModel.coordinator = self
+        let viewController = EpisodeDetailsViewController(viewModel: viewModel)
         navController.pushViewController(viewController, animated: true)
     }
 
+    func presentNetworkTimoutAlert(_ message: String?) {
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+
+        tabBarController.present(alertController, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
+                alertController.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
 }

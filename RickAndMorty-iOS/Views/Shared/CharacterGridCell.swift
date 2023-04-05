@@ -10,23 +10,28 @@ import SnapKit
 
 class CharacterGridCell: UICollectionViewCell {
 
-    static let identifier = "CharacterCell"
+    static let identifier = K.Identifiers.characterCell
 
     lazy var characterNameLabel: UILabel = {
-        let label = UILabel()
+        let label = PaddingLabel()
         label.textAlignment = .center
-        label.backgroundColor = UIColor(red: 0.98, green: 0.96, blue: 0.92, alpha: 0.7)
+        label.backgroundColor = K.Colors.characterNameLabel
         label.textColor = .black
+        label.font = UIFont(name: K.Fonts.secondary, size: 18)
         return label
     }()
 
-    lazy var characterImage: UIImageView = {
+    lazy var characterImage: UIImageView = { [weak self] in
         let imageView = UIImageView()
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = self.layer.cornerRadius
+        imageView.layer.cornerRadius = self?.layer.cornerRadius ?? 0
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,16 +39,23 @@ class CharacterGridCell: UICollectionViewCell {
         setupConstraints()
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        contentView.layer.sublayers?.removeAll()
+    }
+
     func setupViews() {
-        self.backgroundColor = .lightGray
-        self.layer.cornerRadius = 10
-        self.addSubview(characterImage)
-        self.addSubview(characterNameLabel)
+        backgroundColor = .lightGray
+        layer.cornerRadius = 10
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.gray.cgColor
+        addSubview(characterImage)
+        addSubview(characterNameLabel)
     }
 
     func setupConstraints() {
         characterImage.snp.makeConstraints { make in
-            make.edges.equalTo(self)
+            make.edges.equalToSuperview()
         }
 
         characterNameLabel.snp.makeConstraints { make in
@@ -52,9 +64,5 @@ class CharacterGridCell: UICollectionViewCell {
             make.right.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

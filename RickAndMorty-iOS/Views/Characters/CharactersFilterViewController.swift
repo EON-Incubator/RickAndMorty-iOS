@@ -8,21 +8,24 @@
 import UIKit
 import Combine
 
-class CharactersFilterViewController: UIViewController {
+class CharactersFilterViewController: BaseViewController {
 
-    private let statuses = ["alive", "dead", "unknown"]
-    private let genders = ["male", "female", "genderless", "unknown"]
-
+    private let statuses = [K.FilterLabels.alive, K.FilterLabels.dead, K.FilterLabels.unknown]
+    private let genders = [K.FilterLabels.male, K.FilterLabels.female, K.FilterLabels.genderless, K.FilterLabels.unknown]
     private let charactersFilterView = CharactersFilterView()
-    private var viewModel: CharactersViewModel
+    private let viewModel: CharactersViewModel
+    private let dismissHandler: (() -> Void)?
+    private let currentFilterOptions: CurrentValueSubject<FilterOptions, Never>
 
-    required init?(coder: NSCoder) {
-        fatalError("This class does not support NSCoder")
-    }
+    private var cancellables = Set<AnyCancellable>()
 
-    init(viewModel: CharactersViewModel) {
+    init(viewModel: CharactersViewModel, onDismiss: (() -> Void)?) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
+        dismissHandler = onDismiss
+        currentFilterOptions = CurrentValueSubject<FilterOptions, Never>(FilterOptions(
+            status: viewModel.filterOptions.status,
+            gender: viewModel.filterOptions.gender))
+        super.init()
     }
 
     override func loadView() {
@@ -32,18 +35,32 @@ class CharactersFilterViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        presentationController?.delegate = self
+        addTargets()
+        bindToViewModel()
+        restoreStatesFromViewModel()
+    }
+
+    private func addTargets() {
         charactersFilterView.statusSegmentControl.addTarget(self, action: #selector(statusValueChanged), for: .valueChanged)
         charactersFilterView.genderSegmentControl.addTarget(self, action: #selector(genderValueChanged), for: .valueChanged)
-
-        charactersFilterView.applyButton.addTarget(self, action: #selector(applyButtonTapped), for: .touchUpInside)
         charactersFilterView.dismissButton.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
         charactersFilterView.clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
+    }
 
-        if let currentStatusIndex = statuses.firstIndex(of: viewModel.currentStatus) {
+    private func bindToViewModel() {
+        currentFilterOptions
+            .receive(on: DispatchQueue.main)
+            .map({ $0 })
+            .assign(to: \.filterOptions, on: viewModel)
+            .store(in: &cancellables)
+    }
+
+    private func restoreStatesFromViewModel() {
+        if let currentStatusIndex = statuses.firstIndex(of: viewModel.filterOptions.status) {
             charactersFilterView.statusSegmentControl.selectedSegmentIndex = currentStatusIndex
         }
-
-        if let currentGenderIndex = genders.firstIndex(of: viewModel.currentGender) {
+        if let currentGenderIndex = genders.firstIndex(of: viewModel.filterOptions.gender) {
             charactersFilterView.genderSegmentControl.selectedSegmentIndex = currentGenderIndex
         }
     }
@@ -51,32 +68,46 @@ class CharactersFilterViewController: UIViewController {
     @objc private func statusValueChanged() {
         let statusIndex = charactersFilterView.statusSegmentControl.selectedSegmentIndex
         if statusIndex >= 0 {
-            viewModel.currentStatus = self.statuses[statusIndex]
-            viewModel.currentPage = 1
+            if currentFilterOptions.value.status != statuses[statusIndex] {
+                currentFilterOptions.value.status = statuses[statusIndex]
+            } else {
+                charactersFilterView.statusSegmentControl.selectedSegmentIndex = -1
+                currentFilterOptions.value.status = ""
+            }
         }
     }
 
     @objc private func genderValueChanged() {
         let genderIndex = charactersFilterView.genderSegmentControl.selectedSegmentIndex
         if genderIndex >= 0 {
-            viewModel.currentGender = self.genders[genderIndex]
-            viewModel.currentPage = 1
+            if currentFilterOptions.value.gender != genders[genderIndex] {
+                currentFilterOptions.value.gender = genders[genderIndex]
+            } else {
+                charactersFilterView.genderSegmentControl.selectedSegmentIndex = -1
+                currentFilterOptions.value.gender = ""
+            }
         }
     }
 
-    @objc private func applyButtonTapped() {
-        self.dismiss(animated: true)
-    }
-
     @objc private func dismissButtonTapped() {
-        self.dismiss(animated: true)
+        dismiss(animated: true)
     }
 
     @objc private func clearButtonTapped() {
         charactersFilterView.statusSegmentControl.selectedSegmentIndex = -1
         charactersFilterView.genderSegmentControl.selectedSegmentIndex = -1
-        viewModel.currentStatus = ""
-        viewModel.currentGender = ""
-        viewModel.currentPage = 1
+        currentFilterOptions.value = FilterOptions(status: "", gender: "")
+    }
+
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
+        dismissHandler?()
+    }
+}
+
+extension CharactersFilterViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        dismiss(animated: true)
+        return true
     }
 }

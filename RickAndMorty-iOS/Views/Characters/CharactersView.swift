@@ -8,47 +8,22 @@
 import UIKit
 import SnapKit
 
-class CharactersView: UIView {
+class CharactersView: BaseView {
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    init() {
-        super.init(frame: .zero)
-        setupViews()
-        setupConstraints()
-    }
-
-    private func setupViews() {
-        self.backgroundColor = .systemBackground
-        self.addSubview(collectionView)
-        collectionView.showsVerticalScrollIndicator = false
-
-        let layoutGuide = self.safeAreaLayoutGuide
-        self.addSubview(loadingIndicator)
-        NSLayoutConstraint.activate([
-            layoutGuide.centerXAnchor.constraint(equalTo: loadingIndicator.centerXAnchor),
-            layoutGuide.bottomAnchor.constraint(equalTo: loadingIndicator.bottomAnchor, constant: 10)
-        ])
-
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
-    }
-
-    lazy var loadingIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        indicator.hidesWhenStopped = true
-        indicator.color = .black
-        return indicator
-    }()
+    let loadingView = LoadingView()
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
-        collectionView.accessibilityIdentifier = "CharactersCollectionView"
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
+        collectionView.accessibilityIdentifier = K.Identifiers.characters
         collectionView.register(CharacterGridCell.self, forCellWithReuseIdentifier: CharacterGridCell.identifier)
         return collectionView
     }()
+
+    override init() {
+        super.init()
+        setupViews()
+        setupConstraints()
+    }
 
     func createLayout() -> UICollectionViewCompositionalLayout {
         let sectionProvider = { (_: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
@@ -80,30 +55,39 @@ class CharactersView: UIView {
         return layout
     }
 
+    private func setupViews() {
+        backgroundColor = .systemBackground
+        addSubview(collectionView)
+        addSubview(loadingView)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
+    }
+
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(self.safeAreaInsets).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+            make.edges.equalTo(safeAreaInsets).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
+        loadingView.setupConstraints(view: self)
     }
 }
 
 extension CharactersView {
     func filterButton(_ target: Any?, action: Selector) -> UIBarButtonItem {
-        let filterButton = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 30))
-        filterButton.layer.cornerRadius = 15
+        let filterButton = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 25))
+        filterButton.layer.cornerRadius = 12.5
         filterButton.tintColor = .black
-        filterButton.backgroundColor = UIColor(red: 0.65, green: 0.76, blue: 0.81, alpha: 1.00)
-        filterButton.setTitle("Filter", for: .normal)
+        filterButton.backgroundColor = K.Colors.filterButton
+        filterButton.setTitle(K.Titles.filter, for: .normal)
         filterButton.setTitleColor(.black, for: .normal)
         filterButton.setTitleColor(.white, for: .highlighted)
         filterButton.titleLabel?.font = .systemFont(ofSize: 12)
-        filterButton.setImage(UIImage(named: "filter"), for: .normal)
+        filterButton.setImage(UIImage(named: K.Images.filter), for: .normal)
         filterButton.addTarget(target, action: action, for: .touchUpInside)
         return UIBarButtonItem(customView: filterButton)
     }
 
     func logoView() -> UIBarButtonItem {
-        let imageView = UIImageView(image: UIImage(named: "RickAndMorty"))
+        let imageView = UIImageView(image: UIImage(named: K.Images.logo))
         imageView.contentMode = .scaleAspectFit
 
         imageView.snp.makeConstraints { make in

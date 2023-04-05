@@ -8,21 +8,8 @@
 import UIKit
 
 class AvatarCell: UICollectionViewCell {
-    static let identifier = "CharacterAvatarCell"
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-        setupConstraints()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func setupViews() {
-        self.addSubview(characterImage)
-    }
+    static let identifier = K.Identifiers.characterAvatarCell
 
     lazy var characterImage: UIImageView = {
         let imageView = UIImageView()
@@ -33,6 +20,20 @@ class AvatarCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupViews()
+        setupConstraints()
+    }
+
+    func setupViews() {
+        addSubview(characterImage)
+    }
 
     func setupConstraints() {
         characterImage.snp.makeConstraints { make in

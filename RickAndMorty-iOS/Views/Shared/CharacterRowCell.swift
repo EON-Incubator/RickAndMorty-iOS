@@ -9,10 +9,19 @@ import UIKit
 
 class CharacterRowCell: UICollectionViewListCell {
 
-    static let identifier = "CharacterRowCell"
+    enum CharacterStatus: String {
+        case alive = "Alive"
+        case dead = "Dead"
+        case unknown = "unknown"
+        var description: String {
+            return rawValue
+        }
+    }
+
+    static let identifier = K.Identifiers.characterRowCell
 
     lazy var characterAvatarImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "person.circle"))
+        let imageView = UIImageView(image: UIImage(systemName: K.Images.systemPerson))
         imageView.tintColor = .systemGray3
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .systemGray6
@@ -24,7 +33,8 @@ class CharacterRowCell: UICollectionViewListCell {
     lazy var characterStatusLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = .systemFont(ofSize: 13, weight: .semibold)
+        label.font = UIFont(name: K.Fonts.secondary, size: 13)
+
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.backgroundColor = .systemGray
@@ -39,19 +49,21 @@ class CharacterRowCell: UICollectionViewListCell {
 
     lazy var upperLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 22)
+        label.font = UIFont(name: K.Fonts.secondary, size: 22)
         label.adjustsFontSizeToFitWidth = true
-        label.textAlignment = .left
+        label.textAlignment = .center
         return label
     }()
 
     lazy var lowerLeftLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .bold)
-        label.textColor = .systemBackground
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .black
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.backgroundColor = UIColor(red: 0.40, green: 0.20, blue: 0.50, alpha: 0.9)
+        label.backgroundColor = K.Colors.gender
+        label.layer.borderWidth = 0.3
+        label.layer.borderColor = UIColor.gray.cgColor
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
         return label
@@ -59,11 +71,13 @@ class CharacterRowCell: UICollectionViewListCell {
 
     lazy var lowerRightLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .bold)
-        label.textColor = .systemBackground
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .black
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.backgroundColor = UIColor(red: 0.87, green: 0.47, blue: 0.34, alpha: 0.9)
+        label.backgroundColor = K.Colors.species
+        label.layer.borderWidth = 0.3
+        label.layer.borderColor = UIColor.gray.cgColor
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
         return label
@@ -75,45 +89,48 @@ class CharacterRowCell: UICollectionViewListCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
+        accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
         setupViews()
         setupConstraints()
     }
 
-    func setupViews() {
-        let myView = UIView(frame: self.bounds)
-        myView.backgroundColor = UIColor(named: "characterRowBackgroundColor")
-        self.backgroundView = myView
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = UIColor.gray.cgColor
-        self.layer.cornerRadius = 5
-        self.layer.masksToBounds = true
-        self.addSubview(characterAvatarImageView)
-        self.addSubview(characterStatusLabel)
-        self.addSubview(upperLabel)
-        self.addSubview(lowerLeftLabel)
-        self.addSubview(lowerRightLabel)
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        contentView.layer.sublayers?.removeAll()
     }
 
-    enum CharacterStatus: String {
-        case alive = "Alive"
-        case dead = "Dead"
-        case unknown = "unknown"
-        var description: String {
-            return self.rawValue
-        }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.gray.cgColor
+        layer.cornerRadius = 5
+        layer.masksToBounds = true
+    }
+
+    func setupViews() {
+        let myView = UIView(frame: bounds)
+        myView.backgroundColor = UIColor(named: K.Colors.characterRow)?.withAlphaComponent(0.7)
+        backgroundView = myView
+
+        addSubview(characterAvatarImageView)
+        addSubview(characterStatusLabel)
+        addSubview(upperLabel)
+        addSubview(lowerLeftLabel)
+        addSubview(lowerRightLabel)
     }
 
     func statusColor(_ color: String) -> UIColor {
         switch color {
         case CharacterStatus.alive.description:
-            return .systemGreen
+            return .systemGreen.withAlphaComponent(0.8)
         case CharacterStatus.dead.description:
-            return .systemRed
+            characterStatusLabel.textColor = .white
+            return .systemRed.withAlphaComponent(0.8)
         case CharacterStatus.unknown.description:
-            return .systemYellow
+            return .systemYellow.withAlphaComponent(0.8)
         default:
-            return .systemGray
+            return .systemGray.withAlphaComponent(0.8)
         }
     }
 
@@ -122,14 +139,14 @@ class CharacterRowCell: UICollectionViewListCell {
             make.left.equalToSuperview().offset(10)
             make.centerY.equalToSuperview()
             make.height.equalToSuperview().offset(-20)
-            make.width.equalTo(self.snp.height).offset(-20).multipliedBy(1.0 / 1.0)
+            make.width.equalTo(snp.height).offset(-20).multipliedBy(1.0 / 1.0)
         }
 
         upperLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(100)
+            make.right.equalToSuperview().offset(-25)
             make.top.equalToSuperview().offset(10)
             make.height.equalTo(30)
-            make.width.equalToSuperview().offset(-110)
         }
 
         lowerLeftLabel.snp.makeConstraints { make in

@@ -1,25 +1,50 @@
-# RickAndMorty-iOS
-Final project of EON Mobile Incubator W23
+<p align="center">
+  <img src="https://img.shields.io/badge/Coverage-87.2%25-brightgreen" />
+  <img src="https://img.shields.io/badge/SwiftLint-%E2%9C%94-orange" />
+</p>
 
-Mobile app that consume the public RickyAndMorty GraphQL
-  - URL - https://rickandmortyapi.com/graphql
-  - Docs - https://rickandmortyapi.com/documentation
+# Rick And Morty App
 
-**Ground Rules**
+iOS app created by using UIKit (No Storyboard) and RickAndMorty GraphQL API.
 
-* You must use Swift
-* You must use MVVM as the app architecture
-  * You are free to use other patterns that build on top of MVVM (e.g. MVVM+Coordinators)
-* You must use UIKit for iOS and your views should be created programmatically
-  * Do not use Storyboards or XIB files
-  * Do not use SwiftUI
-  * You are free to use dependencies to help! (e.g. with the creation of views and management of autolayout constraints)
-* Your implementation should use asynchronous and reactive programming concepts (i.e. Combine, Closures, DispatchQueues, SwiftConcurrency)
-* You must use Apollo GraphQL to interact with the Ricky and Morty GraphQL API
-* You should have test coverage over 70% on your view models
-  * You should explore both Unit and BDD testing
-* For dependency management you’re encouraged to use Swift Package Manager
-* Carthage is okay as well! If you choose to go that route
-* You must setup Swiftlint locally and add it as a pre-commit hook to ensure your code is being linted
-  * Read more about git hooks here https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
-  * Swiftlint must also be setup as a Github Check to run on all pull requests and this check must pass for a PR to be merged
+### [🚀 Live demo](https://appetize.io/app/sq2wxnbkaagqyt527d22cux4ny?device=iphone14promax&osVersion=16.2&scale=75&deviceColor=black)
+
+## Build using:
+
+- Apollo GraphQL
+- [RickAndMorty API](https://rickandmortyapi.com/documentation/#graphql)
+- MVVM + Coordinators
+- Combine
+- Diffable Data Source
+- Compositional Layout
+- Pagination
+- Skeleton Animation
+- Quick and Nimble for testing
+- SnapKit for Auto-Layout
+- SDWebImage for Async image downloading
+- SwiftLint for linting
+
+## Features
+
+- User can see a list of all characters and their detailed info.
+- User can filter characters by Status (Alive | Dead | Unknown)
+- User can filter characters by Gender (Male | Female | Genderless | Unknown)
+- User can see a list of all locations in the show.
+- User can see a list of all the espisodes of the show.
+- User can search any character by name.
+- User can search any location by name and type.
+- Every list is paginated.
+- Dark/ Light theme support.
+- Support skeleton for elegent loading animation.
+
+## Demo
+
+![characters screen](https://github.com/EON-Incubator/RickAndMorty-iOS/blob/feature/rms-68/update-readme/assets/characters.gif?raw=true)
+![Episodes screen](https://github.com/EON-Incubator/RickAndMorty-iOS/blob/feature/rms-68/update-readme/assets/Episodes.gif?raw=true)
+![Locations screen](https://github.com/EON-Incubator/RickAndMorty-iOS/blob/feature/rms-68/update-readme/assets/Locations.gif?raw=true)
+![Search screen](https://github.com/EON-Incubator/RickAndMorty-iOS/blob/feature/rms-68/update-readme/assets/Search.gif?raw=true)
+
+## Contributors
+
+- [Calvin Pak](https://github.com/CalvinPak)
+- [Gagandeep Singh](https://github.com/GSingh1994)

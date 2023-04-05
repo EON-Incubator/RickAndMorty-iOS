@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 class EpisodesViewModel {
 
@@ -16,20 +17,22 @@ class EpisodesViewModel {
             fetchData(page: currentPage)
         }
     }
+    weak var coordinator: MainCoordinator?
 
     func fetchData(page: Int) {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetEpisodesQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
                 name: nil,
-                episode: nil)) { result in
+                episode: nil)) { [weak self] result in
                     switch result {
                     case .success(let response):
                         if let results = response.data?.episodes?.results {
-                            self.mapData(page: page, episodes: results)
+                            self?.mapData(page: page, episodes: results)
                         }
                     case .failure(let error):
                         print(error)
+                        self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                     }
                 }
     }
@@ -41,4 +44,17 @@ class EpisodesViewModel {
             self.episodes.value.append(contentsOf: (episodes.compactMap { $0 }) )
         }
     }
+
+    func refresh() {
+        currentPage = 1
+    }
+
+    func loadMore() {
+        currentPage += 1
+    }
+
+    func goEpisodeDetails(id: String, navController: UINavigationController) {
+        coordinator?.goEpisodeDetails(id: id, navController: navController)
+    }
+
 }

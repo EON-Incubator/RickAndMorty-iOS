@@ -9,7 +9,7 @@ import UIKit
 
 class LocationRowCell: RowCell {
 
-    static let identifier = "LocationRowCell"
+    static let identifier = K.Identifiers.locationRowCell
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -17,25 +17,20 @@ class LocationRowCell: RowCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
         addStyles()
-        setupConstraints()
     }
 
     func addStyles() {
-        let myView = UIView(frame: self.bounds)
-        myView.backgroundColor = UIColor(red: 0.99, green: 0.89, blue: 0.54, alpha: 0.1)
-        self.backgroundView = myView
-        lowerRightLabel.backgroundColor = UIColor(red: 0.87, green: 0.99, blue: 0.98, alpha: 0.4)
+        let myView = UIView(frame: bounds)
+        myView.backgroundColor = UIColor(named: K.Colors.locationCell)
+        backgroundView = myView
+        lowerRightLabel.backgroundColor = K.Colors.dimension
         lowerRightLabel.layer.borderWidth = 0.3
         lowerRightLabel.layer.borderColor = UIColor.gray.cgColor
 
         lowerLeftLabel.layer.borderWidth = 0.3
         lowerLeftLabel.layer.borderColor = UIColor.gray.cgColor
-        lowerLeftLabel.backgroundColor = UIColor(red: 1.00,
-                                                 green: 0.75,
-                                                 blue: 0.66,
-                                                 alpha: 0.4)
+        lowerLeftLabel.backgroundColor = K.Colors.type
 
     }
 }

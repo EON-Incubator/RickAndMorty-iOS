@@ -9,24 +9,29 @@ import UIKit
 import Combine
 import SDWebImage
 
-class CharacterDetailsViewController: UIViewController {
+class CharacterDetailsViewController: BaseViewController {
 
-    let viewModel = CharacterDetailsViewModel()
-    let locationsViewModel = LocationsViewModel()
-    var characterDetailsView = CharacterDetailsView()
-    weak var coordinator: MainCoordinator?
-    var characterID: String?
-    var avatarImageUrl: String?
-    var titleViewState: TitleViewState = .noTitle
-
-    private var dataSource: DataSource!
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
-    private var cancellables = Set<AnyCancellable>()
-    var snapshot = Snapshot()
 
     enum TitleViewState {
         case noTitle, title, titleWithImage
+    }
+
+    private let viewModel: CharacterDetailsViewModel
+    private let locationsViewModel = LocationsViewModel()
+    private let characterDetailsView = CharacterDetailsView()
+
+    private var characterID: String?
+    private var avatarImageUrl: String?
+    private var titleViewState: TitleViewState = .noTitle
+    private var dataSource: DataSource?
+    private var cancellables = Set<AnyCancellable>()
+    private var snapshot = Snapshot()
+
+    init(viewModel: CharacterDetailsViewModel) {
+        self.viewModel = viewModel
+        super.init()
     }
 
     override func loadView() {
@@ -36,11 +41,11 @@ class CharacterDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.selectedCharacter = characterID!
         configureDataSource()
         showEmptyData()
         subscribeToViewModel()
         updateTitleView()
+        viewModel.fetchData()
     }
 
     func showEmptyData() {
@@ -49,20 +54,22 @@ class CharacterDetailsViewController: UIViewController {
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 1), toSection: .empty)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 3), toSection: .emptyInfo)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 2), toSection: .emptyLocation)
-        self.dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
 
     func subscribeToViewModel() {
-        viewModel.character.sink(receiveValue: { [self] characterInfo in
-            self.title = characterInfo.name
+        viewModel.character.sink(receiveValue: { [weak self] characterInfo in
+            self?.title = characterInfo.name
             if !characterInfo.episode.isEmpty {
-                snapshot.deleteAllItems()
-                snapshot.appendSections([.appearance, .info, .location, .episodes])
-                snapshot.appendItems([CharacterDetails(characterInfo)], toSection: .appearance)
-                snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .info)
-                snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .location)
-                snapshot.appendItems(characterInfo.episode, toSection: .episodes)
-                self.dataSource.apply(snapshot, animatingDifferences: true)
+                if var snapshot = self?.snapshot {
+                    snapshot.deleteAllItems()
+                    snapshot.appendSections([.appearance, .info, .location, .episodes])
+                    snapshot.appendItems([CharacterDetails(characterInfo)], toSection: .appearance)
+                    snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .info)
+                    snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .location)
+                    snapshot.appendItems(characterInfo.episode, toSection: .episodes)
+                    self?.dataSource?.apply(snapshot, animatingDifferences: true)
+                }
             }
         }).store(in: &cancellables)
     }
@@ -72,74 +79,75 @@ class CharacterDetailsViewController: UIViewController {
 extension CharacterDetailsViewController {
     // swiftlint:disable cyclomatic_complexity
     private func configureDataSource() {
-        dataSource = DataSource(collectionView: characterDetailsView.collectionView, cellProvider: { (collectionView, indexPath, characterInfo) -> UICollectionViewCell? in
-
-            let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell
-            let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+        dataSource = DataSource(collectionView: characterDetailsView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, characterInfo) -> UICollectionViewCell? in
 
             switch indexPath.section {
             case 0:
-                hideLoadingAnimation(currentCell: avatarCell!)
+                let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell
                 if let character = characterInfo as? CharacterDetails {
                     guard let image = character.item.image else { fatalError("Image not found") }
-                    self.avatarImageUrl = image
-                    avatarCell?.characterImage.sd_setImage(with: URL(string: image))
-                    return avatarCell!
+                    self?.avatarImageUrl = image
+                    avatarCell?.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 300, height: 300)])
+                    return avatarCell
                 }
             case 1:
-                hideLoadingAnimation(currentCell: infoCell!)
+                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 if let character = characterInfo as? CharacterDetails {
                     switch indexPath.item {
                     case 0:
-                        return InfoCell.configCell(cell: infoCell!,
-                                                   leftLabel: "Gender",
-                                                   rightLabel: character.item.gender!,
-                                                   infoImage: UIImage(named: "gender")!)
+                        return InfoCell.configCell(cell: infoCell,
+                                                   leftLabel: K.Info.gender,
+                                                   rightLabel: character.item.gender ?? "",
+                                                   infoImage: UIImage(named: K.Images.gender) ?? UIImage())
                     case 1:
-                        return InfoCell.configCell(cell: infoCell!,
-                                                   leftLabel: "Species",
-                                                   rightLabel: character.item.species!,
-                                                   infoImage: UIImage(named: "dna")!)
+                        return InfoCell.configCell(cell: infoCell,
+                                                   leftLabel: K.Info.species,
+                                                   rightLabel: character.item.species ?? "",
+                                                   infoImage: UIImage(named: K.Images.species) ?? UIImage())
                     default:
-                        return InfoCell.configCell(cell: infoCell!,
-                                                   leftLabel: "Status",
-                                                   rightLabel: character.item.status!,
-                                                   infoImage: UIImage(named: "heart")!)
+                        return InfoCell.configCell(cell: infoCell,
+                                                   leftLabel: K.Info.status,
+                                                   rightLabel: character.item.status ?? "",
+                                                   infoImage: UIImage(named: K.Images.status) ?? UIImage())
                     }
                 }
             case 2:
-                hideLoadingAnimation(currentCell: infoCell!)
+                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 if let character = characterInfo as? CharacterDetails {
-                    infoCell?.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
                     switch indexPath.item {
                     case 0:
-                        return InfoCell.configCell(cell: infoCell!,
-                                                   leftLabel: "Origin",
-                                                   rightLabel: (character.item.origin?.name)!,
-                                                   infoImage: UIImage(named: "chick")!)
+                        return InfoCell.configCell(cell: infoCell,
+                                                   leftLabel: K.Info.origin,
+                                                   rightLabel: (character.item.origin?.name) ?? "",
+                                                   infoImage: UIImage(named: K.Images.origin) ?? UIImage())
                     default:
-                        return InfoCell.configCell(cell: infoCell!,
-                                                   leftLabel: "Last Seen",
-                                                   rightLabel: (character.item.location?.name)!,
-                                                   infoImage: UIImage(named: "map")!)
+                        return InfoCell.configCell(cell: infoCell,
+                                                   leftLabel: K.Info.lastSeen,
+                                                   rightLabel: (character.item.location?.name) ?? "",
+                                                   infoImage: UIImage(named: K.Images.lastSeen) ?? UIImage())
                     }
                 }
             case 3:
+                guard let episodeCell = self?.characterDetailsView.episodeCell else { return nil }
                 if let episode = characterInfo as?
                     RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode {
-                    return collectionView.dequeueConfiguredReusableCell(using: self.characterDetailsView.episodeCell,
+                    return collectionView.dequeueConfiguredReusableCell(using: episodeCell,
                                                                         for: indexPath,
                                                                         item: episode)
                 }
             case 4:
-                showLoadingAnimation(currentCell: avatarCell!)
+                let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell
+                avatarCell?.showLoadingAnimation()
                 avatarCell?.characterImage.layer.borderWidth = 0
+                avatarCell?.backgroundColor = .secondarySystemBackground
                 return avatarCell
             case 5:
-                showLoadingAnimation(currentCell: infoCell!)
+                let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+                infoCell?.showLoadingAnimation()
                 return infoCell
             case 6:
-                showLoadingAnimation(currentCell: infoCell!)
+                let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
+                infoCell?.showLoadingAnimation()
                 return infoCell
             default:
                 return UICollectionViewCell()
@@ -148,18 +156,18 @@ extension CharacterDetailsViewController {
         })
 
         // for custom header
-        dataSource.supplementaryViewProvider = { (_ collectionView, _ kind, indexPath) in
-            guard let headerView = self.characterDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as? HeaderView else {
+        dataSource?.supplementaryViewProvider = { [weak self] (_ collectionView, _ kind, indexPath) in
+            guard let headerView = self?.characterDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
             }
             var headerTitle: String
             switch indexPath.section {
             case 4:
-                headerTitle = "APPEARANCE"
+                headerTitle = K.Headers.appearance
             case 5:
-                headerTitle = "INFO"
+                headerTitle = K.Headers.info
             case 6:
-                headerTitle = "LOCATION"
+                headerTitle = K.Headers.locations
             default:
                 headerTitle = "\(Section.allCases[indexPath.section])".uppercased()
             }
@@ -177,23 +185,23 @@ extension CharacterDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         if indexPath.section > 1 {
-            if let episode = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode? {
-                coordinator?.goEpisodeDetails(id: (episode?.id)!, navController: self.navigationController!)
+            if let episode = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode? {
+                viewModel.goEpisodeDetails(id: (episode?.id) ?? "", navController: navigationController ?? UINavigationController())
             }
-            if let character = dataSource.itemIdentifier(for: indexPath) as? CharacterDetails {
+            if let character = dataSource?.itemIdentifier(for: indexPath) as? CharacterDetails {
                 switch indexPath.row {
                 case 0:
                     if let originID = character.item.origin?.id {
-                        coordinator?.goLocationDetails(id: originID, navController: self.navigationController!)
+                        viewModel.goLocationDetails(id: originID, navController: self.navigationController ?? UINavigationController())
                     }
                 default:
-                    coordinator?.goLocationDetails(id: (character.item.location?.id)!, navController: self.navigationController!)
+                    viewModel.goLocationDetails(id: (character.item.location?.id) ?? "", navController: navigationController ?? UINavigationController())
                 }
             }
         }
     }
 
-    // MARK: - Customize the Title View on scroll
+// MARK: - Customize the Title View on scroll
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.section == 0 && indexPath.item == 0 {
             titleViewState = .titleWithImage
@@ -225,21 +233,21 @@ extension CharacterDetailsViewController: UICollectionViewDelegate {
         case .noTitle:
             navigationItem.titleView?.removeFromSuperview()
         case .title:
-            let titleWithImage = characterDetailsView.titleView(image: nil, title: title)
-            self.navigationItem.titleView = titleWithImage
-            UIView.transition(with: self.navigationController?.navigationBar ?? UIView(), duration: 0.25, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+            let titleWithImage = characterDetailsView.titleView(image: nil, title: title ?? "")
+            navigationItem.titleView = titleWithImage
+            UIView.transition(with: navigationController?.navigationBar ?? UIView(), duration: 0.25, options: [.transitionCrossDissolve], animations: nil, completion: nil)
         case .titleWithImage:
-            let titleWithImage = characterDetailsView.titleView(image: self.avatarImageUrl, title: title)
-            self.navigationItem.titleView = titleWithImage
-            UIView.transition(with: self.navigationController?.navigationBar ?? UIView(), duration: 0.25, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+            let titleWithImage = characterDetailsView.titleView(image: avatarImageUrl, title: title ?? "")
+            navigationItem.titleView = titleWithImage
+            UIView.transition(with: navigationController?.navigationBar ?? UIView(), duration: 0.25, options: [.transitionCrossDissolve], animations: nil, completion: nil)
         }
     }
 }
 
 // MARK: Struct for Diffable DataSource
 struct CharacterDetails: Hashable {
-    var id: UUID
-    var item: RickAndMortyAPI.GetCharacterQuery.Data.Character
+    let id: UUID
+    let item: RickAndMortyAPI.GetCharacterQuery.Data.Character
     init(id: UUID = UUID(), _ item: RickAndMortyAPI.GetCharacterQuery.Data.Character) {
         self.id = id
         self.item = item

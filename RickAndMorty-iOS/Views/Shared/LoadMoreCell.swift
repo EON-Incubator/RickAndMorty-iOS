@@ -10,7 +10,20 @@ import SnapKit
 
 class LoadMoreCell: UICollectionViewListCell {
 
-    static let identifier = "LoadMoreCell"
+    static let identifier = K.Identifiers.loadMoreCell
+
+    lazy var centerLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .black
+        label.text = "↓    Load More   ↓"
+        label.textAlignment = .center
+        label.font = .boldSystemFont(ofSize: 20)
+        return label
+    }()
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -18,28 +31,20 @@ class LoadMoreCell: UICollectionViewListCell {
         setupConstraints()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    override func prepareForReuse() {
+            super.prepareForReuse()
+            contentView.layer.sublayers?.removeAll()
+        }
 
     func setupViews() {
-        let myView = UIView(frame: self.bounds)
-        myView.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
-        self.backgroundView = myView
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = UIColor.gray.cgColor
-        self.layer.cornerRadius = 5
-        self.addSubview(centerLabel)
+        let myView = UIView(frame: bounds)
+        myView.layer.opacity = 0.0
+        backgroundView = myView
+        layer.borderWidth = 0.2
+        layer.borderColor = UIColor.gray.cgColor
+        layer.cornerRadius = 5
+        addSubview(centerLabel)
     }
-
-    lazy var centerLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.text = "Load More"
-        label.textAlignment = .center
-        label.font = .boldSystemFont(ofSize: 20)
-        return label
-    }()
 
     func setupConstraints() {
         centerLabel.snp.makeConstraints { make in

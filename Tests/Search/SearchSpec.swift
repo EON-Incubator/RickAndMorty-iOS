@@ -22,17 +22,17 @@ final class SearchSpec: QuickSpec {
 
                 it("should return at least 1 result from characters") {
                     sut.fetchData(input: "space")
-                    await expect(sut.characters.value.count).toEventually(beGreaterThanOrEqualTo(1), timeout: DispatchTimeInterval.seconds(10))
+                    await expect(sut.characters.value.count).toEventually(beGreaterThanOrEqualTo(1), timeout: DispatchTimeInterval.seconds(3))
                 }
 
                 it("should return at least 1 result from locations with given name") {
                     sut.fetchData(input: "space")
-                    await expect(sut.locatonsWithGivenName.value.count).toEventually(beGreaterThanOrEqualTo(1), timeout: DispatchTimeInterval.seconds(10))
+                    await expect(sut.locatonsWithGivenName.value.count).toEventually(beGreaterThanOrEqualTo(1), timeout: DispatchTimeInterval.seconds(3))
                 }
 
                 it("should return at least 1 result from locations with given type") {
                     sut.fetchData(input: "space")
-                    await expect(sut.locationsWithGivenType.value.count).toEventually(beGreaterThanOrEqualTo(1), timeout: DispatchTimeInterval.seconds(10))
+                    await expect(sut.locationsWithGivenType.value.count).toEventually(beGreaterThanOrEqualTo(1), timeout: DispatchTimeInterval.seconds(3))
                 }
 
             }
@@ -42,17 +42,19 @@ final class SearchSpec: QuickSpec {
                 it("should return 0 result from characters") {
                     sut.fetchData(input: "adfjdskjhs")
                     sleep(1)
-                    await expect(sut.characters.value.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10))
+                    await expect(sut.characters.value.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(3))
                 }
 
                 it("should return 0 result from locations with given name") {
                     sut.fetchData(input: "adfjdskjhs")
-                    await expect(sut.locatonsWithGivenName.value.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10))
+                    sleep(1)
+                    await expect(sut.locatonsWithGivenName.value.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(3))
                 }
 
-                it("should return 0 result from locations with given name") {
+                it("should return 0 result from locations with given type") {
                     sut.fetchData(input: "adfjdskjhs")
-                    await expect(sut.locationsWithGivenType.value.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10))
+                    sleep(1)
+                    await expect(sut.locationsWithGivenType.value.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(3))
                 }
 
             }

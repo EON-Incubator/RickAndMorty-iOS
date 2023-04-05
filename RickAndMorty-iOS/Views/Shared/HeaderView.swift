@@ -8,20 +8,21 @@
 import UIKit
 
 class HeaderView: UICollectionReusableView {
-    public var textLabel: UILabel = {
+
+    public let textLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
         label.font = UIFont.preferredFont(forTextStyle: .headline)
         return label
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
         commonInit()
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         commonInit()
     }
 

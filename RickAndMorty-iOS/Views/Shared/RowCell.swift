@@ -16,6 +16,47 @@ class RowCell: UICollectionViewListCell {
         return view
     }()
 
+    lazy var upperLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: K.Fonts.secondary, size: 18)
+        label.textColor = .label
+        label.lineBreakMode = .byTruncatingTail
+        label.textAlignment = .center
+        return label
+    }()
+
+    lazy var lowerLeftLabel: UILabel = {
+        let label = PaddingLabel()
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = .label
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.layer.cornerRadius = 5
+        label.clipsToBounds = true
+        label.layer.borderWidth = 0.3
+        label.layer.borderColor = UIColor.gray.cgColor
+        label.backgroundColor = K.Colors.episodeNumber
+        return label
+    }()
+
+    lazy var lowerRightLabel: UILabel = {
+        let label = PaddingLabel()
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = .label
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.7
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.layer.cornerRadius = 5
+        label.clipsToBounds = true
+        label.backgroundColor = K.Colors.episodeDate
+        label.layer.borderWidth = 0.3
+        label.layer.borderColor = UIColor.gray.cgColor
+        return label
+    }()
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -23,57 +64,39 @@ class RowCell: UICollectionViewListCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
-        let myView = UIView(frame: self.bounds)
-        myView.backgroundColor = UIColor(red: 0.93, green: 0.95, blue: 1.00, alpha: 0.5)
-        self.backgroundView = myView
+        accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
+        let myView = UIView(frame: bounds)
+        myView.backgroundColor = UIColor(named: K.Colors.episodeCell)
+        myView.layer.cornerRadius = 5
+        backgroundView = myView
         setupViews()
         setupConstraints()
     }
 
-    lazy var upperLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "Chalkboard SE Regular", size: 18)
-        label.lineBreakMode = .byTruncatingTail
-        label.textAlignment = .center
-        return label
-    }()
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        for index in 0...3 {
+            characterAvatarImageViews[index].image = UIImage(systemName: K.Images.systemPerson)?.withRenderingMode(.alwaysTemplate)
+        }
 
-    lazy var lowerLeftLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
-        label.textAlignment = .center
-        label.layer.cornerRadius = 5
-        label.clipsToBounds = true
-        label.layer.borderWidth = 0.3
-        label.layer.borderColor = UIColor.gray.cgColor
-        label.backgroundColor = UIColor(red: 1.00, green: 0.75, blue: 0.66, alpha: 0.4)
-        return label
-    }()
+        contentView.layer.sublayers?.removeAll()
+    }
 
-    lazy var lowerRightLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
-        label.textAlignment = .center
-        label.layer.cornerRadius = 5
-        label.clipsToBounds = true
-        label.backgroundColor = UIColor(red: 1.00, green: 0.92, blue: 0.71, alpha: 0.4)
-        label.layer.borderWidth = 0.3
-        label.layer.borderColor = UIColor.gray.cgColor
-        return label
-    }()
+    override func layoutSubviews() {
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.gray.cgColor
+        layer.cornerRadius = 5
+        // setup-shadows
+        layer.shadowRadius = 2
+        layer.shadowOffset = .zero
+        layer.shadowOpacity = 0.3
+        layer.shadowPath = UIBezierPath(rect: bounds).cgPath
+    }
 
     func setupViews() {
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = UIColor.gray.cgColor
-        self.layer.cornerRadius = 5
         for index in 0...3 {
-            let imageView = UIImageView(image: UIImage(systemName: "person.circle"))
-            imageView.tintColor = .systemGray3
+            let imageView = UIImageView(image: UIImage(systemName: K.Images.systemPerson)?.withRenderingMode(.alwaysTemplate))
+            imageView.tintColor = .systemFill
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
             imageView.layer.cornerRadius = imageView.frame.width / 2
@@ -81,17 +104,17 @@ class RowCell: UICollectionViewListCell {
             characterAvatarsView.addSubview(characterAvatarImageViews[index])
         }
 
-        self.addSubview(characterAvatarsView)
-        self.addSubview(upperLabel)
-        self.addSubview(lowerLeftLabel)
-        self.addSubview(lowerRightLabel)
+        addSubview(characterAvatarsView)
+        addSubview(upperLabel)
+        addSubview(lowerLeftLabel)
+        addSubview(lowerRightLabel)
     }
 
     func setupConstraints() {
         characterAvatarsView.snp.makeConstraints { make in
             make.top.left.equalToSuperview().offset(2)
             make.height.equalToSuperview().offset(-8)
-            make.width.equalTo(self.snp.height).multipliedBy(1.0 / 1.0)
+            make.width.equalTo(snp.height).multipliedBy(1.0 / 1.0)
         }
 
         characterAvatarImageViews[0].snp.makeConstraints { make in
@@ -122,7 +145,7 @@ class RowCell: UICollectionViewListCell {
 
         lowerLeftLabel.snp.makeConstraints { make in
             make.left.equalTo(upperLabel)
-            make.height.equalTo(20)
+            make.height.equalTo(25)
             make.width.equalTo(upperLabel).dividedBy(2).offset(-30)
             make.bottom.equalToSuperview().offset(-10)
         }
@@ -133,5 +156,24 @@ class RowCell: UICollectionViewListCell {
             make.height.equalTo(lowerLeftLabel)
             make.width.equalTo(upperLabel).dividedBy(2)
         }
+    }
+}
+
+@IBDesignable class PaddingLabel: UILabel {
+
+    @IBInspectable var topInset: CGFloat = 1
+    @IBInspectable var bottomInset: CGFloat = 1
+    @IBInspectable var leftInset: CGFloat = 3
+    @IBInspectable var rightInset: CGFloat = 3
+
+    override func drawText(in rect: CGRect) {
+        let insets = UIEdgeInsets.init(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
+        super.drawText(in: rect.inset(by: insets))
+    }
+
+    override var intrinsicContentSize: CGSize {
+        let size = super.intrinsicContentSize
+        return CGSize(width: size.width + leftInset + rightInset,
+                      height: size.height + topInset + bottomInset)
     }
 }
