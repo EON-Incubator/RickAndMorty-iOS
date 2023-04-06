@@ -289,6 +289,7 @@ extension SearchViewController: UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController, selecting searchSuggestion: UISearchSuggestion) {
         searchController.searchBar.text = searchSuggestion.localizedSuggestion
+        self.viewModel.refresh(input: searchSuggestion.localizedSuggestion ?? "")
         searchController.searchBar.endEditing(true)
     }
 
