@@ -48,7 +48,9 @@ class SearchViewController: BaseViewController {
         super.viewDidLoad()
 
         configureDataSource()
-        subscribeToViewModel()
+//        subscribeToViewModel()
+
+        subscribeToTestVM()
     }
 
     override func loadView() {
@@ -56,6 +58,18 @@ class SearchViewController: BaseViewController {
         view = searchView
         searchView.collectionView.delegate = self
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+    }
+
+    func subscribeToTestVM() {
+        charactersSearchViewModel.characters.sink(receiveValue: { char in
+            self.snapshot.deleteAllItems()
+            self.snapshot.appendSections([.characters, .loadMoreCharacters])
+            self.snapshot.appendItems(char, toSection: .characters)
+            if char.count > 0 {
+                self.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreCharacters)
+            }
+            self.dataSource?.apply(self.snapshot)
+        }).store(in: &cancellables)
     }
 
     func subscribeToViewModel() {
@@ -186,19 +200,19 @@ extension SearchViewController: UICollectionViewDelegate {
     func loadMoreCharacters() {
         currentCharactersPage += 1
         // remove load-more section
-        if currentCharactersPage == totalCharactersPage {
-            let ids = snapshot.itemIdentifiers(inSection: .loadMoreCharacters)
-            snapshot.deleteItems(ids)
-        }
+//        if currentCharactersPage == totalCharactersPage {
+//            let ids = snapshot.itemIdentifiers(inSection: .loadMoreCharacters)
+//            snapshot.deleteItems(ids)
+//        }
         charactersSearchViewModel.fetchData(page: currentCharactersPage, name: viewModel.searchInput)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            let newCharacters = self?.charactersSearchViewModel.charactersForSearch.value
-            self?.snapshot.appendItems(newCharacters ?? [], toSection: .characters)
-            if let snapshot = self?.snapshot {
-                self?.dataSource?.apply(snapshot, animatingDifferences: true)
-            }
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+//            let newCharacters = self?.charactersSearchViewModel.charactersForSearch.value
+//            self?.snapshot.appendItems(newCharacters ?? [], toSection: .characters)
+//            if let snapshot = self?.snapshot {
+//                self?.dataSource?.apply(snapshot, animatingDifferences: true)
+//            }
+//        }
     }
 
     func loadMoreLocations() {
@@ -302,6 +316,9 @@ extension SearchViewController: UISearchResultsUpdating {
             debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
                 self.searchView.loadingView.spinner.stopAnimating()
                 if searchInput.count >= 2 {
+
+                    self.charactersSearchViewModel.fetchData(page: self.currentCharactersPage, name: searchInput)
+
                     // remove search-for-something label
                     if searchInput != self.viewModel.searchInput {
                         self.viewModel.refresh(input: searchInput)
