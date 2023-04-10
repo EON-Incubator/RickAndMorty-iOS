@@ -48,7 +48,7 @@ class SearchViewController: BaseViewController {
         super.viewDidLoad()
 
         configureDataSource()
-//        subscribeToViewModel()
+        //        subscribeToViewModel()
 
         subscribeToTestVM()
     }
@@ -63,7 +63,7 @@ class SearchViewController: BaseViewController {
     func subscribeToTestVM() {
         charactersSearchViewModel.characters.sink(receiveValue: { char in
             self.snapshot.deleteAllItems()
-            self.snapshot.appendSections([.characters, .loadMoreCharacters])
+            self.snapshot.appendSections([.characters, .loadMoreCharacters, .locations, .loadMoreLocations])
             self.snapshot.appendItems(char, toSection: .characters)
             if char.count > 0 {
                 self.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreCharacters)
@@ -71,6 +71,41 @@ class SearchViewController: BaseViewController {
             self.dataSource?.apply(self.snapshot)
         }).store(in: &cancellables)
     }
+
+    func loadUniqueLocations() {
+        uniqueLocations = []
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.uniqueLocations += ((self?.locationNameViewModel.locationsNameSearch.value ?? []) + (self?.locationTypeViewModel.locationsTypeSearch.value ?? []))
+            let newUniqueLocations = Array(Set((self?.uniqueLocations) ?? []))
+            let locationsIDs = self?.snapshot.itemIdentifiers(inSection: .locations)
+            self?.snapshot.deleteItems(locationsIDs ?? [])
+            self?.snapshot.appendItems(newUniqueLocations, toSection: .locations)
+            if let snapshot = self?.snapshot {
+                self?.dataSource?.apply(snapshot, animatingDifferences: false)
+            }
+        }
+    }
+
+    //    func loadMoreLocations() {
+    //        currentLocationsPage += 1
+    //        if currentLocationsPage == totalLocationsPage {
+    //            let ids = snapshot.itemIdentifiers(inSection: .loadMoreLocations)
+    //            snapshot.deleteItems(ids)
+    //        }
+    //        locationNameViewModel.fetchData(page: currentLocationsPage, name: viewModel.searchInput)
+    //        locationTypeViewModel.fetchData(page: currentLocationsPage, type: viewModel.searchInput)
+    //
+    //        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+    //            self?.uniqueLocations += ((self?.locationNameViewModel.locationsNameSearch.value ?? []) + (self?.locationTypeViewModel.locationsTypeSearch.value ?? []))
+    //            let newUniqueLocations = Array(Set((self?.uniqueLocations) ?? []))
+    //            let locationsIDs = self?.snapshot.itemIdentifiers(inSection: .locations)
+    //            self?.snapshot.deleteItems(locationsIDs ?? [])
+    //            self?.snapshot.appendItems(newUniqueLocations, toSection: .locations)
+    //            if let snapshot = self?.snapshot {
+    //                self?.dataSource?.apply(snapshot, animatingDifferences: false)
+    //            }
+    //        }
+    //    }
 
     func subscribeToViewModel() {
 
@@ -200,19 +235,19 @@ extension SearchViewController: UICollectionViewDelegate {
     func loadMoreCharacters() {
         currentCharactersPage += 1
         // remove load-more section
-//        if currentCharactersPage == totalCharactersPage {
-//            let ids = snapshot.itemIdentifiers(inSection: .loadMoreCharacters)
-//            snapshot.deleteItems(ids)
-//        }
+        //        if currentCharactersPage == totalCharactersPage {
+        //            let ids = snapshot.itemIdentifiers(inSection: .loadMoreCharacters)
+        //            snapshot.deleteItems(ids)
+        //        }
         charactersSearchViewModel.fetchData(page: currentCharactersPage, name: viewModel.searchInput)
 
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-//            let newCharacters = self?.charactersSearchViewModel.charactersForSearch.value
-//            self?.snapshot.appendItems(newCharacters ?? [], toSection: .characters)
-//            if let snapshot = self?.snapshot {
-//                self?.dataSource?.apply(snapshot, animatingDifferences: true)
-//            }
-//        }
+        //        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+        //            let newCharacters = self?.charactersSearchViewModel.charactersForSearch.value
+        //            self?.snapshot.appendItems(newCharacters ?? [], toSection: .characters)
+        //            if let snapshot = self?.snapshot {
+        //                self?.dataSource?.apply(snapshot, animatingDifferences: true)
+        //            }
+        //        }
     }
 
     func loadMoreLocations() {
@@ -318,6 +353,10 @@ extension SearchViewController: UISearchResultsUpdating {
                 if searchInput.count >= 2 {
 
                     self.charactersSearchViewModel.fetchData(page: self.currentCharactersPage, name: searchInput)
+                    self.locationNameViewModel.fetchData(page: self.currentLocationsPage, name: searchInput)
+                    self.locationTypeViewModel.fetchData(page: self.currentLocationsPage, type: searchInput)
+
+                    self.loadUniqueLocations()
 
                     // remove search-for-something label
                     if searchInput != self.viewModel.searchInput {
