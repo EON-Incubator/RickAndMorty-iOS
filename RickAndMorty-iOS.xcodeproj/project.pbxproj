@@ -31,6 +31,7 @@
 		54BDF5BE29BBB2CB003F7084 /* CharacterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BDF5BD29BBB2CB003F7084 /* CharacterDetailsViewController.swift */; };
 		54BDF5C229BBBEB9003F7084 /* CharacterDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BDF5C129BBBEB9003F7084 /* CharacterDetailsView.swift */; };
 		54BDF5C529BBC891003F7084 /* AvatarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BDF5C429BBC891003F7084 /* AvatarCell.swift */; };
+		54C01EA229E49586009847AE /* TMDb in Frameworks */ = {isa = PBXBuildFile; productRef = 54C01EA129E49586009847AE /* TMDb */; };
 		54CA239A29D5FD0900898FBC /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CA239929D5FD0900898FBC /* K.swift */; };
 		54D1E4E029D492CE00571BC5 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D1E4DF29D492CE00571BC5 /* LoadingView.swift */; };
 		54ECFC3F29C545A00049ACE3 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54ECFC3E29C545A00049ACE3 /* SearchViewController.swift */; };
@@ -233,6 +234,7 @@
 				5447EE1D29BA591800D2D05A /* SDWebImage in Frameworks */,
 				F77E4B9F29B94B9300B8B5CE /* Apollo in Frameworks */,
 				5447EE1A29BA36DC00D2D05A /* SnapKit in Frameworks */,
+				54C01EA229E49586009847AE /* TMDb in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -694,6 +696,7 @@
 				F77E4B9E29B94B9300B8B5CE /* Apollo */,
 				5447EE1929BA36DC00D2D05A /* SnapKit */,
 				5447EE1C29BA591800D2D05A /* SDWebImage */,
+				54C01EA129E49586009847AE /* TMDb */,
 			);
 			productName = "RickAndMorty-iOS";
 			productReference = F77E4B7829B906D400B8B5CE /* RickAndMorty-iOS.app */;
@@ -784,6 +787,7 @@
 				5447EE1B29BA591800D2D05A /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				F77E4BF129BA3BE100B8B5CE /* XCRemoteSwiftPackageReference "Quick" */,
 				F77E4BF429BA3BF200B8B5CE /* XCRemoteSwiftPackageReference "Nimble" */,
+				54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */,
 			);
 			productRefGroup = F77E4B7929B906D400B8B5CE /* Products */;
 			projectDirPath = "";
@@ -1292,6 +1296,14 @@
 				kind = branch;
 			};
 		};
+		54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adamayoung/TMDb";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 		F77E4B9D29B94B9300B8B5CE /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
@@ -1333,6 +1345,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5447EE1B29BA591800D2D05A /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
+		};
+		54C01EA129E49586009847AE /* TMDb */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */;
+			productName = TMDb;
 		};
 		F77E4B9E29B94B9300B8B5CE /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;

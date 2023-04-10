@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import TMDb
 
 class EpisodeDetailsViewController: BaseViewController {
 
@@ -48,10 +49,17 @@ class EpisodeDetailsViewController: BaseViewController {
         viewModel.fetchData()
     }
 
+    var episodeRating: Double?
+
+    func fetchData(episode: String, season: String) async {
+        let tmdb = TMDbAPI(apiKey: "1ecd1b26d36c0ce0ec76aec3676d5773")
+        episodeRating = try? await tmdb.tvShowEpisodes.details(forEpisode: Int(episode) ?? 0, inSeason: Int(season) ?? 0, inTVShow: 60625).voteAverage
+    }
+
     func showEmptyData() {
         snapshot.deleteAllItems()
         snapshot.appendSections([.info, .characters, .emptyInfo, .emptyCharacters])
-        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 2), toSection: .emptyInfo)
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 3), toSection: .emptyInfo)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 4), toSection: .emptyCharacters)
         self.dataSource?.apply(snapshot, animatingDifferences: true)
     }
@@ -63,7 +71,7 @@ class EpisodeDetailsViewController: BaseViewController {
                 if var snapshot = self?.snapshot {
                     snapshot.deleteAllItems()
                     snapshot.appendSections([.info, .characters])
-                    snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
+                    snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
                     snapshot.appendItems(episode.characters, toSection: .characters)
                     self?.dataSource?.apply(snapshot, animatingDifferences: true)
                 }
@@ -143,6 +151,16 @@ extension EpisodeDetailsViewController {
                 cell.rightLabel.text = episodeDetails.item.air_date
                 cell.infoImage.image = UIImage(named: K.Images.calendar)?.withRenderingMode(.alwaysTemplate)
                 cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
+            case 2:
+                let episodeArray = episodeDetails.item.episode?.split(separator: "", maxSplits: 5)
+                Task {
+                    await self.fetchData(episode: "\(episodeArray?[4] ?? "")\(episodeArray?[5] ?? "")",
+                                         season: "\(episodeArray?[1] ?? "")\(episodeArray?[2] ?? "")")
+                    cell.rightLabel.text = String(format: "%.1f", episodeRating ?? 0)
+                    cell.leftLabel.text = "Rating"
+                    cell.infoImage.image = UIImage(systemName: "star")
+                    cell.rightLabel.adjustsFontSizeToFitWidth = false
+                }
             default:
                 cell.rightLabel.text = "-"
             }
