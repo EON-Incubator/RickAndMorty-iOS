@@ -15,6 +15,7 @@ class EpisodeDetailsViewController: BaseViewController {
     typealias Snapshot = NSDiffableDataSourceSnapshot<EpisodeDetailsSection, AnyHashable>
 
     enum EpisodeDetailsSection: Int, CaseIterable {
+        case overview
         case info
         case characters
         case emptyInfo
@@ -44,16 +45,18 @@ class EpisodeDetailsViewController: BaseViewController {
         super.viewDidLoad()
 
         configureDataSource()
-        showEmptyData()
+        //        showEmptyData()
         subscribeToViewModel()
         viewModel.fetchData()
     }
 
     var episodeRating: Double?
+    var episodeOverview: String?
 
     func fetchData(episode: String, season: String) async {
         let tmdb = TMDbAPI(apiKey: "1ecd1b26d36c0ce0ec76aec3676d5773")
         episodeRating = try? await tmdb.tvShowEpisodes.details(forEpisode: Int(episode) ?? 0, inSeason: Int(season) ?? 0, inTVShow: 60625).voteAverage
+        episodeOverview = try? await tmdb.tvShowEpisodes.details(forEpisode: Int(episode) ?? 0, inSeason: Int(season) ?? 0, inTVShow: 60625).overview
     }
 
     func showEmptyData() {
@@ -70,7 +73,8 @@ class EpisodeDetailsViewController: BaseViewController {
             if !episode.characters.isEmpty {
                 if var snapshot = self?.snapshot {
                     snapshot.deleteAllItems()
-                    snapshot.appendSections([.info, .characters])
+                    snapshot.appendSections([.overview, .info, .characters])
+                    snapshot.appendItems([EpisodeDetails(episode)], toSection: .overview)
                     snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
                     snapshot.appendItems(episode.characters, toSection: .characters)
                     self?.dataSource?.apply(snapshot, animatingDifferences: true)
@@ -94,10 +98,23 @@ extension EpisodeDetailsViewController {
         dataSource = DataSource(collectionView: episodeDetailsView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, episode) -> UICollectionViewCell? in
 
             switch indexPath.section {
+
             case 0:
+                if let episodeDetails = episode as? EpisodeDetails {
+                    let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier, for: indexPath) as? EpisodeOverviewCell
+                    let episodeArray = episodeDetails.item.episode?.split(separator: "", maxSplits: 5)
+                    Task {
+                        await self?.fetchData(episode: "\(episodeArray?[4] ?? "")\(episodeArray?[5] ?? "")",
+                                              season: "\(episodeArray?[1] ?? "")\(episodeArray?[2] ?? "")")
+                        overviewCell?.centerLabel.text = self?.episodeOverview
+
+                    }
+                    return overviewCell
+                }
+            case 1:
                 guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 return self?.configInfoCell(cell: infoCell, data: episode, itemIndex: indexPath.item)
-            case 1:
+            case 2:
                 let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
                 if let character = episode as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
                     let urlString = character?.image ?? ""
@@ -110,11 +127,11 @@ extension EpisodeDetailsViewController {
                     return characterRowCell
                 }
                 // empty sections
-            case 2:
+            case 3:
                 let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
                 infoCell?.showLoadingAnimation()
                 return infoCell
-            case 3:
+            case 4:
                 let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
                 characterRowCell?.showLoadingAnimation()
                 return characterRowCell
@@ -131,7 +148,10 @@ extension EpisodeDetailsViewController {
             guard let headerView = self?.episodeDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
             }
-            headerView.textLabel.text = indexPath.section == 0 || indexPath.section == 2 ? K.Headers.info : K.Headers.characters
+            headerView.textLabel.text = indexPath.section == 1 ? K.Headers.info : K.Headers.characters
+            if indexPath.section == 0 {
+                headerView.textLabel.text = "OVERVIEW"
+            }
             headerView.textLabel.textColor = .lightGray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView

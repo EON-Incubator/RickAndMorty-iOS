@@ -19,6 +19,7 @@ class EpisodeDetailsView: BaseView {
                                 forCellWithReuseIdentifier: InfoCell.identifier)
         collectionView.register(CharacterRowCell.self,
                                 forCellWithReuseIdentifier: CharacterRowCell.identifier)
+        collectionView.register(EpisodeOverviewCell.self, forCellWithReuseIdentifier: EpisodeOverviewCell.identifier)
 
         return collectionView
     }()
@@ -62,8 +63,8 @@ extension EpisodeDetailsView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.estimated(60) :
-                                             NSCollectionLayoutDimension.estimated(100)
+            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.estimated(100) :
+                                             NSCollectionLayoutDimension.estimated(60)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                    heightDimension: groupHeight)
