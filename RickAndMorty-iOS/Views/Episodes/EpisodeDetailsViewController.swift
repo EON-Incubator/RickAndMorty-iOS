@@ -18,6 +18,7 @@ class EpisodeDetailsViewController: BaseViewController {
         case overview
         case info
         case characters
+        case emptyOverview
         case emptyInfo
         case emptyCharacters
     }
@@ -45,7 +46,7 @@ class EpisodeDetailsViewController: BaseViewController {
         super.viewDidLoad()
 
         configureDataSource()
-        //        showEmptyData()
+        showEmptyData()
         subscribeToViewModel()
         viewModel.fetchData()
     }
@@ -61,7 +62,8 @@ class EpisodeDetailsViewController: BaseViewController {
 
     func showEmptyData() {
         snapshot.deleteAllItems()
-        snapshot.appendSections([.info, .characters, .emptyInfo, .emptyCharacters])
+        snapshot.appendSections([.overview, .info, .characters, .emptyOverview, .emptyInfo, .emptyCharacters])
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 1), toSection: .emptyOverview)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 3), toSection: .emptyInfo)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 4), toSection: .emptyCharacters)
         self.dataSource?.apply(snapshot, animatingDifferences: true)
@@ -98,7 +100,6 @@ extension EpisodeDetailsViewController {
         dataSource = DataSource(collectionView: episodeDetailsView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, episode) -> UICollectionViewCell? in
 
             switch indexPath.section {
-
             case 0:
                 if let episodeDetails = episode as? EpisodeDetails {
                     let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier, for: indexPath) as? EpisodeOverviewCell
@@ -126,12 +127,17 @@ extension EpisodeDetailsViewController {
                     characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character?.status ?? "")
                     return characterRowCell
                 }
+
                 // empty sections
             case 3:
+                let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier, for: indexPath) as? EpisodeOverviewCell
+                overviewCell?.showLoadingAnimation()
+                return overviewCell
+            case 4:
                 let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
                 infoCell?.showLoadingAnimation()
                 return infoCell
-            case 4:
+            case 5:
                 let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
                 characterRowCell?.showLoadingAnimation()
                 return characterRowCell

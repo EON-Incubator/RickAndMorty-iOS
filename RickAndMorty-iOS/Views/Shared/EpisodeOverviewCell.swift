@@ -29,7 +29,7 @@ class EpisodeOverviewCell: UICollectionViewListCell {
         super.prepareForReuse()
         contentView.layer.sublayers?.removeAll()
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -49,7 +49,7 @@ class EpisodeOverviewCell: UICollectionViewListCell {
             make.left.equalTo(self).offset(2)
             make.right.equalTo(self).offset(-2)
             make.top.equalTo(self).offset(-12)
-            make.bottom.equalTo(self).offset(-1)
+            make.bottom.equalTo(self)
         }
     }
 }
