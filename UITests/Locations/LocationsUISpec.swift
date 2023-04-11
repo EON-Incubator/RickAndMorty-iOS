@@ -38,10 +38,13 @@ final class LocationsUISpec: QuickSpec {
 
                 beforeEach {
                     DispatchQueue.main.async {
-                        app.collectionViews.element.swipeUp(velocity: .fast)
-                        app.collectionViews.element.swipeUp(velocity: .fast)
-                        app.collectionViews.element.swipeUp(velocity: .slow)
-                        sleep(1)
+                        var tryCount = 0
+                        while !(app.collectionViews.staticTexts["Signus 5 Expanse"].exists) && tryCount <= 5 {
+                            app.collectionViews.element.swipeUp(velocity: .default)
+                            sleep(1)
+                            tryCount += 1
+                        }
+
                     }
                 }
 
@@ -64,7 +67,7 @@ final class LocationsUISpec: QuickSpec {
                     let collectionView = app.collectionViews.element
                     await expect(collectionView.identifier).toEventually(equal("LocationDetailsCollectionView"))
                     let firstCell = app.collectionViews.element.cells.element(boundBy: 0)
-                    await expect(firstCell.staticTexts["Signus 5 Expanse"].exists).toEventually(beTrue())
+                    await expect(firstCell.staticTexts["unknown"].exists).toEventually(beTrue())
                     let secondCell = app.collectionViews.element.cells.element(boundBy: 1)
                     await expect(secondCell.staticTexts["Cromulon Dimension"].exists).toEventually(beTrue())
                 }

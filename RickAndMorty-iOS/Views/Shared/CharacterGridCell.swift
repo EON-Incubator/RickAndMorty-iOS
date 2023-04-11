@@ -12,16 +12,12 @@ class CharacterGridCell: UICollectionViewCell {
 
     static let identifier = K.Identifiers.characterCell
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.contentView.layer.sublayers?.removeAll()
-    }
-
     lazy var characterNameLabel: UILabel = {
-        let label = UILabel()
+        let label = PaddingLabel()
         label.textAlignment = .center
         label.backgroundColor = K.Colors.characterNameLabel
         label.textColor = .black
+        label.font = UIFont(name: K.Fonts.secondary, size: 18)
         return label
     }()
 
@@ -33,17 +29,28 @@ class CharacterGridCell: UICollectionViewCell {
         return imageView
     }()
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         setupConstraints()
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        contentView.layer.sublayers?.removeAll()
+    }
+
     func setupViews() {
-        self.backgroundColor = .lightGray
-        self.layer.cornerRadius = 10
-        self.addSubview(characterImage)
-        self.addSubview(characterNameLabel)
+        backgroundColor = .lightGray
+        layer.cornerRadius = 10
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.gray.cgColor
+        addSubview(characterImage)
+        addSubview(characterNameLabel)
     }
 
     func setupConstraints() {
@@ -57,9 +64,5 @@ class CharacterGridCell: UICollectionViewCell {
             make.right.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

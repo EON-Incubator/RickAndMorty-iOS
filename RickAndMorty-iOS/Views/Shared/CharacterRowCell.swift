@@ -9,12 +9,16 @@ import UIKit
 
 class CharacterRowCell: UICollectionViewListCell {
 
-    static let identifier = K.Identifiers.characterRowCell
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.contentView.layer.sublayers?.removeAll()
+    enum CharacterStatus: String {
+        case alive = "Alive"
+        case dead = "Dead"
+        case unknown = "unknown"
+        var description: String {
+            return rawValue
+        }
     }
+
+    static let identifier = K.Identifiers.characterRowCell
 
     lazy var characterAvatarImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: K.Images.systemPerson))
@@ -29,7 +33,7 @@ class CharacterRowCell: UICollectionViewListCell {
     lazy var characterStatusLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: K.Fonts.secondaryBold, size: 13)
+        label.font = UIFont(name: K.Fonts.secondary, size: 13)
 
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
@@ -53,8 +57,8 @@ class CharacterRowCell: UICollectionViewListCell {
 
     lazy var lowerLeftLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .bold)
-        label.textColor = .label
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .black
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.backgroundColor = K.Colors.gender
@@ -66,9 +70,9 @@ class CharacterRowCell: UICollectionViewListCell {
     }()
 
     lazy var lowerRightLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .bold)
-        label.textColor = .label
+        let label = PaddingLabel()
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .black
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         label.backgroundColor = K.Colors.species
@@ -85,39 +89,35 @@ class CharacterRowCell: UICollectionViewListCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
+        accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
         setupViews()
         setupConstraints()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        contentView.layer.sublayers?.removeAll()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = UIColor.gray.cgColor
-        self.layer.cornerRadius = 5
-        self.layer.masksToBounds = true
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.gray.cgColor
+        layer.cornerRadius = 5
+        layer.masksToBounds = true
     }
 
     func setupViews() {
-        let myView = UIView(frame: self.bounds)
+        let myView = UIView(frame: bounds)
         myView.backgroundColor = UIColor(named: K.Colors.characterRow)?.withAlphaComponent(0.7)
-        self.backgroundView = myView
+        backgroundView = myView
 
-        self.addSubview(characterAvatarImageView)
-        self.addSubview(characterStatusLabel)
-        self.addSubview(upperLabel)
-        self.addSubview(lowerLeftLabel)
-        self.addSubview(lowerRightLabel)
-    }
-
-    enum CharacterStatus: String {
-        case alive = "Alive"
-        case dead = "Dead"
-        case unknown = "unknown"
-        var description: String {
-            return self.rawValue
-        }
+        addSubview(characterAvatarImageView)
+        addSubview(characterStatusLabel)
+        addSubview(upperLabel)
+        addSubview(lowerLeftLabel)
+        addSubview(lowerRightLabel)
     }
 
     func statusColor(_ color: String) -> UIColor {
@@ -125,7 +125,6 @@ class CharacterRowCell: UICollectionViewListCell {
         case CharacterStatus.alive.description:
             return .systemGreen.withAlphaComponent(0.8)
         case CharacterStatus.dead.description:
-            characterStatusLabel.textColor = .white
             return .systemRed.withAlphaComponent(0.8)
         case CharacterStatus.unknown.description:
             return .systemYellow.withAlphaComponent(0.8)

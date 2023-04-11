@@ -18,6 +18,7 @@ struct K {
         static let search = "Search"
         static let filter = "Filter"
         static let clearButton = "Clear"
+        static let loadMore = "↓    Load More   ↓"
     }
 
     struct Identifiers {
@@ -104,8 +105,8 @@ struct K {
         static let infoCell = "InfoCell"
         static let characterView = "CharacterView"
         static let characterRow = "characterRowBackgroundColor"
-        static let gender = UIColor(red: 0.87, green: 0.96, blue: 0.95, alpha: 0.6)
-        static let species = UIColor(red: 0.98, green: 0.99, blue: 0.76, alpha: 0.5)
+        static let gender = UIColor(red: 0.87, green: 0.96, blue: 0.95, alpha: 0.4)
+        static let species = UIColor(red: 0.98, green: 0.99, blue: 0.76, alpha: 0.4)
         static let episodeNumber = UIColor(red: 1.00, green: 0.75, blue: 0.66, alpha: 0.4)
         static let episodeDate = UIColor(red: 1.00, green: 0.92, blue: 0.71, alpha: 0.4)
         static let characterNameLabel = UIColor(red: 0.98, green: 0.96, blue: 0.92, alpha: 0.7)

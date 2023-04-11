@@ -9,14 +9,16 @@ import UIKit
 
 class MainCoordinator: Coordinator {
 
-    let window: UIWindow
+    private let window: UIWindow
+    private let tabBarController = UITabBarController()
+    private let characterNavController = UINavigationController()
+    private let locationNavController = UINavigationController()
+    private let episodeNavController = UINavigationController()
+    private let searchNavController = UINavigationController()
 
-    var tabBarController = UITabBarController()
-
-    let characterNavController = UINavigationController()
-    let locationNavController = UINavigationController()
-    let episodeNavController = UINavigationController()
-    let searchNavController = UINavigationController()
+    init(window: UIWindow) {
+        self.window = window
+    }
 
     func customNavBarAppearance() -> UINavigationBarAppearance {
         let customNavBarAppearance = UINavigationBarAppearance()
@@ -25,11 +27,11 @@ class MainCoordinator: Coordinator {
         shadow.shadowColor = UIColor.label
         shadow.shadowBlurRadius = 0.5
 
-        customNavBarAppearance.largeTitleTextAttributes = [.font: UIFont(name: K.Fonts.primary, size: 34)!,
+        customNavBarAppearance.largeTitleTextAttributes = [.font: UIFont(name: K.Fonts.primary, size: 34) as Any,
                                                            .foregroundColor: UIColor.label,
                                                            .shadow: shadow]
-        customNavBarAppearance.titleTextAttributes = [.font: UIFont(name: K.Fonts.primary, size: 27)!,
-                                                      .foregroundColor: UIColor.systemCyan,
+        customNavBarAppearance.titleTextAttributes = [.font: UIFont(name: K.Fonts.primary, size: 27) as Any,
+                                                      .foregroundColor: UIColor.label,
                                                       .shadow: shadow]
 
         customNavBarAppearance.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 5)
@@ -39,10 +41,6 @@ class MainCoordinator: Coordinator {
         return customNavBarAppearance
     }
 
-    init(window: UIWindow) {
-        self.window = window
-    }
-
     func start() {
         // Configure tab bar.
         tabBarController.tabBar.backgroundColor = .systemBackground
@@ -50,25 +48,10 @@ class MainCoordinator: Coordinator {
         let navBarAppearance = customNavBarAppearance()
 
         // Add navigation controllers to the tab bar and set the title and icon for each tab.
-        tabBarController.addChild(characterNavController)
-        characterNavController.tabBarItem.image = UIImage(systemName: K.Images.systemCharacters)
-        characterNavController.tabBarItem.title = K.Titles.characters
-        characterNavController.navigationBar.standardAppearance = navBarAppearance
-
-        tabBarController.addChild(locationNavController)
-        locationNavController.tabBarItem.image = UIImage(systemName: K.Images.map)
-        locationNavController.tabBarItem.title = K.Titles.locations
-        locationNavController.navigationBar.standardAppearance = navBarAppearance
-
-        tabBarController.addChild(episodeNavController)
-        episodeNavController.tabBarItem.image = UIImage(systemName: K.Images.television)
-        episodeNavController.tabBarItem.title = K.Titles.episodes
-        episodeNavController.navigationBar.standardAppearance = navBarAppearance
-
-        tabBarController.addChild(searchNavController)
-        searchNavController.tabBarItem.image = UIImage(systemName: K.Images.systemMagnifyingGlass)
-        searchNavController.tabBarItem.title = K.Titles.search
-        searchNavController.navigationBar.standardAppearance = navBarAppearance
+        configureTab(navController: characterNavController, image: UIImage(systemName: K.Images.systemCharacters), title: K.Titles.characters, barAppearance: navBarAppearance)
+        configureTab(navController: locationNavController, image: UIImage(systemName: K.Images.map), title: K.Titles.locations, barAppearance: navBarAppearance)
+        configureTab(navController: episodeNavController, image: UIImage(systemName: K.Images.television), title: K.Titles.episodes, barAppearance: navBarAppearance)
+        configureTab(navController: searchNavController, image: UIImage(systemName: K.Images.systemMagnifyingGlass), title: K.Titles.search, barAppearance: navBarAppearance)
 
         // Add CharactersViewController to the character navigation controller.
         let charactersViewModel = CharactersViewModel()
@@ -99,6 +82,15 @@ class MainCoordinator: Coordinator {
         window.rootViewController = tabBarController
         window.makeKeyAndVisible()
     }
+
+    func configureTab(navController: UINavigationController, image: UIImage?, title: String, barAppearance: UINavigationBarAppearance) {
+        tabBarController.addChild(navController)
+        navController.tabBarItem.image = image
+        navController.tabBarItem.title = title
+        navController.navigationBar.standardAppearance = barAppearance
+    }
+
+    // MARK: - Navigations
 
     func goCharacterDetails(id: String, navController: UINavigationController) {
         let viewModel = CharacterDetailsViewModel(characterId: id)
@@ -132,9 +124,10 @@ class MainCoordinator: Coordinator {
         viewController.dismiss(animated: true)
     }
 
-    func goLocationDetails(id: String, navController: UINavigationController) {
+    func goLocationDetails(id: String, navController: UINavigationController, residentCount: Int) {
         let viewModel = LocationDetailsViewModel(locationId: id)
         viewModel.locationId = id
+        viewModel.residentCount = residentCount
         viewModel.coordinator = self
         let viewController = LocationDetailsViewController(viewModel: viewModel)
         navController.pushViewController(viewController, animated: true)
@@ -148,4 +141,13 @@ class MainCoordinator: Coordinator {
         navController.pushViewController(viewController, animated: true)
     }
 
+    func presentNetworkTimoutAlert(_ message: String?) {
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+
+        tabBarController.present(alertController, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
+                alertController.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
 }

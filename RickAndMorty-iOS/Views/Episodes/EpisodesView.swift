@@ -7,44 +7,34 @@
 
 import UIKit
 
-class EpisodesView: UIView {
+class EpisodesView: BaseView {
 
     let loadingView = LoadingView()
+    let episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (_ cell, _ indexPath, _ episode) in }
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
         collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
         collectionView.showsVerticalScrollIndicator = false
         return collectionView
     }()
 
-    let episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (_ cell, _ indexPath, _ episode) in
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    init() {
-        super.init(frame: .zero)
+    override init() {
+        super.init()
         setupViews()
         setupConstraints()
     }
 
     private func setupViews() {
-        self.backgroundColor = UIColor(named: K.Colors.episodeView)
-        self.addSubview(collectionView)
-        self.addSubview(loadingView)
+        backgroundColor = UIColor(named: K.Colors.episodeView)
+        addSubview(collectionView)
+        addSubview(loadingView)
     }
 
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(self.safeAreaInsets).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+            make.edges.equalTo(safeAreaInsets).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
         loadingView.setupConstraints(view: self)
     }

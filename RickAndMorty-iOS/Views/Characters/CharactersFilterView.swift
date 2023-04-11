@@ -8,13 +8,7 @@
 import UIKit
 import SnapKit
 
-class CharactersFilterView: UIView {
-
-    let blurView: UIVisualEffectView = {
-        let effect = UIBlurEffect(style: .systemThinMaterial)
-        let view = UIVisualEffectView(effect: effect)
-        return view
-    }()
+class CharactersFilterView: BaseView {
 
     let dismissButton: UIButton = {
         let button = UIButton()
@@ -22,13 +16,6 @@ class CharactersFilterView: UIView {
         button.setTitleColor(.systemGray, for: .highlighted)
         button.accessibilityIdentifier = K.Identifiers.dismissButton
         return button
-    }()
-
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = K.FilterLabels.title
-        label.font = UIFont(name: K.Fonts.primary, size: 24)
-        return label
     }()
 
     let clearButton: UIButton = {
@@ -40,48 +27,57 @@ class CharactersFilterView: UIView {
         return button
     }()
 
-    let lineView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .gray
-        return view
-    }()
-
-    let statusLabel: UILabel = {
-        let label = UILabel()
-        label.text = K.FilterLabels.status
-        label.font = UIFont(name: K.Fonts.secondary, size: 14)
-        return label
-    }()
-
     let statusSegmentControl: CustomSegmentedControl = {
         let items = [K.FilterLabels.alive, K.FilterLabels.dead, K.FilterLabels.unknown]
         let segmentControl = CustomSegmentedControl(items: items)
         segmentControl.selectedSegmentTintColor = .systemCyan
-        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14)!], for: .normal)
+        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14) as Any], for: .normal)
         return segmentControl
-    }()
-
-    let genderLabel: UILabel = {
-        let label = UILabel()
-        label.text = K.FilterLabels.gender
-        label.font = UIFont(name: K.Fonts.secondary, size: 14)
-        return label
     }()
 
     let genderSegmentControl: CustomSegmentedControl = {
         let items = [K.FilterLabels.male, K.FilterLabels.female, K.FilterLabels.genderless, K.FilterLabels.unknown]
         let segmentControl = CustomSegmentedControl(items: items)
         segmentControl.selectedSegmentTintColor = .systemCyan
-        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14)!], for: .normal)
+        segmentControl.setTitleTextAttributes([.font: UIFont(name: K.Fonts.secondary, size: 14) as Any], for: .normal)
         return segmentControl
     }()
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
+    private let blurView: UIVisualEffectView = {
+        let effect = UIBlurEffect(style: .systemThinMaterial)
+        let view = UIVisualEffectView(effect: effect)
+        return view
+    }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = K.FilterLabels.title
+        label.font = UIFont(name: K.Fonts.primary, size: 24)
+        return label
+    }()
+
+    private let lineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .gray
+        return view
+    }()
+
+    private let statusLabel: UILabel = {
+        let label = UILabel()
+        label.text = K.FilterLabels.status
+        label.font = UIFont(name: K.Fonts.secondary, size: 14)
+        return label
+    }()
+
+    private let genderLabel: UILabel = {
+        let label = UILabel()
+        label.text = K.FilterLabels.gender
+        label.font = UIFont(name: K.Fonts.secondary, size: 14)
+        return label
+    }()
+
+    override init() {
+        super.init()
         setupViews()
         setupConstraints()
     }
@@ -161,7 +157,7 @@ class CustomSegmentedControl: UISegmentedControl {
         let previousIndex = selectedSegmentIndex
         super.touchesEnded(touches, with: event)
         if previousIndex == selectedSegmentIndex {
-            let touchLocation = touches.first!.location(in: self)
+            guard let touchLocation = touches.first?.location(in: self) else { return }
             if bounds.contains(touchLocation) {
                 sendActions(for: .valueChanged)
             }

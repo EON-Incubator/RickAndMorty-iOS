@@ -8,10 +8,10 @@
 import UIKit
 import SnapKit
 
-class EpisodeDetailsView: UIView {
+class EpisodeDetailsView: BaseView {
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
         collectionView.register(HeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: K.Headers.identifier)
@@ -23,24 +23,16 @@ class EpisodeDetailsView: UIView {
         return collectionView
     }()
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    init() {
-        super.init(frame: .zero)
+    override init() {
+        super.init()
         setupViews()
         setupConstraints()
     }
 
     private func setupViews() {
-        self.backgroundColor = UIColor(named: K.Colors.episodeView)
+        backgroundColor = UIColor(named: K.Colors.episodeView)
         collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
-        self.addSubview(collectionView)
+        addSubview(collectionView)
         collectionView.accessibilityIdentifier = K.Identifiers.episodeDetails
         collectionView.showsVerticalScrollIndicator = false
     }

@@ -11,12 +11,18 @@ import UIKit
 
 class LocationDetailsViewModel {
 
-    weak var coordinator: MainCoordinator?
     let location = PassthroughSubject<RickAndMortyAPI.GetLocationQuery.Data.Location, Never>()
     var locationId: String
+    weak var coordinator: MainCoordinator?
 
     init(locationId: String) {
         self.locationId = locationId
+    }
+
+    var residentCount = 0
+
+    func getResidentCount() -> Int {
+        return residentCount
     }
 
     func fetchData() {
@@ -31,6 +37,7 @@ class LocationDetailsViewModel {
                         }
                     case .failure(let error):
                         print(error)
+                        self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                     }
                 }
     }

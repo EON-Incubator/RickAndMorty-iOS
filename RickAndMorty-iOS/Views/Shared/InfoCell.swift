@@ -9,44 +9,8 @@ import UIKit
 import SnapKit
 
 class InfoCell: UICollectionViewListCell {
+
     static let identifier = K.Info.identifier
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        setupViews()
-        setupConstraints()
-        self.isUserInteractionEnabled = false
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.contentView.layer.sublayers?.removeAll()
-    }
-
-    static func configCell(cell: InfoCell, leftLabel: String, rightLabel: String, infoImage: UIImage) -> InfoCell {
-        cell.leftLabel.text = leftLabel
-        cell.rightLabel.text = rightLabel
-        cell.infoImage.image = infoImage.withRenderingMode(.alwaysTemplate)
-        cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
-        if (leftLabel == "Origin" || leftLabel == "Last Seen") && (rightLabel != "unknown") {
-            cell.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
-            cell.isUserInteractionEnabled = true
-        }
-        return cell
-    }
-
-    func setupViews() {
-        let myView = UIView(frame: self.bounds)
-        myView.backgroundColor = .secondarySystemBackground
-        self.backgroundView = myView
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = UIColor.gray.cgColor
-        self.layer.cornerRadius = 5
-        self.addSubview(leftLabel)
-        self.addSubview(rightLabel)
-        self.addSubview(infoImage)
-    }
 
     lazy var leftLabel: UILabel = {
         let label = UILabel()
@@ -70,6 +34,47 @@ class InfoCell: UICollectionViewListCell {
         return image
     }()
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        setupViews()
+        setupConstraints()
+        isUserInteractionEnabled = false
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        contentView.layer.sublayers?.removeAll()
+    }
+
+    static func configCell(cell: InfoCell, leftLabel: String, rightLabel: String, infoImage: UIImage) -> InfoCell {
+        cell.leftLabel.text = leftLabel
+        cell.rightLabel.text = rightLabel
+        cell.infoImage.image = infoImage.withRenderingMode(.alwaysTemplate)
+        cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
+        if (leftLabel == "Origin" || leftLabel == "Last Seen") && (rightLabel != "unknown") {
+            cell.accessories = [.disclosureIndicator(options: .init(reservedLayoutWidth: .actual, tintColor: .systemGray))]
+            cell.isUserInteractionEnabled = true
+        }
+        return cell
+    }
+
+    func setupViews() {
+        let myView = UIView(frame: bounds)
+        myView.backgroundColor = .secondarySystemBackground
+        backgroundView = myView
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.gray.cgColor
+        layer.cornerRadius = 5
+        addSubview(leftLabel)
+        addSubview(rightLabel)
+        addSubview(infoImage)
+    }
+
     func setupConstraints() {
         leftLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(60)
@@ -89,9 +94,5 @@ class InfoCell: UICollectionViewListCell {
             make.height.equalTo(25)
             make.top.equalToSuperview().offset(12)
         }
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

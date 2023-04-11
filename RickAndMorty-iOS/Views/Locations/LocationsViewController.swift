@@ -8,29 +8,28 @@
 import UIKit
 import Combine
 
-class LocationsViewController: UIViewController {
-
-    let locationsView = LocationsView()
-    let viewModel: LocationsViewModel
+class LocationsViewController: BaseViewController {
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
-    private var dataSource: DataSource!
+
+    private let locationsView = LocationsView()
+    private let viewModel: LocationsViewModel
+
+    private var dataSource: DataSource?
     private var cancellables = Set<AnyCancellable>()
-    var snapshot = Snapshot()
+    private var snapshot = Snapshot()
 
     init(viewModel: LocationsViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init()
     }
 
     override func loadView() {
         view = locationsView
         navigationController?.navigationBar.prefersLargeTitles = true
+        UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         title = K.Titles.locations
         locationsView.collectionView.delegate = self
         locationsView.collectionView.refreshControl = UIRefreshControl()
@@ -43,14 +42,14 @@ class LocationsViewController: UIViewController {
         configureDataSource()
         showEmptyData()
         subscribeToViewModel()
-        viewModel.currentPage = 1
+        viewModel.refresh()
     }
 
     func showEmptyData() {
         snapshot.deleteAllItems()
         snapshot.appendSections([.appearance, .empty])
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 8), toSection: .empty)
-        self.dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
 
     func subscribeToViewModel() {
@@ -60,7 +59,7 @@ class LocationsViewController: UIViewController {
                     snapshot.deleteAllItems()
                     snapshot.appendSections([.appearance])
                     snapshot.appendItems(locations, toSection: .appearance)
-                    self?.dataSource.apply(snapshot, animatingDifferences: true)
+                    self?.dataSource?.apply(snapshot, animatingDifferences: true)
                 }
                 self?.locationsView.loadingView.spinner.stopAnimating()
             }
@@ -73,11 +72,7 @@ class LocationsViewController: UIViewController {
     }
 
     @objc func onRefresh() {
-        viewModel.currentPage = 1
-    }
-
-    func loadMore() {
-        viewModel.currentPage += 1
+        viewModel.refresh()
     }
 }
 
@@ -85,11 +80,12 @@ class LocationsViewController: UIViewController {
 extension LocationsViewController {
     private func configureDataSource() {
         dataSource = DataSource(collectionView: locationsView.collectionView, cellProvider: { (collectionView, indexPath, data) -> UICollectionViewCell? in
+
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationRowCell.identifier, for: indexPath) as? LocationRowCell
 
             // section with empty location cells
             if indexPath.section == 1 {
-                showLoadingAnimation(currentCell: cell!)
+                cell?.showLoadingAnimation()
                 return cell
             }
 
@@ -99,7 +95,7 @@ extension LocationsViewController {
             cell?.lowerRightLabel.text = location?.dimension
             for index in 0...3 {
                 let isIndexValid = location?.residents.indices.contains(index)
-                if isIndexValid! {
+                if isIndexValid ?? false {
                     let urlString = location?.residents[index]?.image ?? ""
                     cell?.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
                 }
@@ -117,16 +113,16 @@ extension LocationsViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
-            self.locationsView.loadingView.spinner.startAnimating()
-            loadMore()
+            locationsView.loadingView.spinner.startAnimating()
+            viewModel.loadMore()
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        if let location = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result {
-            viewModel.goLocationDetails(id: location.id!, navController: self.navigationController!)
+        if let location = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result {
+            viewModel.goLocationDetails(id: location.id ?? "", navController: navigationController ?? UINavigationController(), residentCount: location.residents.count)
         }
     }
 }

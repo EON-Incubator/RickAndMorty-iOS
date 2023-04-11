@@ -10,9 +10,9 @@ import Combine
 
 class EpisodeDetailsViewModel {
 
-    weak var coordinator: MainCoordinator?
     let episode = PassthroughSubject<RickAndMortyAPI.GetEpisodeQuery.Data.Episode, Never>()
     var episodeId: String
+    weak var coordinator: MainCoordinator?
 
     init(episodeId: String) {
         self.episodeId = episodeId
@@ -29,6 +29,7 @@ class EpisodeDetailsViewModel {
                     }
                 case .failure(let error):
                     print(error)
+                    self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                 }
 
             }

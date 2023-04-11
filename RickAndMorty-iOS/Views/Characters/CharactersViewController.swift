@@ -9,24 +9,32 @@ import UIKit
 import Combine
 import SDWebImage
 
-class CharactersViewController: UIViewController {
-
-    let charactersGridView = CharactersView()
-    var viewModel: CharactersViewModel
+class CharactersViewController: BaseViewController {
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
-    private var dataSource: DataSource!
+
+    private let charactersGridView = CharactersView()
+
+    private var viewModel: CharactersViewModel
+    private var dataSource: DataSource?
     private var cancellables = Set<AnyCancellable>()
-    var snapshot = Snapshot()
+    private var snapshot = Snapshot()
 
     init(viewModel: CharactersViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    override func loadView() {
+        view = charactersGridView
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        title = K.Titles.characters
+        navigationItem.leftBarButtonItem = charactersGridView.logoView()
+        charactersGridView.collectionView.delegate = self
+        charactersGridView.collectionView.refreshControl = UIRefreshControl()
+        charactersGridView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
     }
 
     override func viewDidLoad() {
@@ -34,26 +42,46 @@ class CharactersViewController: UIViewController {
         configureDataSource()
         showEmptyData()
         subscribeToViewModel()
-        viewModel.currentPage = 1
+        viewModel.refresh()
     }
 
-    override func loadView() {
-        view = charactersGridView
-        navigationController?.navigationBar.prefersLargeTitles = true
-        title = K.Titles.characters
-        navigationItem.rightBarButtonItem = charactersGridView.filterButton(self, action: #selector(filterButtonPressed))
-        navigationItem.leftBarButtonItem = charactersGridView.logoView()
+    override func viewWillAppear(_ animated: Bool) {
+        setupFilterButton()
+    }
 
-        charactersGridView.collectionView.delegate = self
-        charactersGridView.collectionView.refreshControl = UIRefreshControl()
-        charactersGridView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+    override func viewWillDisappear(_ animated: Bool) {
+        removeFilterButton()
+    }
+
+    private func setupFilterButton() {
+        let rightButton = charactersGridView.filterButton(self, action: #selector(filterButtonPressed)).customView
+        rightButton?.tag = 1
+        navigationController?.navigationBar.addSubview(rightButton ?? UIButton())
+        let targetView = self.navigationController?.navigationBar
+        rightButton?.snp.makeConstraints({ make in
+            make.height.equalTo(25)
+            make.width.equalTo(80)
+            make.trailing.equalTo(targetView?.snp_trailingMargin ?? view.snp_trailingMargin).inset(5)
+            make.bottom.equalToSuperview().inset(5)
+        })
+    }
+
+    private func removeFilterButton() {
+        guard let subviews = self.navigationController?.navigationBar.subviews else { return }
+        for view in subviews where view.tag != 0 {
+            UIView.animate(withDuration: 0.2,
+                           animations: { view.alpha = 0.0 },
+                           completion: { _ in
+                view.removeFromSuperview()
+            })
+        }
     }
 
     func showEmptyData() {
         snapshot.deleteAllItems()
         snapshot.appendSections([.appearance, .empty])
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 10), toSection: .empty)
-        self.dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
 
     func subscribeToViewModel() {
@@ -63,7 +91,7 @@ class CharactersViewController: UIViewController {
                     snapshot.deleteAllItems()
                     snapshot.appendSections([.appearance])
                     snapshot.appendItems(characters, toSection: .appearance)
-                    self?.dataSource.apply(snapshot, animatingDifferences: true)
+                    self?.dataSource?.apply(snapshot, animatingDifferences: true)
                 }
                 self?.charactersGridView.loadingView.spinner.stopAnimating()
             }
@@ -75,11 +103,7 @@ class CharactersViewController: UIViewController {
     }
 
     @objc func onRefresh() {
-        viewModel.currentPage = 1
-    }
-
-    func loadMore() {
-        viewModel.currentPage += 1
+        viewModel.refresh()
     }
 
     @objc func filterButtonPressed(sender: UIButton) {
@@ -99,14 +123,14 @@ extension CharactersViewController {
             let characterCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterGridCell.identifier, for: indexPath) as? CharacterGridCell
 
             if indexPath.section == 1 {
-                showLoadingAnimation(currentCell: characterCell!)
+                characterCell?.showLoadingAnimation()
                 return characterCell
             }
 
             if let char = character as? RickAndMortyAPI.CharacterBasics {
-                characterCell!.characterNameLabel.text = char.name
+                characterCell?.characterNameLabel.text = char.name
                 if let image = char.image {
-                    characterCell!.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 200, height: 200)])
+                    characterCell?.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 200, height: 200)])
                 }
             }
             return characterCell
@@ -120,15 +144,15 @@ extension CharactersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == collectionView.numberOfItems(inSection: indexPath.section) - 1 {
             // show lazy-loading indicator
-            self.charactersGridView.loadingView.spinner.startAnimating()
-            loadMore()
+            charactersGridView.loadingView.spinner.startAnimating()
+            viewModel.loadMore()
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
-        if let character = dataSource.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics {
-            viewModel.goCharacterDetails(id: character.id!, navController: self.navigationController!)
+        if let character = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics {
+            viewModel.goCharacterDetails(id: character.id ?? "", navController: navigationController ?? UINavigationController())
         }
     }
 }

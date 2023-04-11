@@ -11,13 +11,13 @@ import UIKit
 
 class EpisodesViewModel {
 
-    weak var coordinator: MainCoordinator?
     var episodes = CurrentValueSubject<[RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result], Never>([])
     var currentPage = 0 {
         didSet {
             fetchData(page: currentPage)
         }
     }
+    weak var coordinator: MainCoordinator?
 
     func fetchData(page: Int) {
         Network.shared.apollo.fetch(
@@ -32,6 +32,7 @@ class EpisodesViewModel {
                         }
                     case .failure(let error):
                         print(error)
+                        self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                     }
                 }
     }
@@ -42,6 +43,14 @@ class EpisodesViewModel {
         } else {
             self.episodes.value.append(contentsOf: (episodes.compactMap { $0 }) )
         }
+    }
+
+    func refresh() {
+        currentPage = 1
+    }
+
+    func loadMore() {
+        currentPage += 1
     }
 
     func goEpisodeDetails(id: String, navController: UINavigationController) {

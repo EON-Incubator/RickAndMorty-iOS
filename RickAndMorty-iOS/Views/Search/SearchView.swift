@@ -7,22 +7,12 @@
 
 import UIKit
 
-class SearchView: UIView {
+class SearchView: BaseView {
 
-    lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
-        collectionView.register(CharacterRowCell.self,
-                                forCellWithReuseIdentifier: CharacterRowCell.identifier)
-        collectionView.register(HeaderView.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: K.Headers.identifier)
-        collectionView.register(LoadMoreCell.self,
-                                forCellWithReuseIdentifier: LoadMoreCell.identifier)
-        return collectionView
-    }()
+    let loadingView = LoadingView()
 
     let locationCell = UICollectionView.CellRegistration<LocationRowCell, RickAndMortyAPI.LocationDetails> { (cell, _ indexPath, location) in
-
+        cell.lowerRightLabel.isHidden = false
         cell.upperLabel.text = location.name
         cell.lowerLeftLabel.text = location.type
         cell.lowerRightLabel.text = location.dimension
@@ -40,27 +30,17 @@ class SearchView: UIView {
         }
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    init() {
-        super.init(frame: .zero)
-        collectionView.showsVerticalScrollIndicator = false
-        setupViews()
-        setupConstraints()
-    }
-
-    private func setupViews() {
-        self.backgroundColor = UIColor(named: K.Colors.episodeView)
-        self.collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
-        self.addSubview(collectionView)
-        self.addSubview(middleLabel)
-    }
+    lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
+        collectionView.register(CharacterRowCell.self,
+                                forCellWithReuseIdentifier: CharacterRowCell.identifier)
+        collectionView.register(HeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: K.Headers.identifier)
+        collectionView.register(LoadMoreCell.self,
+                                forCellWithReuseIdentifier: LoadMoreCell.identifier)
+        return collectionView
+    }()
 
     lazy var middleLabel: UILabel = {
         let label = UILabel()
@@ -70,15 +50,31 @@ class SearchView: UIView {
         return label
     }()
 
+    override init() {
+        super.init()
+        collectionView.showsVerticalScrollIndicator = false
+        setupViews()
+        setupConstraints()
+    }
+
+    private func setupViews() {
+        backgroundColor = UIColor(named: K.Colors.episodeView)
+        collectionView.backgroundColor = UIColor(named: K.Colors.episodeView)
+        addSubview(collectionView)
+        addSubview(middleLabel)
+        addSubview(loadingView)
+    }
+
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
         middleLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(self.safeAreaLayoutGuide)
-            make.left.equalTo(self.safeAreaLayoutGuide).inset(10)
-            make.right.equalTo(self.safeAreaLayoutGuide).inset(10)
+            make.centerY.equalTo(safeAreaLayoutGuide)
+            make.left.equalTo(safeAreaLayoutGuide).inset(10)
+            make.right.equalTo(safeAreaLayoutGuide).inset(10)
         }
+        loadingView.setupConstraints(view: self)
     }
 
     private func createLayout() -> UICollectionViewLayout {

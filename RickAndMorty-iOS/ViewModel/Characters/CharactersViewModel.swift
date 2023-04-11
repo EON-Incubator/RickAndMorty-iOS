@@ -15,29 +15,26 @@ struct FilterOptions {
 
 class CharactersViewModel {
 
-    weak var coordinator: MainCoordinator?
-    var characters = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
     let charactersForSearch = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
-
+    var characters = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
+    var name = ""
     var currentPage = 0 {
         didSet {
             fetchData(page: currentPage)
         }
     }
-
     var filterOptions = FilterOptions(status: "", gender: "") {
         didSet {
             fetchData(page: 1)
         }
     }
+    weak var coordinator: MainCoordinator?
 
-    var name = ""
-
-    func fetchData(page: Int) {
+    func fetchData(page: Int, name: String = "") {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetCharactersQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
-                name: GraphQLNullable<String>(stringLiteral: self.name),
+                name: GraphQLNullable<String>(stringLiteral: name),
                 status: GraphQLNullable<String>(stringLiteral: filterOptions.status),
                 gender: GraphQLNullable<String>(stringLiteral: filterOptions.gender))) { [weak self] result in
 
@@ -48,18 +45,27 @@ class CharactersViewModel {
                         }
                     case .failure(let error):
                         print(error)
+                        self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                     }
 
                 }
     }
 
     func mapData(page: Int, characters: [RickAndMortyAPI.GetCharactersQuery.Data.Characters.Result?]) {
-        self.charactersForSearch.value = (characters.compactMap { $0?.fragments.characterBasics })
+        charactersForSearch.value = (characters.compactMap { $0?.fragments.characterBasics })
         if page == 1 {
             self.characters.value = (characters.compactMap { $0?.fragments.characterBasics })
         } else {
             self.characters.value.append(contentsOf: (characters.compactMap { $0?.fragments.characterBasics }) )
         }
+    }
+
+    func refresh() {
+        currentPage = 1
+    }
+
+    func loadMore() {
+        currentPage += 1
     }
 
     func showCharactersFilter(viewController: UIViewController, viewModel: CharactersViewModel, sender: AnyObject, onDismiss: (() -> Void)? = nil) {

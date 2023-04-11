@@ -8,42 +8,7 @@
 import UIKit
 import SnapKit
 
-class CharacterDetailsView: UIView {
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    init() {
-        super.init(frame: .zero)
-        setupViews()
-        setupConstraints()
-    }
-
-    private func setupViews() {
-        self.backgroundColor = .systemBackground
-        self.addSubview(collectionView)
-        collectionView.accessibilityIdentifier = K.Identifiers.characterDetails
-        collectionView.showsVerticalScrollIndicator = false
-    }
-
-    private func setupConstraints() {
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
-        }
-    }
-
-    lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
-        collectionView.register(AvatarCell.self,
-                                forCellWithReuseIdentifier: AvatarCell.identifier)
-        collectionView.register(InfoCell.self,
-                                forCellWithReuseIdentifier: InfoCell.identifier)
-        collectionView.register(HeaderView.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: K.Headers.identifier)
-        return collectionView
-    }()
+class CharacterDetailsView: BaseView {
 
     let episodeCell = UICollectionView.CellRegistration<RowCell, RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode> { (cell, _ indexPath, episode) in
         cell.upperLabel.text = episode.name
@@ -56,6 +21,37 @@ class CharacterDetailsView: UIView {
                 let urlString = episode.characters[index]?.image ?? ""
                 cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
             }
+        }
+    }
+
+    lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
+        collectionView.register(AvatarCell.self,
+                                forCellWithReuseIdentifier: AvatarCell.identifier)
+        collectionView.register(InfoCell.self,
+                                forCellWithReuseIdentifier: InfoCell.identifier)
+        collectionView.register(HeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: K.Headers.identifier)
+        return collectionView
+    }()
+
+    override init() {
+        super.init()
+        setupViews()
+        setupConstraints()
+    }
+
+    private func setupViews() {
+        backgroundColor = .systemBackground
+        addSubview(collectionView)
+        collectionView.accessibilityIdentifier = K.Identifiers.characterDetails
+        collectionView.showsVerticalScrollIndicator = false
+    }
+
+    private func setupConstraints() {
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
     }
 }
@@ -116,7 +112,7 @@ extension CharacterDetailsView {
 }
 
 extension CharacterDetailsView {
-    func titleView(image: String?, title: String!) -> UIView {
+    func titleView(image: String?, title: String) -> UIView {
         let titleWithImage = UIView()
 
         if let imageUrl = image {

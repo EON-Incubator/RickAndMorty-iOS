@@ -11,21 +11,20 @@ import UIKit
 
 class LocationsViewModel {
 
-    weak var coordinator: MainCoordinator?
-    var locations = CurrentValueSubject<[RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result], Never>([])
     let locationsNameSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
     let locationsTypeSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
 
+    var locations = CurrentValueSubject<[RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result], Never>([])
     var currentPage = 0 {
         didSet {
             fetchData(page: currentPage)
         }
     }
-
     var name = ""
     var type = ""
+    weak var coordinator: MainCoordinator?
 
-    func fetchData(page: Int) {
+    func fetchData(page: Int, name: String = "", type: String = "") {
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetLocationsQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
@@ -39,13 +38,14 @@ class LocationsViewModel {
                     }
                 case .failure(let error):
                     print(error)
+                    self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                 }
             }
     }
 
     func mapData(page: Int, locations: [RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result?]) {
-        self.locationsNameSearch.value = (locations.compactMap { $0?.fragments.locationDetails })
-        self.locationsTypeSearch.value = (locations.compactMap { $0?.fragments.locationDetails })
+        locationsNameSearch.value = (locations.compactMap { $0?.fragments.locationDetails })
+        locationsTypeSearch.value = (locations.compactMap { $0?.fragments.locationDetails })
         if page == 1 {
             self.locations.value = (locations.compactMap { $0 })
         } else {
@@ -53,7 +53,15 @@ class LocationsViewModel {
         }
     }
 
-    func goLocationDetails(id: String, navController: UINavigationController) {
-        coordinator?.goLocationDetails(id: id, navController: navController)
+    func refresh() {
+        currentPage = 1
+    }
+
+    func loadMore() {
+        currentPage += 1
+    }
+
+    func goLocationDetails(id: String, navController: UINavigationController, residentCount: Int) {
+        coordinator?.goLocationDetails(id: id, navController: navController, residentCount: residentCount)
     }
 }

@@ -7,24 +7,23 @@
 
 import UIKit
 
-class LoadingView: UIView {
+class LoadingView: BaseView {
 
     lazy var spinner: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.hidesWhenStopped = true
-        indicator.color = .black
+        indicator.color = .label
         return indicator
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        self.addSubview(spinner)
+    override init() {
+        super.init()
+        addSubview(spinner)
     }
 
     func setupConstraints(view: UIView) {
-        let layoutGuide = self.safeAreaLayoutGuide
+        let layoutGuide = safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             layoutGuide.centerXAnchor.constraint(equalTo: spinner.centerXAnchor),
             layoutGuide.bottomAnchor.constraint(equalTo: spinner.bottomAnchor, constant: 10)
@@ -35,10 +34,6 @@ class LoadingView: UIView {
             make.right.equalTo(view).offset(-30)
             make.left.equalTo(view).offset(30)
         }
-    }
-
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
 }

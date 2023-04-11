@@ -10,9 +10,9 @@ import Combine
 
 class CharacterDetailsViewModel {
 
-    weak var coordinator: MainCoordinator?
     let character = PassthroughSubject<RickAndMortyAPI.GetCharacterQuery.Data.Character, Never>()
-    var characterId: String
+    weak var coordinator: MainCoordinator?
+    private var characterId: String
 
     init(characterId: String) {
         self.characterId = characterId
@@ -29,13 +29,14 @@ class CharacterDetailsViewModel {
                     }
                 case .failure(let error):
                     print(error)
+                    self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                 }
 
             }
     }
 
     func goLocationDetails(id: String, navController: UINavigationController) {
-        coordinator?.goLocationDetails(id: id, navController: navController)
+        coordinator?.goLocationDetails(id: id, navController: navController, residentCount: 0)
     }
 
     func goEpisodeDetails(id: String, navController: UINavigationController) {

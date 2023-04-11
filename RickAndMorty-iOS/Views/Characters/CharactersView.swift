@@ -8,34 +8,22 @@
 import UIKit
 import SnapKit
 
-class CharactersView: UIView {
+class CharactersView: BaseView {
 
     let loadingView = LoadingView()
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    init() {
-        super.init(frame: .zero)
-        setupViews()
-        setupConstraints()
-    }
-
-    private func setupViews() {
-        self.backgroundColor = .systemBackground
-        self.addSubview(collectionView)
-        self.addSubview(loadingView)
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
-    }
-
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: createLayout())
+        let collectionView = UICollectionView(frame: bounds, collectionViewLayout: createLayout())
         collectionView.accessibilityIdentifier = K.Identifiers.characters
         collectionView.register(CharacterGridCell.self, forCellWithReuseIdentifier: CharacterGridCell.identifier)
         return collectionView
     }()
+
+    override init() {
+        super.init()
+        setupViews()
+        setupConstraints()
+    }
 
     func createLayout() -> UICollectionViewCompositionalLayout {
         let sectionProvider = { (_: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
@@ -67,6 +55,14 @@ class CharactersView: UIView {
         return layout
     }
 
+    private func setupViews() {
+        backgroundColor = .systemBackground
+        addSubview(collectionView)
+        addSubview(loadingView)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0)
+    }
+
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaInsets).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
@@ -77,8 +73,8 @@ class CharactersView: UIView {
 
 extension CharactersView {
     func filterButton(_ target: Any?, action: Selector) -> UIBarButtonItem {
-        let filterButton = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 30))
-        filterButton.layer.cornerRadius = 15
+        let filterButton = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 25))
+        filterButton.layer.cornerRadius = 12.5
         filterButton.tintColor = .black
         filterButton.backgroundColor = K.Colors.filterButton
         filterButton.setTitle(K.Titles.filter, for: .normal)
