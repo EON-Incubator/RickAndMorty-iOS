@@ -7,7 +7,6 @@
 
 import UIKit
 import Combine
-import TMDb
 
 class EpisodeDetailsViewController: BaseViewController {
 
@@ -51,15 +50,6 @@ class EpisodeDetailsViewController: BaseViewController {
         viewModel.fetchData()
     }
 
-    var episodeRating: Double?
-    var episodeOverview: String?
-
-    func fetchData(episode: String, season: String) async {
-        let tmdb = TMDbAPI(apiKey: "1ecd1b26d36c0ce0ec76aec3676d5773")
-        episodeRating = try? await tmdb.tvShowEpisodes.details(forEpisode: Int(episode) ?? 0, inSeason: Int(season) ?? 0, inTVShow: 60625).voteAverage
-        episodeOverview = try? await tmdb.tvShowEpisodes.details(forEpisode: Int(episode) ?? 0, inSeason: Int(season) ?? 0, inTVShow: 60625).overview
-    }
-
     func showEmptyData() {
         snapshot.deleteAllItems()
         snapshot.appendSections([.overview, .info, .characters, .emptyOverview, .emptyInfo, .emptyCharacters])
@@ -71,7 +61,6 @@ class EpisodeDetailsViewController: BaseViewController {
 
     func subscribeToViewModel() {
         viewModel.episode.sink(receiveValue: { [weak self] episode in
-            self?.title = episode.name
             if !episode.characters.isEmpty {
                 if var snapshot = self?.snapshot {
                     snapshot.deleteAllItems()
@@ -79,7 +68,10 @@ class EpisodeDetailsViewController: BaseViewController {
                     snapshot.appendItems([EpisodeDetails(episode)], toSection: .overview)
                     snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
                     snapshot.appendItems(episode.characters, toSection: .characters)
-                    self?.dataSource?.apply(snapshot, animatingDifferences: true)
+                    DispatchQueue.main.async {
+                        self?.title = episode.name
+                        self?.dataSource?.apply(snapshot, animatingDifferences: true)
+                    }
                 }
             }
             // Dismiss refresh control.
@@ -101,17 +93,9 @@ extension EpisodeDetailsViewController {
 
             switch indexPath.section {
             case 0:
-                if let episodeDetails = episode as? EpisodeDetails {
-                    let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier, for: indexPath) as? EpisodeOverviewCell
-                    let episodeArray = episodeDetails.item.episode?.split(separator: "", maxSplits: 5)
-                    Task {
-                        await self?.fetchData(episode: "\(episodeArray?[4] ?? "")\(episodeArray?[5] ?? "")",
-                                              season: "\(episodeArray?[1] ?? "")\(episodeArray?[2] ?? "")")
-                        overviewCell?.centerLabel.text = self?.episodeOverview
-
-                    }
-                    return overviewCell
-                }
+                let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier, for: indexPath) as? EpisodeOverviewCell
+                overviewCell?.centerLabel.text = self?.viewModel.episodeDetails?.overview
+                return overviewCell
             case 1:
                 guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 return self?.configInfoCell(cell: infoCell, data: episode, itemIndex: indexPath.item)
@@ -178,15 +162,10 @@ extension EpisodeDetailsViewController {
                 cell.infoImage.image = UIImage(named: K.Images.calendar)?.withRenderingMode(.alwaysTemplate)
                 cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
             case 2:
-                let episodeArray = episodeDetails.item.episode?.split(separator: "", maxSplits: 5)
-                Task {
-                    await self.fetchData(episode: "\(episodeArray?[4] ?? "")\(episodeArray?[5] ?? "")",
-                                         season: "\(episodeArray?[1] ?? "")\(episodeArray?[2] ?? "")")
-                    cell.rightLabel.text = String(format: "%.1f", episodeRating ?? 0)
-                    cell.leftLabel.text = "Rating"
-                    cell.infoImage.image = UIImage(systemName: "star")
-                    cell.rightLabel.adjustsFontSizeToFitWidth = false
-                }
+                cell.rightLabel.text = String(format: "%.1f", self.viewModel.episodeDetails?.voteAverage ?? 0)
+                cell.leftLabel.text = "Rating"
+                cell.infoImage.image = UIImage(systemName: "star")
+                cell.rightLabel.adjustsFontSizeToFitWidth = false
             default:
                 cell.rightLabel.text = "-"
             }
