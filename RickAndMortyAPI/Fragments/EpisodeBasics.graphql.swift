@@ -16,10 +16,11 @@ public extension RickAndMortyAPI {
       """ }
 
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
     public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Episode }
     public static var __selections: [ApolloAPI.Selection] { [
+      .field("__typename", String.self),
       .field("air_date", String?.self),
       .field("episode", String?.self),
       .field("id", RickAndMortyAPI.ID?.self),

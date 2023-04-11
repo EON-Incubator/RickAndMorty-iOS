@@ -53,7 +53,7 @@ public extension RickAndMortyAPI {
 
     public struct Data: RickAndMortyAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
       public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Query }
       public static var __selections: [ApolloAPI.Selection] { [
@@ -74,10 +74,11 @@ public extension RickAndMortyAPI {
       /// Parent Type: `Locations`
       public struct Locations: RickAndMortyAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
         public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Locations }
         public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("info", Info?.self),
           .field("results", [Result?]?.self),
         ] }
@@ -90,10 +91,11 @@ public extension RickAndMortyAPI {
         /// Parent Type: `Info`
         public struct Info: RickAndMortyAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
           public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Info }
           public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .fragment(PageInfo.self),
           ] }
 
@@ -108,7 +110,7 @@ public extension RickAndMortyAPI {
 
           public struct Fragments: FragmentContainer {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
             public var pageInfo: PageInfo { _toFragment() }
           }
@@ -119,10 +121,11 @@ public extension RickAndMortyAPI {
         /// Parent Type: `Location`
         public struct Result: RickAndMortyAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
           public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Location }
           public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("residents", [Resident?].self),
             .fragment(LocationDetails.self),
             .fragment(LocationBasics.self),
@@ -141,7 +144,7 @@ public extension RickAndMortyAPI {
 
           public struct Fragments: FragmentContainer {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
             public var locationDetails: LocationDetails { _toFragment() }
             public var locationBasics: LocationBasics { _toFragment() }
@@ -152,10 +155,11 @@ public extension RickAndMortyAPI {
           /// Parent Type: `Character`
           public struct Resident: RickAndMortyAPI.SelectionSet {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
             public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Character }
             public static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
               .field("image", String?.self),
             ] }
 

@@ -2,7 +2,7 @@
 // This file was automatically generated and should not be edited.
 
 import ApolloTestSupport
-import RickAndMorty_iOS
+import RickAndMorty-iOS
 
 public class Episodes: MockObject {
   public static let objectType: Object = RickAndMortyAPI.Objects.Episodes

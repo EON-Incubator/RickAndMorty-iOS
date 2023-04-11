@@ -21,13 +21,13 @@ public extension RickAndMortyAPI {
               ...episodeBasics
               characters {
                 __typename
-                image
+                ...characterBasics
               }
             }
           }
         }
         """#,
-        fragments: [PageInfo.self, EpisodeBasics.self]
+        fragments: [PageInfo.self, EpisodeBasics.self, CharacterBasics.self]
       ))
 
     public var page: GraphQLNullable<Int>
@@ -52,7 +52,7 @@ public extension RickAndMortyAPI {
 
     public struct Data: RickAndMortyAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
       public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Query }
       public static var __selections: [ApolloAPI.Selection] { [
@@ -73,10 +73,11 @@ public extension RickAndMortyAPI {
       /// Parent Type: `Episodes`
       public struct Episodes: RickAndMortyAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
         public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Episodes }
         public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("info", Info?.self),
           .field("results", [Result?]?.self),
         ] }
@@ -89,10 +90,11 @@ public extension RickAndMortyAPI {
         /// Parent Type: `Info`
         public struct Info: RickAndMortyAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
           public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Info }
           public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .fragment(PageInfo.self),
           ] }
 
@@ -107,7 +109,7 @@ public extension RickAndMortyAPI {
 
           public struct Fragments: FragmentContainer {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
             public var pageInfo: PageInfo { _toFragment() }
           }
@@ -118,10 +120,11 @@ public extension RickAndMortyAPI {
         /// Parent Type: `Episode`
         public struct Result: RickAndMortyAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
           public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Episode }
           public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("characters", [Character?].self),
             .fragment(EpisodeBasics.self),
           ] }
@@ -139,7 +142,7 @@ public extension RickAndMortyAPI {
 
           public struct Fragments: FragmentContainer {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
             public var episodeBasics: EpisodeBasics { _toFragment() }
           }
@@ -149,16 +152,36 @@ public extension RickAndMortyAPI {
           /// Parent Type: `Character`
           public struct Character: RickAndMortyAPI.SelectionSet {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
             public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Character }
             public static var __selections: [ApolloAPI.Selection] { [
-              .field("image", String?.self),
+              .field("__typename", String.self),
+              .fragment(CharacterBasics.self),
             ] }
 
+            /// The id of the character.
+            public var id: RickAndMortyAPI.ID? { __data["id"] }
+            /// The name of the character.
+            public var name: String? { __data["name"] }
             /// Link to the character's image.
             /// All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
             public var image: String? { __data["image"] }
+            /// The gender of the character ('Female', 'Male', 'Genderless' or 'unknown').
+            public var gender: String? { __data["gender"] }
+            /// The status of the character ('Alive', 'Dead' or 'unknown').
+            public var status: String? { __data["status"] }
+            /// The species of the character.
+            public var species: String? { __data["species"] }
+            /// The type or subspecies of the character.
+            public var type: String? { __data["type"] }
+
+            public struct Fragments: FragmentContainer {
+              public let __data: DataDict
+              public init(_dataDict: DataDict) { __data = _dataDict }
+
+              public var characterBasics: CharacterBasics { _toFragment() }
+            }
           }
         }
       }
