@@ -16,7 +16,7 @@ class EpisodeOverviewCell: UICollectionViewListCell {
         label.textColor = .label
         label.font = UIFont(name: K.Fonts.secondary, size: 20)
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
+        label.minimumScaleFactor = 0.8
         label.numberOfLines = 0
         return label
     }()
@@ -25,6 +25,11 @@ class EpisodeOverviewCell: UICollectionViewListCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        contentView.layer.sublayers?.removeAll()
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -43,8 +48,8 @@ class EpisodeOverviewCell: UICollectionViewListCell {
         centerLabel.snp.makeConstraints { make in
             make.left.equalTo(self).offset(2)
             make.right.equalTo(self).offset(-2)
-            make.top.equalTo(self).offset(2)
-            make.bottom.equalTo(self).offset(-2)
+            make.top.equalTo(self).offset(-12)
+            make.bottom.equalTo(self).offset(-1)
         }
     }
 }
