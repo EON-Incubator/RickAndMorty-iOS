@@ -15,6 +15,8 @@ class Network {
 
     func downloadAllData() {
         downloadCharacters(page: 1)
+        downloadEpisodes(page: 1)
+        downloadLocations(page: 1)
     }
 
     func downloadCharacters(page: Int) {
@@ -122,6 +124,65 @@ class Network {
             try realm.write {
                 print("Saving Episodes results...")
                 realm.add(episodes, update: .modified)
+            }
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+        }
+
+    }
+
+    func downloadLocations(page: Int) {
+        Network.shared.apollo.fetch(
+            query: RickAndMortyAPI.GetLocationsQuery(
+                page: GraphQLNullable<Int>(integerLiteral: page),
+                name: nil,
+                type: nil
+            )) { [weak self] result in
+                switch result {
+                case .success(let response):
+                    if let results = response.data?.locations?.results {
+                        self?.saveLocations(results)
+                    }
+                    if let pageInfo = response.data?.locations?.info {
+                        if pageInfo.next != nil {
+                            self?.downloadLocations(page: page + 1)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
+
+    func saveLocations(_ results: [RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result?]) {
+        print("Saving \(results.count) Locations results...")
+        var locations = [Locations]()
+
+        for item in results {
+            let location = Locations()
+            location.id = item?.id ?? ""
+            location.name = item?.name ?? ""
+            location.dimension = item?.dimension ?? ""
+            location.type = item?.type ?? ""
+            for locationItem in item?.residents ?? [] {
+                let character = Characters()
+                character.id = locationItem?.id ?? ""
+                character.name = locationItem?.name ?? ""
+                character.image = locationItem?.image ?? ""
+                character.gender = locationItem?.gender ?? ""
+                character.species = locationItem?.species ?? ""
+                character.status = locationItem?.status ?? ""
+                character.type = locationItem?.type ?? ""
+                location.residents.append(character)
+            }
+            locations.append(location)
+        }
+
+        do {
+            let realm = try Realm()
+            try realm.write {
+                print("Saving Locations results...")
+                realm.add(locations, update: .modified)
             }
         } catch {
             print("REALM ERROR: error in initializing realm")

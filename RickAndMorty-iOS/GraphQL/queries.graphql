@@ -37,11 +37,8 @@ query getLocations($page: Int, $name: String, $type: String) {
       ...pageInfo
     }
     results {
-      ...locationDetails
       ...locationBasics
-      residents {
-        image
-      }
+      ...locationDetails
     }
   }
 }
@@ -110,7 +107,7 @@ query searchFor($keyword: String) {
 fragment locationDetails on Location {
    ...locationBasics
       residents {
-        image
+        ...characterBasics
       }
 }
 
