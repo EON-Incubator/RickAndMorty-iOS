@@ -11,6 +11,10 @@ import UIKit
 // swiftlint: disable type_name
 struct K {
 
+    struct Keys {
+        static let tmdbApiKey = "d1462f89cffc09c847474f957c5b6e5e"
+    }
+
     struct Titles {
         static let characters = "Characters"
         static let locations = "Locations"

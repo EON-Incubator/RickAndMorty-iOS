@@ -36,6 +36,12 @@
 		54ECFC3F29C545A00049ACE3 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54ECFC3E29C545A00049ACE3 /* SearchViewController.swift */; };
 		54ECFC4129C546400049ACE3 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54ECFC4029C546400049ACE3 /* SearchView.swift */; };
 		54ECFC4429C546820049ACE3 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54ECFC4329C546820049ACE3 /* SearchViewModel.swift */; };
+		F729CB5E29E464180051E624 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = F729CB5D29E464180051E624 /* Realm */; };
+		F729CB6029E464180051E624 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F729CB5F29E464180051E624 /* RealmSwift */; };
+		F729CB6329E49D500051E624 /* TMDb in Frameworks */ = {isa = PBXBuildFile; productRef = F729CB6229E49D500051E624 /* TMDb */; };
+		F729CB6729E4B9960051E624 /* TVShowEpisodeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB6629E4B9950051E624 /* TVShowEpisodeObject.swift */; };
+		F729CB6A29E5A9F10051E624 /* Characters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB6929E5A9F10051E624 /* Characters.swift */; };
+		F729CB6C29E5DAE30051E624 /* Episodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB6B29E5DAE30051E624 /* Episodes.swift */; };
 		F7604C9B29BF7219003C2906 /* LocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7604C9A29BF7219003C2906 /* LocationsView.swift */; };
 		F77E4B7C29B906D400B8B5CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B7B29B906D400B8B5CE /* AppDelegate.swift */; };
 		F77E4B7E29B906D400B8B5CE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B7D29B906D400B8B5CE /* SceneDelegate.swift */; };
@@ -154,6 +160,9 @@
 		54ECFC3E29C545A00049ACE3 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		54ECFC4029C546400049ACE3 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		54ECFC4329C546820049ACE3 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		F729CB6629E4B9950051E624 /* TVShowEpisodeObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TVShowEpisodeObject.swift; path = "RickAndMorty-iOS/Models/TVShowEpisodeObject.swift"; sourceTree = SOURCE_ROOT; };
+		F729CB6929E5A9F10051E624 /* Characters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Characters.swift; sourceTree = "<group>"; };
+		F729CB6B29E5DAE30051E624 /* Episodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episodes.swift; sourceTree = "<group>"; };
 		F7604C9A29BF7219003C2906 /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
 		F77E4B7829B906D400B8B5CE /* RickAndMorty-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RickAndMorty-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F77E4B7B29B906D400B8B5CE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -231,7 +240,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5447EE1D29BA591800D2D05A /* SDWebImage in Frameworks */,
+				F729CB6329E49D500051E624 /* TMDb in Frameworks */,
 				F77E4B9F29B94B9300B8B5CE /* Apollo in Frameworks */,
+				F729CB5E29E464180051E624 /* Realm in Frameworks */,
+				F729CB6029E464180051E624 /* RealmSwift in Frameworks */,
 				5447EE1A29BA36DC00D2D05A /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -370,6 +382,16 @@
 			path = Search;
 			sourceTree = "<group>";
 		};
+		F729CB6829E5A6EE0051E624 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F729CB6629E4B9950051E624 /* TVShowEpisodeObject.swift */,
+				F729CB6929E5A9F10051E624 /* Characters.swift */,
+				F729CB6B29E5DAE30051E624 /* Episodes.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		F7604C9C29BF721D003C2906 /* Locations */ = {
 			isa = PBXGroup;
 			children = (
@@ -411,6 +433,7 @@
 				F77E4B9829B935EC00B8B5CE /* Coordinators */,
 				F77E4B9429B934C300B8B5CE /* Views */,
 				544A6CBD29BF878A0055FB75 /* ViewModel */,
+				F729CB6829E5A6EE0051E624 /* Models */,
 				F77E4BDD29BA390F00B8B5CE /* Network */,
 				F7EA92EF29CB8F9600F7F112 /* RickAndMortyAPI */,
 				F77E4BA029B94D5900B8B5CE /* GraphQL */,
@@ -694,6 +717,9 @@
 				F77E4B9E29B94B9300B8B5CE /* Apollo */,
 				5447EE1929BA36DC00D2D05A /* SnapKit */,
 				5447EE1C29BA591800D2D05A /* SDWebImage */,
+				F729CB5D29E464180051E624 /* Realm */,
+				F729CB5F29E464180051E624 /* RealmSwift */,
+				F729CB6229E49D500051E624 /* TMDb */,
 			);
 			productName = "RickAndMorty-iOS";
 			productReference = F77E4B7829B906D400B8B5CE /* RickAndMorty-iOS.app */;
@@ -754,7 +780,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					F77E4B7729B906D400B8B5CE = {
 						CreatedOnToolsVersion = 14.2;
@@ -784,6 +810,8 @@
 				5447EE1B29BA591800D2D05A /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				F77E4BF129BA3BE100B8B5CE /* XCRemoteSwiftPackageReference "Quick" */,
 				F77E4BF429BA3BF200B8B5CE /* XCRemoteSwiftPackageReference "Nimble" */,
+				F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				F729CB6129E49D500051E624 /* XCRemoteSwiftPackageReference "TMDb" */,
 			);
 			productRefGroup = F77E4B7929B906D400B8B5CE /* Products */;
 			projectDirPath = "";
@@ -891,11 +919,14 @@
 				F77E4B9A29B9362300B8B5CE /* Coordinator.swift in Sources */,
 				F7EA931D29CB8F9600F7F112 /* GetLocationsQuery.graphql.swift in Sources */,
 				F7EA932029CB8F9600F7F112 /* GetCharacterQuery.graphql.swift in Sources */,
+				F729CB6C29E5DAE30051E624 /* Episodes.swift in Sources */,
 				F7EA931529CB8F9600F7F112 /* CharacterBasics.graphql.swift in Sources */,
+				F729CB6729E4B9960051E624 /* TVShowEpisodeObject.swift in Sources */,
 				544A6CCD29C106060055FB75 /* EpisodesViewController.swift in Sources */,
 				F7F240C829C440A0007E34AC /* CharactersFilterView.swift in Sources */,
 				F77E4B9229B9090900B8B5CE /* CharactersViewController.swift in Sources */,
 				F7EA932929CB8F9600F7F112 /* SchemaConfiguration.swift in Sources */,
+				F729CB6A29E5A9F10051E624 /* Characters.swift in Sources */,
 				F7C26FEA29BF73B100903AF2 /* LocationsViewModel.swift in Sources */,
 				F7EA932529CB8F9600F7F112 /* Query.graphql.swift in Sources */,
 				5447EE1F29BA5A7900D2D05A /* CharacterGridCell.swift in Sources */,
@@ -1162,6 +1193,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
@@ -1183,6 +1215,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
@@ -1292,6 +1325,22 @@
 				kind = branch;
 			};
 		};
+		F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		F729CB6129E49D500051E624 /* XCRemoteSwiftPackageReference "TMDb" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adamayoung/TMDb.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 		F77E4B9D29B94B9300B8B5CE /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
@@ -1333,6 +1382,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5447EE1B29BA591800D2D05A /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
+		};
+		F729CB5D29E464180051E624 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		F729CB5F29E464180051E624 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		F729CB6229E49D500051E624 /* TMDb */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F729CB6129E49D500051E624 /* XCRemoteSwiftPackageReference "TMDb" */;
+			productName = TMDb;
 		};
 		F77E4B9E29B94B9300B8B5CE /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;

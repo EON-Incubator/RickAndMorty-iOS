@@ -15,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         // SDImageCache.shared.config.shouldCacheImagesInMemory = false
+        Network.shared.downloadCharacters(page: 1)
         return true
     }
 
