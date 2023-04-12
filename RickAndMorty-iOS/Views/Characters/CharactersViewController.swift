@@ -43,6 +43,7 @@ class CharactersViewController: BaseViewController {
         showEmptyData()
         subscribeToViewModel()
         viewModel.refresh()
+        Network.shared.downloadAllData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -51,10 +52,6 @@ class CharactersViewController: BaseViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         removeFilterButton()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        Network.shared.downloadAllData()
     }
 
     private func setupFilterButton() {

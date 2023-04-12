@@ -11,7 +11,9 @@ import SnapKit
 class DownloadProgressView: BaseView {
 
     static let shared = DownloadProgressView()
-    let currentWindow = UIApplication.shared.connectedScenes.compactMap { ($0 as? UIWindowScene)?.keyWindow }.last
+    let currentWindow = UIApplication.shared.connectedScenes.compactMap {
+                            ($0 as? UIWindowScene)?.keyWindow
+                        }.last
 
     let dismissButton: UIButton = {
         let button = UIButton()
@@ -49,6 +51,7 @@ class DownloadProgressView: BaseView {
         addSubview(dismissButton)
         addSubview(titleLabel)
         currentWindow?.addSubview(self)
+        dismissButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
     }
 
     func setupConstraints() {
@@ -58,7 +61,6 @@ class DownloadProgressView: BaseView {
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(50)
         }
-        self.superview?.layoutSubviews()
 
         blurView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalToSuperview()
@@ -79,6 +81,14 @@ class DownloadProgressView: BaseView {
 
     func show() {
         alpha = 0
+        currentWindow?.addSubview(self)
+        self.snp.updateConstraints { make in
+            make.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(50)
+        }
+        self.superview?.layoutSubviews()
+
         UIView.animate(withDuration: 0.5, animations: {
             self.snp.updateConstraints { make in
                 make.bottom.equalToSuperview().inset(90)
@@ -88,15 +98,13 @@ class DownloadProgressView: BaseView {
         }, completion: nil)
     }
 
-    func dismiss() {
+    @objc func dismiss() {
         UIView.animate(withDuration: 0.5, animations: {
             self.snp.updateConstraints { make in
                 make.bottom.equalToSuperview()
             }
             self.superview?.layoutSubviews()
             self.alpha = 0
-        }, completion: { _ in
-            self.removeFromSuperview()
-        })
+        }, completion: nil)
     }
 }
