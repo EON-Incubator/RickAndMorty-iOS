@@ -28,6 +28,9 @@ class EpisodeDetailsViewModel {
         }
     }
 
+    var episodeImages: TVShowEpisodeImageCollection?
+//https://image.tmdb.org/t/p/w500/oWaKdUeMOlVZem3v9DWsdDGlTuY.jpg
+
     var episodeNumber: String? = "" {
         didSet {
             let tmdb = TMDbAPI(apiKey: "1ecd1b26d36c0ce0ec76aec3676d5773")
@@ -36,6 +39,7 @@ class EpisodeDetailsViewModel {
             let season = "\(episodeArray?[1] ?? "")\(episodeArray?[2] ?? "")"
             Task {
                 episodeDetails = try? await tmdb.tvShowEpisodes.details(forEpisode: Int(episode) ?? 0, inSeason: Int(season) ?? 0, inTVShow: 60625)
+                episodeImages = try? await tmdb.tvShowEpisodes.images(forEpisode: Int(episode) ?? 0, inSeason: Int(season) ?? 0, inTVShow: 60625)
             }
         }
     }

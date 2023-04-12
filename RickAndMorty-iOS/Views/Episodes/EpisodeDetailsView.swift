@@ -20,6 +20,7 @@ class EpisodeDetailsView: BaseView {
         collectionView.register(CharacterRowCell.self,
                                 forCellWithReuseIdentifier: CharacterRowCell.identifier)
         collectionView.register(EpisodeOverviewCell.self, forCellWithReuseIdentifier: EpisodeOverviewCell.identifier)
+        collectionView.register(CarouselCell.self, forCellWithReuseIdentifier: CarouselCell.identifier)
 
         return collectionView
     }()
@@ -63,11 +64,28 @@ extension EpisodeDetailsView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.estimated(100) :
-                                             NSCollectionLayoutDimension.estimated(60)
+            var groupHeight: NSCollectionLayoutDimension
 
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: groupHeight)
+            switch sectionIndex {
+            case 0:
+                groupHeight = NSCollectionLayoutDimension.estimated(200)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0)
+            case 1:
+                groupHeight = NSCollectionLayoutDimension.estimated(100)
+            case 3:
+                groupHeight = NSCollectionLayoutDimension.estimated(100)
+            default:
+                groupHeight = NSCollectionLayoutDimension.estimated(60)
+            }
+            var groupWidth: NSCollectionLayoutDimension
+
+            if sectionIndex == 0 {
+                groupWidth = .fractionalWidth(0.95)
+            } else {
+                groupWidth = .fractionalWidth(1.0)
+            }
+
+            let groupSize = NSCollectionLayoutSize(widthDimension: groupWidth, heightDimension: groupHeight)
             var group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
 
             if effectiveWidth > 500 {
@@ -81,6 +99,12 @@ extension EpisodeDetailsView {
 
             if (self?.collectionView.numberOfItems(inSection: sectionIndex) ?? 0) > 0 {
                 section.boundarySupplementaryItems = [header]
+            }
+
+            if sectionIndex == 0 {
+                section.orthogonalScrollingBehavior = .groupPaging
+                section.boundarySupplementaryItems = []
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
             }
 
             return section

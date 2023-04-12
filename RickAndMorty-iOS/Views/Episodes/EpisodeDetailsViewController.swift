@@ -14,9 +14,11 @@ class EpisodeDetailsViewController: BaseViewController {
     typealias Snapshot = NSDiffableDataSourceSnapshot<EpisodeDetailsSection, AnyHashable>
 
     enum EpisodeDetailsSection: Int, CaseIterable {
+        case carousel
         case overview
         case info
         case characters
+        case emptyCarousel
         case emptyOverview
         case emptyInfo
         case emptyCharacters
@@ -52,7 +54,8 @@ class EpisodeDetailsViewController: BaseViewController {
 
     func showEmptyData() {
         snapshot.deleteAllItems()
-        snapshot.appendSections([.overview, .info, .characters, .emptyOverview, .emptyInfo, .emptyCharacters])
+        snapshot.appendSections([.carousel, .overview, .info, .characters, .emptyCarousel, .emptyOverview, .emptyInfo, .emptyCharacters])
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 1), toSection: .emptyCarousel)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 1), toSection: .emptyOverview)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 3), toSection: .emptyInfo)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 4), toSection: .emptyCharacters)
@@ -64,7 +67,8 @@ class EpisodeDetailsViewController: BaseViewController {
             if !episode.characters.isEmpty {
                 if var snapshot = self?.snapshot {
                     snapshot.deleteAllItems()
-                    snapshot.appendSections([.overview, .info, .characters])
+                    snapshot.appendSections([.carousel, .overview, .info, .characters])
+                    snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode), EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .carousel)
                     snapshot.appendItems([EpisodeDetails(episode)], toSection: .overview)
                     snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
                     snapshot.appendItems(episode.characters, toSection: .characters)
@@ -93,13 +97,17 @@ extension EpisodeDetailsViewController {
 
             switch indexPath.section {
             case 0:
+                let carouselCell = collectionView.dequeueReusableCell(withReuseIdentifier: CarouselCell.identifier, for: indexPath) as? CarouselCell
+                carouselCell?.carouselImage.sd_setImage(with: URL(string: "https://picsum.photos/200/300"))
+                return carouselCell
+            case 1:
                 let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier, for: indexPath) as? EpisodeOverviewCell
                 overviewCell?.centerLabel.text = self?.viewModel.episodeDetails?.overview
                 return overviewCell
-            case 1:
+            case 2:
                 guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 return self?.configInfoCell(cell: infoCell, data: episode, itemIndex: indexPath.item)
-            case 2:
+            case 3:
                 let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
                 if let character = episode as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
                     let urlString = character?.image ?? ""
@@ -113,15 +121,20 @@ extension EpisodeDetailsViewController {
                 }
 
                 // empty sections
-            case 3:
+            case 4:
+                let carouselCell = collectionView.dequeueReusableCell(withReuseIdentifier: CarouselCell.identifier, for: indexPath) as? CarouselCell
+                carouselCell?.backgroundColor = .secondarySystemBackground
+                carouselCell?.showLoadingAnimation()
+                return carouselCell
+            case 5:
                 let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier, for: indexPath) as? EpisodeOverviewCell
                 overviewCell?.showLoadingAnimation()
                 return overviewCell
-            case 4:
+            case 6:
                 let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
                 infoCell?.showLoadingAnimation()
                 return infoCell
-            case 5:
+            case 7:
                 let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
                 characterRowCell?.showLoadingAnimation()
                 return characterRowCell
@@ -138,8 +151,8 @@ extension EpisodeDetailsViewController {
             guard let headerView = self?.episodeDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
             }
-            headerView.textLabel.text = indexPath.section == 1 ? K.Headers.info : K.Headers.characters
-            if indexPath.section == 0 {
+            headerView.textLabel.text = indexPath.section == 2 ? K.Headers.info : K.Headers.characters
+            if indexPath.section == 1 {
                 headerView.textLabel.text = "OVERVIEW"
             }
             headerView.textLabel.textColor = .lightGray
