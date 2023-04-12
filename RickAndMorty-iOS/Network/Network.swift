@@ -13,14 +13,23 @@ class Network {
     static let shared = Network()
     let apollo = ApolloClient(url: URL(string: "https://rickandmortyapi.com/graphql")!)
 
+    private var charactersTotalPages = 0
+    private var locationsTotalPages = 0
+    private var episodesTotalPages = 0
+
     func downloadAllData() {
+        DownloadProgressView.shared.show()
         downloadCharacters(page: 1)
         downloadEpisodes(page: 1)
         downloadLocations(page: 1)
     }
 
     func downloadCharacters(page: Int) {
-        print("Downloading page \(page)...")
+        if charactersTotalPages > 0 {
+            let progress = Float(page) / Float(charactersTotalPages) * 100
+            let progressMsg = String(format: "Downloading Characters...%.0f%%", progress)
+            DownloadProgressView.shared.titleLabel.text = progressMsg
+        }
         apollo.fetch(
             query: RickAndMortyAPI.GetCharactersQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
@@ -36,7 +45,10 @@ class Network {
                         }
                         if let pageInfo = response.data?.characters?.info {
                             if pageInfo.next != nil {
+                                self?.charactersTotalPages = pageInfo.pages ?? 0
                                 self?.downloadCharacters(page: page + 1)
+                            } else {
+                                DownloadProgressView.shared.dismiss()
                             }
                         }
                     case .failure(let error):
@@ -47,7 +59,6 @@ class Network {
     }
 
     func saveCharacters(_ results: [RickAndMortyAPI.GetCharactersQuery.Data.Characters.Result?]) {
-        print("Saving \(results.count) characters...")
         var characters = [Characters]()
 
         for item in results {
@@ -70,10 +81,14 @@ class Network {
         } catch {
             print("REALM ERROR: error in initializing realm")
         }
-
     }
 
     func downloadEpisodes(page: Int) {
+        if episodesTotalPages > 0 {
+            let progress = Float(page) / Float(episodesTotalPages) * 100
+            let progressMsg = String(format: "Downloading Episodes...%.0f%%", progress)
+            DownloadProgressView.shared.titleLabel.text = progressMsg
+        }
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetEpisodesQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
@@ -86,6 +101,7 @@ class Network {
                         }
                         if let pageInfo = response.data?.episodes?.info {
                             if pageInfo.next != nil {
+                                self?.episodesTotalPages = pageInfo.pages ?? 0
                                 self?.downloadEpisodes(page: page + 1)
                             }
                         }
@@ -96,7 +112,6 @@ class Network {
     }
 
     func saveEpisodes(_ results: [RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result?]) {
-        print("Saving \(results.count) Episodes results...")
         var episodes = [Episodes]()
 
         for item in results {
@@ -122,7 +137,6 @@ class Network {
         do {
             let realm = try Realm()
             try realm.write {
-                print("Saving Episodes results...")
                 realm.add(episodes, update: .modified)
             }
         } catch {
@@ -132,6 +146,11 @@ class Network {
     }
 
     func downloadLocations(page: Int) {
+        if locationsTotalPages > 0 {
+            let progress = Float(page) / Float(locationsTotalPages) * 100
+            let progressMsg = String(format: "Downloading Locations...%.0f%%", progress)
+            DownloadProgressView.shared.titleLabel.text = progressMsg
+        }
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetLocationsQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
@@ -145,6 +164,7 @@ class Network {
                     }
                     if let pageInfo = response.data?.locations?.info {
                         if pageInfo.next != nil {
+                            self?.locationsTotalPages = pageInfo.pages ?? 0
                             self?.downloadLocations(page: page + 1)
                         }
                     }

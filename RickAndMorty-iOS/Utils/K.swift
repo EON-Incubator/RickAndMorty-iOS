@@ -23,6 +23,7 @@ struct K {
         static let filter = "Filter"
         static let clearButton = "Clear"
         static let loadMore = "↓    Load More   ↓"
+        static let download = "Download"
     }
 
     struct Identifiers {
@@ -39,6 +40,7 @@ struct K {
         static let characterAvatarCell = "CharacterAvatarCell"
         static let loadMoreCell = "LoadMoreCell"
         static let locationRowCell = "LocationRowCell"
+        static let downloadProgressView = "DownloadProgressView"
     }
 
     struct Headers {

@@ -53,6 +53,10 @@ class CharactersViewController: BaseViewController {
         removeFilterButton()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        Network.shared.downloadAllData()
+    }
+
     private func setupFilterButton() {
         let rightButton = charactersGridView.filterButton(self, action: #selector(filterButtonPressed)).customView
         rightButton?.tag = 1
