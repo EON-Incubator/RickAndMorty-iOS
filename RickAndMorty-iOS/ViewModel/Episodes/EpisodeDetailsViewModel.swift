@@ -15,21 +15,19 @@ class EpisodeDetailsViewModel {
     var episodeId: String
     weak var coordinator: MainCoordinator?
     var episodeData: (any Hashable)?
+    var episodeDetails: TVShowEpisode?
 
     init(episodeId: String) {
         self.episodeId = episodeId
     }
 
-    var episodeDetails: TVShowEpisode? {
+    var episodeImages: TVShowEpisodeImageCollection? {
         didSet {
             if let data = episodeData as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode {
                 self.episode.send(data)
             }
         }
     }
-
-    var episodeImages: TVShowEpisodeImageCollection?
-//https://image.tmdb.org/t/p/w500/oWaKdUeMOlVZem3v9DWsdDGlTuY.jpg
 
     var episodeNumber: String? = "" {
         didSet {

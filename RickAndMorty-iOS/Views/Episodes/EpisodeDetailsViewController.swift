@@ -21,7 +21,6 @@ class EpisodeDetailsViewController: BaseViewController {
         case emptyCarousel
         case emptyOverview
         case emptyInfo
-        case emptyCharacters
     }
 
     private let episodeDetailsView = EpisodeDetailsView()
@@ -54,21 +53,21 @@ class EpisodeDetailsViewController: BaseViewController {
 
     func showEmptyData() {
         snapshot.deleteAllItems()
-        snapshot.appendSections([.carousel, .overview, .info, .characters, .emptyCarousel, .emptyOverview, .emptyInfo, .emptyCharacters])
+        snapshot.appendSections([.carousel, .overview, .info, .characters, .emptyCarousel, .emptyOverview, .emptyInfo])
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 1), toSection: .emptyCarousel)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 1), toSection: .emptyOverview)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 3), toSection: .emptyInfo)
-        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 4), toSection: .emptyCharacters)
         self.dataSource?.apply(snapshot, animatingDifferences: true)
     }
 
     func subscribeToViewModel() {
         viewModel.episode.sink(receiveValue: { [weak self] episode in
             if !episode.characters.isEmpty {
+                let imageCount = self?.viewModel.episodeImages?.stills.count
                 if var snapshot = self?.snapshot {
                     snapshot.deleteAllItems()
                     snapshot.appendSections([.carousel, .overview, .info, .characters])
-                    snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode), EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .carousel)
+                    snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: imageCount!), toSection: .carousel)
                     snapshot.appendItems([EpisodeDetails(episode)], toSection: .overview)
                     snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
                     snapshot.appendItems(episode.characters, toSection: .characters)
@@ -97,53 +96,52 @@ extension EpisodeDetailsViewController {
 
             switch indexPath.section {
             case 0:
-                let carouselCell = collectionView.dequeueReusableCell(withReuseIdentifier: CarouselCell.identifier, for: indexPath) as? CarouselCell
-                carouselCell?.carouselImage.sd_setImage(with: URL(string: "https://picsum.photos/200/300"))
-                return carouselCell
+                guard let carouselCell = collectionView.dequeueReusableCell(withReuseIdentifier: CarouselCell.identifier,
+                                                                            for: indexPath) as? CarouselCell else { return nil}
+                return self?.configCarouselCell(cell: carouselCell, itemIndex: indexPath.item)
             case 1:
-                let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier, for: indexPath) as? EpisodeOverviewCell
+                let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier,
+                                                                      for: indexPath) as? EpisodeOverviewCell
                 overviewCell?.centerLabel.text = self?.viewModel.episodeDetails?.overview
                 return overviewCell
             case 2:
-                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
+                guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier,
+                                                                        for: indexPath) as? InfoCell else { return nil }
                 return self?.configInfoCell(cell: infoCell, data: episode, itemIndex: indexPath.item)
             case 3:
-                let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
-                if let character = episode as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
-                    let urlString = character?.image ?? ""
-                    characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
-                    characterRowCell?.upperLabel.text = character?.name
-                    characterRowCell?.lowerLeftLabel.text = character?.gender
-                    characterRowCell?.lowerRightLabel.text = character?.species
-                    characterRowCell?.characterStatusLabel.text = character?.status
-                    characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character?.status ?? "")
-                    return characterRowCell
-                }
+                guard let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier,
+                                                                                for: indexPath) as? CharacterRowCell else { return nil }
+                return self?.configCharacterRowCell(cell: characterRowCell, data: episode, itemIndex: indexPath.item)
 
-                // empty sections
-            case 4:
-                let carouselCell = collectionView.dequeueReusableCell(withReuseIdentifier: CarouselCell.identifier, for: indexPath) as? CarouselCell
-                carouselCell?.backgroundColor = .secondarySystemBackground
-                carouselCell?.showLoadingAnimation()
-                return carouselCell
-            case 5:
-                let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier, for: indexPath) as? EpisodeOverviewCell
-                overviewCell?.showLoadingAnimation()
-                return overviewCell
-            case 6:
-                let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
-                infoCell?.showLoadingAnimation()
-                return infoCell
-            case 7:
-                let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
-                characterRowCell?.showLoadingAnimation()
-                return characterRowCell
             default:
-                return UICollectionViewCell()
+                // empty sections
+                return self?.loadEmptySections(collectionView: collectionView, index: indexPath)
             }
-            return UICollectionViewCell()
         })
         applyHeaderView()
+    }
+
+    func loadEmptySections(collectionView: UICollectionView, index: IndexPath) -> UICollectionViewCell? {
+        switch index.section {
+        case 4:
+            let carouselCell = collectionView.dequeueReusableCell(withReuseIdentifier: CarouselCell.identifier,
+                                                                  for: index) as? CarouselCell
+            carouselCell?.backgroundColor = .secondarySystemBackground
+            carouselCell?.showLoadingAnimation()
+            return carouselCell
+        case 5:
+            let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier,
+                                                                  for: index) as? EpisodeOverviewCell
+            overviewCell?.showLoadingAnimation()
+            return overviewCell
+        case 6:
+            let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier,
+                                                              for: index) as? InfoCell
+            infoCell?.showLoadingAnimation()
+            return infoCell
+        default:
+            return UICollectionViewCell()
+        }
     }
 
     func applyHeaderView() {
@@ -151,14 +149,41 @@ extension EpisodeDetailsViewController {
             guard let headerView = self?.episodeDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
             }
-            headerView.textLabel.text = indexPath.section == 2 ? K.Headers.info : K.Headers.characters
-            if indexPath.section == 1 {
-                headerView.textLabel.text = "OVERVIEW"
+            switch indexPath.section {
+            case 5:
+                headerView.textLabel.text = K.Headers.overview
+            case 6:
+                headerView.textLabel.text = K.Headers.info
+            case 7:
+                headerView.textLabel.text = K.Headers.characters
+            default:
+                headerView.textLabel.text = "\(EpisodeDetailsSection.allCases[indexPath.section])".uppercased()
             }
             headerView.textLabel.textColor = .lightGray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
         }
+    }
+
+    func configCarouselCell(cell: CarouselCell, itemIndex: Int) -> UICollectionViewCell {
+        guard let filePath = self.viewModel.episodeImages?.stills[itemIndex].filePath else { return UICollectionViewCell()}
+        let imageUrl = "https://image.tmdb.org/t/p/w400\(filePath)"
+        cell.carouselImage.sd_setImage(with: URL(string: imageUrl))
+        return cell
+    }
+
+    func configCharacterRowCell(cell: CharacterRowCell, data: AnyHashable, itemIndex: Int) -> UICollectionViewCell {
+        if let character = data as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
+            let urlString = character?.image ?? ""
+            cell.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
+            cell.upperLabel.text = character?.name
+            cell.lowerLeftLabel.text = character?.gender
+            cell.lowerRightLabel.text = character?.species
+            cell.characterStatusLabel.text = character?.status
+            cell.characterStatusLabel.backgroundColor = cell.statusColor(character?.status ?? "")
+            return cell
+        }
+        return UICollectionViewCell()
     }
 
     func configInfoCell(cell: InfoCell, data: AnyHashable, itemIndex: Int) -> UICollectionViewCell {
@@ -176,8 +201,8 @@ extension EpisodeDetailsViewController {
                 cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
             case 2:
                 cell.rightLabel.text = String(format: "%.1f", self.viewModel.episodeDetails?.voteAverage ?? 0)
-                cell.leftLabel.text = "Rating"
-                cell.infoImage.image = UIImage(systemName: "star")
+                cell.leftLabel.text = K.Info.rating
+                cell.infoImage.image = UIImage(systemName: K.Images.systemStar)
                 cell.rightLabel.adjustsFontSizeToFitWidth = false
             default:
                 cell.rightLabel.text = "-"

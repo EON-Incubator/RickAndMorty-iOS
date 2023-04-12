@@ -44,6 +44,7 @@ struct K {
         static let locations = "LOCATIONS"
         static let residents = "RESIDENTS"
         static let characters = "CHARACTERS"
+        static let overview = "OVERVIEW"
     }
 
     struct Info {
@@ -56,6 +57,7 @@ struct K {
         static let dimension = "Dimension"
         static let episode = "Episode"
         static let airDate = "Air Date"
+        static let rating = "Rating"
         static let identifier = "InfoCell"
     }
 
@@ -89,6 +91,7 @@ struct K {
         static let map = "map"
         static let systemMagnifyingGlass = "magnifyingglass"
         static let systemPerson = "person.circle"
+        static let systemStar = "star"
     }
 
     struct Fonts {
