@@ -11,8 +11,9 @@ import UIKit
 // swiftlint: disable type_name
 struct K {
 
-    struct Keys {
-        static let tmdbApiKey = "d1462f89cffc09c847474f957c5b6e5e"
+    struct Tmdb {
+        static let tmdbApiKey = "1ecd1b26d36c0ce0ec76aec3676d5773"
+        static let showId = 60625
     }
 
     struct Titles {

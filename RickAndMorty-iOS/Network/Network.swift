@@ -8,6 +8,7 @@
 import Foundation
 import Apollo
 import RealmSwift
+import TMDb
 
 class Network {
     static let shared = Network()
@@ -16,6 +17,14 @@ class Network {
     private var charactersTotalPages = 0
     private var locationsTotalPages = 0
     private var episodesTotalPages = 0
+
+    private var isEpisodesDataDownloaded = false {
+        didSet {
+            if isEpisodesDataDownloaded == true {
+                downloadAllEpisodeDetails()
+            }
+        }
+    }
 
     func downloadAllData() {
         DownloadProgressView.shared.show()
@@ -103,6 +112,8 @@ class Network {
                             if pageInfo.next != nil {
                                 self?.episodesTotalPages = pageInfo.pages ?? 0
                                 self?.downloadEpisodes(page: page + 1)
+                            } else {
+                                self?.isEpisodesDataDownloaded = true
                             }
                         }
                     case .failure(let error):
@@ -142,7 +153,6 @@ class Network {
         } catch {
             print("REALM ERROR: error in initializing realm")
         }
-
     }
 
     func downloadLocations(page: Int) {
@@ -175,7 +185,6 @@ class Network {
     }
 
     func saveLocations(_ results: [RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result?]) {
-        print("Saving \(results.count) Locations results...")
         var locations = [Locations]()
 
         for item in results {
@@ -185,14 +194,13 @@ class Network {
             location.dimension = item?.dimension ?? ""
             location.type = item?.type ?? ""
             for locationItem in item?.residents ?? [] {
-                let character = Characters()
-                character.id = locationItem?.id ?? ""
-                character.name = locationItem?.name ?? ""
-                character.image = locationItem?.image ?? ""
-                character.gender = locationItem?.gender ?? ""
-                character.species = locationItem?.species ?? ""
-                character.status = locationItem?.status ?? ""
-                character.type = locationItem?.type ?? ""
+                let character = Characters(id: locationItem?.id ?? "",
+                                           name: locationItem?.name ?? "",
+                                           image: locationItem?.image ?? "",
+                                           gender: locationItem?.gender ?? "",
+                                           status: locationItem?.status ?? "",
+                                           species: locationItem?.species ?? "",
+                                           type: locationItem?.type ?? "")
                 location.residents.append(character)
             }
             locations.append(location)
@@ -201,12 +209,86 @@ class Network {
         do {
             let realm = try Realm()
             try realm.write {
-                print("Saving Locations results...")
                 realm.add(locations, update: .modified)
             }
         } catch {
             print("REALM ERROR: error in initializing realm")
         }
 
+    }
+
+    func downloadAllEpisodeDetails() {
+        do {
+            let realm = try Realm()
+            let episodes = realm.objects(Episodes.self)
+            for item in episodes {
+                let seasonNumberString = String(item.episode.dropFirst())
+                    .prefix(while: { $0.isNumber })
+                let seasonNumber = Int(seasonNumberString) ?? 0
+                let episodeNumberString = String(item.episode.dropFirst(4))
+                let episodeNumber = Int(episodeNumberString) ?? 0
+
+                downloadEpisodeDetails(season: seasonNumber, episode: episodeNumber, parentId: item.id)
+            }
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+        }
+
+    }
+
+    func downloadEpisodeDetails(season: Int, episode: Int, parentId: String) {
+        DispatchQueue.main.async {
+            let progressMsg = "Downloading Details of Season \(season), Episode \(episode)..."
+            DownloadProgressView.shared.titleLabel.text = progressMsg
+        }
+        let tmdb = TMDbAPI(apiKey: K.Tmdb.tmdbApiKey)
+        Task {
+            let episodeDetails = try? await tmdb.tvShowEpisodes.details(forEpisode: episode, inSeason: season, inTVShow: K.Tmdb.showId)
+
+            let episodePhotos = try? await tmdb.tvShowEpisodes.images(forEpisode: episode, inSeason: season, inTVShow: K.Tmdb.showId)
+
+            let episodeVideos = try? await tmdb.tvShowEpisodes.videos(forEpisode: episode, inSeason: season, inTVShow: K.Tmdb.showId)
+
+            let tmdbEpisodeDetails = TmdbEpisodeDetails()
+            tmdbEpisodeDetails.id = episodeDetails?.id ?? 0
+            tmdbEpisodeDetails.episodeId = parentId
+            tmdbEpisodeDetails.name = episodeDetails?.name ?? ""
+            tmdbEpisodeDetails.episodeNumber = episodeDetails?.episodeNumber ?? 0
+            tmdbEpisodeDetails.seasonNumber = episodeDetails?.seasonNumber ?? 0
+            tmdbEpisodeDetails.overview = episodeDetails?.overview ?? ""
+            tmdbEpisodeDetails.airDate = episodeDetails?.airDate ?? Date()
+            tmdbEpisodeDetails.productionCode = episodeDetails?.productionCode ?? ""
+            tmdbEpisodeDetails.stillPath = episodeDetails?.stillPath?.absoluteString ?? ""
+            tmdbEpisodeDetails.voteAverage = episodeDetails?.voteAverage ?? 0
+            tmdbEpisodeDetails.voteCount = episodeDetails?.voteCount ?? 0
+
+            if let stills = episodePhotos?.stills {
+                for item in stills {
+                    let image = TmdbEpisodeImages(id: item.id.absoluteString, filePath: item.filePath.absoluteString)
+                    tmdbEpisodeDetails.episodeImages.append(image)
+                }
+            }
+
+            if let videos = episodeVideos?.results {
+                for item in videos {
+                    let video = TmdbEpisodeVideos(id: item.id, key: item.key, name: item.name, site: item.site)
+                    tmdbEpisodeDetails.episodeVideos.append(video)
+                }
+            }
+
+            DispatchQueue.main.async {
+                do {
+                    let realm = try Realm()
+                    let episode = realm.objects(Episodes.self).first(where: { $0.id == parentId })!
+
+                    try realm.write {
+                        realm.add(tmdbEpisodeDetails, update: .modified)
+                        episode.episodeDetails = tmdbEpisodeDetails
+                    }
+                } catch {
+                    print("REALM ERROR: error in initializing realm")
+                }
+            }
+        }
     }
 }

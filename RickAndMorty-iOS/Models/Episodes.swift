@@ -14,4 +14,5 @@ class Episodes: RealmSwift.Object {
     @Persisted var episode: String
     @Persisted var airDate: String
     @Persisted var characters = RealmSwift.List<Characters>()
+    @Persisted var episodeDetails: TmdbEpisodeDetails?
 }
