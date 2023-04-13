@@ -60,14 +60,14 @@ class CharacterDetailsViewController: BaseViewController {
     func subscribeToViewModel() {
         viewModel.character.sink(receiveValue: { [weak self] characterInfo in
             self?.title = characterInfo.name
-            if !characterInfo.episode.isEmpty {
+            if !characterInfo.episodes.isEmpty {
                 if var snapshot = self?.snapshot {
                     snapshot.deleteAllItems()
                     snapshot.appendSections([.appearance, .info, .location, .episodes])
                     snapshot.appendItems([CharacterDetails(characterInfo)], toSection: .appearance)
                     snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .info)
                     snapshot.appendItems([CharacterDetails(characterInfo), CharacterDetails(characterInfo)], toSection: .location)
-                    snapshot.appendItems(characterInfo.episode, toSection: .episodes)
+                    snapshot.appendItems(Array(characterInfo.episodes), toSection: .episodes)
                     self?.dataSource?.apply(snapshot, animatingDifferences: true)
                 }
             }
@@ -85,7 +85,7 @@ extension CharacterDetailsViewController {
             case 0:
                 let avatarCell = collectionView.dequeueReusableCell(withReuseIdentifier: AvatarCell.identifier, for: indexPath) as? AvatarCell
                 if let character = characterInfo as? CharacterDetails {
-                    guard let image = character.item.image else { fatalError("Image not found") }
+                    let image = character.item.image
                     self?.avatarImageUrl = image
                     avatarCell?.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 300, height: 300)])
                     return avatarCell
@@ -97,17 +97,17 @@ extension CharacterDetailsViewController {
                     case 0:
                         return InfoCell.configCell(cell: infoCell,
                                                    leftLabel: K.Info.gender,
-                                                   rightLabel: character.item.gender ?? "",
+                                                   rightLabel: character.item.gender,
                                                    infoImage: UIImage(named: K.Images.gender) ?? UIImage())
                     case 1:
                         return InfoCell.configCell(cell: infoCell,
                                                    leftLabel: K.Info.species,
-                                                   rightLabel: character.item.species ?? "",
+                                                   rightLabel: character.item.species,
                                                    infoImage: UIImage(named: K.Images.species) ?? UIImage())
                     default:
                         return InfoCell.configCell(cell: infoCell,
                                                    leftLabel: K.Info.status,
-                                                   rightLabel: character.item.status ?? "",
+                                                   rightLabel: character.item.status,
                                                    infoImage: UIImage(named: K.Images.status) ?? UIImage())
                     }
                 }
@@ -130,7 +130,7 @@ extension CharacterDetailsViewController {
             case 3:
                 guard let episodeCell = self?.characterDetailsView.episodeCell else { return nil }
                 if let episode = characterInfo as?
-                    RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode {
+                    Episodes {
                     return collectionView.dequeueConfiguredReusableCell(using: episodeCell,
                                                                         for: indexPath,
                                                                         item: episode)
@@ -185,7 +185,7 @@ extension CharacterDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         if indexPath.section > 1 {
-            if let episode = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode? {
+            if let episode = dataSource?.itemIdentifier(for: indexPath) as? Episodes? {
                 viewModel.goEpisodeDetails(id: (episode?.id) ?? "", navController: navigationController ?? UINavigationController())
             }
             if let character = dataSource?.itemIdentifier(for: indexPath) as? CharacterDetails {
@@ -247,8 +247,8 @@ extension CharacterDetailsViewController: UICollectionViewDelegate {
 // MARK: Struct for Diffable DataSource
 struct CharacterDetails: Hashable {
     let id: UUID
-    let item: RickAndMortyAPI.GetCharacterQuery.Data.Character
-    init(id: UUID = UUID(), _ item: RickAndMortyAPI.GetCharacterQuery.Data.Character) {
+    let item: Characters
+    init(id: UUID = UUID(), _ item: Characters) {
         self.id = id
         self.item = item
     }

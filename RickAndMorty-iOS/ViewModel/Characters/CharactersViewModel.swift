@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import RealmSwift
 
 struct FilterOptions {
     var status: String
@@ -16,7 +17,7 @@ struct FilterOptions {
 class CharactersViewModel {
 
     let charactersForSearch = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
-    var characters = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
+    var characters = CurrentValueSubject<[Characters], Never>([])
     var name = ""
     var currentPage = 0 {
         didSet {
@@ -31,6 +32,10 @@ class CharactersViewModel {
     weak var coordinator: MainCoordinator?
 
     func fetchData(page: Int, name: String = "") {
+        if UserDefaults().bool(forKey: "isOfflineMode") {
+            getDataFromDB(page: page)
+            return
+        }
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetCharactersQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
@@ -51,12 +56,43 @@ class CharactersViewModel {
                 }
     }
 
+    func getDataFromDB(page: Int) {
+        if let results = Network.shared.getCharacters(page: page) {
+            self.mapDataFromDB(page: page, characters: results)
+        } else {
+            self.characters.value = [Characters]()
+        }
+    }
+
+    func mapDataFromDB(page: Int, characters: Results<Characters>) {
+        if page == 1 {
+            self.characters.value = (characters.compactMap { $0 })
+        } else {
+            self.characters.value.append(contentsOf: (characters.compactMap { $0 }) )
+        }
+    }
+
     func mapData(page: Int, characters: [RickAndMortyAPI.GetCharactersQuery.Data.Characters.Result?]) {
         charactersForSearch.value = (characters.compactMap { $0?.fragments.characterBasics })
+
+        var charatersArray = [Characters]()
+
+        for item in characters {
+            let character = Characters()
+            character.id = item?.id ?? ""
+            character.name = item?.name ?? ""
+            character.gender = item?.gender ?? ""
+            character.image = item?.image ?? ""
+            character.species = item?.species ?? ""
+            character.status = item?.status ?? ""
+            character.type = item?.type ?? ""
+            charatersArray.append(character)
+        }
+
         if page == 1 {
-            self.characters.value = (characters.compactMap { $0?.fragments.characterBasics })
+            self.characters.value = (charatersArray.compactMap { $0 })
         } else {
-            self.characters.value.append(contentsOf: (characters.compactMap { $0?.fragments.characterBasics }) )
+            self.characters.value.append(contentsOf: (charatersArray.compactMap { $0 }) )
         }
     }
 

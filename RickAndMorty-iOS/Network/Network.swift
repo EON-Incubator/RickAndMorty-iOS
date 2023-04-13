@@ -10,6 +10,7 @@ import Apollo
 import RealmSwift
 import TMDb
 
+// swiftlint: disable file_length
 class Network {
     static let shared = Network()
     let apollo = ApolloClient(url: URL(string: "https://rickandmortyapi.com/graphql")!)
@@ -26,11 +27,25 @@ class Network {
         }
     }
 
+    private var isEpisodeDetailsDataDownloaded = false {
+        didSet {
+            if isEpisodeDetailsDataDownloaded == true {
+                downloadLocations(page: 1)
+            }
+        }
+    }
+
+    private var isLocationsDataDownloaded = false {
+        didSet {
+            if isLocationsDataDownloaded == true {
+                downloadCharacters(page: 1)
+            }
+        }
+    }
+
     func downloadAllData() {
         DownloadProgressView.shared.show()
-        downloadCharacters(page: 1)
         downloadEpisodes(page: 1)
-        downloadLocations(page: 1)
     }
 
     func downloadCharacters(page: Int) {
@@ -40,11 +55,8 @@ class Network {
             DownloadProgressView.shared.titleLabel.text = progressMsg
         }
         apollo.fetch(
-            query: RickAndMortyAPI.GetCharactersQuery(
-                page: GraphQLNullable<Int>(integerLiteral: page),
-                name: nil,
-                status: nil,
-                gender: nil)) { [weak self] result in
+            query: RickAndMortyAPI.GetCharactersWithDetailsQuery(
+                page: GraphQLNullable<Int>(integerLiteral: page))) { [weak self] result in
 
                     switch result {
                     case .success(let response):
@@ -65,31 +77,6 @@ class Network {
                     }
 
                 }
-    }
-
-    func saveCharacters(_ results: [RickAndMortyAPI.GetCharactersQuery.Data.Characters.Result?]) {
-        var characters = [Characters]()
-
-        for item in results {
-            let character = Characters()
-            character.id = item?.id ?? ""
-            character.name = item?.name ?? ""
-            character.image = item?.image ?? ""
-            character.gender = item?.gender ?? ""
-            character.species = item?.species ?? ""
-            character.status = item?.status ?? ""
-            character.type = item?.type ?? ""
-            characters.append(character)
-        }
-
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(characters, update: .modified)
-            }
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-        }
     }
 
     func downloadEpisodes(page: Int) {
@@ -122,39 +109,6 @@ class Network {
                 }
     }
 
-    func saveEpisodes(_ results: [RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result?]) {
-        var episodes = [Episodes]()
-
-        for item in results {
-            let episode = Episodes()
-            episode.id = item?.id ?? ""
-            episode.name = item?.name ?? ""
-            episode.episode = item?.episode ?? ""
-            episode.airDate = item?.air_date ?? ""
-            for characterItem in item?.characters ?? [] {
-                let character = Characters()
-                character.id = characterItem?.id ?? ""
-                character.name = characterItem?.name ?? ""
-                character.image = characterItem?.image ?? ""
-                character.gender = characterItem?.gender ?? ""
-                character.species = characterItem?.species ?? ""
-                character.status = characterItem?.status ?? ""
-                character.type = characterItem?.type ?? ""
-                episode.characters.append(character)
-            }
-            episodes.append(episode)
-        }
-
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(episodes, update: .modified)
-            }
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-        }
-    }
-
     func downloadLocations(page: Int) {
         if locationsTotalPages > 0 {
             let progress = Float(page) / Float(locationsTotalPages) * 100
@@ -176,45 +130,14 @@ class Network {
                         if pageInfo.next != nil {
                             self?.locationsTotalPages = pageInfo.pages ?? 0
                             self?.downloadLocations(page: page + 1)
+                        } else {
+                            self?.isLocationsDataDownloaded = true
                         }
                     }
                 case .failure(let error):
                     print(error)
                 }
             }
-    }
-
-    func saveLocations(_ results: [RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result?]) {
-        var locations = [Locations]()
-
-        for item in results {
-            let location = Locations()
-            location.id = item?.id ?? ""
-            location.name = item?.name ?? ""
-            location.dimension = item?.dimension ?? ""
-            location.type = item?.type ?? ""
-            for locationItem in item?.residents ?? [] {
-                let character = Characters(id: locationItem?.id ?? "",
-                                           name: locationItem?.name ?? "",
-                                           image: locationItem?.image ?? "",
-                                           gender: locationItem?.gender ?? "",
-                                           status: locationItem?.status ?? "",
-                                           species: locationItem?.species ?? "",
-                                           type: locationItem?.type ?? "")
-                location.residents.append(character)
-            }
-            locations.append(location)
-        }
-
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(locations, update: .modified)
-            }
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-        }
-
     }
 
     func downloadAllEpisodeDetails() {
@@ -230,6 +153,8 @@ class Network {
 
                 downloadEpisodeDetails(season: seasonNumber, episode: episodeNumber, parentId: item.id)
             }
+            print("downloaded all episode details")
+            isEpisodeDetailsDataDownloaded = true
         } catch {
             print("REALM ERROR: error in initializing realm")
         }
@@ -237,6 +162,7 @@ class Network {
     }
 
     func downloadEpisodeDetails(season: Int, episode: Int, parentId: String) {
+        print("downloaded episode details.....S\(season)E\(episode)")
         DispatchQueue.main.async {
             let progressMsg = "Downloading Details of Season \(season), Episode \(episode)..."
             DownloadProgressView.shared.titleLabel.text = progressMsg
@@ -276,23 +202,147 @@ class Network {
                 }
             }
 
-            DispatchQueue.main.async {
-                do {
-                    let realm = try Realm()
-                    let episode = realm.objects(Episodes.self).first(where: { $0.id == parentId })!
+            saveEpisodeDetails(tmdbEpisodeDetails, parentId: parentId)
+        }
+    }
+}
 
-                    try realm.write {
-                        realm.add(tmdbEpisodeDetails, update: .modified)
-                        episode.episodeDetails = tmdbEpisodeDetails
-                    }
-                } catch {
-                    print("REALM ERROR: error in initializing realm")
+// MARK: - LocalDB Save Operations
+extension Network {
+    func saveCharacters(_ results: [RickAndMortyAPI.GetCharactersWithDetailsQuery.Data.Characters.Result?]) {
+        var characters = [Characters]()
+
+        for item in results {
+            let character = Characters()
+            character.id = item?.id ?? ""
+            character.name = item?.name ?? ""
+            character.image = item?.image ?? ""
+            character.gender = item?.gender ?? ""
+            character.species = item?.species ?? ""
+            character.status = item?.status ?? ""
+            character.type = item?.type ?? ""
+
+            do {
+
+                let realm = try Realm()
+
+                if let originId = item?.origin?.id {
+                    let origin = realm.object(ofType: Locations.self, forPrimaryKey: originId)
+                    character.origin = origin
                 }
+
+                if let locationId = item?.location?.id {
+                    let location = realm.object(ofType: Locations.self, forPrimaryKey: locationId)
+                    character.location = location
+                }
+
+                if let episodes = item?.episode {
+                    for epi in episodes {
+                        if let episode = realm.object(ofType: Episodes.self, forPrimaryKey: epi?.id) {
+                            character.episodes.append(episode)
+                        }
+                    }
+                }
+            } catch {
+                print("REALM ERROR: error in initializing realm")
+            }
+            characters.append(character)
+        }
+
+        do {
+            let realm = try Realm()
+            try realm.write {
+                realm.add(characters, update: .modified)
+            }
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+        }
+    }
+
+    func saveLocations(_ results: [RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result?]) {
+        var locations = [Locations]()
+
+        for item in results {
+            let location = Locations()
+            location.id = item?.id ?? ""
+            location.name = item?.name ?? ""
+            location.dimension = item?.dimension ?? ""
+            location.type = item?.type ?? ""
+            for locationItem in item?.residents ?? [] {
+                let character = Characters(id: locationItem?.id ?? "",
+                                           name: locationItem?.name ?? "",
+                                           image: locationItem?.image ?? "",
+                                           gender: locationItem?.gender ?? "",
+                                           status: locationItem?.status ?? "",
+                                           species: locationItem?.species ?? "",
+                                           type: locationItem?.type ?? "")
+                location.residents.append(character)
+            }
+            locations.append(location)
+        }
+
+        do {
+            let realm = try Realm()
+            try realm.write {
+                realm.add(locations, update: .modified)
+            }
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+        }
+
+    }
+
+    func saveEpisodes(_ results: [RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result?]) {
+        var episodes = [Episodes]()
+
+        for item in results {
+            let episode = Episodes()
+            episode.id = item?.id ?? ""
+            episode.name = item?.name ?? ""
+            episode.episode = item?.episode ?? ""
+            episode.airDate = item?.air_date ?? ""
+            for characterItem in item?.characters ?? [] {
+                let character = Characters()
+                character.id = characterItem?.id ?? ""
+                character.name = characterItem?.name ?? ""
+                character.image = characterItem?.image ?? ""
+                character.gender = characterItem?.gender ?? ""
+                character.species = characterItem?.species ?? ""
+                character.status = characterItem?.status ?? ""
+                character.type = characterItem?.type ?? ""
+                episode.characters.append(character)
+            }
+            episodes.append(episode)
+        }
+
+        do {
+            let realm = try Realm()
+            try realm.write {
+                realm.add(episodes, update: .modified)
+            }
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+        }
+    }
+
+    func saveEpisodeDetails(_ tmdbEpisodeDetails: TmdbEpisodeDetails, parentId: String) {
+        DispatchQueue.main.async {
+            do {
+                let realm = try Realm()
+                let episode = realm.objects(Episodes.self).first(where: { $0.id == parentId })!
+
+                try realm.write {
+                    realm.add(tmdbEpisodeDetails, update: .modified)
+                    episode.episodeDetails = tmdbEpisodeDetails
+                }
+            } catch {
+                print("REALM ERROR: error in initializing realm")
             }
         }
     }
 }
 
+// MARK: - LocalDB Read Operations
 extension Network {
 
     func getCharacters(page: Int) -> Results<Characters>? {
@@ -361,3 +411,4 @@ extension Network {
         }
     }
 }
+// swiftlint: enable file_length

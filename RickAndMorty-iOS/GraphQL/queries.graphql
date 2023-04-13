@@ -9,6 +9,26 @@ query getCharacters($page: Int, $name: String, $status: String, $gender: String)
   }
 }
 
+query getCharactersWithDetails($page: Int) {
+  characters(page: $page) {
+    info {
+      ...pageInfo
+    }
+    results {
+      ...characterBasics
+      episode {
+        ...episodeBasics
+      }
+      origin {
+        ...locationBasics
+      }
+      location {
+        ...locationBasics
+      }
+    }
+  }
+}
+
 query getCharacter($characterId: ID!) {
   character(id: $characterId) {
     ...characterBasics

@@ -16,6 +16,9 @@ class Characters: RealmSwift.Object {
     @Persisted var status: String
     @Persisted var species: String
     @Persisted var type: String
+    @Persisted var origin: Locations?
+    @Persisted var location: Locations?
+    @Persisted var episodes: List<Episodes>
 
     convenience init(id: String, name: String, image: String, gender: String, status: String,
                      species: String, type: String) {
