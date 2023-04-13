@@ -292,3 +292,72 @@ class Network {
         }
     }
 }
+
+extension Network {
+
+    func getCharacters(page: Int) -> Results<Characters>? {
+        do {
+            let realm = try Realm()
+            let characters = realm.objects(Characters.self)
+            return page == 1 ? characters : nil
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+            return nil
+        }
+    }
+
+    func getCharacter(characterId: String) -> Characters? {
+        do {
+            let realm = try Realm()
+            let character = realm.object(ofType: Characters.self, forPrimaryKey: characterId)
+            return character
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+            return nil
+        }
+    }
+
+    func getLocations(page: Int) -> Results<Locations>? {
+        do {
+            let realm = try Realm()
+            let locations = realm.objects(Locations.self)
+            return page == 1 ? locations : nil
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+            return nil
+        }
+    }
+
+    func getLocation(locationId: String) -> Locations? {
+        do {
+            let realm = try Realm()
+            let location = realm.object(ofType: Locations.self, forPrimaryKey: locationId)
+            return location
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+            return nil
+        }
+    }
+
+    func getEpisodes(page: Int) -> Results<Episodes>? {
+        do {
+            let realm = try Realm()
+            let episodes = realm.objects(Episodes.self)
+            return page == 1 ? episodes : nil
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+            return nil
+        }
+    }
+
+    func getEpisode(episodeId: String) -> Episodes? {
+        do {
+            let realm = try Realm()
+            let episode = realm.object(ofType: Episodes.self, forPrimaryKey: episodeId)
+            return episode
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+            return nil
+        }
+    }
+}

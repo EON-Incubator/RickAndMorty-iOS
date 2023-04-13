@@ -64,7 +64,7 @@ class EpisodeDetailsViewController: BaseViewController {
                     snapshot.deleteAllItems()
                     snapshot.appendSections([.info, .characters])
                     snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
-                    snapshot.appendItems(episode.characters, toSection: .characters)
+                    snapshot.appendItems(Array(episode.characters), toSection: .characters)
                     self?.dataSource?.apply(snapshot, animatingDifferences: true)
                 }
             }
@@ -91,7 +91,7 @@ extension EpisodeDetailsViewController {
                 return self?.configInfoCell(cell: infoCell, data: episode, itemIndex: indexPath.item)
             case 1:
                 let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
-                if let character = episode as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
+                if let character = episode as? Characters? {
                     let urlString = character?.image ?? ""
                     characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
                     characterRowCell?.upperLabel.text = character?.name
@@ -140,7 +140,7 @@ extension EpisodeDetailsViewController {
                 cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
             case 1:
                 cell.leftLabel.text = K.Info.airDate
-                cell.rightLabel.text = episodeDetails.item.air_date
+                cell.rightLabel.text = episodeDetails.item.airDate
                 cell.infoImage.image = UIImage(named: K.Images.calendar)?.withRenderingMode(.alwaysTemplate)
                 cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
             default:
@@ -156,7 +156,7 @@ extension EpisodeDetailsViewController {
 extension EpisodeDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        if let character = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
+        if let character = dataSource?.itemIdentifier(for: indexPath) as? Characters? {
             viewModel.goCharacterDetails(id: (character?.id) ?? "", navController: navigationController ?? UINavigationController())
         }
     }
@@ -165,8 +165,8 @@ extension EpisodeDetailsViewController: UICollectionViewDelegate {
 // MARK: Struct for Diffable DataSource
 struct EpisodeDetails: Hashable {
     let id: UUID
-    let item: RickAndMortyAPI.GetEpisodeQuery.Data.Episode
-    init(id: UUID = UUID(), _ item: RickAndMortyAPI.GetEpisodeQuery.Data.Episode) {
+    let item: Episodes
+    init(id: UUID = UUID(), _ item: Episodes) {
         self.id = id
         self.item = item
     }
