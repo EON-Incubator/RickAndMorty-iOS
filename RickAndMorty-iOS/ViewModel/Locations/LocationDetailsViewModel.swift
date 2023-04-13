@@ -11,7 +11,7 @@ import UIKit
 
 class LocationDetailsViewModel {
 
-    let location = PassthroughSubject<RickAndMortyAPI.GetLocationQuery.Data.Location, Never>()
+    let location = PassthroughSubject<Locations, Never>()
     var locationId: String
     weak var coordinator: MainCoordinator?
 
@@ -26,6 +26,10 @@ class LocationDetailsViewModel {
     }
 
     func fetchData() {
+        if UserDefaults().bool(forKey: "isOfflineMode") {
+            getDataFromDB()
+            return
+        }
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetLocationQuery(
                 locationId: locationId
@@ -33,13 +37,42 @@ class LocationDetailsViewModel {
                     switch result {
                     case .success(let response):
                         if let loc = response.data?.location {
-                            self?.location.send(loc)
+                            self?.mapData(location: loc)
                         }
                     case .failure(let error):
                         print(error)
                         self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                     }
                 }
+    }
+
+    func mapData(location: RickAndMortyAPI.GetLocationQuery.Data.Location) {
+        let loc = Locations()
+        loc.id = location.id ?? ""
+        loc.name = location.name ?? ""
+        loc.type = location.type ?? ""
+        loc.dimension = location.dimension ?? ""
+        var charactersArray = [Characters]()
+        let charcters = location.residents
+        for char in charcters {
+            let character = Characters()
+            character.id = char?.id ?? ""
+            character.name = char?.name ?? ""
+            character.gender = char?.gender ?? ""
+            character.image = char?.image ?? ""
+            character.species = char?.species ?? ""
+            character.status = char?.status ?? ""
+            character.type = char?.type ?? ""
+            charactersArray.append(character)
+        }
+        loc.residents.append(objectsIn: charactersArray)
+        self.location.send(loc)
+    }
+
+    func getDataFromDB() {
+        if let loc = Network.shared.getLocation(locationId: locationId) {
+            self.location.send(loc)
+        }
     }
 
     func goCharacterDetails(id: String, navController: UINavigationController) {
