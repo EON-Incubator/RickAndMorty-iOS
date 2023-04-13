@@ -18,9 +18,11 @@ class YoutubePlayerView: UIView {
     }
 
     func setupViews() {
-        self.addSubview(wkytPlayerView)
-//        wkytPlayerView.addSubview(closeButton)
+        addSubview(wkytPlayerView)
         closeButton.addTarget(self, action: #selector(buttonPressed), for: .allTouchEvents)
+
+        backgroundColor = .clear
+//        insertSubview(blurView, at: 0)
     }
 
     lazy var wkytPlayerView: WKYTPlayerView = {
@@ -50,12 +52,21 @@ class YoutubePlayerView: UIView {
         }
     }
 
+    private let blurView: UIVisualEffectView = {
+        let effect = UIBlurEffect(style: .light)
+        let view = UIVisualEffectView(effect: effect)
+        return view
+    }()
+
     func setupConstraints() {
         wkytPlayerView.snp.makeConstraints { make in
             make.width.equalToSuperview()
-            make.centerY.equalToSuperview()
+//            make.centerY.equalToSuperview()
             make.height.equalTo(200)
         }
+//        blurView.snp.makeConstraints { make in
+//            make.top.bottom.leading.trailing.equalToSuperview()
+//        }
 //        closeButton.snp.makeConstraints { make in
 //            make.right.top.equalToSuperview().inset(-15)
 //            make.height.equalTo(50)

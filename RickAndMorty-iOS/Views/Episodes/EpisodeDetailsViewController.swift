@@ -45,10 +45,26 @@ class EpisodeDetailsViewController: BaseViewController, WKYTPlayerViewDelegate {
     }
 
     @objc func playVideo() {
+        let alertController = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
         let playerView = YoutubePlayerView()
         playerView.wkytPlayerView.delegate = self
-        episodeDetailsView.setupPlayer(player: playerView)
+
+        alertController.view.addSubview(playerView)
+        playerView.translatesAutoresizingMaskIntoConstraints = false
+        playerView.topAnchor.constraint(equalTo: alertController.view.topAnchor, constant: 10).isActive = true
+        playerView.rightAnchor.constraint(equalTo: alertController.view.rightAnchor, constant: -10).isActive = true
+        playerView.leftAnchor.constraint(equalTo: alertController.view.leftAnchor, constant: 10).isActive = true
+        playerView.bottomAnchor.constraint(equalTo: alertController.view.bottomAnchor, constant: -10).isActive = true
+
+        alertController.view.translatesAutoresizingMaskIntoConstraints = false
+        alertController.view.heightAnchor.constraint(equalToConstant: 300).isActive = true
+
+        playerView.backgroundColor = .clear
         playerView.wkytPlayerView.load(withVideoId: "sywZWeI_8Cg", playerVars: ["playsinline": 1, "modestbranding": 1, "showinfo": 0])
+
+        let cancelAction = UIAlertAction(title: "Close", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 
     func playerViewDidBecomeReady(_ playerView: WKYTPlayerView) {
