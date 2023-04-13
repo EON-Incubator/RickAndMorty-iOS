@@ -41,6 +41,13 @@ class EpisodeDetailsView: BaseView {
         collectionView.showsVerticalScrollIndicator = false
     }
 
+    func setupPlayer(player: YoutubePlayerView) {
+        addSubview(player)
+        player.snp.makeConstraints { make in
+            make.edges.equalTo(collectionView)
+        }
+    }
+
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))

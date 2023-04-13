@@ -107,6 +107,15 @@
         "revision" : "34950d5c751e9fe3b151041700d8a1255bec67ca",
         "version" : "8.1.0"
       }
+    },
+    {
+      "identity" : "youtubeplayer-in-wkwebview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/hmhv/YoutubePlayer-in-WKWebView",
+      "state" : {
+        "revision" : "970bf5f089171c78622633e9112e9d8730ace758",
+        "version" : "0.3.8"
+      }
     }
   ],
   "version" : 2

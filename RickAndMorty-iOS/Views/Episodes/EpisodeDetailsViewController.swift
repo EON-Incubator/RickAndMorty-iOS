@@ -7,8 +7,9 @@
 
 import UIKit
 import Combine
+import YoutubePlayer_in_WKWebView
 
-class EpisodeDetailsViewController: BaseViewController {
+class EpisodeDetailsViewController: BaseViewController, WKYTPlayerViewDelegate {
 
     typealias DataSource = UICollectionViewDiffableDataSource<EpisodeDetailsSection, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<EpisodeDetailsSection, AnyHashable>
@@ -40,6 +41,18 @@ class EpisodeDetailsViewController: BaseViewController {
         episodeDetailsView.collectionView.delegate = self
         episodeDetailsView.collectionView.refreshControl = UIRefreshControl()
         episodeDetailsView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(playVideo))
+    }
+
+    @objc func playVideo() {
+        let playerView = YoutubePlayerView()
+        playerView.wkytPlayerView.delegate = self
+        episodeDetailsView.setupPlayer(player: playerView)
+        playerView.wkytPlayerView.load(withVideoId: "sywZWeI_8Cg", playerVars: ["playsinline": 1, "modestbranding": 1, "showinfo": 0])
+    }
+
+    func playerViewDidBecomeReady(_ playerView: WKYTPlayerView) {
+        playerView.playVideo()
     }
 
     override func viewDidLoad() {
