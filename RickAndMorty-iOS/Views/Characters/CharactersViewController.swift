@@ -43,7 +43,6 @@ class CharactersViewController: BaseViewController {
         showEmptyData()
         subscribeToViewModel()
         viewModel.refresh()
-        Network.shared.downloadAllData()
     }
 
     override func viewWillAppear(_ animated: Bool) {

@@ -16,6 +16,13 @@ struct K {
         static let showId = 60625
     }
 
+    struct DataUpdate {
+        static let downloadAlertTitle = "New data available"
+        static let downloadAlertMsg = "Do you want to download Rick and Morty data for offline access?"
+        static let downloadAlertDownloadButton = "Download"
+        static let downloadAlertCancelButton = "Cancel"
+    }
+
     struct Titles {
         static let characters = "Characters"
         static let locations = "Locations"

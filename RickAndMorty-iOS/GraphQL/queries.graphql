@@ -1,3 +1,11 @@
+query getEpisodesCount {
+  episodes {
+    info {
+      count
+    }
+  }
+}
+
 query getCharacters($page: Int, $name: String, $status: String, $gender: String) {
   characters(page: $page, filter: {name: $name, status: $status, gender: $gender}) {
     info {

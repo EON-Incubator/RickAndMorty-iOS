@@ -49,6 +49,7 @@
 		F76E21D929E75551000CA322 /* TmdbEpisodeVideos.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */; };
 		F76E21DB29E88F8B000CA322 /* GetCharactersWithDetailsQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76E21DA29E88F8B000CA322 /* GetCharactersWithDetailsQuery.graphql.swift */; };
 		F76E21DD29E9D720000CA322 /* SearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76E21DC29E9D720000CA322 /* SearchResults.swift */; };
+		F76E21DF29E9E98B000CA322 /* GetEpisodesCountQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76E21DE29E9E98B000CA322 /* GetEpisodesCountQuery.graphql.swift */; };
 		F77E4B7C29B906D400B8B5CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B7B29B906D400B8B5CE /* AppDelegate.swift */; };
 		F77E4B7E29B906D400B8B5CE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B7D29B906D400B8B5CE /* SceneDelegate.swift */; };
 		F77E4B8529B906D600B8B5CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F77E4B8429B906D600B8B5CE /* Assets.xcassets */; };
@@ -176,6 +177,7 @@
 		F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TmdbEpisodeVideos.swift; path = "RickAndMorty-iOS/Models/TmdbEpisodeVideos.swift"; sourceTree = "<group>"; };
 		F76E21DA29E88F8B000CA322 /* GetCharactersWithDetailsQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetCharactersWithDetailsQuery.graphql.swift; sourceTree = "<group>"; };
 		F76E21DC29E9D720000CA322 /* SearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResults.swift; sourceTree = "<group>"; };
+		F76E21DE29E9E98B000CA322 /* GetEpisodesCountQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetEpisodesCountQuery.graphql.swift; sourceTree = "<group>"; };
 		F77E4B7829B906D400B8B5CE /* RickAndMorty-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RickAndMorty-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F77E4B7B29B906D400B8B5CE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F77E4B7D29B906D400B8B5CE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -662,6 +664,7 @@
 		F7EA92F729CB8F9600F7F112 /* Queries */ = {
 			isa = PBXGroup;
 			children = (
+				F76E21DE29E9E98B000CA322 /* GetEpisodesCountQuery.graphql.swift */,
 				F76E21DA29E88F8B000CA322 /* GetCharactersWithDetailsQuery.graphql.swift */,
 				F7EA92F829CB8F9600F7F112 /* GetCharactersQuery.graphql.swift */,
 				F7EA92F929CB8F9600F7F112 /* GetEpisodeQuery.graphql.swift */,
@@ -904,6 +907,7 @@
 				54BDF5C529BBC891003F7084 /* AvatarCell.swift in Sources */,
 				54BAB03029CE492700F67056 /* LoadMoreCell.swift in Sources */,
 				F7EA932A29CB8F9600F7F112 /* SchemaMetadata.graphql.swift in Sources */,
+				F76E21DF29E9E98B000CA322 /* GetEpisodesCountQuery.graphql.swift in Sources */,
 				F76E21D929E75551000CA322 /* TmdbEpisodeVideos.swift in Sources */,
 				F7EA931729CB8F9600F7F112 /* PageInfo.graphql.swift in Sources */,
 				54ECFC4129C546400049ACE3 /* SearchView.swift in Sources */,
@@ -1159,7 +1163,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8A8FN284QT;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "RickAndMorty-iOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Rick and Morty";
@@ -1172,7 +1176,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.EON-Incubator.RickAndMorty-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.EON-Incubator.RickAndMortyiOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1189,7 +1193,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8A8FN284QT;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "RickAndMorty-iOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Rick and Morty";
@@ -1202,7 +1206,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.EON-Incubator.RickAndMorty-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.EON-Incubator.RickAndMortyiOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;

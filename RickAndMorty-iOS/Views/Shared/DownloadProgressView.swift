@@ -45,6 +45,7 @@ class DownloadProgressView: BaseView {
     func setupViews() {
         accessibilityIdentifier = K.Identifiers.downloadProgressView
         backgroundColor = .clear
+        alpha = 0
         layer.cornerRadius = 25
         clipsToBounds = true
         insertSubview(blurView, at: 0)

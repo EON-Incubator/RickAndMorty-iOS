@@ -6,13 +6,17 @@
 //
 
 import Foundation
+import Network
 import Apollo
 import RealmSwift
 import TMDb
+import UIKit
 
 // swiftlint: disable file_length
 class Network {
     static let shared = Network()
+    let networkMontior = NWPathMonitor()
+    let defaults = UserDefaults.standard
     let apollo = ApolloClient(url: URL(string: "https://rickandmortyapi.com/graphql")!)
 
     private var charactersTotalPages = 0
@@ -44,7 +48,7 @@ class Network {
     }
 
     func downloadAllData() {
-        return
+        defaults.set(false, forKey: "isDownloadCompleted")
         DownloadProgressView.shared.show()
         downloadEpisodes(page: 1)
     }
@@ -71,6 +75,8 @@ class Network {
                                 self?.downloadCharacters(page: page + 1)
                             } else {
                                 DownloadProgressView.shared.dismiss()
+                                self?.defaults.set(true, forKey: "isDownloadCompleted")
+
                             }
                         }
                     case .failure(let error):
@@ -435,6 +441,50 @@ extension Network {
         } catch {
             print("REALM ERROR: error in initializing realm")
             return nil
+        }
+    }
+}
+// MARK: - Check for Data Update
+extension Network {
+    func checkForUpdate() {
+        Network.shared.apollo.fetch(query: RickAndMortyAPI.GetEpisodesCountQuery()) { [weak self] result in
+            switch result {
+            case .success(let response):
+                if let count = response.data?.episodes?.info?.count as? Int {
+                    print("Currently there are \(count) episodes from the API.")
+                    if let episodeCountFromDB = self?.episodeCountFromDB() {
+                        print("Currently there are \(episodeCountFromDB) episodes from the local DB.")
+                        if episodeCountFromDB == -1 { return }
+                        let isDownloadCompleted = self?.defaults.bool(forKey: "isDownloadCompleted") ?? false
+                        if (count > episodeCountFromDB) || !isDownloadCompleted {
+                            print("New data availble!")
+                            let downloadAlert = UIAlertController(title: K.DataUpdate.downloadAlertTitle, message: K.DataUpdate.downloadAlertMsg, preferredStyle: .alert)
+                            let downloadAction = UIAlertAction(title: K.DataUpdate.downloadAlertDownloadButton, style: .default) { _ in
+                                Network.shared.downloadAllData()
+                            }
+                            downloadAlert.addAction(downloadAction)
+                            let cancel = UIAlertAction(title: K.DataUpdate.downloadAlertCancelButton, style: .cancel)
+                            downloadAlert.addAction(cancel)
+                            DownloadProgressView.shared.currentWindow?.rootViewController?.present(downloadAlert, animated: true)
+                        } else {
+                            print("You have the latest data.")
+                        }
+                    }
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+
+    func episodeCountFromDB() -> Int {
+        do {
+            let realm = try Realm()
+            let episodes = realm.objects(Episodes.self)
+            return episodes.count
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+            return -1
         }
     }
 }
