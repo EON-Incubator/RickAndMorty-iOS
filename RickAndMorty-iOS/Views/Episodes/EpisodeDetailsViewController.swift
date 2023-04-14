@@ -233,22 +233,22 @@ extension EpisodeDetailsViewController: YTPlayerViewDelegate {
     func setupNavItems() {
         var linkMenuItems: [UIAction] {
             return [
-                UIAction(title: "Hulu", handler: { (_) in
+                UIAction(title: "Hulu", image: UIImage(named: "hulu"), handler: { (_) in
                     if let url = URL(string: K.Urls.hulu) {
                         UIApplication.shared.open(url)
                     }
                 }),
-                UIAction(title: "Amazon", handler: { (_) in
+                UIAction(title: "Amazon", image: UIImage(named: "amazon"), handler: { (_) in
                     if let url = URL(string: K.Urls.amazon) {
                         UIApplication.shared.open(url)
                     }
                 }),
-                UIAction(title: "Adult Swim", handler: { (_) in
+                UIAction(title: "Adult Swim", image: UIImage(named: "adultSwim"), handler: { (_) in
                     if let url = URL(string: K.Urls.adultSwim) {
                         UIApplication.shared.open(url)
                     }
                 }),
-                UIAction(title: "Apple", image: UIImage(systemName: "apple.logo"), handler: { (_) in
+                UIAction(title: "Apple", image: UIImage(systemName: "apple.logo", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), handler: { (_) in
                     if let url = URL(string: K.Urls.apple) {
                         UIApplication.shared.open(url)
                     }
