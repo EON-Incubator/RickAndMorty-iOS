@@ -35,6 +35,8 @@ struct K {
         static let characterAvatarCell = "CharacterAvatarCell"
         static let loadMoreCell = "LoadMoreCell"
         static let locationRowCell = "LocationRowCell"
+        static let carouselCell = "CarouselCell"
+        static let episodeOverviewCell = "EpisodeOverviewCell"
     }
 
     struct Headers {
@@ -92,6 +94,7 @@ struct K {
         static let systemMagnifyingGlass = "magnifyingglass"
         static let systemPerson = "person.circle"
         static let systemStar = "star"
+        static let episodeImageUrl = "https://image.tmdb.org/t/p/w400"
     }
 
     struct Fonts {

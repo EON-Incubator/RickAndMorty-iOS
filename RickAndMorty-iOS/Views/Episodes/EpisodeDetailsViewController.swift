@@ -41,6 +41,7 @@ class EpisodeDetailsViewController: BaseViewController {
         episodeDetailsView.collectionView.delegate = self
         episodeDetailsView.collectionView.refreshControl = UIRefreshControl()
         episodeDetailsView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
 
     override func viewDidLoad() {
@@ -170,7 +171,7 @@ extension EpisodeDetailsViewController {
 
     func configCarouselCell(cell: CarouselCell, itemIndex: Int) -> UICollectionViewCell {
         guard let filePath = self.viewModel.episodeImages?.stills[itemIndex].filePath else { return UICollectionViewCell()}
-        let imageUrl = "https://image.tmdb.org/t/p/w400\(filePath)"
+        let imageUrl = "\(K.Images.episodeImageUrl)\(filePath)"
         cell.carouselImage.sd_setImage(with: URL(string: imageUrl))
         return cell
     }

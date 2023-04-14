@@ -9,7 +9,7 @@ import UIKit
 
 class CarouselCell: UICollectionViewListCell {
 
-    static let identifier = "CarouselCell"
+    static let identifier = K.Identifiers.carouselCell
 
     lazy var carouselImage: UIImageView = {
         let imageView = UIImageView()

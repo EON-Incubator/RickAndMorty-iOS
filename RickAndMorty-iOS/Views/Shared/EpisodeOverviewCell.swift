@@ -9,7 +9,7 @@ import UIKit
 
 class EpisodeOverviewCell: UICollectionViewListCell {
 
-    static let identifier = "EpisodeOverviewCell"
+    static let identifier = K.Identifiers.episodeOverviewCell
 
     lazy var centerLabel: UILabel = {
         let label = UILabel()
