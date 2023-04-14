@@ -227,9 +227,7 @@ extension EpisodeDetailsViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: - YTPlayerView Delegate
-extension EpisodeDetailsViewController: YTPlayerViewDelegate {
-
+extension EpisodeDetailsViewController {
     func setupNavItems() {
         var linkMenuItems: [UIAction] {
             return [
@@ -268,31 +266,22 @@ extension EpisodeDetailsViewController: YTPlayerViewDelegate {
     }
 
     @objc func playVideo(sender: AnyObject) {
-        let videoId = viewModel.episodeVideo ?? ""
+        let youtubeViewController = YoutubeViewController(videoId: viewModel.episodeVideo ?? "")
+        youtubeViewController.modalPresentationStyle = .popover
 
-        let alertController = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
-
-        let playerView = YoutubePlayerView()
-
-        playerView.delegate = self
-
-        alertController.view.addSubview(playerView)
-
-        playerView.setupConstraints(controller: alertController)
-
-        playerView.load(withVideoId: videoId, playerVars: ["modestbranding": 1])
-
-        let cancelAction = UIAlertAction(title: "Close", style: UIAlertAction.Style.cancel) {_ in
-            playerView.stopVideo()
+        if let popover = youtubeViewController.popoverPresentationController {
+            popover.sourceView = sender as? UIView
+            let sheet = popover.adaptiveSheetPresentationController
+            sheet.detents = [
+                .custom(identifier: UISheetPresentationController.Detent.Identifier("small")) { _ in
+                    return 300
+                }
+            ]
+            sheet.prefersGrabberVisible = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+            sheet.prefersEdgeAttachedInCompactHeight = true
         }
-
-        alertController.addAction(cancelAction)
-
-        self.present(alertController, animated: true, completion: nil)
-    }
-
-    func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
-        playerView.playVideo()
+        present(youtubeViewController, animated: true, completion: nil)
     }
 }
 
