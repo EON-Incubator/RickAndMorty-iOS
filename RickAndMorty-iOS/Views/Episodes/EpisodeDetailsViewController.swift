@@ -229,10 +229,39 @@ extension EpisodeDetailsViewController: UICollectionViewDelegate {
 
 // MARK: - YTPlayerView Delegate
 extension EpisodeDetailsViewController: YTPlayerViewDelegate {
+
     func setupNavItems() {
+        var linkMenuItems: [UIAction] {
+            return [
+                UIAction(title: "Hulu", handler: { (_) in
+                    if let url = URL(string: K.Urls.hulu) {
+                        UIApplication.shared.open(url)
+                    }
+                }),
+                UIAction(title: "Amazon", handler: { (_) in
+                    if let url = URL(string: K.Urls.amazon) {
+                        UIApplication.shared.open(url)
+                    }
+                }),
+                UIAction(title: "Adult Swim", handler: { (_) in
+                    if let url = URL(string: K.Urls.adultSwim) {
+                        UIApplication.shared.open(url)
+                    }
+                }),
+                UIAction(title: "Apple", image: UIImage(systemName: "apple.logo"), handler: { (_) in
+                    if let url = URL(string: K.Urls.apple) {
+                        UIApplication.shared.open(url)
+                    }
+                })
+            ]
+        }
+
+        var linkMenu: UIMenu {
+            return UIMenu(title: "", image: nil, identifier: nil, children: linkMenuItems)
+        }
+
         let playIcon = UIBarButtonItem(image: UIImage(systemName: "play"), style: .plain, target: self, action: #selector(playVideo))
-        let LinkIcon = UIBarButtonItem(image: UIImage(systemName: "link"), style: .plain, target: self, action: #selector(playVideo))
-        navigationItem.rightBarButtonItem = LinkIcon
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "", image: UIImage(systemName: "link"), menu: linkMenu)
         if viewModel.episodeVideo != nil {
             navigationItem.rightBarButtonItems?.append(playIcon)
         }

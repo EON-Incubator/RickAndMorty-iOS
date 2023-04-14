@@ -121,5 +121,12 @@ struct K {
         static let dimension = UIColor(red: 0.87, green: 0.99, blue: 0.98, alpha: 0.4)
         static let type = UIColor(red: 1.00, green: 0.75, blue: 0.66, alpha: 0.4)
     }
+
+    struct Urls {
+        static let amazon = "https://www.amazon.com/gp/video/detail/0JHRH3V853S6L8MJQA4Q04BREF/ref=atv_dl_rdr?autoplay=1"
+        static let hulu = "https://www.hulu.com/series/rick-and-morty-d76d6361-3fbf-4842-8dd7-e05520557280"
+        static let adultSwim = "https://www.adultswim.com/videos/rick-and-morty"
+        static let apple = "https://tv.apple.com/ca/show/rick-and-morty/umc.cmc.12dp30hnvyq5fbm9716puu8zc"
+    }
 }
 // swiftlint: enable type_name
