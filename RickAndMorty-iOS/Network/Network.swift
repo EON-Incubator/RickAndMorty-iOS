@@ -345,10 +345,14 @@ extension Network {
 // MARK: - LocalDB Read Operations
 extension Network {
 
-    func getCharacters(page: Int) -> Results<Characters>? {
+    func getCharacters(page: Int, status: String, gender: String, name: String) -> Results<Characters>? {
+        let status = status.count > 0 ? status : "*"
+        let gender = gender.count > 0 ? gender : "*"
+        let name = name.count > 0 ? name : "*"
+
         do {
             let realm = try Realm()
-            let characters = realm.objects(Characters.self)
+            let characters = realm.objects(Characters.self).filter("status LIKE[c] %@ AND gender LIKE[c] %@ AND name LIKE[c] %@", status, gender, name)
             return page == 1 ? characters : nil
         } catch {
             print("REALM ERROR: error in initializing realm")

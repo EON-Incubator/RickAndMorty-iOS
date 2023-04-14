@@ -33,7 +33,7 @@ class CharactersViewModel {
 
     func fetchData(page: Int, name: String = "") {
         if UserDefaults().bool(forKey: "isOfflineMode") {
-            getDataFromDB(page: page)
+            getDataFromDB(page: page, name: name)
             return
         }
         Network.shared.apollo.fetch(
@@ -56,8 +56,8 @@ class CharactersViewModel {
                 }
     }
 
-    func getDataFromDB(page: Int) {
-        if let results = Network.shared.getCharacters(page: page) {
+    func getDataFromDB(page: Int, name: String = "") {
+        if let results = Network.shared.getCharacters(page: page, status: filterOptions.status, gender: filterOptions.gender, name: name) {
             self.mapDataFromDB(page: page, characters: results)
         } else {
             self.characters.value = [Characters]()
