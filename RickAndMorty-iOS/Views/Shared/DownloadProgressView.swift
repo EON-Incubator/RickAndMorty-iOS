@@ -36,6 +36,12 @@ class DownloadProgressView: BaseView {
         return label
     }()
 
+    let progressView: UIProgressView = {
+        let progressView = UIProgressView()
+        progressView.progressTintColor = .systemCyan
+        return progressView
+    }()
+
     override init() {
         super.init()
         setupViews()
@@ -46,11 +52,12 @@ class DownloadProgressView: BaseView {
         accessibilityIdentifier = K.Identifiers.downloadProgressView
         backgroundColor = .clear
         alpha = 0
-        layer.cornerRadius = 25
+        layer.cornerRadius = 30
         clipsToBounds = true
         insertSubview(blurView, at: 0)
         addSubview(dismissButton)
         addSubview(titleLabel)
+        addSubview(progressView)
         currentWindow?.addSubview(self)
         dismissButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
     }
@@ -60,7 +67,7 @@ class DownloadProgressView: BaseView {
         self.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(50)
+            make.height.equalTo(70)
         }
 
         blurView.snp.makeConstraints { make in
@@ -76,7 +83,12 @@ class DownloadProgressView: BaseView {
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
+            make.centerY.equalToSuperview().offset(-5)
+        }
+
+        progressView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp_bottomMargin).offset(15)
+            make.leading.trailing.equalToSuperview().inset(60)
         }
     }
 

@@ -55,9 +55,10 @@ class Network {
 
     func downloadCharacters(page: Int) {
         if charactersTotalPages > 0 {
-            let progress = Float(page) / Float(charactersTotalPages) * 100
-            let progressMsg = String(format: "Downloading Characters...%.0f%%", progress)
+            let progress = Float(page) / Float(charactersTotalPages)
+            let progressMsg = String(format: "Downloading Characters...%.0f%%", progress * 100)
             DownloadProgressView.shared.titleLabel.text = progressMsg
+            DownloadProgressView.shared.progressView.progress = progress
         }
         apollo.fetch(
             query: RickAndMortyAPI.GetCharactersWithDetailsQuery(
@@ -88,9 +89,10 @@ class Network {
 
     func downloadEpisodes(page: Int) {
         if episodesTotalPages > 0 {
-            let progress = Float(page) / Float(episodesTotalPages) * 100
-            let progressMsg = String(format: "Downloading Episodes...%.0f%%", progress)
+            let progress = Float(page) / Float(episodesTotalPages)
+            let progressMsg = String(format: "Downloading Episodes...%.0f%%", progress * 100)
             DownloadProgressView.shared.titleLabel.text = progressMsg
+            DownloadProgressView.shared.progressView.progress = progress
         }
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetEpisodesQuery(
@@ -118,9 +120,10 @@ class Network {
 
     func downloadLocations(page: Int) {
         if locationsTotalPages > 0 {
-            let progress = Float(page) / Float(locationsTotalPages) * 100
-            let progressMsg = String(format: "Downloading Locations...%.0f%%", progress)
+            let progress = Float(page) / Float(locationsTotalPages)
+            let progressMsg = String(format: "Downloading Locations...%.0f%%", progress * 100)
             DownloadProgressView.shared.titleLabel.text = progressMsg
+            DownloadProgressView.shared.progressView.progress = progress
         }
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetLocationsQuery(
@@ -171,7 +174,7 @@ class Network {
     func downloadEpisodeDetails(season: Int, episode: Int, parentId: String) {
         print("downloaded episode details.....S\(season)E\(episode)")
         DispatchQueue.main.async {
-            let progressMsg = "Downloading Details of Season \(season), Episode \(episode)..."
+            let progressMsg = "Downloading Episode Details..."
             DownloadProgressView.shared.titleLabel.text = progressMsg
         }
         let tmdb = TMDbAPI(apiKey: K.Tmdb.tmdbApiKey)
