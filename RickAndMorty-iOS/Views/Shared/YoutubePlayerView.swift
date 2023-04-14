@@ -9,21 +9,7 @@ import UIKit
 import SnapKit
 import YouTubeiOSPlayerHelper
 
-class YoutubePlayerView: BaseView {
-
-    override init() {
-        super.init()
-        setupViews()
-    }
-
-    func setupViews() {
-        addSubview(ytPlayerView)
-    }
-
-    lazy var ytPlayerView: YTPlayerView = {
-        let playerView = YTPlayerView()
-        return playerView
-    }()
+class YoutubePlayerView: YTPlayerView {
 
     func setupConstraints(controller: UIAlertController) {
         self.snp.makeConstraints { make in
@@ -32,10 +18,6 @@ class YoutubePlayerView: BaseView {
 
         controller.view.snp.makeConstraints { make in
             make.height.equalTo(300)
-        }
-
-        ytPlayerView.snp.makeConstraints { make in
-            make.edges.equalTo(self)
         }
     }
 }

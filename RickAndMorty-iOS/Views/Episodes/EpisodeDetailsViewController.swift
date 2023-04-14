@@ -76,7 +76,7 @@ class EpisodeDetailsViewController: BaseViewController {
                     DispatchQueue.main.async {
                         self?.title = episode.name
                         // add play icon to navigation bar
-                        self?.setupVideoItem()
+                        self?.setupNavItems()
                         self?.dataSource?.apply(snapshot, animatingDifferences: true)
                     }
                 }
@@ -229,9 +229,12 @@ extension EpisodeDetailsViewController: UICollectionViewDelegate {
 
 // MARK: - YTPlayerView Delegate
 extension EpisodeDetailsViewController: YTPlayerViewDelegate {
-    func setupVideoItem() {
+    func setupNavItems() {
+        let playIcon = UIBarButtonItem(image: UIImage(systemName: "play"), style: .plain, target: self, action: #selector(playVideo))
+        let LinkIcon = UIBarButtonItem(image: UIImage(systemName: "link"), style: .plain, target: self, action: #selector(playVideo))
+        navigationItem.rightBarButtonItem = LinkIcon
         if viewModel.episodeVideo != nil {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(playVideo))
+            navigationItem.rightBarButtonItems?.append(playIcon)
         }
     }
 
@@ -242,15 +245,18 @@ extension EpisodeDetailsViewController: YTPlayerViewDelegate {
 
         let playerView = YoutubePlayerView()
 
-        playerView.ytPlayerView.delegate = self
+        playerView.delegate = self
 
         alertController.view.addSubview(playerView)
 
         playerView.setupConstraints(controller: alertController)
 
-        playerView.ytPlayerView.load(withVideoId: videoId, playerVars: ["modestbranding": 1])
+        playerView.load(withVideoId: videoId, playerVars: ["modestbranding": 1])
 
-        let cancelAction = UIAlertAction(title: "Close", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Close", style: UIAlertAction.Style.cancel) {_ in
+            playerView.stopVideo()
+        }
+
         alertController.addAction(cancelAction)
 
         self.present(alertController, animated: true, completion: nil)
