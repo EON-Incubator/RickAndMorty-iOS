@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import YoutubePlayer_in_WKWebView
 
-class EpisodeDetailsViewController: BaseViewController, WKYTPlayerViewDelegate {
+class EpisodeDetailsViewController: BaseViewController {
 
     typealias DataSource = UICollectionViewDiffableDataSource<EpisodeDetailsSection, AnyHashable>
     typealias Snapshot = NSDiffableDataSourceSnapshot<EpisodeDetailsSection, AnyHashable>
@@ -41,34 +41,6 @@ class EpisodeDetailsViewController: BaseViewController, WKYTPlayerViewDelegate {
         episodeDetailsView.collectionView.delegate = self
         episodeDetailsView.collectionView.refreshControl = UIRefreshControl()
         episodeDetailsView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(playVideo))
-    }
-
-    @objc func playVideo() {
-        let alertController = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
-        let playerView = YoutubePlayerView()
-        playerView.wkytPlayerView.delegate = self
-
-        alertController.view.addSubview(playerView)
-        playerView.translatesAutoresizingMaskIntoConstraints = false
-        playerView.topAnchor.constraint(equalTo: alertController.view.topAnchor, constant: 10).isActive = true
-        playerView.rightAnchor.constraint(equalTo: alertController.view.rightAnchor, constant: -10).isActive = true
-        playerView.leftAnchor.constraint(equalTo: alertController.view.leftAnchor, constant: 10).isActive = true
-        playerView.bottomAnchor.constraint(equalTo: alertController.view.bottomAnchor, constant: -10).isActive = true
-
-        alertController.view.translatesAutoresizingMaskIntoConstraints = false
-        alertController.view.heightAnchor.constraint(equalToConstant: 300).isActive = true
-
-        playerView.backgroundColor = .clear
-        playerView.wkytPlayerView.load(withVideoId: "sywZWeI_8Cg", playerVars: ["playsinline": 1, "modestbranding": 1, "showinfo": 0])
-
-        let cancelAction = UIAlertAction(title: "Close", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        self.present(alertController, animated: true, completion: nil)
-    }
-
-    func playerViewDidBecomeReady(_ playerView: WKYTPlayerView) {
-        playerView.playVideo()
     }
 
     override func viewDidLoad() {
@@ -102,6 +74,8 @@ class EpisodeDetailsViewController: BaseViewController, WKYTPlayerViewDelegate {
                     snapshot.appendItems(episode.characters, toSection: .characters)
                     DispatchQueue.main.async {
                         self?.title = episode.name
+                        // add play icon to navigation bar
+                        self?.setupVideoItem()
                         self?.dataSource?.apply(snapshot, animatingDifferences: true)
                     }
                 }
@@ -249,6 +223,39 @@ extension EpisodeDetailsViewController: UICollectionViewDelegate {
         if let character = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
             viewModel.goCharacterDetails(id: (character?.id) ?? "", navController: navigationController ?? UINavigationController())
         }
+    }
+}
+
+// MARK: - WKYTPlayerView Delegate
+extension EpisodeDetailsViewController: WKYTPlayerViewDelegate {
+    func setupVideoItem() {
+        if viewModel.episodeVideo != nil {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(playVideo))
+        }
+    }
+
+    @objc func playVideo(sender: AnyObject) {
+        let videoId = viewModel.episodeVideo ?? ""
+
+        let alertController = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
+
+        let playerView = YoutubePlayerView()
+        playerView.wkytPlayerView.delegate = self
+
+        alertController.view.addSubview(playerView)
+
+        playerView.setupConstraints(controller: alertController)
+
+        playerView.wkytPlayerView.load(withVideoId: videoId)
+
+        let cancelAction = UIAlertAction(title: "Close", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+
+        self.present(alertController, animated: true, completion: nil)
+    }
+
+    func playerViewDidBecomeReady(_ playerView: WKYTPlayerView) {
+        playerView.playVideo()
     }
 }
 

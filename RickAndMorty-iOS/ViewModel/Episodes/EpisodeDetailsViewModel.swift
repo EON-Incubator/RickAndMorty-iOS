@@ -16,6 +16,7 @@ class EpisodeDetailsViewModel {
     weak var coordinator: MainCoordinator?
     var episodeData: (any Hashable)?
     var episodeDetails: TVShowEpisode?
+    var episodeVideo: String?
 
     init(episodeId: String) {
         self.episodeId = episodeId
@@ -37,6 +38,10 @@ class EpisodeDetailsViewModel {
             let season = "\(episodeArray?[1] ?? "")\(episodeArray?[2] ?? "")"
             Task {
                 episodeDetails = try? await tmdb.tvShowEpisodes.details(forEpisode: Int(episode) ?? 0, inSeason: Int(season) ?? 0, inTVShow: 60625)
+                let video = try? await tmdb.tvShowEpisodes.videos(forEpisode: Int(episode) ?? 0, inSeason: Int(season) ?? 0, inTVShow: 60625)
+                if let videoId = video?.results.first?.key {
+                    episodeVideo = videoId
+                }
                 episodeImages = try? await tmdb.tvShowEpisodes.images(forEpisode: Int(episode) ?? 0, inSeason: Int(season) ?? 0, inTVShow: 60625)
             }
         }
