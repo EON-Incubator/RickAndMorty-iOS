@@ -32,13 +32,10 @@ class YoutubePlayerView: BaseView {
 
         controller.view.snp.makeConstraints { make in
             make.height.equalTo(300)
-            make.top.equalTo(safeAreaLayoutGuide)
         }
 
         wkytPlayerView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.top.bottom.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.edges.equalTo(self)
         }
     }
 }
