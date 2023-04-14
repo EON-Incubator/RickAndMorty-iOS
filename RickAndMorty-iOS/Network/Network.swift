@@ -346,6 +346,28 @@ extension Network {
 // MARK: - LocalDB Read Operations
 extension Network {
 
+    func search(keyword: String) -> SearchResults {
+        var characters = [Characters]()
+        var locationsWithName = [Locations]()
+        var locationsWithType = [Locations]()
+
+        do {
+            let realm = try Realm()
+            let char = realm.objects(Characters.self).filter("name CONTAINS[c] %@", keyword)
+            characters = Array(char)
+            let locWithName = realm.objects(Locations.self).filter("name CONTAINS[c] %@", keyword)
+            locationsWithName = Array(locWithName)
+            let locWithType = realm.objects(Locations.self).filter("type CONTAINS[c] %@", keyword)
+            locationsWithType = Array(locWithType)
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+        }
+
+        let searchResults = SearchResults(characters: characters, charactersTotalPages: 1, locationsWithName: locationsWithName, locationsWithNameTotalPages: 1, locationsWithType: locationsWithType, locationsWithTypeTotalPages: 1)
+
+        return searchResults
+    }
+
     func getCharacters(page: Int, status: String, gender: String, name: String) -> Results<Characters>? {
         let status = status.count > 0 ? status : "*"
         let gender = gender.count > 0 ? gender : "*"

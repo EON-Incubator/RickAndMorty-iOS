@@ -9,19 +9,9 @@ import Foundation
 import Combine
 import UIKit
 
-struct SearchResult {
-    let characters: [Characters]
-    let charactersTotalPages: Int
-    let locationsWithName: [Locations]
-    let locationsWithNameTotalPages: Int
-    let locationsWithType: [Locations]
-    let locationsWithTypeTotalPages: Int
-
-}
-
 class SearchViewModel {
 
-    let searchResults = PassthroughSubject<SearchResult, Never>()
+    let searchResults = PassthroughSubject<SearchResults, Never>()
     // for viewModel testing
     let characters = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.Characters.Result], Never>([])
     let locatonsWithGivenName = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result], Never>([])
@@ -39,6 +29,10 @@ class SearchViewModel {
     }
 
     func fetchData(input: String) {
+        if UserDefaults().bool(forKey: "isOfflineMode") {
+            getDataFromDB(keyword: input)
+            return
+        }
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.SearchForQuery(keyword: GraphQLNullable<String>(stringLiteral: input))) { [weak self] result in
                 switch result {
@@ -49,7 +43,6 @@ class SearchViewModel {
                     guard let locationsWithTypeData = data.locationsWithType?.results else { return }
 
                     self?.mapData(data: data)
-                    // self?.searchResults.send(data)
 
                     self?.characters.value = charactersData.compactMap { $0 }
                     self?.locatonsWithGivenName.value = locationsWithNameData.compactMap { $0 }
@@ -60,6 +53,11 @@ class SearchViewModel {
                     self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                 }
             }
+    }
+
+    func getDataFromDB(keyword: String) {
+        let results = Network.shared.search(keyword: keyword)
+        self.searchResults.send(results)
     }
 
     func mapData(data: RickAndMortyAPI.SearchForQuery.Data) {
@@ -141,7 +139,7 @@ class SearchViewModel {
             }
         }
 
-        let searchResults = SearchResult(characters: characters, charactersTotalPages: charactersTotalPages, locationsWithName: locationsWithName, locationsWithNameTotalPages: locationsWithNameTotalPages, locationsWithType: locationsWithType, locationsWithTypeTotalPages: locationsWithTypeTotalPages)
+        let searchResults = SearchResults(characters: characters, charactersTotalPages: charactersTotalPages, locationsWithName: locationsWithName, locationsWithNameTotalPages: locationsWithNameTotalPages, locationsWithType: locationsWithType, locationsWithTypeTotalPages: locationsWithTypeTotalPages)
 
         self.searchResults.send(searchResults)
     }

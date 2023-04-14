@@ -83,7 +83,7 @@ class SearchViewController: BaseViewController {
                     self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreCharacters)
                 }
                 self?.snapshot.appendItems(self?.uniqueLocations ?? [], toSection: .locations)
-                if self?.totalLocationsPage ?? 0 > 1 {
+                if self?.totalLocationsPage ?? 0 > 2 {
                     self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreLocations)
                 }
             case 1:
@@ -95,7 +95,7 @@ class SearchViewController: BaseViewController {
             case 2:
                 self?.currentLocationsPage = 1
                 self?.snapshot.appendItems(self?.uniqueLocations ?? [], toSection: .locations)
-                if self?.totalLocationsPage ?? 0 > 1 {
+                if self?.totalLocationsPage ?? 0 > 2 {
                     self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreLocations)
                 }
             default:

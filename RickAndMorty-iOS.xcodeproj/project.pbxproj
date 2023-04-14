@@ -48,6 +48,7 @@
 		F76E21D729E71682000CA322 /* TmdbEpisodeImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76E21D629E71682000CA322 /* TmdbEpisodeImages.swift */; };
 		F76E21D929E75551000CA322 /* TmdbEpisodeVideos.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */; };
 		F76E21DB29E88F8B000CA322 /* GetCharactersWithDetailsQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76E21DA29E88F8B000CA322 /* GetCharactersWithDetailsQuery.graphql.swift */; };
+		F76E21DD29E9D720000CA322 /* SearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76E21DC29E9D720000CA322 /* SearchResults.swift */; };
 		F77E4B7C29B906D400B8B5CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B7B29B906D400B8B5CE /* AppDelegate.swift */; };
 		F77E4B7E29B906D400B8B5CE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B7D29B906D400B8B5CE /* SceneDelegate.swift */; };
 		F77E4B8529B906D600B8B5CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F77E4B8429B906D600B8B5CE /* Assets.xcassets */; };
@@ -174,6 +175,7 @@
 		F76E21D629E71682000CA322 /* TmdbEpisodeImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbEpisodeImages.swift; sourceTree = "<group>"; };
 		F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TmdbEpisodeVideos.swift; path = "RickAndMorty-iOS/Models/TmdbEpisodeVideos.swift"; sourceTree = "<group>"; };
 		F76E21DA29E88F8B000CA322 /* GetCharactersWithDetailsQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetCharactersWithDetailsQuery.graphql.swift; sourceTree = "<group>"; };
+		F76E21DC29E9D720000CA322 /* SearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResults.swift; sourceTree = "<group>"; };
 		F77E4B7829B906D400B8B5CE /* RickAndMorty-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RickAndMorty-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F77E4B7B29B906D400B8B5CE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F77E4B7D29B906D400B8B5CE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 				F729CB6929E5A9F10051E624 /* Characters.swift */,
 				F729CB6D29E60CF70051E624 /* Locations.swift */,
 				F729CB6B29E5DAE30051E624 /* Episodes.swift */,
+				F76E21DC29E9D720000CA322 /* SearchResults.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -963,6 +966,7 @@
 				54CA239A29D5FD0900898FBC /* K.swift in Sources */,
 				54BDF5BE29BBB2CB003F7084 /* CharacterDetailsViewController.swift in Sources */,
 				544A6CC829C0F8A70055FB75 /* RowCell.swift in Sources */,
+				F76E21DD29E9D720000CA322 /* SearchResults.swift in Sources */,
 				544A6CC429BFA8980055FB75 /* CharacterDetailsViewModel.swift in Sources */,
 				F7EA932729CB8F9600F7F112 /* Episodes.graphql.swift in Sources */,
 				F7EA932829CB8F9600F7F112 /* Locations.graphql.swift in Sources */,
