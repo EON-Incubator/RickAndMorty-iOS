@@ -11,7 +11,7 @@ class SearchView: BaseView {
 
     let loadingView = LoadingView()
 
-    let locationCell = UICollectionView.CellRegistration<LocationRowCell, RickAndMortyAPI.LocationDetails> { (cell, _ indexPath, location) in
+    let locationCell = UICollectionView.CellRegistration<LocationRowCell, Locations> { (cell, _ indexPath, location) in
         cell.lowerRightLabel.isHidden = false
         cell.upperLabel.text = location.name
         cell.lowerLeftLabel.text = location.type
@@ -24,7 +24,7 @@ class SearchView: BaseView {
         for index in 0...3 {
             let isIndexValid = location.residents.indices.contains(index)
             if isIndexValid {
-                let urlString = location.residents[index]?.image ?? ""
+                let urlString = location.residents[index].image
                 cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
             }
         }

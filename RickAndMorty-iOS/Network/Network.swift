@@ -44,6 +44,7 @@ class Network {
     }
 
     func downloadAllData() {
+        return
         DownloadProgressView.shared.show()
         downloadEpisodes(page: 1)
     }

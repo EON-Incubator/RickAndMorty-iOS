@@ -16,7 +16,7 @@ struct FilterOptions {
 
 class CharactersViewModel {
 
-    let charactersForSearch = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
+    let charactersForSearch = CurrentValueSubject<[Characters], Never>([])
     var characters = CurrentValueSubject<[Characters], Never>([])
     var name = ""
     var currentPage = 0 {
@@ -73,7 +73,6 @@ class CharactersViewModel {
     }
 
     func mapData(page: Int, characters: [RickAndMortyAPI.GetCharactersQuery.Data.Characters.Result?]) {
-        charactersForSearch.value = (characters.compactMap { $0?.fragments.characterBasics })
 
         var charatersArray = [Characters]()
 
@@ -88,6 +87,8 @@ class CharactersViewModel {
             character.type = item?.type ?? ""
             charatersArray.append(character)
         }
+
+        charactersForSearch.value = (charatersArray.compactMap { $0 })
 
         if page == 1 {
             self.characters.value = (charatersArray.compactMap { $0 })

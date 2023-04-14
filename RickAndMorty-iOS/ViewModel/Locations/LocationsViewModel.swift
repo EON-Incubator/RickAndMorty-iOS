@@ -12,8 +12,8 @@ import RealmSwift
 
 class LocationsViewModel {
 
-    let locationsNameSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
-    let locationsTypeSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
+    let locationsNameSearch = CurrentValueSubject<[Locations], Never>([])
+    let locationsTypeSearch = CurrentValueSubject<[Locations], Never>([])
 
     var locations = CurrentValueSubject<[Locations], Never>([])
     var currentPage = 0 {
@@ -92,8 +92,8 @@ class LocationsViewModel {
             locationsArray.append(location)
         }
 
-//        locationsNameSearch.value = (locations.compactMap { $0?.fragments.locationDetails })
-//        locationsTypeSearch.value = (locations.compactMap { $0?.fragments.locationDetails })
+        locationsNameSearch.value = (locationsArray.compactMap { $0 })
+        locationsTypeSearch.value = (locationsArray.compactMap { $0 })
 
         if page == 1 {
             self.locations.value = (locationsArray.compactMap { $0 })

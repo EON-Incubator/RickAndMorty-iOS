@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         // SDImageCache.shared.config.shouldCacheImagesInMemory = false
         let defaults = UserDefaults.standard
-        defaults.set(true, forKey: "isOfflineMode")
+        defaults.set(false, forKey: "isOfflineMode")
         return true
     }
 
