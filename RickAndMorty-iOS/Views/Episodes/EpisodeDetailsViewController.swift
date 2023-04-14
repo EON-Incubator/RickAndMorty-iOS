@@ -7,7 +7,7 @@
 
 import UIKit
 import Combine
-import YoutubePlayer_in_WKWebView
+import YouTubeiOSPlayerHelper
 
 class EpisodeDetailsViewController: BaseViewController {
 
@@ -226,8 +226,8 @@ extension EpisodeDetailsViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: - WKYTPlayerView Delegate
-extension EpisodeDetailsViewController: WKYTPlayerViewDelegate {
+// MARK: - YTPlayerView Delegate
+extension EpisodeDetailsViewController: YTPlayerViewDelegate {
     func setupVideoItem() {
         if viewModel.episodeVideo != nil {
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(playVideo))
@@ -240,13 +240,14 @@ extension EpisodeDetailsViewController: WKYTPlayerViewDelegate {
         let alertController = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
 
         let playerView = YoutubePlayerView()
-        playerView.wkytPlayerView.delegate = self
+
+        playerView.ytPlayerView.delegate = self
 
         alertController.view.addSubview(playerView)
 
         playerView.setupConstraints(controller: alertController)
 
-        playerView.wkytPlayerView.load(withVideoId: videoId)
+        playerView.ytPlayerView.load(withVideoId: videoId, playerVars: ["modestbranding": 1])
 
         let cancelAction = UIAlertAction(title: "Close", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
@@ -254,7 +255,7 @@ extension EpisodeDetailsViewController: WKYTPlayerViewDelegate {
         self.present(alertController, animated: true, completion: nil)
     }
 
-    func playerViewDidBecomeReady(_ playerView: WKYTPlayerView) {
+    func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
         playerView.playVideo()
     }
 }

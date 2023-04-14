@@ -109,12 +109,12 @@
       }
     },
     {
-      "identity" : "youtubeplayer-in-wkwebview",
+      "identity" : "youtube-ios-player-helper",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/hmhv/YoutubePlayer-in-WKWebView",
+      "location" : "https://github.com/youtube/youtube-ios-player-helper",
       "state" : {
-        "revision" : "970bf5f089171c78622633e9112e9d8730ace758",
-        "version" : "0.3.8"
+        "revision" : "f57129cd4380ec0a74dd3a59da3270a1d653d59b",
+        "version" : "1.0.4"
       }
     }
   ],

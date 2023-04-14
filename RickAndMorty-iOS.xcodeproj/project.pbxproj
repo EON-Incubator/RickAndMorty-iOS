@@ -25,8 +25,8 @@
 		544A6CD629C11AD40055FB75 /* EpisodeDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CD529C11AD40055FB75 /* EpisodeDetailsView.swift */; };
 		544A6CD829C11BAA0055FB75 /* EpisodeDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CD729C11BAA0055FB75 /* EpisodeDetailsViewModel.swift */; };
 		54644B7929CA8AC7007FB8B3 /* EmptyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54644B7829CA8AC7007FB8B3 /* EmptyData.swift */; };
-		5475A18329E8564E000D27C8 /* YoutubePlayer-in-WKWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 5475A18229E8564E000D27C8 /* YoutubePlayer-in-WKWebView */; };
 		5475A18529E856AE000D27C8 /* YoutubePlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5475A18429E856AE000D27C8 /* YoutubePlayerView.swift */; };
+		54941D9529E9B47C0076DD20 /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 54941D9429E9B47C0076DD20 /* YouTubeiOSPlayerHelper */; };
 		54A0C36929E609A9009153BF /* CarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A0C36829E609A9009153BF /* CarouselCell.swift */; };
 		54A2EC3829BB7CEE006E880E /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 54A2EC3729BB7CEE006E880E /* SDWebImage */; };
 		54A2EC3C29BB7D7C006E880E /* CharactersGridCellSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A2EC3B29BB7D7C006E880E /* CharactersGridCellSpec.swift */; };
@@ -238,11 +238,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5475A18329E8564E000D27C8 /* YoutubePlayer-in-WKWebView in Frameworks */,
 				5447EE1D29BA591800D2D05A /* SDWebImage in Frameworks */,
 				F77E4B9F29B94B9300B8B5CE /* Apollo in Frameworks */,
 				5447EE1A29BA36DC00D2D05A /* SnapKit in Frameworks */,
 				54C01EA229E49586009847AE /* TMDb in Frameworks */,
+				54941D9529E9B47C0076DD20 /* YouTubeiOSPlayerHelper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -708,7 +708,7 @@
 				5447EE1929BA36DC00D2D05A /* SnapKit */,
 				5447EE1C29BA591800D2D05A /* SDWebImage */,
 				54C01EA129E49586009847AE /* TMDb */,
-				5475A18229E8564E000D27C8 /* YoutubePlayer-in-WKWebView */,
+				54941D9429E9B47C0076DD20 /* YouTubeiOSPlayerHelper */,
 			);
 			productName = "RickAndMorty-iOS";
 			productReference = F77E4B7829B906D400B8B5CE /* RickAndMorty-iOS.app */;
@@ -800,7 +800,7 @@
 				F77E4BF129BA3BE100B8B5CE /* XCRemoteSwiftPackageReference "Quick" */,
 				F77E4BF429BA3BF200B8B5CE /* XCRemoteSwiftPackageReference "Nimble" */,
 				54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */,
-				5475A18129E8564E000D27C8 /* XCRemoteSwiftPackageReference "YoutubePlayer-in-WKWebView" */,
+				54941D9329E9B47C0076DD20 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 			);
 			productRefGroup = F77E4B7929B906D400B8B5CE /* Products */;
 			projectDirPath = "";
@@ -1312,12 +1312,12 @@
 				kind = branch;
 			};
 		};
-		5475A18129E8564E000D27C8 /* XCRemoteSwiftPackageReference "YoutubePlayer-in-WKWebView" */ = {
+		54941D9329E9B47C0076DD20 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hmhv/YoutubePlayer-in-WKWebView";
+			repositoryURL = "https://github.com/youtube/youtube-ios-player-helper";
 			requirement = {
 				kind = exactVersion;
-				version = 0.3.8;
+				version = 1.0.4;
 			};
 		};
 		54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */ = {
@@ -1365,10 +1365,10 @@
 			package = 5447EE1B29BA591800D2D05A /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
 		};
-		5475A18229E8564E000D27C8 /* YoutubePlayer-in-WKWebView */ = {
+		54941D9429E9B47C0076DD20 /* YouTubeiOSPlayerHelper */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 5475A18129E8564E000D27C8 /* XCRemoteSwiftPackageReference "YoutubePlayer-in-WKWebView" */;
-			productName = "YoutubePlayer-in-WKWebView";
+			package = 54941D9329E9B47C0076DD20 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */;
+			productName = YouTubeiOSPlayerHelper;
 		};
 		54A2EC3729BB7CEE006E880E /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;

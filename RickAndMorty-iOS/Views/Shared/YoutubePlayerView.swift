@@ -7,7 +7,7 @@
 
 import UIKit
 import SnapKit
-import YoutubePlayer_in_WKWebView
+import YouTubeiOSPlayerHelper
 
 class YoutubePlayerView: BaseView {
 
@@ -17,11 +17,11 @@ class YoutubePlayerView: BaseView {
     }
 
     func setupViews() {
-        addSubview(wkytPlayerView)
+        addSubview(ytPlayerView)
     }
 
-    lazy var wkytPlayerView: WKYTPlayerView = {
-        let playerView = WKYTPlayerView()
+    lazy var ytPlayerView: YTPlayerView = {
+        let playerView = YTPlayerView()
         return playerView
     }()
 
@@ -34,7 +34,7 @@ class YoutubePlayerView: BaseView {
             make.height.equalTo(300)
         }
 
-        wkytPlayerView.snp.makeConstraints { make in
+        ytPlayerView.snp.makeConstraints { make in
             make.edges.equalTo(self)
         }
     }
