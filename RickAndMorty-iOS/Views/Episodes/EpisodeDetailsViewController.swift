@@ -14,8 +14,10 @@ class EpisodeDetailsViewController: BaseViewController {
     typealias Snapshot = NSDiffableDataSourceSnapshot<EpisodeDetailsSection, AnyHashable>
 
     enum EpisodeDetailsSection: Int, CaseIterable {
+        case overview
         case info
         case characters
+        case emptyOverview
         case emptyInfo
         case emptyCharacters
     }
@@ -50,22 +52,26 @@ class EpisodeDetailsViewController: BaseViewController {
 
     func showEmptyData() {
         snapshot.deleteAllItems()
-        snapshot.appendSections([.info, .characters, .emptyInfo, .emptyCharacters])
-        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 2), toSection: .emptyInfo)
+        snapshot.appendSections([.overview, .info, .characters, .emptyOverview, .emptyInfo, .emptyCharacters])
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 1), toSection: .emptyOverview)
+        snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 3), toSection: .emptyInfo)
         snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: 4), toSection: .emptyCharacters)
         self.dataSource?.apply(snapshot, animatingDifferences: true)
     }
 
     func subscribeToViewModel() {
         viewModel.episode.sink(receiveValue: { [weak self] episode in
-            self?.title = episode.name
             if !episode.characters.isEmpty {
                 if var snapshot = self?.snapshot {
                     snapshot.deleteAllItems()
-                    snapshot.appendSections([.info, .characters])
-                    snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
+                    snapshot.appendSections([.overview, .info, .characters])
+                    snapshot.appendItems([EpisodeDetails(episode)], toSection: .overview)
+                    snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
                     snapshot.appendItems(Array(episode.characters), toSection: .characters)
-                    self?.dataSource?.apply(snapshot, animatingDifferences: true)
+                    DispatchQueue.main.async {
+                        self?.title = episode.name
+                        self?.dataSource?.apply(snapshot, animatingDifferences: true)
+                    }
                 }
             }
             // Dismiss refresh control.
@@ -87,9 +93,15 @@ extension EpisodeDetailsViewController {
 
             switch indexPath.section {
             case 0:
+                let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier, for: indexPath) as? EpisodeOverviewCell
+                if let episodeDetails = episode as? EpisodeDetails {
+                    overviewCell?.centerLabel.text = episodeDetails.item.episodeDetails?.overview
+                }
+                return overviewCell
+            case 1:
                 guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell else { return nil }
                 return self?.configInfoCell(cell: infoCell, data: episode, itemIndex: indexPath.item)
-            case 1:
+            case 2:
                 let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
                 if let character = episode as? Characters? {
                     let urlString = character?.image ?? ""
@@ -101,12 +113,17 @@ extension EpisodeDetailsViewController {
                     characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character?.status ?? "")
                     return characterRowCell
                 }
+
                 // empty sections
-            case 2:
+            case 3:
+                let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier, for: indexPath) as? EpisodeOverviewCell
+                overviewCell?.showLoadingAnimation()
+                return overviewCell
+            case 4:
                 let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier, for: indexPath) as? InfoCell
                 infoCell?.showLoadingAnimation()
                 return infoCell
-            case 3:
+            case 5:
                 let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell
                 characterRowCell?.showLoadingAnimation()
                 return characterRowCell
@@ -123,7 +140,10 @@ extension EpisodeDetailsViewController {
             guard let headerView = self?.episodeDetailsView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
             }
-            headerView.textLabel.text = indexPath.section == 0 || indexPath.section == 2 ? K.Headers.info : K.Headers.characters
+            headerView.textLabel.text = indexPath.section == 1 ? K.Headers.info : K.Headers.characters
+            if indexPath.section == 0 {
+                headerView.textLabel.text = "OVERVIEW"
+            }
             headerView.textLabel.textColor = .lightGray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
@@ -143,6 +163,11 @@ extension EpisodeDetailsViewController {
                 cell.rightLabel.text = episodeDetails.item.airDate
                 cell.infoImage.image = UIImage(named: K.Images.calendar)?.withRenderingMode(.alwaysTemplate)
                 cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
+            case 2:
+                cell.rightLabel.text = String(format: "%.1f", episodeDetails.item.episodeDetails?.voteAverage ?? 0)
+                cell.leftLabel.text = "Rating"
+                cell.infoImage.image = UIImage(systemName: "star")
+                cell.rightLabel.adjustsFontSizeToFitWidth = false
             default:
                 cell.rightLabel.text = "-"
             }

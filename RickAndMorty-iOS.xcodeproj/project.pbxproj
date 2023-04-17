@@ -31,6 +31,8 @@
 		54BDF5BE29BBB2CB003F7084 /* CharacterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BDF5BD29BBB2CB003F7084 /* CharacterDetailsViewController.swift */; };
 		54BDF5C229BBBEB9003F7084 /* CharacterDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BDF5C129BBBEB9003F7084 /* CharacterDetailsView.swift */; };
 		54BDF5C529BBC891003F7084 /* AvatarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BDF5C429BBC891003F7084 /* AvatarCell.swift */; };
+		54C01EA229E49586009847AE /* TMDb in Frameworks */ = {isa = PBXBuildFile; productRef = 54C01EA129E49586009847AE /* TMDb */; };
+		54C01EA429E4BBC4009847AE /* EpisodeOverviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C01EA329E4BBC4009847AE /* EpisodeOverviewCell.swift */; };
 		54CA239A29D5FD0900898FBC /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CA239929D5FD0900898FBC /* K.swift */; };
 		54D1E4E029D492CE00571BC5 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D1E4DF29D492CE00571BC5 /* LoadingView.swift */; };
 		54ECFC3F29C545A00049ACE3 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54ECFC3E29C545A00049ACE3 /* SearchViewController.swift */; };
@@ -162,6 +164,7 @@
 		54BDF5BD29BBB2CB003F7084 /* CharacterDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsViewController.swift; sourceTree = "<group>"; };
 		54BDF5C129BBBEB9003F7084 /* CharacterDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsView.swift; sourceTree = "<group>"; };
 		54BDF5C429BBC891003F7084 /* AvatarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarCell.swift; sourceTree = "<group>"; };
+		54C01EA329E4BBC4009847AE /* EpisodeOverviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeOverviewCell.swift; sourceTree = "<group>"; };
 		54CA239929D5FD0900898FBC /* K.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K.swift; sourceTree = "<group>"; };
 		54D1E4DF29D492CE00571BC5 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		54ECFC3E29C545A00049ACE3 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -259,6 +262,7 @@
 				F729CB5E29E464180051E624 /* Realm in Frameworks */,
 				F729CB6029E464180051E624 /* RealmSwift in Frameworks */,
 				5447EE1A29BA36DC00D2D05A /* SnapKit in Frameworks */,
+				54C01EA229E49586009847AE /* TMDb in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +306,7 @@
 				54BAB02F29CE492700F67056 /* LoadMoreCell.swift */,
 				54D1E4DF29D492CE00571BC5 /* LoadingView.swift */,
 				F729CB7129E636610051E624 /* DownloadProgressView.swift */,
+				54C01EA329E4BBC4009847AE /* EpisodeOverviewCell.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -740,7 +745,7 @@
 				5447EE1C29BA591800D2D05A /* SDWebImage */,
 				F729CB5D29E464180051E624 /* Realm */,
 				F729CB5F29E464180051E624 /* RealmSwift */,
-				F729CB6229E49D500051E624 /* TMDb */,
+				54C01EA129E49586009847AE /* TMDb */,
 			);
 			productName = "RickAndMorty-iOS";
 			productReference = F77E4B7829B906D400B8B5CE /* RickAndMorty-iOS.app */;
@@ -832,7 +837,7 @@
 				F77E4BF129BA3BE100B8B5CE /* XCRemoteSwiftPackageReference "Quick" */,
 				F77E4BF429BA3BF200B8B5CE /* XCRemoteSwiftPackageReference "Nimble" */,
 				F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */,
-				F729CB6129E49D500051E624 /* XCRemoteSwiftPackageReference "TMDb" */,
+				54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */,
 			);
 			productRefGroup = F77E4B7929B906D400B8B5CE /* Products */;
 			projectDirPath = "";
@@ -911,6 +916,7 @@
 				F76E21D929E75551000CA322 /* TmdbEpisodeVideos.swift in Sources */,
 				F7EA931729CB8F9600F7F112 /* PageInfo.graphql.swift in Sources */,
 				54ECFC4129C546400049ACE3 /* SearchView.swift in Sources */,
+				54C01EA429E4BBC4009847AE /* EpisodeOverviewCell.swift in Sources */,
 				54D1E4E029D492CE00571BC5 /* LoadingView.swift in Sources */,
 				F7EA932129CB8F9600F7F112 /* Characters.graphql.swift in Sources */,
 				544A6CC229BFA5410055FB75 /* Section.swift in Sources */,
@@ -1361,9 +1367,9 @@
 				kind = branch;
 			};
 		};
-		F729CB6129E49D500051E624 /* XCRemoteSwiftPackageReference "TMDb" */ = {
+		54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/adamayoung/TMDb.git";
+			repositoryURL = "https://github.com/adamayoung/TMDb";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 8.0.0;
@@ -1421,9 +1427,9 @@
 			package = F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
 		};
-		F729CB6229E49D500051E624 /* TMDb */ = {
+		54C01EA129E49586009847AE /* TMDb */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F729CB6129E49D500051E624 /* XCRemoteSwiftPackageReference "TMDb" */;
+			package = 54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */;
 			productName = TMDb;
 		};
 		F77E4B9E29B94B9300B8B5CE /* Apollo */ = {
