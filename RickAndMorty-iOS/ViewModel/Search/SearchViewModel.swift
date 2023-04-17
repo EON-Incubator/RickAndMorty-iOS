@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import UIKit
+import TMDb
 
 class SearchViewModel {
 
@@ -26,6 +27,27 @@ class SearchViewModel {
 
     func refresh(input: String) {
         searchInput = input
+    }
+
+    var episodeNames: [String] = []
+
+    // if episode.overview contains search-query, get episode name, get episode by passing name to fetchData
+
+    func testEpisodeOverview(input: String) {
+        let tmdb = TMDbAPI(apiKey: Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? "")
+        Task {
+
+            var totalEpisodes: [TVShowEpisode] = []
+
+            for index in 1...5 {
+                let seasonEpisodes = try? await tmdb.tvShowSeasons.details(forSeason: index, inTVShow: 60625).episodes
+                totalEpisodes.append(contentsOf: seasonEpisodes?.compactMap({$0}) ?? [])
+            }
+
+            for episode in totalEpisodes where episode.overview?.lowercased().contains(searchInput) == true {
+                episodeNames.append(episode.name)
+            }
+        }
     }
 
     func fetchData(input: String) {

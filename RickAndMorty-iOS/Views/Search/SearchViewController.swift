@@ -264,7 +264,7 @@ extension SearchViewController: UISearchResultsUpdating {
         navigationItem.searchController = searchController
         definesPresentationContext = true
         let searchBar = searchController.searchBar
-        searchBar.scopeButtonTitles = ["All", K.Titles.characters, K.Titles.locations]
+        searchBar.scopeButtonTitles = ["All", K.Titles.characters, K.Titles.locations, "Episodes"]
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
