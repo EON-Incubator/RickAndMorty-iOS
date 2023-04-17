@@ -14,16 +14,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         let defaults = UserDefaults.standard
-        defaults.set(false, forKey: "isOfflineMode")
+        Network.shared.setOfflineMode(false)
 
         Network.shared.networkMontior.pathUpdateHandler = { path in
             if path.status == .satisfied {
                 // Connected
-                defaults.set(false, forKey: "isOfflineMode")
+                Network.shared.setOfflineMode(false)
                 Network.shared.checkForUpdate()
             } else {
                 // Disconnected
-                defaults.set(true, forKey: "isOfflineMode")
+                Network.shared.setOfflineMode(true)
             }
             print(path.status)
         }

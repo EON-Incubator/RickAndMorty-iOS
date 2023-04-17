@@ -173,7 +173,7 @@ extension EpisodeDetailsViewController {
     func configCarouselCell(cell: CarouselCell, data: AnyHashable, itemIndex: Int) -> UICollectionViewCell {
         if let image = data as? TmdbEpisodeImages {
             guard let filePath = image.filePath else { return UICollectionViewCell() }
-            let imageUrl = "https://image.tmdb.org/t/p/w400\(filePath)"
+            let imageUrl = K.Tmdb.imageBaseUrl + filePath
             cell.carouselImage.sd_setImage(with: URL(string: imageUrl))
             return cell
         }

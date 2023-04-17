@@ -53,7 +53,7 @@ class EpisodeDetailsViewModel {
     }
 
     func fetchData() {
-        if UserDefaults().bool(forKey: "isOfflineMode") {
+        if Network.shared.isOfflineMode() {
             getDataFromDB()
             return
         }
@@ -67,6 +67,7 @@ class EpisodeDetailsViewModel {
                     }
                 case .failure(let error):
                     print(error)
+                    Network.shared.setOfflineMode(true)
                     self.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                 }
 

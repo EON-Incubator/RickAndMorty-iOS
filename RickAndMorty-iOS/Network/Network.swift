@@ -58,10 +58,27 @@ class Network {
 
     private var isCharactersImagesDownloaded = false {
         didSet {
-            if isCharactersDataDownloaded == true {
+            if isCharactersImagesDownloaded == true {
+                cacheEpisodesImages()
+            }
+        }
+    }
+
+    private var isEpisodesImagesDownloaded = false {
+        didSet {
+            if isEpisodesImagesDownloaded == true {
+                DownloadProgressView.shared.dismiss()
                 defaults.set(true, forKey: "isDownloadCompleted")
             }
         }
+    }
+
+    func setOfflineMode(_ mode: Bool) {
+        defaults.set(mode, forKey: "isOfflineMode")
+    }
+
+    func isOfflineMode() -> Bool {
+        defaults.bool(forKey: "isOfflineMode")
     }
 }
 
@@ -462,6 +479,17 @@ extension Network {
             return nil
         }
     }
+
+    func getEpisodesImages() -> Results<TmdbEpisodeImages>? {
+        do {
+            let realm = try Realm()
+            let episodesImages = realm.objects(TmdbEpisodeImages.self)
+            return episodesImages
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+            return nil
+        }
+    }
 }
 // MARK: - Check for Data Update
 extension Network {
@@ -527,8 +555,30 @@ extension Network {
                 }
             }, completed: { [weak self] (_, _) in
                 DispatchQueue.main.async {
-                    DownloadProgressView.shared.dismiss()
                     self?.isCharactersImagesDownloaded = true
+                }
+            })
+        }
+    }
+
+    func cacheEpisodesImages() {
+        if let episodeImages = getEpisodesImages() {
+            var imageURLs = [URL]()
+            for image in episodeImages {
+                if let url = URL(string: K.Tmdb.imageBaseUrl + (image.filePath ?? "")) {
+                    imageURLs.append(url)
+                }
+            }
+            SDWebImagePrefetcher.shared.prefetchURLs(imageURLs, progress: { (noOfFinishedUrls, noOfTotalUrls) in
+                let progress = Float(noOfFinishedUrls) / Float(noOfTotalUrls)
+                let progressMsg = String(format: "Downloading Episodes Images...%.0f%%", progress * 100)
+                DispatchQueue.main.async {
+                    DownloadProgressView.shared.titleLabel.text = progressMsg
+                    DownloadProgressView.shared.progressView.progress = progress
+                }
+            }, completed: { [weak self] (_, _) in
+                DispatchQueue.main.async {
+                    self?.isEpisodesImagesDownloaded = true
                 }
             })
         }

@@ -26,7 +26,7 @@ class LocationsViewModel {
     weak var coordinator: MainCoordinator?
 
     func fetchData(page: Int, name: String = "", type: String = "") {
-        if UserDefaults().bool(forKey: "isOfflineMode") {
+        if Network.shared.isOfflineMode() {
             getDataFromDB(page: page)
             return
         }
@@ -43,6 +43,7 @@ class LocationsViewModel {
                     }
                 case .failure(let error):
                     print(error)
+                    Network.shared.setOfflineMode(true)
                     self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                 }
             }

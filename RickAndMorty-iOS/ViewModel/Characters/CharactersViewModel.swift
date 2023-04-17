@@ -32,7 +32,7 @@ class CharactersViewModel {
     weak var coordinator: MainCoordinator?
 
     func fetchData(page: Int, name: String = "") {
-        if UserDefaults().bool(forKey: "isOfflineMode") {
+        if Network.shared.isOfflineMode() {
             getDataFromDB(page: page, name: name)
             return
         }
@@ -50,6 +50,7 @@ class CharactersViewModel {
                         }
                     case .failure(let error):
                         print(error)
+                        Network.shared.setOfflineMode(true)
                         self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                     }
 

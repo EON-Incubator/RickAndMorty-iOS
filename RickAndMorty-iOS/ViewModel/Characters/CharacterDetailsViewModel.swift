@@ -19,7 +19,7 @@ class CharacterDetailsViewModel {
     }
 
     func fetchData() {
-        if UserDefaults().bool(forKey: "isOfflineMode") {
+        if Network.shared.isOfflineMode() {
             getDataFromDB()
             return
         }
@@ -33,6 +33,7 @@ class CharacterDetailsViewModel {
                     }
                 case .failure(let error):
                     print(error)
+                    Network.shared.setOfflineMode(true)
                     self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                 }
 

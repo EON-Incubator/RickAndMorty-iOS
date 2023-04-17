@@ -145,7 +145,7 @@ class MainCoordinator: Coordinator {
         let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
 
         tabBarController.present(alertController, animated: true) {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
                 alertController.dismiss(animated: true, completion: nil)
             }
         }

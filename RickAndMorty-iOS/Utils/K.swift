@@ -14,6 +14,7 @@ struct K {
     struct Tmdb {
         static let tmdbApiKey = "1ecd1b26d36c0ce0ec76aec3676d5773"
         static let showId = 60625
+        static let imageBaseUrl = "https://image.tmdb.org/t/p/w400"
     }
 
     struct DataUpdate {
