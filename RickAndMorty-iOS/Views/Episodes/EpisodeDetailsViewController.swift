@@ -77,7 +77,7 @@ class EpisodeDetailsViewController: BaseViewController {
                     DispatchQueue.main.async {
                         self?.title = episode.name
                         // add play icon to navigation bar
-                        self?.setupVideoItem()
+                        self?.setupNavItems()
                         self?.dataSource?.apply(snapshot, animatingDifferences: true)
                     }
                 }
@@ -233,37 +233,61 @@ extension EpisodeDetailsViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: - YTPlayerView Delegate
-extension EpisodeDetailsViewController: YTPlayerViewDelegate {
-    func setupVideoItem() {
+extension EpisodeDetailsViewController {
+    func setupNavItems() {
+        var linkMenuItems: [UIAction] {
+            return [
+                UIAction(title: K.Titles.hulu, image: UIImage(named: K.Images.hulu), handler: { (_) in
+                    if let url = URL(string: K.Urls.hulu) {
+                        UIApplication.shared.open(url)
+                    }
+                }),
+                UIAction(title: K.Titles.amazon, image: UIImage(named: K.Images.amazon), handler: { (_) in
+                    if let url = URL(string: K.Urls.amazon) {
+                        UIApplication.shared.open(url)
+                    }
+                }),
+                UIAction(title: K.Titles.adultSwim, image: UIImage(named: K.Images.adultSwim), handler: { (_) in
+                    if let url = URL(string: K.Urls.adultSwim) {
+                        UIApplication.shared.open(url)
+                    }
+                }),
+                UIAction(title: K.Titles.apple, image: UIImage(systemName: K.Images.systemApple, withConfiguration: UIImage.SymbolConfiguration(scale: .large)), handler: { (_) in
+                    if let url = URL(string: K.Urls.apple) {
+                        UIApplication.shared.open(url)
+                    }
+                })
+            ]
+        }
+
+        var linkMenu: UIMenu {
+            return UIMenu(title: "", image: nil, identifier: nil, children: linkMenuItems)
+        }
+
+        let playIcon = UIBarButtonItem(image: UIImage(systemName: K.Images.systemplay), style: .plain, target: self, action: #selector(playVideo))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "", image: UIImage(systemName: K.Images.systemlink), menu: linkMenu)
         if viewModel.episodeVideo != nil {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(playVideo))
+            navigationItem.rightBarButtonItems?.append(playIcon)
         }
     }
 
     @objc func playVideo(sender: AnyObject) {
-        let videoId = viewModel.episodeVideo ?? ""
+        let youtubeViewController = YoutubeViewController(videoId: viewModel.episodeVideo ?? "")
+        youtubeViewController.modalPresentationStyle = .popover
 
-        let alertController = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
-
-        let playerView = YoutubePlayerView()
-
-        playerView.ytPlayerView.delegate = self
-
-        alertController.view.addSubview(playerView)
-
-        playerView.setupConstraints(controller: alertController)
-
-        playerView.ytPlayerView.load(withVideoId: videoId, playerVars: ["modestbranding": 1])
-
-        let cancelAction = UIAlertAction(title: "Close", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-
-        self.present(alertController, animated: true, completion: nil)
-    }
-
-    func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
-        playerView.playVideo()
+        if let popover = youtubeViewController.popoverPresentationController {
+            popover.sourceView = sender as? UIView
+            let sheet = popover.adaptiveSheetPresentationController
+            sheet.detents = [
+                .custom(identifier: UISheetPresentationController.Detent.Identifier("small")) { _ in
+                    return 300
+                }
+            ]
+            sheet.prefersGrabberVisible = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+            sheet.prefersEdgeAttachedInCompactHeight = true
+        }
+        present(youtubeViewController, animated: true, completion: nil)
     }
 }
 
