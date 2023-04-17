@@ -32,7 +32,7 @@ class EpisodeDetailsViewModel {
 
     var episodeNumber: String? = "" {
         didSet {
-            let tmdb = TMDbAPI(apiKey: "1ecd1b26d36c0ce0ec76aec3676d5773")
+            let tmdb = TMDbAPI(apiKey: Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? "")
             let episodeArray = episodeNumber?.split(separator: "", maxSplits: 5)
             let episode = "\(episodeArray?[4] ?? "")\(episodeArray?[5] ?? "")"
             let season = "\(episodeArray?[1] ?? "")\(episodeArray?[2] ?? "")"

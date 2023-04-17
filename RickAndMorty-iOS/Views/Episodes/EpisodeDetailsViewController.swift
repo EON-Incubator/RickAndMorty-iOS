@@ -69,7 +69,7 @@ class EpisodeDetailsViewController: BaseViewController {
                 if var snapshot = self?.snapshot {
                     snapshot.deleteAllItems()
                     snapshot.appendSections([.carousel, .overview, .info, .characters])
-                    snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: imageCount!), toSection: .carousel)
+                    snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: imageCount ?? 0), toSection: .carousel)
                     snapshot.appendItems([EpisodeDetails(episode)], toSection: .overview)
                     snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
                     snapshot.appendItems(episode.characters, toSection: .characters)
