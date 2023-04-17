@@ -24,13 +24,13 @@ class YoutubeView: BaseView {
         setupConstraints()
     }
 
-    func setupViews() {
+    private func setupViews() {
         backgroundColor = .clear
         insertSubview(blurView, at: 0)
         addSubview(playerView)
     }
 
-    func setupConstraints() {
+    private func setupConstraints() {
         playerView.snp.makeConstraints { make in
             make.edges.equalTo(self).inset(UIEdgeInsets(top: 20, left: 15, bottom: 80, right: 15))
         }

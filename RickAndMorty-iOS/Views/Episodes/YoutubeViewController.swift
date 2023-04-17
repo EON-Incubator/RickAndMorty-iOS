@@ -10,9 +10,9 @@ import YouTubeiOSPlayerHelper
 
 class YoutubeViewController: BaseViewController, YTPlayerViewDelegate {
 
-    let youtubeView = YoutubeView()
+    private let youtubeView = YoutubeView()
 
-    var videoId: String
+    private var videoId: String
 
     init(videoId: String) {
         self.videoId = videoId
@@ -21,7 +21,6 @@ class YoutubeViewController: BaseViewController, YTPlayerViewDelegate {
 
    override func viewDidLoad() {
        youtubeView.playerView.delegate = self
-       print(videoId)
        youtubeView.playerView.load(withVideoId: videoId, playerVars: ["modestbranding": 1])
    }
 

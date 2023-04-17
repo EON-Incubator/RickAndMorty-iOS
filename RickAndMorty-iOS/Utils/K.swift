@@ -19,6 +19,10 @@ struct K {
         static let filter = "Filter"
         static let clearButton = "Clear"
         static let loadMore = "↓    Load More   ↓"
+        static let hulu = "Hulu"
+        static let amazon = "Amazon"
+        static let adultSwim = "Adult Swim"
+        static let apple = "Apple"
     }
 
     struct Identifiers {
@@ -95,6 +99,12 @@ struct K {
         static let systemPerson = "person.circle"
         static let systemStar = "star"
         static let episodeImageUrl = "https://image.tmdb.org/t/p/w400"
+        static let hulu = "hulu"
+        static let amazon = "amazon"
+        static let adultSwim = "adultSwim"
+        static let systemApple = "apple.logo"
+        static let systemplay = "play"
+        static let systemlink = "link"
     }
 
     struct Fonts {

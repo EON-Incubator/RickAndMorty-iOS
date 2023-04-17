@@ -231,22 +231,22 @@ extension EpisodeDetailsViewController {
     func setupNavItems() {
         var linkMenuItems: [UIAction] {
             return [
-                UIAction(title: "Hulu", image: UIImage(named: "hulu"), handler: { (_) in
+                UIAction(title: K.Titles.hulu, image: UIImage(named: K.Images.hulu), handler: { (_) in
                     if let url = URL(string: K.Urls.hulu) {
                         UIApplication.shared.open(url)
                     }
                 }),
-                UIAction(title: "Amazon", image: UIImage(named: "amazon"), handler: { (_) in
+                UIAction(title: K.Titles.amazon, image: UIImage(named: K.Images.amazon), handler: { (_) in
                     if let url = URL(string: K.Urls.amazon) {
                         UIApplication.shared.open(url)
                     }
                 }),
-                UIAction(title: "Adult Swim", image: UIImage(named: "adultSwim"), handler: { (_) in
+                UIAction(title: K.Titles.adultSwim, image: UIImage(named: K.Images.adultSwim), handler: { (_) in
                     if let url = URL(string: K.Urls.adultSwim) {
                         UIApplication.shared.open(url)
                     }
                 }),
-                UIAction(title: "Apple", image: UIImage(systemName: "apple.logo", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), handler: { (_) in
+                UIAction(title: K.Titles.apple, image: UIImage(systemName: K.Images.systemApple, withConfiguration: UIImage.SymbolConfiguration(scale: .large)), handler: { (_) in
                     if let url = URL(string: K.Urls.apple) {
                         UIApplication.shared.open(url)
                     }
@@ -258,8 +258,8 @@ extension EpisodeDetailsViewController {
             return UIMenu(title: "", image: nil, identifier: nil, children: linkMenuItems)
         }
 
-        let playIcon = UIBarButtonItem(image: UIImage(systemName: "play"), style: .plain, target: self, action: #selector(playVideo))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "", image: UIImage(systemName: "link"), menu: linkMenu)
+        let playIcon = UIBarButtonItem(image: UIImage(systemName: K.Images.systemplay), style: .plain, target: self, action: #selector(playVideo))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "", image: UIImage(systemName: K.Images.systemlink), menu: linkMenu)
         if viewModel.episodeVideo != nil {
             navigationItem.rightBarButtonItems?.append(playIcon)
         }
