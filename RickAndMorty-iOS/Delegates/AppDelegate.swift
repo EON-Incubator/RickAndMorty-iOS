@@ -12,20 +12,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+
         let defaults = UserDefaults.standard
         defaults.set(false, forKey: "isOfflineMode")
 
         Network.shared.networkMontior.pathUpdateHandler = { path in
-           if path.status == .satisfied {
-               print("-------Connected-------")
-               defaults.set(false, forKey: "isOfflineMode")
-               Network.shared.checkForUpdate()
-           } else {
-              print("-------Disconnected-------")
-               defaults.set(true, forKey: "isOfflineMode")
-           }
-           print(path.status)
+            if path.status == .satisfied {
+                // Connected
+                defaults.set(false, forKey: "isOfflineMode")
+                Network.shared.checkForUpdate()
+            } else {
+                // Disconnected
+                defaults.set(true, forKey: "isOfflineMode")
+            }
         }
 
         let queue = DispatchQueue(label: "Monitor")

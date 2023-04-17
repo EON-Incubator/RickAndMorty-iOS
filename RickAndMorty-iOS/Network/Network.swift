@@ -63,7 +63,10 @@ class Network {
             }
         }
     }
+}
 
+// MARK: - Download Operations
+extension Network {
     func downloadAllData() {
         defaults.set(false, forKey: "isDownloadCompleted")
         DownloadProgressView.shared.show()
@@ -178,7 +181,6 @@ class Network {
 
                 downloadEpisodeDetails(season: seasonNumber, episode: episodeNumber, parentId: item.id)
             }
-            print("downloaded all episode details")
             isEpisodeDetailsDataDownloaded = true
         } catch {
             print("REALM ERROR: error in initializing realm")
@@ -187,7 +189,6 @@ class Network {
     }
 
     func downloadEpisodeDetails(season: Int, episode: Int, parentId: String) {
-        print("downloaded episode details.....S\(season)E\(episode)")
         DispatchQueue.main.async {
             let progressMsg = "Downloading Episode Details..."
             DownloadProgressView.shared.titleLabel.text = progressMsg
@@ -469,13 +470,13 @@ extension Network {
             switch result {
             case .success(let response):
                 if let count = response.data?.episodes?.info?.count as? Int {
-                    print("Currently there are \(count) episodes from the API.")
+                    // Currently there are {count} episodes from the API.
                     if let episodeCountFromDB = self?.episodeCountFromDB() {
-                        print("Currently there are \(episodeCountFromDB) episodes from the local DB.")
+                        // Currently there are {episodeCountFromDB} episodes from the local DB.
                         if episodeCountFromDB == -1 { return }
                         let isDownloadCompleted = self?.defaults.bool(forKey: "isDownloadCompleted") ?? false
                         if (count > episodeCountFromDB) || !isDownloadCompleted {
-                            print("New data availble!")
+                            // New data availble.
                             let downloadAlert = UIAlertController(title: K.DataUpdate.downloadAlertTitle, message: K.DataUpdate.downloadAlertMsg, preferredStyle: .alert)
                             let downloadAction = UIAlertAction(title: K.DataUpdate.downloadAlertDownloadButton, style: .default) { _ in
                                 Network.shared.downloadAllData()
@@ -485,7 +486,7 @@ extension Network {
                             downloadAlert.addAction(cancel)
                             DownloadProgressView.shared.currentWindow?.rootViewController?.present(downloadAlert, animated: true)
                         } else {
-                            print("You have the latest data.")
+                            // User have the latest data.
                         }
                     }
                 }
@@ -519,8 +520,7 @@ extension Network {
             }
             SDWebImagePrefetcher.shared.prefetchURLs(imageURLs, progress: { (noOfFinishedUrls, noOfTotalUrls) in
                 let progress = Float(noOfFinishedUrls) / Float(noOfTotalUrls)
-                let progressMsg = String(format: "Downloading Images(Characters)...%.0f%%", progress * 100)
-                print(String(format: "Downloading Character Images...%.0f%%", progress * 100))
+                let progressMsg = String(format: "Downloading Characters Images...%.0f%%", progress * 100)
                 DispatchQueue.main.async {
                     DownloadProgressView.shared.titleLabel.text = progressMsg
                     DownloadProgressView.shared.progressView.progress = progress
