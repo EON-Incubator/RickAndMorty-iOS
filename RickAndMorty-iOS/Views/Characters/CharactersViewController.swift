@@ -127,11 +127,9 @@ extension CharactersViewController {
                 return characterCell
             }
 
-            if let char = character as? RickAndMortyAPI.CharacterBasics {
+            if let char = character as? Characters {
                 characterCell?.characterNameLabel.text = char.name
-                if let image = char.image {
-                    characterCell?.characterImage.sd_setImage(with: URL(string: image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 200, height: 200)])
-                }
+                characterCell?.characterImage.sd_setImage(with: URL(string: char.image), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 200, height: 200)])
             }
             return characterCell
         })
@@ -151,8 +149,8 @@ extension CharactersViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
-        if let character = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics {
-            viewModel.goCharacterDetails(id: character.id ?? "", navController: navigationController ?? UINavigationController())
+        if let character = dataSource?.itemIdentifier(for: indexPath) as? Characters {
+            viewModel.goCharacterDetails(id: character.id, navController: navigationController ?? UINavigationController())
         }
     }
 }

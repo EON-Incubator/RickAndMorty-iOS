@@ -11,7 +11,7 @@ import UIKit
 
 class SearchViewModel {
 
-    let searchResults = PassthroughSubject<RickAndMortyAPI.SearchForQuery.Data, Never>()
+    let searchResults = PassthroughSubject<SearchResults, Never>()
     // for viewModel testing
     let characters = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.Characters.Result], Never>([])
     let locatonsWithGivenName = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result], Never>([])
@@ -29,6 +29,10 @@ class SearchViewModel {
     }
 
     func fetchData(input: String) {
+        if UserDefaults().bool(forKey: "isOfflineMode") {
+            getDataFromDB(keyword: input)
+            return
+        }
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.SearchForQuery(keyword: GraphQLNullable<String>(stringLiteral: input))) { [weak self] result in
                 switch result {
@@ -38,7 +42,7 @@ class SearchViewModel {
                     guard let locationsWithNameData = data.locationsWithName?.results else { return }
                     guard let locationsWithTypeData = data.locationsWithType?.results else { return }
 
-                    self?.searchResults.send(data)
+                    self?.mapData(data: data)
 
                     self?.characters.value = charactersData.compactMap { $0 }
                     self?.locatonsWithGivenName.value = locationsWithNameData.compactMap { $0 }
@@ -49,6 +53,95 @@ class SearchViewModel {
                     self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
                 }
             }
+    }
+
+    func getDataFromDB(keyword: String) {
+        let results = Network.shared.search(keyword: keyword)
+        self.searchResults.send(results)
+    }
+
+    func mapData(data: RickAndMortyAPI.SearchForQuery.Data) {
+
+        var characters = [Characters]()
+        var charactersTotalPages = 0
+        var locationsWithName = [Locations]()
+        var locationsWithNameTotalPages = 0
+        var locationsWithType = [Locations]()
+        var locationsWithTypeTotalPages = 0
+
+        charactersTotalPages = data.characters?.info?.pages ?? 0
+        locationsWithNameTotalPages = data.locationsWithName?.info?.pages ?? 0
+        locationsWithTypeTotalPages = data.locationsWithType?.info?.pages ?? 0
+
+        if let characterData = data.characters?.results {
+            for item in characterData {
+                let character = Characters()
+                character.id = item?.id ?? ""
+                character.name = item?.name ?? ""
+                character.gender = item?.gender ?? ""
+                character.image = item?.image ?? ""
+                character.species = item?.species ?? ""
+                character.status = item?.status ?? ""
+                character.type = item?.type ?? ""
+                characters.append(character)
+            }
+        }
+
+        if let locationsWithNameData = data.locationsWithName?.results {
+            for item in locationsWithNameData {
+                let location = Locations()
+                location.id = item?.id ?? ""
+                location.name = item?.name ?? ""
+                location.type = item?.type ?? ""
+                location.dimension = item?.dimension ?? ""
+                var charactersArray = [Characters]()
+                if let charcters = item?.residents {
+                    for char in charcters {
+                        let character = Characters()
+                        character.id = char?.id ?? ""
+                        character.name = char?.name ?? ""
+                        character.gender = char?.gender ?? ""
+                        character.image = char?.image ?? ""
+                        character.species = char?.species ?? ""
+                        character.status = char?.status ?? ""
+                        character.type = char?.type ?? ""
+                        charactersArray.append(character)
+                    }
+                }
+                location.residents.append(objectsIn: charactersArray)
+                locationsWithName.append(location)
+            }
+        }
+
+        if let locationsWithTypeData = data.locationsWithType?.results {
+            for item in locationsWithTypeData {
+                let location = Locations()
+                location.id = item?.id ?? ""
+                location.name = item?.name ?? ""
+                location.type = item?.type ?? ""
+                location.dimension = item?.dimension ?? ""
+                var charactersArray = [Characters]()
+                if let charcters = item?.residents {
+                    for char in charcters {
+                        let character = Characters()
+                        character.id = char?.id ?? ""
+                        character.name = char?.name ?? ""
+                        character.gender = char?.gender ?? ""
+                        character.image = char?.image ?? ""
+                        character.species = char?.species ?? ""
+                        character.status = char?.status ?? ""
+                        character.type = char?.type ?? ""
+                        charactersArray.append(character)
+                    }
+                }
+                location.residents.append(objectsIn: charactersArray)
+                locationsWithType.append(location)
+            }
+        }
+
+        let searchResults = SearchResults(characters: characters, charactersTotalPages: charactersTotalPages, locationsWithName: locationsWithName, locationsWithNameTotalPages: locationsWithNameTotalPages, locationsWithType: locationsWithType, locationsWithTypeTotalPages: locationsWithTypeTotalPages)
+
+        self.searchResults.send(searchResults)
     }
 
     func goCharacterDetails(id: String, navController: UINavigationController) {

@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import RealmSwift
 
 struct FilterOptions {
     var status: String
@@ -15,8 +16,8 @@ struct FilterOptions {
 
 class CharactersViewModel {
 
-    let charactersForSearch = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
-    var characters = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
+    let charactersForSearch = CurrentValueSubject<[Characters], Never>([])
+    var characters = CurrentValueSubject<[Characters], Never>([])
     var name = ""
     var currentPage = 0 {
         didSet {
@@ -31,6 +32,10 @@ class CharactersViewModel {
     weak var coordinator: MainCoordinator?
 
     func fetchData(page: Int, name: String = "") {
+        if UserDefaults().bool(forKey: "isOfflineMode") {
+            getDataFromDB(page: page, name: name)
+            return
+        }
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetCharactersQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
@@ -51,12 +56,44 @@ class CharactersViewModel {
                 }
     }
 
-    func mapData(page: Int, characters: [RickAndMortyAPI.GetCharactersQuery.Data.Characters.Result?]) {
-        charactersForSearch.value = (characters.compactMap { $0?.fragments.characterBasics })
-        if page == 1 {
-            self.characters.value = (characters.compactMap { $0?.fragments.characterBasics })
+    func getDataFromDB(page: Int, name: String = "") {
+        if let results = Network.shared.getCharacters(page: page, status: filterOptions.status, gender: filterOptions.gender, name: name) {
+            self.mapDataFromDB(page: page, characters: results)
         } else {
-            self.characters.value.append(contentsOf: (characters.compactMap { $0?.fragments.characterBasics }) )
+            self.characters.value = [Characters]()
+        }
+    }
+
+    func mapDataFromDB(page: Int, characters: Results<Characters>) {
+        if page == 1 {
+            self.characters.value = (characters.compactMap { $0 })
+        } else {
+            self.characters.value.append(contentsOf: (characters.compactMap { $0 }) )
+        }
+    }
+
+    func mapData(page: Int, characters: [RickAndMortyAPI.GetCharactersQuery.Data.Characters.Result?]) {
+
+        var charatersArray = [Characters]()
+
+        for item in characters {
+            let character = Characters()
+            character.id = item?.id ?? ""
+            character.name = item?.name ?? ""
+            character.gender = item?.gender ?? ""
+            character.image = item?.image ?? ""
+            character.species = item?.species ?? ""
+            character.status = item?.status ?? ""
+            character.type = item?.type ?? ""
+            charatersArray.append(character)
+        }
+
+        charactersForSearch.value = (charatersArray.compactMap { $0 })
+
+        if page == 1 {
+            self.characters.value = (charatersArray.compactMap { $0 })
+        } else {
+            self.characters.value.append(contentsOf: (charatersArray.compactMap { $0 }) )
         }
     }
 

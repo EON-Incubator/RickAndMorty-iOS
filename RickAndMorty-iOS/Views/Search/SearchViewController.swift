@@ -35,7 +35,7 @@ class SearchViewController: BaseViewController {
     private var currentLocationsPage = 1
     private var totalCharactersPage: Int = 0
     private var totalLocationsPage: Int = 0
-    private var uniqueLocations: [RickAndMortyAPI.LocationDetails] = []
+    private var uniqueLocations: [Locations] = []
 
     private weak var debounceTimer: Timer?
 
@@ -65,19 +65,16 @@ class SearchViewController: BaseViewController {
 
             self?.snapshot.appendSections([.characters, .loadMoreCharacters, .locations, .loadMoreLocations])
 
-            let locationsWithName: [RickAndMortyAPI.LocationDetails] = result.locationsWithName?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
+            let locationsWithName = result.locationsWithName
+            let locationsWithType = result.locationsWithType
 
-            let locationsWithType: [RickAndMortyAPI.LocationDetails] = result.locationsWithType?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
-
-            let locations: [RickAndMortyAPI.LocationDetails] = locationsWithName + locationsWithType
+            let locations: [Locations] = locationsWithName + locationsWithType
             self?.uniqueLocations = Array(Set(locations))
 
-            let characters = result.characters?.results?.compactMap {
-                $0?.fragments.characterBasics
-            } as? [RickAndMortyAPI.CharacterBasics] ?? []
+            let characters = result.characters
 
-            self?.totalCharactersPage = result.characters?.info?.pages ?? 1
-            self?.totalLocationsPage = (result.locationsWithType?.info?.pages ?? 0) + (result.locationsWithName?.info?.pages ?? 0)
+            self?.totalCharactersPage = result.charactersTotalPages
+            self?.totalLocationsPage = result.locationsWithNameTotalPages + result.locationsWithTypeTotalPages
 
             switch self?.searchController.searchBar.selectedScopeButtonIndex {
             case 0:
@@ -86,7 +83,7 @@ class SearchViewController: BaseViewController {
                     self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreCharacters)
                 }
                 self?.snapshot.appendItems(self?.uniqueLocations ?? [], toSection: .locations)
-                if self?.totalLocationsPage ?? 0 > 1 {
+                if self?.totalLocationsPage ?? 0 > 2 {
                     self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreLocations)
                 }
             case 1:
@@ -98,7 +95,7 @@ class SearchViewController: BaseViewController {
             case 2:
                 self?.currentLocationsPage = 1
                 self?.snapshot.appendItems(self?.uniqueLocations ?? [], toSection: .locations)
-                if self?.totalLocationsPage ?? 0 > 1 {
+                if self?.totalLocationsPage ?? 0 > 2 {
                     self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreLocations)
                 }
             default:
@@ -122,22 +119,22 @@ class SearchViewController: BaseViewController {
 
             switch indexPath.section {
             case 0:
-                if let character = result as? RickAndMortyAPI.CharacterBasics {
+                if let character = result as? Characters {
 
                     weak var characterRowCell = (collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell)
 
-                    let urlString = character.image ?? ""
+                    let urlString = character.image
                     characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
                     characterRowCell?.upperLabel.text = character.name
                     characterRowCell?.lowerLeftLabel.text = character.gender
                     characterRowCell?.lowerRightLabel.text = character.species
                     characterRowCell?.characterStatusLabel.text = character.status
-                    characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character.status ?? "")
+                    characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character.status)
 
                     cell = characterRowCell ?? CharacterRowCell()
                 }
             case 2:
-                cell = collectionView.dequeueConfiguredReusableCell(using: locationCell, for: indexPath, item: result as? RickAndMortyAPI.LocationDetails)
+                cell = collectionView.dequeueConfiguredReusableCell(using: locationCell, for: indexPath, item: result as? Locations)
             default:
                 cell = collectionView.dequeueReusableCell(withReuseIdentifier: LoadMoreCell.identifier, for: indexPath) as? LoadMoreCell ?? cell
             }
@@ -163,11 +160,11 @@ extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        if let location = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.LocationDetails? {
+        if let location = dataSource?.itemIdentifier(for: indexPath) as? Locations? {
             viewModel.goLocationDetails(id: (location?.id) ?? "", navController: navigationController ?? UINavigationController(), residentCount: location?.residents.count ?? 0)
         }
 
-        if let character = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics? {
+        if let character = dataSource?.itemIdentifier(for: indexPath) as? Characters? {
             viewModel.goCharacterDetails(id: (character?.id) ?? "", navController: navigationController ?? UINavigationController())
         }
 
