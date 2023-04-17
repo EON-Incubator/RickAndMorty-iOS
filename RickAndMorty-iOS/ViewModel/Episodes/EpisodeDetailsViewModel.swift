@@ -12,20 +12,25 @@ import TMDb
 class EpisodeDetailsViewModel {
 
     let episode = PassthroughSubject<Episodes, Never>()
-
-    var episodeId: String
+    let tmdb = TMDbAPI(apiKey: K.Tmdb.tmdbApiKey)
     weak var coordinator: MainCoordinator?
+    var episodeId: String
+    var seasonNo = 0
+    var episodeNo = 0
     var episodeData: (any Hashable)?
-
-    init(episodeId: String) {
-        self.episodeId = episodeId
+    var episodeDetails: TVShowEpisode? {
+        didSet {
+            Task {
+                episodeImages = try? await tmdb.tvShowEpisodes.images(forEpisode: episodeNo, inSeason: seasonNo, inTVShow: K.Tmdb.showId)
+            }
+        }
     }
 
-    var episodeDetails: TVShowEpisode? {
+    var episodeImages: TVShowEpisodeImageCollection? {
         didSet {
             if let data = episodeData as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode {
                 if let episodeDetails = episodeDetails {
-                    self.mapData(episode: data, episodeDetails: episodeDetails)
+                    self.mapData(episode: data, episodeDetails: episodeDetails, episodeImages: episodeImages)
                 }
             }
         }
@@ -33,14 +38,18 @@ class EpisodeDetailsViewModel {
 
     var episodeNumber: String? = "" {
         didSet {
-            let tmdb = TMDbAPI(apiKey: K.Tmdb.tmdbApiKey)
             let episodeArray = episodeNumber?.split(separator: "", maxSplits: 5)
-            let episode = "\(episodeArray?[4] ?? "")\(episodeArray?[5] ?? "")"
-            let season = "\(episodeArray?[1] ?? "")\(episodeArray?[2] ?? "")"
+            episodeNo = Int("\(episodeArray?[4] ?? "")\(episodeArray?[5] ?? "")") ?? 0
+            seasonNo = Int("\(episodeArray?[1] ?? "")\(episodeArray?[2] ?? "")") ?? 0
             Task {
-                episodeDetails = try? await tmdb.tvShowEpisodes.details(forEpisode: Int(episode) ?? 0, inSeason: Int(season) ?? 0, inTVShow: K.Tmdb.showId)
+                episodeDetails = try? await tmdb.tvShowEpisodes.details(forEpisode: episodeNo, inSeason: seasonNo, inTVShow: K.Tmdb.showId)
+                episodeImages = try? await tmdb.tvShowEpisodes.images(forEpisode: episodeNo, inSeason: seasonNo, inTVShow: K.Tmdb.showId)
             }
         }
+    }
+
+    init(episodeId: String) {
+        self.episodeId = episodeId
     }
 
     func fetchData() {
@@ -64,7 +73,7 @@ class EpisodeDetailsViewModel {
             }
     }
 
-    func mapData(episode: RickAndMortyAPI.GetEpisodeQuery.Data.Episode, episodeDetails: TVShowEpisode) {
+    func mapData(episode: RickAndMortyAPI.GetEpisodeQuery.Data.Episode, episodeDetails: TVShowEpisode, episodeImages: TVShowEpisodeImageCollection?) {
 
         let epi = Episodes()
         epi.id = episode.id ?? ""
@@ -97,6 +106,16 @@ class EpisodeDetailsViewModel {
         details.voteAverage = episodeDetails.voteAverage
         details.stillPath = episodeDetails.stillPath?.absoluteString
         details.productionCode = episodeDetails.productionCode
+
+        if let episodeImages = episodeImages {
+            for item in episodeImages.stills {
+                let image = TmdbEpisodeImages()
+                image.id = item.id.absoluteString
+                image.filePath = item.filePath.absoluteString
+                details.episodeImages.append(image)
+            }
+        }
+
         epi.episodeDetails = details
         self.episode.send(epi)
     }
