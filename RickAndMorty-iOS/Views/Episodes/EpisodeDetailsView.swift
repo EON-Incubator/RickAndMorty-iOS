@@ -127,7 +127,6 @@ extension EpisodeDetailsView {
                 section.boundarySupplementaryItems = []
                 section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
             }
-
             return section
         }
         return layout

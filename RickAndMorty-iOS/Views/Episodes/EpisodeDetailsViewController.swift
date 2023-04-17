@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import YouTubeiOSPlayerHelper
 
 class EpisodeDetailsViewController: BaseViewController {
 
@@ -40,6 +41,7 @@ class EpisodeDetailsViewController: BaseViewController {
         episodeDetailsView.collectionView.delegate = self
         episodeDetailsView.collectionView.refreshControl = UIRefreshControl()
         episodeDetailsView.collectionView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
 
     override func viewDidLoad() {
@@ -74,6 +76,8 @@ class EpisodeDetailsViewController: BaseViewController {
                     snapshot.appendItems(Array(episode.characters), toSection: .characters)
                     DispatchQueue.main.async {
                         self?.title = episode.name
+                        // add play icon to navigation bar
+                        self?.setupVideoItem()
                         self?.dataSource?.apply(snapshot, animatingDifferences: true)
                     }
                 }
@@ -226,6 +230,40 @@ extension EpisodeDetailsViewController: UICollectionViewDelegate {
         if let character = dataSource?.itemIdentifier(for: indexPath) as? Characters? {
             viewModel.goCharacterDetails(id: (character?.id) ?? "", navController: navigationController ?? UINavigationController())
         }
+    }
+}
+
+// MARK: - YTPlayerView Delegate
+extension EpisodeDetailsViewController: YTPlayerViewDelegate {
+    func setupVideoItem() {
+        if viewModel.episodeVideo != nil {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(playVideo))
+        }
+    }
+
+    @objc func playVideo(sender: AnyObject) {
+        let videoId = viewModel.episodeVideo ?? ""
+
+        let alertController = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
+
+        let playerView = YoutubePlayerView()
+
+        playerView.ytPlayerView.delegate = self
+
+        alertController.view.addSubview(playerView)
+
+        playerView.setupConstraints(controller: alertController)
+
+        playerView.ytPlayerView.load(withVideoId: videoId, playerVars: ["modestbranding": 1])
+
+        let cancelAction = UIAlertAction(title: "Close", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+
+        self.present(alertController, animated: true, completion: nil)
+    }
+
+    func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
+        playerView.playVideo()
     }
 }
 

@@ -25,6 +25,8 @@
 		544A6CD629C11AD40055FB75 /* EpisodeDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CD529C11AD40055FB75 /* EpisodeDetailsView.swift */; };
 		544A6CD829C11BAA0055FB75 /* EpisodeDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CD729C11BAA0055FB75 /* EpisodeDetailsViewModel.swift */; };
 		54644B7929CA8AC7007FB8B3 /* EmptyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54644B7829CA8AC7007FB8B3 /* EmptyData.swift */; };
+		5475A18529E856AE000D27C8 /* YoutubePlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5475A18429E856AE000D27C8 /* YoutubePlayerView.swift */; };
+		54941D9529E9B47C0076DD20 /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 54941D9429E9B47C0076DD20 /* YouTubeiOSPlayerHelper */; };
 		54A0C36929E609A9009153BF /* CarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A0C36829E609A9009153BF /* CarouselCell.swift */; };
 		54A2EC3829BB7CEE006E880E /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 54A2EC3729BB7CEE006E880E /* SDWebImage */; };
 		54A2EC3C29BB7D7C006E880E /* CharactersGridCellSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A2EC3B29BB7D7C006E880E /* CharactersGridCellSpec.swift */; };
@@ -41,7 +43,6 @@
 		54ECFC4429C546820049ACE3 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54ECFC4329C546820049ACE3 /* SearchViewModel.swift */; };
 		F729CB5E29E464180051E624 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = F729CB5D29E464180051E624 /* Realm */; };
 		F729CB6029E464180051E624 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F729CB5F29E464180051E624 /* RealmSwift */; };
-		F729CB6329E49D500051E624 /* TMDb in Frameworks */ = {isa = PBXBuildFile; productRef = F729CB6229E49D500051E624 /* TMDb */; };
 		F729CB6729E4B9960051E624 /* TmdbEpisodeDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB6629E4B9950051E624 /* TmdbEpisodeDetails.swift */; };
 		F729CB6A29E5A9F10051E624 /* Characters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB6929E5A9F10051E624 /* Characters.swift */; };
 		F729CB6C29E5DAE30051E624 /* Episodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB6B29E5DAE30051E624 /* Episodes.swift */; };
@@ -160,6 +161,7 @@
 		544A6CD529C11AD40055FB75 /* EpisodeDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailsView.swift; sourceTree = "<group>"; };
 		544A6CD729C11BAA0055FB75 /* EpisodeDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailsViewModel.swift; sourceTree = "<group>"; };
 		54644B7829CA8AC7007FB8B3 /* EmptyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyData.swift; sourceTree = "<group>"; };
+		5475A18429E856AE000D27C8 /* YoutubePlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubePlayerView.swift; sourceTree = "<group>"; };
 		54A0C36829E609A9009153BF /* CarouselCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselCell.swift; sourceTree = "<group>"; };
 		54A2EC3B29BB7D7C006E880E /* CharactersGridCellSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersGridCellSpec.swift; sourceTree = "<group>"; };
 		54BAB02F29CE492700F67056 /* LoadMoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCell.swift; sourceTree = "<group>"; };
@@ -179,7 +181,7 @@
 		F729CB7129E636610051E624 /* DownloadProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadProgressView.swift; sourceTree = "<group>"; };
 		F7604C9A29BF7219003C2906 /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
 		F76E21D629E71682000CA322 /* TmdbEpisodeImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbEpisodeImages.swift; sourceTree = "<group>"; };
-		F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TmdbEpisodeVideos.swift; path = "RickAndMorty-iOS/Models/TmdbEpisodeVideos.swift"; sourceTree = "<group>"; };
+		F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbEpisodeVideos.swift; sourceTree = "<group>"; };
 		F76E21DA29E88F8B000CA322 /* GetCharactersWithDetailsQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetCharactersWithDetailsQuery.graphql.swift; sourceTree = "<group>"; };
 		F76E21DC29E9D720000CA322 /* SearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResults.swift; sourceTree = "<group>"; };
 		F76E21DE29E9E98B000CA322 /* GetEpisodesCountQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetEpisodesCountQuery.graphql.swift; sourceTree = "<group>"; };
@@ -259,12 +261,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				5447EE1D29BA591800D2D05A /* SDWebImage in Frameworks */,
-				F729CB6329E49D500051E624 /* TMDb in Frameworks */,
 				F77E4B9F29B94B9300B8B5CE /* Apollo in Frameworks */,
 				F729CB5E29E464180051E624 /* Realm in Frameworks */,
 				F729CB6029E464180051E624 /* RealmSwift in Frameworks */,
 				5447EE1A29BA36DC00D2D05A /* SnapKit in Frameworks */,
 				54C01EA229E49586009847AE /* TMDb in Frameworks */,
+				54941D9529E9B47C0076DD20 /* YouTubeiOSPlayerHelper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +312,7 @@
 				F729CB7129E636610051E624 /* DownloadProgressView.swift */,
 				54C01EA329E4BBC4009847AE /* EpisodeOverviewCell.swift */,
 				54A0C36829E609A9009153BF /* CarouselCell.swift */,
+				5475A18429E856AE000D27C8 /* YoutubePlayerView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -410,6 +413,7 @@
 			children = (
 				F729CB6629E4B9950051E624 /* TmdbEpisodeDetails.swift */,
 				F76E21D629E71682000CA322 /* TmdbEpisodeImages.swift */,
+				F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */,
 				F729CB6929E5A9F10051E624 /* Characters.swift */,
 				F729CB6D29E60CF70051E624 /* Locations.swift */,
 				F729CB6B29E5DAE30051E624 /* Episodes.swift */,
@@ -433,7 +437,6 @@
 		F77E4B6F29B906D400B8B5CE = {
 			isa = PBXGroup;
 			children = (
-				F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */,
 				F77E4B7A29B906D400B8B5CE /* RickAndMorty-iOS */,
 				F77E4BE929BA3BA000B8B5CE /* Tests */,
 				F7DB56FA29BBBBF6000FAB01 /* UITests */,
@@ -749,6 +752,7 @@
 				F729CB5D29E464180051E624 /* Realm */,
 				F729CB5F29E464180051E624 /* RealmSwift */,
 				54C01EA129E49586009847AE /* TMDb */,
+				54941D9429E9B47C0076DD20 /* YouTubeiOSPlayerHelper */,
 			);
 			productName = "RickAndMorty-iOS";
 			productReference = F77E4B7829B906D400B8B5CE /* RickAndMorty-iOS.app */;
@@ -841,6 +845,7 @@
 				F77E4BF429BA3BF200B8B5CE /* XCRemoteSwiftPackageReference "Nimble" */,
 				F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */,
+				54941D9329E9B47C0076DD20 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 			);
 			productRefGroup = F77E4B7929B906D400B8B5CE /* Products */;
 			projectDirPath = "";
@@ -945,6 +950,7 @@
 				F7FA2DC329D74D2000CEF68C /* BaseView.swift in Sources */,
 				F7604C9B29BF7219003C2906 /* LocationsView.swift in Sources */,
 				F7EA932429CB8F9600F7F112 /* Location.graphql.swift in Sources */,
+				5475A18529E856AE000D27C8 /* YoutubePlayerView.swift in Sources */,
 				F7EA931829CB8F9600F7F112 /* EpisodeBasics.graphql.swift in Sources */,
 				F7EA931929CB8F9600F7F112 /* LocationBasics.graphql.swift in Sources */,
 				F7EA931629CB8F9600F7F112 /* LocationDetails.graphql.swift in Sources */,
@@ -1363,12 +1369,12 @@
 				kind = branch;
 			};
 		};
-		F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+		54941D9329E9B47C0076DD20 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-swift.git";
+			repositoryURL = "https://github.com/youtube/youtube-ios-player-helper";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = exactVersion;
+				version = 1.0.4;
 			};
 		};
 		54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */ = {
@@ -1377,6 +1383,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 8.0.0;
+			};
+		};
+		F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
 			};
 		};
 		F77E4B9D29B94B9300B8B5CE /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
@@ -1416,10 +1430,20 @@
 			package = 5447EE1B29BA591800D2D05A /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
 		};
+		54941D9429E9B47C0076DD20 /* YouTubeiOSPlayerHelper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 54941D9329E9B47C0076DD20 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */;
+			productName = YouTubeiOSPlayerHelper;
+		};
 		54A2EC3729BB7CEE006E880E /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5447EE1B29BA591800D2D05A /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
+		};
+		54C01EA129E49586009847AE /* TMDb */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */;
+			productName = TMDb;
 		};
 		F729CB5D29E464180051E624 /* Realm */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1430,11 +1454,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
-		};
-		54C01EA129E49586009847AE /* TMDb */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */;
-			productName = TMDb;
 		};
 		F77E4B9E29B94B9300B8B5CE /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;

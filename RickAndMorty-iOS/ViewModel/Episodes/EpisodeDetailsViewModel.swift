@@ -35,6 +35,7 @@ class EpisodeDetailsViewModel {
             }
         }
     }
+    var episodeVideo: String?
 
     var episodeNumber: String? = "" {
         didSet {
@@ -43,7 +44,10 @@ class EpisodeDetailsViewModel {
             seasonNo = Int("\(episodeArray?[1] ?? "")\(episodeArray?[2] ?? "")") ?? 0
             Task {
                 episodeDetails = try? await tmdb.tvShowEpisodes.details(forEpisode: episodeNo, inSeason: seasonNo, inTVShow: K.Tmdb.showId)
-                episodeImages = try? await tmdb.tvShowEpisodes.images(forEpisode: episodeNo, inSeason: seasonNo, inTVShow: K.Tmdb.showId)
+                let video = try? await tmdb.tvShowEpisodes.videos(forEpisode: episodeNo, inSeason: seasonNo, inTVShow: K.Tmdb.showId)
+                if let videoId = video?.results.first?.key {
+                    episodeVideo = videoId
+                }
             }
         }
     }
