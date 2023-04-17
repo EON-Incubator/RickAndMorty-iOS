@@ -33,6 +33,7 @@ class DownloadProgressView: BaseView {
         let label = UILabel()
         label.text = K.Titles.download
         label.font = UIFont(name: K.Fonts.secondary, size: 16)
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
 
@@ -52,7 +53,7 @@ class DownloadProgressView: BaseView {
         accessibilityIdentifier = K.Identifiers.downloadProgressView
         backgroundColor = .clear
         alpha = 0
-        layer.cornerRadius = 30
+        layer.cornerRadius = 10
         clipsToBounds = true
         insertSubview(blurView, at: 0)
         addSubview(dismissButton)
@@ -76,7 +77,7 @@ class DownloadProgressView: BaseView {
 
         dismissButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-30)
+            make.trailing.equalToSuperview().offset(-20)
             make.height.width.equalTo(24)
         }
 

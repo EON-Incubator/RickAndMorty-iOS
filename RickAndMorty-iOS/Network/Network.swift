@@ -10,6 +10,7 @@ import Network
 import Apollo
 import RealmSwift
 import TMDb
+import SDWebImage
 import UIKit
 
 // swiftlint: disable file_length
@@ -47,6 +48,22 @@ class Network {
         }
     }
 
+    private var isCharactersDataDownloaded = false {
+        didSet {
+            if isCharactersDataDownloaded == true {
+                cacheCharactersImages()
+            }
+        }
+    }
+
+    private var isCharactersImagesDownloaded = false {
+        didSet {
+            if isCharactersDataDownloaded == true {
+                defaults.set(true, forKey: "isDownloadCompleted")
+            }
+        }
+    }
+
     func downloadAllData() {
         defaults.set(false, forKey: "isDownloadCompleted")
         DownloadProgressView.shared.show()
@@ -75,9 +92,7 @@ class Network {
                                 self?.charactersTotalPages = pageInfo.pages ?? 0
                                 self?.downloadCharacters(page: page + 1)
                             } else {
-                                DownloadProgressView.shared.dismiss()
-                                self?.defaults.set(true, forKey: "isDownloadCompleted")
-
+                                self?.isCharactersDataDownloaded = true
                             }
                         }
                     case .failure(let error):
@@ -377,7 +392,7 @@ extension Network {
         return searchResults
     }
 
-    func getCharacters(page: Int, status: String, gender: String, name: String) -> Results<Characters>? {
+    func getCharacters(page: Int, status: String = "", gender: String = "", name: String = "") -> Results<Characters>? {
         let status = status.count > 0 ? status : "*"
         let gender = gender.count > 0 ? gender : "*"
         let name = name.count > 0 ? name : "*"
@@ -488,6 +503,34 @@ extension Network {
         } catch {
             print("REALM ERROR: error in initializing realm")
             return -1
+        }
+    }
+}
+
+// MARK: - Image Caching
+extension Network {
+    func cacheCharactersImages() {
+        if let characters = getCharacters(page: 1) {
+            var imageURLs = [URL]()
+            for character in characters {
+                if let url = URL(string: character.image) {
+                    imageURLs.append(url)
+                }
+            }
+            SDWebImagePrefetcher.shared.prefetchURLs(imageURLs, progress: { (noOfFinishedUrls, noOfTotalUrls) in
+                let progress = Float(noOfFinishedUrls) / Float(noOfTotalUrls)
+                let progressMsg = String(format: "Downloading Images(Characters)...%.0f%%", progress * 100)
+                print(String(format: "Downloading Character Images...%.0f%%", progress * 100))
+                DispatchQueue.main.async {
+                    DownloadProgressView.shared.titleLabel.text = progressMsg
+                    DownloadProgressView.shared.progressView.progress = progress
+                }
+            }, completed: { [weak self] (_, _) in
+                DispatchQueue.main.async {
+                    DownloadProgressView.shared.dismiss()
+                    self?.isCharactersImagesDownloaded = true
+                }
+            })
         }
     }
 }
