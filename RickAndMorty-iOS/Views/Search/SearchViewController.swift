@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import TMDb
 
 class SearchViewController: BaseViewController {
 
@@ -18,6 +19,7 @@ class SearchViewController: BaseViewController {
         case locations
         case loadMoreCharacters
         case loadMoreLocations
+        case episodes
     }
 
     private let searchView = SearchView()
@@ -63,7 +65,7 @@ class SearchViewController: BaseViewController {
         viewModel.searchResults.sink(receiveValue: { [weak self] result in
             self?.snapshot.deleteAllItems()
 
-            self?.snapshot.appendSections([.characters, .loadMoreCharacters, .locations, .loadMoreLocations])
+            self?.snapshot.appendSections([.characters, .loadMoreCharacters, .locations, .loadMoreLocations, .episodes])
 
             let locationsWithName: [RickAndMortyAPI.LocationDetails] = result.locationsWithName?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
 
@@ -102,7 +104,7 @@ class SearchViewController: BaseViewController {
                     self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreLocations)
                 }
             default:
-                print("error")
+                self?.snapshot.appendItems(self?.viewModel.episodes ?? [], toSection: .episodes)
             }
             if let snapshot = self?.snapshot {
                 self?.dataSource?.apply(snapshot, animatingDifferences: true)
@@ -117,6 +119,18 @@ class SearchViewController: BaseViewController {
         dataSource = DataSource(collectionView: searchView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, result) -> UICollectionViewCell? in
 
             var cell = UICollectionViewCell()
+
+            if self?.searchController.searchBar.selectedScopeButtonIndex == 3 {
+                guard let episodeCell = self?.searchView.episodeCell else { return nil }
+                let episode = self?.viewModel.episodes[indexPath.item]
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MMM d, y"
+                let cell = collectionView.dequeueConfiguredReusableCell(using: episodeCell, for: indexPath, item: episode)
+                cell.upperLabel.text = episode?.name
+                cell.lowerLeftLabel.text = "S\(episode?.seasonNumber ?? 0)E\(episode?.episodeNumber ?? 0)"
+                cell.lowerRightLabel.text = dateFormatter.string(from: (episode?.airDate) ?? Date())
+                return cell
+            }
 
             guard let locationCell = self?.searchView.locationCell else { return nil }
 
@@ -148,7 +162,12 @@ class SearchViewController: BaseViewController {
             guard let headerView = self?.searchView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
             }
-            let sectionText = indexPath.section == 0 ? K.Headers.characters : K.Headers.locations
+
+            var sectionText = indexPath.section == 0 ? K.Headers.characters : K.Headers.locations
+
+            if self?.searchController.searchBar.selectedScopeButtonIndex == 3 {
+                sectionText = "EPISODES"
+            }
 
             headerView.textLabel.text = sectionText
             headerView.textLabel.textColor = .lightGray
@@ -169,6 +188,11 @@ extension SearchViewController: UICollectionViewDelegate {
 
         if let character = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics? {
             viewModel.goCharacterDetails(id: (character?.id) ?? "", navController: navigationController ?? UINavigationController())
+        }
+
+        if let episode = dataSource?.itemIdentifier(for: indexPath) as? TVShowEpisode {
+            print(episode)
+            viewModel.goEpisodeDetails(id: "0", navController: navigationController ?? UIVideoEditorController())
         }
 
         // load-more section

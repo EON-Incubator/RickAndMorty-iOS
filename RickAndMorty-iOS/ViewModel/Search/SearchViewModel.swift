@@ -20,33 +20,32 @@ class SearchViewModel {
 
     var searchInput = "" {
         didSet {
-            fetchData(input: searchInput)
+            getEpisodeNames()
         }
     }
+
     weak var coordinator: MainCoordinator?
 
     func refresh(input: String) {
         searchInput = input
     }
 
-    var episodeNames: [String] = []
+    var episodes: [TVShowEpisode] = []
 
-    // if episode.overview contains search-query, get episode name, get episode by passing name to fetchData
-
-    func testEpisodeOverview(input: String) {
+    func getEpisodeNames() {
         let tmdb = TMDbAPI(apiKey: Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? "")
         Task {
-
             var totalEpisodes: [TVShowEpisode] = []
 
             for index in 1...5 {
                 let seasonEpisodes = try? await tmdb.tvShowSeasons.details(forSeason: index, inTVShow: 60625).episodes
                 totalEpisodes.append(contentsOf: seasonEpisodes?.compactMap({$0}) ?? [])
             }
-
-            for episode in totalEpisodes where episode.overview?.lowercased().contains(searchInput) == true {
-                episodeNames.append(episode.name)
+            episodes = []
+            for episode in totalEpisodes where episode.overview?.lowercased().contains(searchInput.lowercased()) == true {
+                episodes.append(episode)
             }
+            fetchData(input: searchInput)
         }
     }
 
@@ -79,6 +78,10 @@ class SearchViewModel {
 
     func goLocationDetails(id: String, navController: UINavigationController, residentCount: Int) {
         coordinator?.goLocationDetails(id: id, navController: navController, residentCount: residentCount)
+    }
+
+    func goEpisodeDetails(id: String, navController: UINavigationController) {
+        coordinator?.goEpisodeDetails(id: id, navController: navController)
     }
 }
 
