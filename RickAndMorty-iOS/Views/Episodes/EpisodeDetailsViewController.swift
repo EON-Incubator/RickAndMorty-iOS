@@ -63,11 +63,9 @@ class EpisodeDetailsViewController: BaseViewController {
     func subscribeToViewModel() {
         viewModel.episode.sink(receiveValue: { [weak self] episode in
             if !episode.characters.isEmpty {
-                let imageCount = episode.episodeDetails?.episodeImages.count
                 if var snapshot = self?.snapshot {
                     snapshot.deleteAllItems()
                     snapshot.appendSections([.carousel, .overview, .info, .characters])
-                    // snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: imageCount!), toSection: .carousel)
                     if let episodeImages = episode.episodeDetails?.episodeImages {
                         snapshot.appendItems(Array(episodeImages), toSection: .carousel)
                     }
