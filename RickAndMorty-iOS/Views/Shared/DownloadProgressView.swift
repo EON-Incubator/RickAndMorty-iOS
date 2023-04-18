@@ -18,6 +18,14 @@ class DownloadProgressView: BaseView {
         return button
     }()
 
+    private let dismissLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Hide"
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        return label
+    }()
+
     private let blurView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .systemThinMaterial)
         let view = UIVisualEffectView(effect: effect)
@@ -41,7 +49,6 @@ class DownloadProgressView: BaseView {
     override init() {
         super.init()
         setupViews()
-        // setupConstraints()
     }
 
     func setupViews() {
@@ -52,6 +59,7 @@ class DownloadProgressView: BaseView {
         clipsToBounds = true
         insertSubview(blurView, at: 0)
         addSubview(dismissButton)
+        addSubview(dismissLabel)
         addSubview(titleLabel)
         addSubview(progressView)
     }
@@ -69,9 +77,16 @@ class DownloadProgressView: BaseView {
         }
 
         dismissButton.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-20)
+            make.centerY.equalToSuperview().offset(-5)
+            make.trailing.equalToSuperview().offset(-15)
             make.height.width.equalTo(24)
+        }
+
+        dismissLabel.snp.makeConstraints { make in
+            make.top.equalTo(dismissButton.snp_bottomMargin).offset(5)
+            make.centerX.equalTo(dismissButton.snp_centerXWithinMargins)
+            make.height.equalTo(12)
+            make.width.equalTo(30)
         }
 
         titleLabel.snp.makeConstraints { make in

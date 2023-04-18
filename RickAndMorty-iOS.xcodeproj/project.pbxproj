@@ -312,9 +312,9 @@
 				54644B7829CA8AC7007FB8B3 /* EmptyData.swift */,
 				54BAB02F29CE492700F67056 /* LoadMoreCell.swift */,
 				54D1E4DF29D492CE00571BC5 /* LoadingView.swift */,
-				F729CB7129E636610051E624 /* DownloadProgressView.swift */,
 				54C01EA329E4BBC4009847AE /* EpisodeOverviewCell.swift */,
 				54A0C36829E609A9009153BF /* CarouselCell.swift */,
+				F729CB7129E636610051E624 /* DownloadProgressView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
