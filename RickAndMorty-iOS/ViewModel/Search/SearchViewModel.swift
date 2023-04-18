@@ -140,7 +140,7 @@ class SearchViewModel {
             }
         }
 
-        let searchResults = SearchResults(characters: characters, charactersTotalPages: charactersTotalPages, locationsWithName: locationsWithName, locationsWithNameTotalPages: locationsWithNameTotalPages, locationsWithType: locationsWithType, locationsWithTypeTotalPages: locationsWithTypeTotalPages)
+        let searchResults = SearchResults(characters: characters, charactersTotalPages: charactersTotalPages, locationsWithName: locationsWithName, locationsWithNameTotalPages: locationsWithNameTotalPages, locationsWithType: locationsWithType, locationsWithTypeTotalPages: locationsWithTypeTotalPages, episodes: [])
 
         self.searchResults.send(searchResults)
     }

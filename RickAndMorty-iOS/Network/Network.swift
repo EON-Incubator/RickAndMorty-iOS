@@ -392,6 +392,7 @@ extension Network {
         var characters = [Characters]()
         var locationsWithName = [Locations]()
         var locationsWithType = [Locations]()
+        var episodes = [Episodes]()
 
         do {
             let realm = try Realm()
@@ -401,11 +402,13 @@ extension Network {
             locationsWithName = Array(locWithName)
             let locWithType = realm.objects(Locations.self).filter("type CONTAINS[c] %@", keyword)
             locationsWithType = Array(locWithType)
+            let episodeFilter = realm.objects(Episodes.self).filter("episodeDetails.overview  CONTAINS[c] %@", keyword.lowercased())
+            episodes = Array(episodeFilter)
         } catch {
             print("REALM ERROR: error in initializing realm")
         }
 
-        let searchResults = SearchResults(characters: characters, charactersTotalPages: 1, locationsWithName: locationsWithName, locationsWithNameTotalPages: 1, locationsWithType: locationsWithType, locationsWithTypeTotalPages: 1)
+        let searchResults = SearchResults(characters: characters, charactersTotalPages: 1, locationsWithName: locationsWithName, locationsWithNameTotalPages: 1, locationsWithType: locationsWithType, locationsWithTypeTotalPages: 1, episodes: episodes)
 
         return searchResults
     }

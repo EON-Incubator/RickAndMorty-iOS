@@ -11,6 +11,8 @@ class SearchView: BaseView {
 
     let loadingView = LoadingView()
 
+    let episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (_ cell, _ indexPath, _ episode) in }
+
     let locationCell = UICollectionView.CellRegistration<LocationRowCell, Locations> { (cell, _ indexPath, location) in
         cell.lowerRightLabel.isHidden = false
         cell.upperLabel.text = location.name
