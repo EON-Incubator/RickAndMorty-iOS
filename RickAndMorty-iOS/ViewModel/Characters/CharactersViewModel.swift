@@ -18,6 +18,7 @@ class CharactersViewModel {
 
     let charactersForSearch = CurrentValueSubject<[Characters], Never>([])
     var characters = CurrentValueSubject<[Characters], Never>([])
+    var networkTimeoutMessage: PassthroughSubject<String, Never> = .init()
     var name = ""
     var currentPage = 0 {
         didSet {
@@ -51,7 +52,7 @@ class CharactersViewModel {
                     case .failure(let error):
                         print(error)
                         Network.shared.setOfflineMode(true)
-                        self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
+                        self?.networkTimeoutMessage.send(error.localizedDescription)
                     }
 
                 }

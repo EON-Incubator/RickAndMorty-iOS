@@ -16,7 +16,7 @@ class SearchViewModel {
     let characters = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.Characters.Result], Never>([])
     let locatonsWithGivenName = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithName.Result], Never>([])
     let locationsWithGivenType = CurrentValueSubject<[RickAndMortyAPI.SearchForQuery.Data.LocationsWithType.Result], Never>([])
-
+    var networkTimeoutMessage: PassthroughSubject<String, Never> = .init()
     var searchInput = "" {
         didSet {
             fetchData(input: searchInput)

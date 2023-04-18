@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class MainCoordinator: Coordinator {
 
@@ -15,6 +16,7 @@ class MainCoordinator: Coordinator {
     private let locationNavController = UINavigationController()
     private let episodeNavController = UINavigationController()
     private let searchNavController = UINavigationController()
+    private var cancellables = Set<AnyCancellable>()
 
     init(window: UIWindow) {
         self.window = window
@@ -56,24 +58,40 @@ class MainCoordinator: Coordinator {
         // Add CharactersViewController to the character navigation controller.
         let charactersViewModel = CharactersViewModel()
         charactersViewModel.coordinator = self
+        charactersViewModel.networkTimeoutMessage
+            .sink { message in
+                self.presentNetworkTimoutAlert(message)
+            }.store(in: &cancellables)
         let charactersViewController = CharactersViewController(viewModel: charactersViewModel)
         characterNavController.pushViewController(charactersViewController, animated: false)
 
         // Add LocationsViewController to the location navigation controller.
         let locationsViewModel = LocationsViewModel()
         locationsViewModel.coordinator = self
+        locationsViewModel.networkTimeoutMessage
+            .sink { message in
+                self.presentNetworkTimoutAlert(message)
+            }.store(in: &cancellables)
         let locationsViewController = LocationsViewController(viewModel: locationsViewModel)
         locationNavController.pushViewController(locationsViewController, animated: false)
 
         // Add EpisodesViewController to the episode navigation controller.
         let episodeViewModel = EpisodesViewModel()
         episodeViewModel.coordinator = self
+        episodeViewModel.networkTimeoutMessage
+            .sink { message in
+                self.presentNetworkTimoutAlert(message)
+            }.store(in: &cancellables)
         let episodesViewController = EpisodesViewController(viewModel: episodeViewModel)
         episodeNavController.pushViewController(episodesViewController, animated: false)
 
         // Add SearchViewController to the search navigation controller.
         let searchViewModel = SearchViewModel()
         searchViewModel.coordinator = self
+        searchViewModel.networkTimeoutMessage
+            .sink { message in
+                self.presentNetworkTimoutAlert(message)
+            }.store(in: &cancellables)
         let searchViewController = SearchViewController(viewModel: searchViewModel)
         searchNavController.pushViewController(searchViewController, animated: false)
 

@@ -13,6 +13,7 @@ class CharacterDetailsViewModel {
     let character = PassthroughSubject<Characters, Never>()
     weak var coordinator: MainCoordinator?
     private var characterId: String
+    var networkTimeoutMessage: PassthroughSubject<String, Never> = .init()
 
     init(characterId: String) {
         self.characterId = characterId
@@ -34,7 +35,7 @@ class CharacterDetailsViewModel {
                 case .failure(let error):
                     print(error)
                     Network.shared.setOfflineMode(true)
-                    self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
+                    self?.networkTimeoutMessage.send(error.localizedDescription)
                 }
 
             }
