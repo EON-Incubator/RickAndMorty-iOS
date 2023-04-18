@@ -72,7 +72,8 @@ class Network {
         didSet {
             if isEpisodesImagesDownloaded == true {
                 showDownloadProgress.send(false)
-                defaults.set(true, forKey: "isDownloadCompleted")
+                setDownloadCompleted(true)
+                setOfflineMode(true)
             }
         }
     }
@@ -82,18 +83,26 @@ class Network {
     var showDownloadAlert: PassthroughSubject<UIAlertController, Never> = .init()
 
     func setOfflineMode(_ mode: Bool) {
-        defaults.set(mode, forKey: "isOfflineMode")
+        defaults.set(mode, forKey: K.UserDefaultsKeys.isOfflineMode)
     }
 
     func isOfflineMode() -> Bool {
-        defaults.bool(forKey: "isOfflineMode")
+        defaults.bool(forKey: K.UserDefaultsKeys.isOfflineMode)
+    }
+
+    func setDownloadCompleted(_ mode: Bool) {
+        defaults.set(mode, forKey: K.UserDefaultsKeys.isDownloadCompleted)
+    }
+
+    func isDownloadCompleted() -> Bool {
+        defaults.bool(forKey: K.UserDefaultsKeys.isDownloadCompleted)
     }
 }
 
 // MARK: - Download Operations
 extension Network {
     func downloadAllData() {
-        defaults.set(false, forKey: "isDownloadCompleted")
+        setDownloadCompleted(false)
         showDownloadProgress.send(true)
 
         downloadEpisodes(page: 1)
@@ -509,8 +518,8 @@ extension Network {
                     if let episodeCountFromDB = self?.episodeCountFromDB() {
                         // Currently there are {episodeCountFromDB} episodes from the local DB.
                         if episodeCountFromDB == -1 { return }
-                        let isDownloadCompleted = self?.defaults.bool(forKey: "isDownloadCompleted") ?? false
-                        if (count > episodeCountFromDB) || !isDownloadCompleted {
+                        let isDownloadCompleted = self?.isDownloadCompleted()
+                        if (count > episodeCountFromDB) || !(isDownloadCompleted ?? false) {
                             // New data availble.
                             let downloadAlert = UIAlertController(title: K.DataUpdate.downloadAlertTitle, message: K.DataUpdate.downloadAlertMsg, preferredStyle: .alert)
                             let downloadAction = UIAlertAction(title: K.DataUpdate.downloadAlertDownloadButton, style: .default) { _ in

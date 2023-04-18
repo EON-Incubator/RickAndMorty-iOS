@@ -18,7 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Network.shared.networkMontior.pathUpdateHandler = { path in
             if path.status == .satisfied {
                 // Connected
-                Network.shared.setOfflineMode(false)
+                let isDownloadCompleted = Network.shared.isDownloadCompleted()
+                Network.shared.setOfflineMode(isDownloadCompleted)
                 Network.shared.checkForUpdate()
             } else {
                 // Disconnected

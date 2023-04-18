@@ -153,5 +153,10 @@ struct K {
         static let adultSwim = "https://www.adultswim.com/videos/rick-and-morty"
         static let apple = "https://tv.apple.com/ca/show/rick-and-morty/umc.cmc.12dp30hnvyq5fbm9716puu8zc"
     }
+
+    struct UserDefaultsKeys {
+        static let isOfflineMode = "isOfflineMode"
+        static let isDownloadCompleted = "isDownloadCompleted"
+    }
 }
 // swiftlint: enable type_name
