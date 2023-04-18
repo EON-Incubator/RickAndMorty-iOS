@@ -10,11 +10,6 @@ import SnapKit
 
 class DownloadProgressView: BaseView {
 
-    static let shared = DownloadProgressView()
-    let currentWindow = UIApplication.shared.connectedScenes.compactMap {
-                            ($0 as? UIWindowScene)?.keyWindow
-                        }.last
-
     let dismissButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: K.Images.systemClose), for: .normal)
@@ -46,7 +41,7 @@ class DownloadProgressView: BaseView {
     override init() {
         super.init()
         setupViews()
-        setupConstraints()
+        // setupConstraints()
     }
 
     func setupViews() {
@@ -59,8 +54,6 @@ class DownloadProgressView: BaseView {
         addSubview(dismissButton)
         addSubview(titleLabel)
         addSubview(progressView)
-        currentWindow?.addSubview(self)
-        dismissButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
     }
 
     func setupConstraints() {
@@ -91,34 +84,5 @@ class DownloadProgressView: BaseView {
             make.top.equalTo(titleLabel.snp_bottomMargin).offset(15)
             make.leading.trailing.equalToSuperview().inset(60)
         }
-    }
-
-    func show() {
-        alpha = 0
-        currentWindow?.addSubview(self)
-        self.snp.updateConstraints { make in
-            make.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(50)
-        }
-        self.superview?.layoutSubviews()
-
-        UIView.animate(withDuration: 0.5, animations: {
-            self.snp.updateConstraints { make in
-                make.bottom.equalToSuperview().inset(90)
-            }
-            self.superview?.layoutSubviews()
-            self.alpha = 1
-        }, completion: nil)
-    }
-
-    @objc func dismiss() {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.snp.updateConstraints { make in
-                make.bottom.equalToSuperview()
-            }
-            self.superview?.layoutSubviews()
-            self.alpha = 0
-        }, completion: nil)
     }
 }

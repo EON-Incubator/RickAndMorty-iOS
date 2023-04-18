@@ -16,6 +16,7 @@ class MainCoordinator: Coordinator {
     private let locationNavController = UINavigationController()
     private let episodeNavController = UINavigationController()
     private let searchNavController = UINavigationController()
+    private let downloadProgressView = DownloadProgressView()
     private var cancellables = Set<AnyCancellable>()
 
     init(window: UIWindow) {
@@ -95,6 +96,8 @@ class MainCoordinator: Coordinator {
         let searchViewController = SearchViewController(viewModel: searchViewModel)
         searchNavController.pushViewController(searchViewController, animated: false)
 
+        subscribeToDownloadProgress()
+
         // Set tab bar controller as the root view controller of the UIWindow.
         window.tintColor = .label
         window.rootViewController = tabBarController
@@ -106,6 +109,26 @@ class MainCoordinator: Coordinator {
         navController.tabBarItem.image = image
         navController.tabBarItem.title = title
         navController.navigationBar.standardAppearance = barAppearance
+    }
+
+    func subscribeToDownloadProgress() {
+        Network.shared.showDownloadProgress
+            .sink { shouldShow in
+                if shouldShow {
+                    self.showDownloadProgressView()
+                } else {
+                    self.dismissDownloadProgressView()
+                }
+            }.store(in: &cancellables)
+
+        Network.shared.downloadProgress
+            .sink { downloadProgress in
+                self.updateDownloadProgressView(message: downloadProgress.message, progress: downloadProgress.progress)
+            }.store(in: &cancellables)
+
+        Network.shared.showDownloadAlert.sink { alertController in
+            self.window.rootViewController?.present(alertController, animated: true)
+        }.store(in: &cancellables)
     }
 
     // MARK: - Navigations
@@ -167,5 +190,41 @@ class MainCoordinator: Coordinator {
                 alertController.dismiss(animated: true, completion: nil)
             }
         }
+    }
+
+    func showDownloadProgressView() {
+        downloadProgressView.alpha = 0
+        window.addSubview(downloadProgressView)
+        downloadProgressView.dismissButton.addTarget(self, action: #selector(dismissDownloadProgressView), for: .touchUpInside)
+        downloadProgressView.setupConstraints()
+        downloadProgressView.snp.updateConstraints { make in
+            make.bottom.equalTo(window)
+            make.leading.trailing.equalTo(window).inset(20)
+            make.height.equalTo(50)
+        }
+        downloadProgressView.superview?.layoutSubviews()
+
+        UIView.animate(withDuration: 0.5, animations: {
+            self.downloadProgressView.snp.updateConstraints { make in
+                make.bottom.equalTo(self.window).inset(90)
+            }
+            self.downloadProgressView.superview?.layoutSubviews()
+            self.downloadProgressView.alpha = 1
+        }, completion: nil)
+    }
+
+    @objc func dismissDownloadProgressView() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.downloadProgressView.snp.updateConstraints { make in
+                make.bottom.equalTo(self.window)
+            }
+            self.downloadProgressView.superview?.layoutSubviews()
+            self.downloadProgressView.alpha = 0
+        }, completion: nil)
+    }
+
+    func updateDownloadProgressView(message: String, progress: Float) {
+        self.downloadProgressView.titleLabel.text = message
+        self.downloadProgressView.progressView.progress = progress
     }
 }
