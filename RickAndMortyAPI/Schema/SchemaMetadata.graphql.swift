@@ -32,13 +32,13 @@ public extension RickAndMortyAPI {
     public static func objectType(forTypename typename: String) -> Object? {
       switch typename {
       case "Query": return RickAndMortyAPI.Objects.Query
-      case "Characters": return RickAndMortyAPI.Objects.Characters
+      case "Episodes": return RickAndMortyAPI.Objects.Episodes
       case "Info": return RickAndMortyAPI.Objects.Info
+      case "Characters": return RickAndMortyAPI.Objects.Characters
       case "Character": return RickAndMortyAPI.Objects.Character
       case "Episode": return RickAndMortyAPI.Objects.Episode
       case "Location": return RickAndMortyAPI.Objects.Location
       case "Locations": return RickAndMortyAPI.Objects.Locations
-      case "Episodes": return RickAndMortyAPI.Objects.Episodes
       default: return nil
       }
     }

@@ -65,14 +65,15 @@ class EpisodeDetailsViewController: BaseViewController {
     func subscribeToViewModel() {
         viewModel.episode.sink(receiveValue: { [weak self] episode in
             if !episode.characters.isEmpty {
-                let imageCount = self?.viewModel.episodeImages?.stills.count
                 if var snapshot = self?.snapshot {
                     snapshot.deleteAllItems()
                     snapshot.appendSections([.carousel, .overview, .info, .characters])
-                    snapshot.appendItems(Array(repeatingExpression: EmptyData(id: UUID()), count: imageCount ?? 0), toSection: .carousel)
+                    if let episodeImages = episode.episodeDetails?.episodeImages {
+                        snapshot.appendItems(Array(episodeImages), toSection: .carousel)
+                    }
                     snapshot.appendItems([EpisodeDetails(episode)], toSection: .overview)
                     snapshot.appendItems([EpisodeDetails(episode), EpisodeDetails(episode), EpisodeDetails(episode)], toSection: .info)
-                    snapshot.appendItems(episode.characters, toSection: .characters)
+                    snapshot.appendItems(Array(episode.characters), toSection: .characters)
                     DispatchQueue.main.async {
                         self?.title = episode.name
                         // add play icon to navigation bar
@@ -102,11 +103,13 @@ extension EpisodeDetailsViewController {
             case 0:
                 guard let carouselCell = collectionView.dequeueReusableCell(withReuseIdentifier: CarouselCell.identifier,
                                                                             for: indexPath) as? CarouselCell else { return nil}
-                return self?.configCarouselCell(cell: carouselCell, itemIndex: indexPath.item)
+                return self?.configCarouselCell(cell: carouselCell, data: episode, itemIndex: indexPath.item)
             case 1:
                 let overviewCell = collectionView.dequeueReusableCell(withReuseIdentifier: EpisodeOverviewCell.identifier,
                                                                       for: indexPath) as? EpisodeOverviewCell
-                overviewCell?.centerLabel.text = self?.viewModel.episodeDetails?.overview
+                if let episodeDetails = episode as? EpisodeDetails {
+                    overviewCell?.centerLabel.text = episodeDetails.item.episodeDetails?.overview
+                }
                 return overviewCell
             case 2:
                 guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: InfoCell.identifier,
@@ -169,15 +172,18 @@ extension EpisodeDetailsViewController {
         }
     }
 
-    func configCarouselCell(cell: CarouselCell, itemIndex: Int) -> UICollectionViewCell {
-        guard let filePath = self.viewModel.episodeImages?.stills[itemIndex].filePath else { return UICollectionViewCell()}
-        let imageUrl = "\(K.Images.episodeImageUrl)\(filePath)"
-        cell.carouselImage.sd_setImage(with: URL(string: imageUrl))
-        return cell
+    func configCarouselCell(cell: CarouselCell, data: AnyHashable, itemIndex: Int) -> UICollectionViewCell {
+        if let image = data as? TmdbEpisodeImages {
+            guard let filePath = image.filePath else { return UICollectionViewCell() }
+            let imageUrl = K.Tmdb.imageBaseUrl + filePath
+            cell.carouselImage.sd_setImage(with: URL(string: imageUrl))
+            return cell
+        }
+        return UICollectionViewCell()
     }
 
     func configCharacterRowCell(cell: CharacterRowCell, data: AnyHashable, itemIndex: Int) -> UICollectionViewCell {
-        if let character = data as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
+        if let character = data as? Characters? {
             let urlString = character?.image ?? ""
             cell.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
             cell.upperLabel.text = character?.name
@@ -200,11 +206,11 @@ extension EpisodeDetailsViewController {
                 cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
             case 1:
                 cell.leftLabel.text = K.Info.airDate
-                cell.rightLabel.text = episodeDetails.item.air_date
+                cell.rightLabel.text = episodeDetails.item.airDate
                 cell.infoImage.image = UIImage(named: K.Images.calendar)?.withRenderingMode(.alwaysTemplate)
                 cell.infoImage.tintColor = UIColor(named: K.Colors.infoCell)
             case 2:
-                cell.rightLabel.text = String(format: "%.1f", self.viewModel.episodeDetails?.voteAverage ?? 0)
+                cell.rightLabel.text = String(format: "%.1f", episodeDetails.item.episodeDetails?.voteAverage ?? 0)
                 cell.leftLabel.text = K.Info.rating
                 cell.infoImage.image = UIImage(systemName: K.Images.systemStar)
                 cell.rightLabel.adjustsFontSizeToFitWidth = false
@@ -221,7 +227,7 @@ extension EpisodeDetailsViewController {
 extension EpisodeDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        if let character = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetEpisodeQuery.Data.Episode.Character? {
+        if let character = dataSource?.itemIdentifier(for: indexPath) as? Characters? {
             viewModel.goCharacterDetails(id: (character?.id) ?? "", navController: navigationController ?? UINavigationController())
         }
     }
@@ -288,8 +294,8 @@ extension EpisodeDetailsViewController {
 // MARK: Struct for Diffable DataSource
 struct EpisodeDetails: Hashable {
     let id: UUID
-    let item: RickAndMortyAPI.GetEpisodeQuery.Data.Episode
-    init(id: UUID = UUID(), _ item: RickAndMortyAPI.GetEpisodeQuery.Data.Episode) {
+    let item: Episodes
+    init(id: UUID = UUID(), _ item: Episodes) {
         self.id = id
         self.item = item
     }

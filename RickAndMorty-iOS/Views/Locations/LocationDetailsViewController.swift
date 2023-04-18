@@ -59,14 +59,12 @@ class LocationDetailsViewController: BaseViewController {
     func subscribeToViewModel() {
         viewModel.location.sink(receiveValue: { [weak self] location in
             self?.title = location.name
-            if location.id != nil {
-                self?.snapshot.deleteAllItems()
-                self?.snapshot.appendSections([.info, .residents])
-                self?.snapshot.appendItems([LocationDetails(location), LocationDetails(location)], toSection: .info)
-                self?.snapshot.appendItems(location.residents, toSection: .residents)
-                if let snapshot = self?.snapshot {
-                    self?.dataSource?.apply(snapshot, animatingDifferences: true)
-                }
+            self?.snapshot.deleteAllItems()
+            self?.snapshot.appendSections([.info, .residents])
+            self?.snapshot.appendItems([LocationDetails(location), LocationDetails(location)], toSection: .info)
+            self?.snapshot.appendItems(Array(location.residents), toSection: .residents)
+            if let snapshot = self?.snapshot {
+                self?.dataSource?.apply(snapshot, animatingDifferences: true)
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {
@@ -92,7 +90,7 @@ extension LocationDetailsViewController {
                 return self?.configLocationInfoCell(cell: infoCell, data: location, itemIndex: indexPath.item)
             case 1:
                 guard let characterRowCell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell else { return nil }
-                if let character = location as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
+                if let character = location as? Characters? {
                     let urlString = character?.image ?? ""
                     characterRowCell.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
                     characterRowCell.upperLabel.text = character?.name
@@ -155,7 +153,7 @@ extension LocationDetailsViewController {
 extension LocationDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        if let character = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationQuery.Data.Location.Resident? {
+        if let character = dataSource?.itemIdentifier(for: indexPath) as? Characters? {
             viewModel.goCharacterDetails(id: character?.id ?? "", navController: navigationController ?? UINavigationController())
         }
     }
@@ -164,8 +162,8 @@ extension LocationDetailsViewController: UICollectionViewDelegate {
 // MARK: Struct for Diffable DataSource
 struct LocationDetails: Hashable {
     let id: UUID
-    let item: RickAndMortyAPI.GetLocationQuery.Data.Location
-    init(id: UUID = UUID(), _ item: RickAndMortyAPI.GetLocationQuery.Data.Location) {
+    let item: Locations
+    init(id: UUID = UUID(), _ item: Locations) {
         self.id = id
         self.item = item
     }

@@ -10,15 +10,15 @@ import SnapKit
 
 class CharacterDetailsView: BaseView {
 
-    let episodeCell = UICollectionView.CellRegistration<RowCell, RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode> { (cell, _ indexPath, episode) in
+    let episodeCell = UICollectionView.CellRegistration<RowCell, Episodes> { (cell, _ indexPath, episode) in
         cell.upperLabel.text = episode.name
         cell.lowerLeftLabel.text = episode.episode
-        cell.lowerRightLabel.text = episode.air_date
+        cell.lowerRightLabel.text = episode.airDate
 
         for index in 0...3 {
             let isIndexValid =  episode.characters.indices.contains(index)
             if isIndexValid {
-                let urlString = episode.characters[index]?.image ?? ""
+                let urlString = episode.characters[index].image
                 cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
             }
         }

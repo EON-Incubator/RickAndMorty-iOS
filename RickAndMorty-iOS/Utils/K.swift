@@ -11,6 +11,19 @@ import UIKit
 // swiftlint: disable type_name
 struct K {
 
+    struct Tmdb {
+        static let tmdbApiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? ""
+        static let showId = 60625
+        static let imageBaseUrl = "https://image.tmdb.org/t/p/w400"
+    }
+
+    struct DataUpdate {
+        static let downloadAlertTitle = "New data available"
+        static let downloadAlertMsg = "Do you want to download Rick and Morty data for offline access?"
+        static let downloadAlertDownloadButton = "Download"
+        static let downloadAlertCancelButton = "Cancel"
+    }
+
     struct Titles {
         static let characters = "Characters"
         static let locations = "Locations"
@@ -19,6 +32,7 @@ struct K {
         static let filter = "Filter"
         static let clearButton = "Clear"
         static let loadMore = "↓    Load More   ↓"
+        static let download = "Download"
         static let hulu = "Hulu"
         static let amazon = "Amazon"
         static let adultSwim = "Adult Swim"
@@ -39,6 +53,7 @@ struct K {
         static let characterAvatarCell = "CharacterAvatarCell"
         static let loadMoreCell = "LoadMoreCell"
         static let locationRowCell = "LocationRowCell"
+        static let downloadProgressView = "DownloadProgressView"
         static let carouselCell = "CarouselCell"
         static let episodeOverviewCell = "EpisodeOverviewCell"
     }

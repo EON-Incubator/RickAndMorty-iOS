@@ -89,14 +89,14 @@ extension LocationsViewController {
                 return cell
             }
 
-            let location = data as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result
+            let location = data as? Locations
             cell?.upperLabel.text = location?.name
             cell?.lowerLeftLabel.text = location?.type
             cell?.lowerRightLabel.text = location?.dimension
             for index in 0...3 {
                 let isIndexValid = location?.residents.indices.contains(index)
                 if isIndexValid ?? false {
-                    let urlString = location?.residents[index]?.image ?? ""
+                    let urlString = location?.residents[index].image ?? ""
                     cell?.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
                 }
             }
@@ -121,8 +121,8 @@ extension LocationsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        if let location = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result {
-            viewModel.goLocationDetails(id: location.id ?? "", navController: navigationController ?? UINavigationController(), residentCount: location.residents.count)
+        if let location = dataSource?.itemIdentifier(for: indexPath) as? Locations {
+            viewModel.goLocationDetails(id: location.id, navController: navigationController ?? UINavigationController(), residentCount: location.residents.count)
         }
     }
 }
