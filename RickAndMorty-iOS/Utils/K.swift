@@ -66,6 +66,7 @@ struct K {
         static let residents = "RESIDENTS"
         static let characters = "CHARACTERS"
         static let overview = "OVERVIEW"
+        static let episodes = "EPISODES"
     }
 
     struct Info {

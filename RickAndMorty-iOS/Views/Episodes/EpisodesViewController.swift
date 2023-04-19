@@ -123,7 +123,7 @@ extension EpisodesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        if let episode = dataSource?.itemIdentifier(for: indexPath) as? Episodes { // RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result {
+        if let episode = dataSource?.itemIdentifier(for: indexPath) as? Episodes {
             viewModel.goEpisodeDetails(id: episode.id, navController: navigationController ?? UIVideoEditorController())
         }
     }

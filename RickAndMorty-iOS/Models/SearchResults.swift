@@ -12,4 +12,5 @@ struct SearchResults {
     let locationsWithNameTotalPages: Int
     let locationsWithType: [Locations]
     let locationsWithTypeTotalPages: Int
+    let episodes: [Episodes]
 }

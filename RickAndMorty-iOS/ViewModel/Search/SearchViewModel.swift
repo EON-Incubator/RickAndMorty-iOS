@@ -140,7 +140,9 @@ class SearchViewModel {
             }
         }
 
-        let searchResults = SearchResults(characters: characters, charactersTotalPages: charactersTotalPages, locationsWithName: locationsWithName, locationsWithNameTotalPages: locationsWithNameTotalPages, locationsWithType: locationsWithType, locationsWithTypeTotalPages: locationsWithTypeTotalPages)
+        let episodes = Network.shared.search(keyword: searchInput).episodes
+
+        let searchResults = SearchResults(characters: characters, charactersTotalPages: charactersTotalPages, locationsWithName: locationsWithName, locationsWithNameTotalPages: locationsWithNameTotalPages, locationsWithType: locationsWithType, locationsWithTypeTotalPages: locationsWithTypeTotalPages, episodes: episodes)
 
         self.searchResults.send(searchResults)
     }
@@ -151,6 +153,10 @@ class SearchViewModel {
 
     func goLocationDetails(id: String, navController: UINavigationController, residentCount: Int) {
         coordinator?.goLocationDetails(id: id, navController: navController, residentCount: residentCount)
+    }
+
+    func goEpisodeDetails(id: String, navController: UINavigationController) {
+        coordinator?.goEpisodeDetails(id: id, navController: navController)
     }
 }
 

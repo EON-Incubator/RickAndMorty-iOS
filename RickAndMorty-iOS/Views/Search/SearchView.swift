@@ -11,6 +11,8 @@ class SearchView: BaseView {
 
     let loadingView = LoadingView()
 
+    let episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (_ cell, _ indexPath, _ episode) in }
+
     let locationCell = UICollectionView.CellRegistration<LocationRowCell, Locations> { (cell, _ indexPath, location) in
         cell.lowerRightLabel.isHidden = false
         cell.upperLabel.text = location.name
@@ -105,7 +107,7 @@ class SearchView: BaseView {
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: groupHeight)
 
-            var group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
+            var group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: 1)
 
             if effectiveWidth > 500 {
                 group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 2)
