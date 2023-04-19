@@ -24,7 +24,7 @@ class Network {
     static let shared = Network()
     let networkMontior = NWPathMonitor()
     let defaults = UserDefaults.standard
-    let apollo = ApolloClient(url: URL(string: "https://rickandmortyapi.com/graphql")!)
+    let apollo = ApolloClient(url: URL(string: K.Apollo.graphQLUrl)!)
     private var charactersTotalPages = 0
     private var locationsTotalPages = 0
     private var episodesTotalPages = 0
