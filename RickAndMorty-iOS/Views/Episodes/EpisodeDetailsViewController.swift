@@ -276,7 +276,7 @@ extension EpisodeDetailsViewController {
         youtubeViewController.modalPresentationStyle = .popover
 
         if let popover = youtubeViewController.popoverPresentationController {
-            popover.sourceView = sender as? UIView
+            popover.barButtonItem = sender as? UIBarButtonItem
             let sheet = popover.adaptiveSheetPresentationController
             sheet.detents = [
                 .custom(identifier: UISheetPresentationController.Detent.Identifier("small")) { _ in
