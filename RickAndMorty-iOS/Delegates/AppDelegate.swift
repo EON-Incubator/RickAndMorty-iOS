@@ -25,7 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Disconnected
                 Network.shared.setOfflineMode(true)
             }
-            print(path.status)
         }
 
         let queue = DispatchQueue(label: "Monitor")

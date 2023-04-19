@@ -126,7 +126,7 @@ class EpisodeDetailsViewModel {
     }
 
     func getDataFromDB() {
-        if let epi = Network.shared.getEpisode(episodeId: episodeId) {
+        if let epi = DBManager.shared.getEpisode(episodeId: episodeId) {
             self.episode.send(epi)
             self.episodeVideo = epi.episodeDetails?.episodeVideos.first?.key
         }

@@ -71,7 +71,7 @@ class LocationDetailsViewModel {
     }
 
     func getDataFromDB() {
-        if let loc = Network.shared.getLocation(locationId: locationId) {
+        if let loc = DBManager.shared.getLocation(locationId: locationId) {
             self.location.send(loc)
         }
     }

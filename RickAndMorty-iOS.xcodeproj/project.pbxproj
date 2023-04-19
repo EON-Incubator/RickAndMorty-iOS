@@ -49,6 +49,7 @@
 		F729CB6C29E5DAE30051E624 /* Episodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB6B29E5DAE30051E624 /* Episodes.swift */; };
 		F729CB6E29E60CF70051E624 /* Locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB6D29E60CF70051E624 /* Locations.swift */; };
 		F729CB7229E636610051E624 /* DownloadProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB7129E636610051E624 /* DownloadProgressView.swift */; };
+		F74BACBF29F08C3600742939 /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74BACBE29F08C3600742939 /* DBManager.swift */; };
 		F759DA8329F03E7F00593BD1 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = F759DA8229F03E7F00593BD1 /* Realm */; };
 		F759DA8529F03E7F00593BD1 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F759DA8429F03E7F00593BD1 /* RealmSwift */; };
 		F759DA8729F03E8B00593BD1 /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = F759DA8629F03E8B00593BD1 /* YouTubeiOSPlayerHelper */; };
@@ -185,6 +186,7 @@
 		F729CB6B29E5DAE30051E624 /* Episodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episodes.swift; sourceTree = "<group>"; };
 		F729CB6D29E60CF70051E624 /* Locations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locations.swift; sourceTree = "<group>"; };
 		F729CB7129E636610051E624 /* DownloadProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadProgressView.swift; sourceTree = "<group>"; };
+		F74BACBE29F08C3600742939 /* DBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBManager.swift; sourceTree = "<group>"; };
 		F7604C9A29BF7219003C2906 /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
 		F76E21D629E71682000CA322 /* TmdbEpisodeImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbEpisodeImages.swift; sourceTree = "<group>"; };
 		F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbEpisodeVideos.swift; sourceTree = "<group>"; };
@@ -338,10 +340,10 @@
 		544A6CBD29BF878A0055FB75 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				54ECFC4229C546670049ACE3 /* Search */,
 				544A6CBE29BF87A30055FB75 /* Characters */,
 				F7C26FED29C0C0BB00903AF2 /* Locations */,
 				544A6CD229C114300055FB75 /* Episodes */,
+				54ECFC4229C546670049ACE3 /* Search */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -421,15 +423,23 @@
 		F729CB6829E5A6EE0051E624 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F729CB6629E4B9950051E624 /* TmdbEpisodeDetails.swift */,
-				F76E21D629E71682000CA322 /* TmdbEpisodeImages.swift */,
-				F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */,
 				F729CB6929E5A9F10051E624 /* Characters.swift */,
 				F729CB6D29E60CF70051E624 /* Locations.swift */,
 				F729CB6B29E5DAE30051E624 /* Episodes.swift */,
 				F76E21DC29E9D720000CA322 /* SearchResults.swift */,
+				F729CB6629E4B9950051E624 /* TmdbEpisodeDetails.swift */,
+				F76E21D629E71682000CA322 /* TmdbEpisodeImages.swift */,
+				F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		F74BACC029F098AF00742939 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				F74BACBE29F08C3600742939 /* DBManager.swift */,
+			);
+			path = Database;
 			sourceTree = "<group>";
 		};
 		F7604C9C29BF721D003C2906 /* Locations */ = {
@@ -475,6 +485,7 @@
 				544A6CBD29BF878A0055FB75 /* ViewModel */,
 				F729CB6829E5A6EE0051E624 /* Models */,
 				F77E4BDD29BA390F00B8B5CE /* Network */,
+				F74BACC029F098AF00742939 /* Database */,
 				F7EA92EF29CB8F9600F7F112 /* RickAndMortyAPI */,
 				F77E4BA029B94D5900B8B5CE /* GraphQL */,
 				F7C26FF729C22F5900903AF2 /* Assets */,
@@ -488,11 +499,11 @@
 		F77E4B9429B934C300B8B5CE /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				54ECFC3D29C545810049ACE3 /* Search */,
 				540F4CEE29BEA1A600677B82 /* Shared */,
 				F77E4B9529B934D200B8B5CE /* Characters */,
 				F7604C9C29BF721D003C2906 /* Locations */,
 				544A6CC929C1029B0055FB75 /* Episodes */,
+				54ECFC3D29C545810049ACE3 /* Search */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1005,6 +1016,7 @@
 				F7EA932829CB8F9600F7F112 /* Locations.graphql.swift in Sources */,
 				54BDF5C229BBBEB9003F7084 /* CharacterDetailsView.swift in Sources */,
 				54ECFC3F29C545A00049ACE3 /* SearchViewController.swift in Sources */,
+				F74BACBF29F08C3600742939 /* DBManager.swift in Sources */,
 				54AEA28B29EA079F0084B912 /* YoutubeViewController.swift in Sources */,
 				F77E4BDC29BA390200B8B5CE /* Network.swift in Sources */,
 				54A0C36929E609A9009153BF /* CarouselCell.swift in Sources */,

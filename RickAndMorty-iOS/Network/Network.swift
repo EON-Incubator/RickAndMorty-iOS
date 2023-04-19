@@ -11,7 +11,6 @@ import Apollo
 import RealmSwift
 import TMDb
 import SDWebImage
-import UIKit
 import Combine
 
 struct DownloadProgress {
@@ -19,7 +18,6 @@ struct DownloadProgress {
     var progress: Float
 }
 
-// swiftlint: disable file_length
 class Network {
     static let shared = Network()
     let networkMontior = NWPathMonitor()
@@ -122,7 +120,7 @@ extension Network {
                     case .success(let response):
 
                         if let results = response.data?.characters?.results {
-                            self?.saveCharacters(results)
+                            DBManager.shared.saveCharacters(results)
                         }
                         if let pageInfo = response.data?.characters?.info {
                             if pageInfo.next != nil {
@@ -153,7 +151,7 @@ extension Network {
                     switch result {
                     case .success(let response):
                         if let results = response.data?.episodes?.results {
-                            self?.saveEpisodes(results)
+                            DBManager.shared.saveEpisodes(results)
                         }
                         if let pageInfo = response.data?.episodes?.info {
                             if pageInfo.next != nil {
@@ -184,7 +182,7 @@ extension Network {
                 switch result {
                 case .success(let response):
                     if let results = response.data?.locations?.results {
-                        self?.saveLocations(results)
+                        DBManager.shared.saveLocations(results)
                     }
                     if let pageInfo = response.data?.locations?.info {
                         if pageInfo.next != nil {
@@ -261,258 +259,11 @@ extension Network {
                 }
             }
 
-            saveEpisodeDetails(tmdbEpisodeDetails, parentId: parentId)
+            DBManager.shared.saveEpisodeDetails(tmdbEpisodeDetails, parentId: parentId)
         }
     }
 }
 
-// MARK: - LocalDB Save Operations
-extension Network {
-    func saveCharacters(_ results: [RickAndMortyAPI.GetCharactersWithDetailsQuery.Data.Characters.Result?]) {
-        var characters = [Characters]()
-
-        for item in results {
-            let character = Characters()
-            character.id = item?.id ?? ""
-            character.name = item?.name ?? ""
-            character.image = item?.image ?? ""
-            character.gender = item?.gender ?? ""
-            character.species = item?.species ?? ""
-            character.status = item?.status ?? ""
-            character.type = item?.type ?? ""
-
-            do {
-
-                let realm = try Realm()
-
-                if let originId = item?.origin?.id {
-                    let origin = realm.object(ofType: Locations.self, forPrimaryKey: originId)
-                    character.origin = origin
-                }
-
-                if let locationId = item?.location?.id {
-                    let location = realm.object(ofType: Locations.self, forPrimaryKey: locationId)
-                    character.location = location
-                }
-
-                if let episodes = item?.episode {
-                    for epi in episodes {
-                        if let episode = realm.object(ofType: Episodes.self, forPrimaryKey: epi?.id) {
-                            character.episodes.append(episode)
-                        }
-                    }
-                }
-            } catch {
-                print("REALM ERROR: error in initializing realm")
-            }
-            characters.append(character)
-        }
-
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(characters, update: .modified)
-            }
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-        }
-    }
-
-    func saveLocations(_ results: [RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result?]) {
-        var locations = [Locations]()
-
-        for item in results {
-            let location = Locations()
-            location.id = item?.id ?? ""
-            location.name = item?.name ?? ""
-            location.dimension = item?.dimension ?? ""
-            location.type = item?.type ?? ""
-            for locationItem in item?.residents ?? [] {
-                let character = Characters(id: locationItem?.id ?? "",
-                                           name: locationItem?.name ?? "",
-                                           image: locationItem?.image ?? "",
-                                           gender: locationItem?.gender ?? "",
-                                           status: locationItem?.status ?? "",
-                                           species: locationItem?.species ?? "",
-                                           type: locationItem?.type ?? "")
-                location.residents.append(character)
-            }
-            locations.append(location)
-        }
-
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(locations, update: .modified)
-            }
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-        }
-
-    }
-
-    func saveEpisodes(_ results: [RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result?]) {
-        var episodes = [Episodes]()
-
-        for item in results {
-            let episode = Episodes()
-            episode.id = item?.id ?? ""
-            episode.name = item?.name ?? ""
-            episode.episode = item?.episode ?? ""
-            episode.airDate = item?.air_date ?? ""
-            for characterItem in item?.characters ?? [] {
-                let character = Characters()
-                character.id = characterItem?.id ?? ""
-                character.name = characterItem?.name ?? ""
-                character.image = characterItem?.image ?? ""
-                character.gender = characterItem?.gender ?? ""
-                character.species = characterItem?.species ?? ""
-                character.status = characterItem?.status ?? ""
-                character.type = characterItem?.type ?? ""
-                episode.characters.append(character)
-            }
-            episodes.append(episode)
-        }
-
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(episodes, update: .modified)
-            }
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-        }
-    }
-
-    func saveEpisodeDetails(_ tmdbEpisodeDetails: TmdbEpisodeDetails, parentId: String) {
-        DispatchQueue.main.async {
-            do {
-                let realm = try Realm()
-                let episode = realm.objects(Episodes.self).first(where: { $0.id == parentId })!
-
-                try realm.write {
-                    realm.add(tmdbEpisodeDetails, update: .modified)
-                    episode.episodeDetails = tmdbEpisodeDetails
-                }
-            } catch {
-                print("REALM ERROR: error in initializing realm")
-            }
-        }
-    }
-}
-
-// MARK: - LocalDB Read Operations
-extension Network {
-
-    func search(keyword: String) -> SearchResults {
-        var characters = [Characters]()
-        var locationsWithName = [Locations]()
-        var locationsWithType = [Locations]()
-        var uniqueEpisodes = [Episodes]()
-
-        do {
-            let realm = try Realm()
-            let char = realm.objects(Characters.self).filter("name CONTAINS[c] %@", keyword)
-            characters = Array(char)
-            let locWithName = realm.objects(Locations.self).filter("name CONTAINS[c] %@", keyword)
-            locationsWithName = Array(locWithName)
-            let locWithType = realm.objects(Locations.self).filter("type CONTAINS[c] %@", keyword)
-            locationsWithType = Array(locWithType)
-            let episodeFilterByOverview = realm.objects(Episodes.self).filter("episodeDetails.overview  CONTAINS[c] %@", keyword.lowercased())
-            let episodeFilterByName = realm.objects(Episodes.self).filter("episodeDetails.name  CONTAINS[c] %@", keyword.lowercased())
-
-            let episodes = Array(episodeFilterByName) + Array(episodeFilterByOverview)
-            uniqueEpisodes = Array(Set(episodes))
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-        }
-
-        let searchResults = SearchResults(characters: characters, charactersTotalPages: 1, locationsWithName: locationsWithName, locationsWithNameTotalPages: 1, locationsWithType: locationsWithType, locationsWithTypeTotalPages: 1, episodes: uniqueEpisodes)
-
-        return searchResults
-    }
-
-    func getCharacters(page: Int, status: String = "", gender: String = "", name: String = "") -> Results<Characters>? {
-        let status = status.count > 0 ? status : "*"
-        let gender = gender.count > 0 ? gender : "*"
-        let name = name.count > 0 ? name : "*"
-
-        do {
-            let realm = try Realm()
-            let characters = realm.objects(Characters.self).filter("status LIKE[c] %@ AND gender LIKE[c] %@ AND name LIKE[c] %@", status, gender, name)
-            return page == 1 ? characters : nil
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-            return nil
-        }
-    }
-
-    func getCharacter(characterId: String) -> Characters? {
-        do {
-            let realm = try Realm()
-            let character = realm.object(ofType: Characters.self, forPrimaryKey: characterId)
-            return character
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-            return nil
-        }
-    }
-
-    func getLocations(page: Int) -> Results<Locations>? {
-        do {
-            let realm = try Realm()
-            let locations = realm.objects(Locations.self)
-            return page == 1 ? locations : nil
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-            return nil
-        }
-    }
-
-    func getLocation(locationId: String) -> Locations? {
-        do {
-            let realm = try Realm()
-            let location = realm.object(ofType: Locations.self, forPrimaryKey: locationId)
-            return location
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-            return nil
-        }
-    }
-
-    func getEpisodes(page: Int) -> Results<Episodes>? {
-        do {
-            let realm = try Realm()
-            let episodes = realm.objects(Episodes.self)
-            return page == 1 ? episodes : nil
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-            return nil
-        }
-    }
-
-    func getEpisode(episodeId: String) -> Episodes? {
-        do {
-            let realm = try Realm()
-            let episode = realm.object(ofType: Episodes.self, forPrimaryKey: episodeId)
-            return episode
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-            return nil
-        }
-    }
-
-    func getEpisodesImages() -> Results<TmdbEpisodeImages>? {
-        do {
-            let realm = try Realm()
-            let episodesImages = realm.objects(TmdbEpisodeImages.self)
-            return episodesImages
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-            return nil
-        }
-    }
-}
 // MARK: - Check for Data Update
 extension Network {
     func checkForUpdate() {
@@ -521,40 +272,29 @@ extension Network {
             case .success(let response):
                 if let count = response.data?.episodes?.info?.count as? Int {
                     // Currently there are {count} episodes from the API.
-                    if let episodeCountFromDB = self?.episodeCountFromDB() {
-                        // Currently there are {episodeCountFromDB} episodes from the local DB.
-                        if episodeCountFromDB == -1 { return }
-                        let isDownloadCompleted = self?.isDownloadCompleted()
-                        if (count > episodeCountFromDB) || !(isDownloadCompleted ?? false) {
-                            // New data availble.
-                            let downloadAlert = UIAlertController(title: K.DataUpdate.downloadAlertTitle, message: K.DataUpdate.downloadAlertMsg, preferredStyle: .alert)
-                            let downloadAction = UIAlertAction(title: K.DataUpdate.downloadAlertDownloadButton, style: .default) { _ in
-                                Network.shared.downloadAllData()
-                            }
-                            downloadAlert.addAction(downloadAction)
-                            let cancel = UIAlertAction(title: K.DataUpdate.downloadAlertCancelButton, style: .cancel)
-                            downloadAlert.addAction(cancel)
-                            self?.showDownloadAlert.send(downloadAlert)
-
-                        } else {
-                            // User have the latest data.
+                    let episodeCountFromDB = DBManager.shared.getEpisodeCount()
+                    // Currently there are {episodeCountFromDB} episodes from the local DB.
+                    if episodeCountFromDB == -1 { return }
+                    let isDownloadCompleted = self?.isDownloadCompleted()
+                    if (count > episodeCountFromDB) || !(isDownloadCompleted ?? false) {
+                        // New data availble.
+                        let downloadAlert = UIAlertController(title: K.DataUpdate.downloadAlertTitle, message: K.DataUpdate.downloadAlertMsg, preferredStyle: .alert)
+                        let downloadAction = UIAlertAction(title: K.DataUpdate.downloadAlertDownloadButton, style: .default) { _ in
+                            Network.shared.downloadAllData()
                         }
+                        downloadAlert.addAction(downloadAction)
+                        let cancel = UIAlertAction(title: K.DataUpdate.downloadAlertCancelButton, style: .cancel)
+                        downloadAlert.addAction(cancel)
+                        self?.showDownloadAlert.send(downloadAlert)
+
+                    } else {
+                        // User have the latest data.
                     }
+
                 }
             case .failure(let error):
                 print(error)
             }
-        }
-    }
-
-    func episodeCountFromDB() -> Int {
-        do {
-            let realm = try Realm()
-            let episodes = realm.objects(Episodes.self)
-            return episodes.count
-        } catch {
-            print("REALM ERROR: error in initializing realm")
-            return -1
         }
     }
 }
@@ -562,7 +302,7 @@ extension Network {
 // MARK: - Image Caching
 extension Network {
     func cacheCharactersImages() {
-        if let characters = getCharacters(page: 1) {
+        if let characters = DBManager.shared.getCharacters(page: 1) {
             var imageURLs = [URL]()
             for character in characters {
                 if let url = URL(string: character.image) {
@@ -584,7 +324,7 @@ extension Network {
     }
 
     func cacheEpisodesImages() {
-        if let episodeImages = getEpisodesImages() {
+        if let episodeImages = DBManager.shared.getEpisodesImages() {
             var imageURLs = [URL]()
             for image in episodeImages {
                 if let url = URL(string: K.Tmdb.imageBaseUrl + (image.filePath ?? "")) {
@@ -605,4 +345,3 @@ extension Network {
         }
     }
 }
-// swiftlint: enable file_length

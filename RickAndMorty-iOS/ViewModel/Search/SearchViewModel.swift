@@ -57,7 +57,7 @@ class SearchViewModel {
     }
 
     func getDataFromDB(keyword: String) {
-        let results = Network.shared.search(keyword: keyword)
+        let results = DBManager.shared.search(keyword: keyword)
         self.searchResults.send(results)
     }
 
@@ -140,7 +140,7 @@ class SearchViewModel {
             }
         }
 
-        let episodes = Network.shared.search(keyword: searchInput).episodes
+        let episodes = DBManager.shared.search(keyword: searchInput).episodes
 
         let searchResults = SearchResults(characters: characters, charactersTotalPages: charactersTotalPages, locationsWithName: locationsWithName, locationsWithNameTotalPages: locationsWithNameTotalPages, locationsWithType: locationsWithType, locationsWithTypeTotalPages: locationsWithTypeTotalPages, episodes: episodes)
 

@@ -45,7 +45,7 @@ class EpisodesViewModel {
     }
 
     func getDataFromDB(page: Int) {
-        if let results = Network.shared.getEpisodes(page: page) {
+        if let results = DBManager.shared.getEpisodes(page: page) {
             self.mapDataFromDB(page: page, episodes: results)
         } else {
             self.episodes.value = [Episodes]()
