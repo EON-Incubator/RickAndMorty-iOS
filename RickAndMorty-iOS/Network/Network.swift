@@ -8,7 +8,6 @@
 import Foundation
 import Network
 import Apollo
-import RealmSwift
 import TMDb
 import SDWebImage
 import Combine
@@ -199,9 +198,7 @@ extension Network {
     }
 
     func downloadAllEpisodeDetails() {
-        do {
-            let realm = try Realm()
-            let episodes = realm.objects(Episodes.self)
+        if let episodes = DBManager.shared.getEpisodes(page: 1) {
             for item in episodes {
                 let seasonNumberString = String(item.episode.dropFirst())
                     .prefix(while: { $0.isNumber })
@@ -211,11 +208,8 @@ extension Network {
 
                 downloadEpisodeDetails(season: seasonNumber, episode: episodeNumber, parentId: item.id)
             }
-            isEpisodeDetailsDataDownloaded = true
-        } catch {
-            print("REALM ERROR: error in initializing realm")
         }
-
+        isEpisodeDetailsDataDownloaded = true
     }
 
     func downloadEpisodeDetails(season: Int, episode: Int, parentId: String) {
