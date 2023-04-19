@@ -12,8 +12,9 @@ import UIKit
 struct K {
 
     struct Tmdb {
-        static let tmdbApiKey = "1ecd1b26d36c0ce0ec76aec3676d5773"
+        static let tmdbApiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? ""
         static let showId = 60625
+        static let imageBaseUrl = "https://image.tmdb.org/t/p/w400"
     }
 
     struct DataUpdate {
@@ -32,6 +33,10 @@ struct K {
         static let clearButton = "Clear"
         static let loadMore = "↓    Load More   ↓"
         static let download = "Download"
+        static let hulu = "Hulu"
+        static let amazon = "Amazon"
+        static let adultSwim = "Adult Swim"
+        static let apple = "Apple"
     }
 
     struct Identifiers {
@@ -49,6 +54,8 @@ struct K {
         static let loadMoreCell = "LoadMoreCell"
         static let locationRowCell = "LocationRowCell"
         static let downloadProgressView = "DownloadProgressView"
+        static let carouselCell = "CarouselCell"
+        static let episodeOverviewCell = "EpisodeOverviewCell"
     }
 
     struct Headers {
@@ -58,6 +65,8 @@ struct K {
         static let locations = "LOCATIONS"
         static let residents = "RESIDENTS"
         static let characters = "CHARACTERS"
+        static let overview = "OVERVIEW"
+        static let episodes = "EPISODES"
     }
 
     struct Info {
@@ -70,6 +79,7 @@ struct K {
         static let dimension = "Dimension"
         static let episode = "Episode"
         static let airDate = "Air Date"
+        static let rating = "Rating"
         static let identifier = "InfoCell"
     }
 
@@ -103,6 +113,14 @@ struct K {
         static let map = "map"
         static let systemMagnifyingGlass = "magnifyingglass"
         static let systemPerson = "person.circle"
+        static let systemStar = "star"
+        static let episodeImageUrl = "https://image.tmdb.org/t/p/w400"
+        static let hulu = "hulu"
+        static let amazon = "amazon"
+        static let adultSwim = "adultSwim"
+        static let systemApple = "apple.logo"
+        static let systemplay = "play"
+        static let systemlink = "link"
     }
 
     struct Fonts {
@@ -128,6 +146,13 @@ struct K {
         static let filterButton = UIColor(red: 0.65, green: 0.76, blue: 0.81, alpha: 1.00)
         static let dimension = UIColor(red: 0.87, green: 0.99, blue: 0.98, alpha: 0.4)
         static let type = UIColor(red: 1.00, green: 0.75, blue: 0.66, alpha: 0.4)
+    }
+
+    struct Urls {
+        static let amazon = "https://www.amazon.com/gp/video/detail/0JHRH3V853S6L8MJQA4Q04BREF/ref=atv_dl_rdr?autoplay=1"
+        static let hulu = "https://www.hulu.com/series/rick-and-morty-d76d6361-3fbf-4842-8dd7-e05520557280"
+        static let adultSwim = "https://www.adultswim.com/videos/rick-and-morty"
+        static let apple = "https://tv.apple.com/ca/show/rick-and-morty/umc.cmc.12dp30hnvyq5fbm9716puu8zc"
     }
 }
 // swiftlint: enable type_name

@@ -18,6 +18,7 @@ class CharactersViewModel {
 
     let charactersForSearch = CurrentValueSubject<[Characters], Never>([])
     var characters = CurrentValueSubject<[Characters], Never>([])
+    var networkTimeoutMessage: PassthroughSubject<String, Never> = .init()
     var name = ""
     var currentPage = 0 {
         didSet {
@@ -32,7 +33,7 @@ class CharactersViewModel {
     weak var coordinator: MainCoordinator?
 
     func fetchData(page: Int, name: String = "") {
-        if UserDefaults().bool(forKey: "isOfflineMode") {
+        if Network.shared.isOfflineMode() {
             getDataFromDB(page: page, name: name)
             return
         }
@@ -50,7 +51,8 @@ class CharactersViewModel {
                         }
                     case .failure(let error):
                         print(error)
-                        self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
+                        Network.shared.setOfflineMode(true)
+                        self?.networkTimeoutMessage.send(error.localizedDescription)
                     }
 
                 }

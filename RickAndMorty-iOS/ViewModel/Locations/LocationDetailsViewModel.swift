@@ -12,9 +12,9 @@ import UIKit
 class LocationDetailsViewModel {
 
     let location = PassthroughSubject<Locations, Never>()
-    var locationId: String
     weak var coordinator: MainCoordinator?
-
+    var locationId: String
+    var networkTimeoutMessage: PassthroughSubject<String, Never> = .init()
     init(locationId: String) {
         self.locationId = locationId
     }
@@ -26,7 +26,7 @@ class LocationDetailsViewModel {
     }
 
     func fetchData() {
-        if UserDefaults().bool(forKey: "isOfflineMode") {
+        if Network.shared.isOfflineMode() {
             getDataFromDB()
             return
         }
@@ -41,7 +41,8 @@ class LocationDetailsViewModel {
                         }
                     case .failure(let error):
                         print(error)
-                        self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
+                        Network.shared.setOfflineMode(true)
+                        self?.networkTimeoutMessage.send(error.localizedDescription)
                     }
                 }
     }

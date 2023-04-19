@@ -16,6 +16,7 @@ class LocationsViewModel {
     let locationsTypeSearch = CurrentValueSubject<[Locations], Never>([])
 
     var locations = CurrentValueSubject<[Locations], Never>([])
+    var networkTimeoutMessage: PassthroughSubject<String, Never> = .init()
     var currentPage = 0 {
         didSet {
             fetchData(page: currentPage)
@@ -26,7 +27,7 @@ class LocationsViewModel {
     weak var coordinator: MainCoordinator?
 
     func fetchData(page: Int, name: String = "", type: String = "") {
-        if UserDefaults().bool(forKey: "isOfflineMode") {
+        if Network.shared.isOfflineMode() {
             getDataFromDB(page: page)
             return
         }
@@ -43,7 +44,8 @@ class LocationsViewModel {
                     }
                 case .failure(let error):
                     print(error)
-                    self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
+                    Network.shared.setOfflineMode(true)
+                    self?.networkTimeoutMessage.send(error.localizedDescription)
                 }
             }
     }

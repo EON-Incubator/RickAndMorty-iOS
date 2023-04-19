@@ -58,10 +58,27 @@ class Network {
 
     private var isCharactersImagesDownloaded = false {
         didSet {
-            if isCharactersDataDownloaded == true {
+            if isCharactersImagesDownloaded == true {
+                cacheEpisodesImages()
+            }
+        }
+    }
+
+    private var isEpisodesImagesDownloaded = false {
+        didSet {
+            if isEpisodesImagesDownloaded == true {
+                DownloadProgressView.shared.dismiss()
                 defaults.set(true, forKey: "isDownloadCompleted")
             }
         }
+    }
+
+    func setOfflineMode(_ mode: Bool) {
+        defaults.set(mode, forKey: "isOfflineMode")
+    }
+
+    func isOfflineMode() -> Bool {
+        defaults.bool(forKey: "isOfflineMode")
     }
 }
 
@@ -375,6 +392,7 @@ extension Network {
         var characters = [Characters]()
         var locationsWithName = [Locations]()
         var locationsWithType = [Locations]()
+        var uniqueEpisodes = [Episodes]()
 
         do {
             let realm = try Realm()
@@ -384,11 +402,16 @@ extension Network {
             locationsWithName = Array(locWithName)
             let locWithType = realm.objects(Locations.self).filter("type CONTAINS[c] %@", keyword)
             locationsWithType = Array(locWithType)
+            let episodeFilterByOverview = realm.objects(Episodes.self).filter("episodeDetails.overview  CONTAINS[c] %@", keyword.lowercased())
+            let episodeFilterByName = realm.objects(Episodes.self).filter("episodeDetails.name  CONTAINS[c] %@", keyword.lowercased())
+
+            let episodes = Array(episodeFilterByName) + Array(episodeFilterByOverview)
+            uniqueEpisodes = Array(Set(episodes))
         } catch {
             print("REALM ERROR: error in initializing realm")
         }
 
-        let searchResults = SearchResults(characters: characters, charactersTotalPages: 1, locationsWithName: locationsWithName, locationsWithNameTotalPages: 1, locationsWithType: locationsWithType, locationsWithTypeTotalPages: 1)
+        let searchResults = SearchResults(characters: characters, charactersTotalPages: 1, locationsWithName: locationsWithName, locationsWithNameTotalPages: 1, locationsWithType: locationsWithType, locationsWithTypeTotalPages: 1, episodes: uniqueEpisodes)
 
         return searchResults
     }
@@ -462,6 +485,17 @@ extension Network {
             return nil
         }
     }
+
+    func getEpisodesImages() -> Results<TmdbEpisodeImages>? {
+        do {
+            let realm = try Realm()
+            let episodesImages = realm.objects(TmdbEpisodeImages.self)
+            return episodesImages
+        } catch {
+            print("REALM ERROR: error in initializing realm")
+            return nil
+        }
+    }
 }
 // MARK: - Check for Data Update
 extension Network {
@@ -527,8 +561,30 @@ extension Network {
                 }
             }, completed: { [weak self] (_, _) in
                 DispatchQueue.main.async {
-                    DownloadProgressView.shared.dismiss()
                     self?.isCharactersImagesDownloaded = true
+                }
+            })
+        }
+    }
+
+    func cacheEpisodesImages() {
+        if let episodeImages = getEpisodesImages() {
+            var imageURLs = [URL]()
+            for image in episodeImages {
+                if let url = URL(string: K.Tmdb.imageBaseUrl + (image.filePath ?? "")) {
+                    imageURLs.append(url)
+                }
+            }
+            SDWebImagePrefetcher.shared.prefetchURLs(imageURLs, progress: { (noOfFinishedUrls, noOfTotalUrls) in
+                let progress = Float(noOfFinishedUrls) / Float(noOfTotalUrls)
+                let progressMsg = String(format: "Downloading Episodes Images...%.0f%%", progress * 100)
+                DispatchQueue.main.async {
+                    DownloadProgressView.shared.titleLabel.text = progressMsg
+                    DownloadProgressView.shared.progressView.progress = progress
+                }
+            }, completed: { [weak self] (_, _) in
+                DispatchQueue.main.async {
+                    self?.isEpisodesImagesDownloaded = true
                 }
             })
         }

@@ -79,19 +79,19 @@ extension CharacterDetailsView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            func getGroupHeight() -> NSCollectionLayoutDimension {
-                switch sectionType {
-                case .appearance, .empty:
-                    return NSCollectionLayoutDimension.estimated(280)
-                case .info, .location, .emptyInfo, .emptyLocation:
-                    return NSCollectionLayoutDimension.estimated(60)
-                default:
-                    return NSCollectionLayoutDimension.estimated(100)
-                }
+            var groupHeight: NSCollectionLayoutDimension
+
+            switch sectionType {
+            case .appearance, .empty:
+                groupHeight = NSCollectionLayoutDimension.estimated(280)
+            case .info, .location, .emptyInfo, .emptyLocation:
+                groupHeight = NSCollectionLayoutDimension.estimated(60)
+            default:
+                groupHeight = NSCollectionLayoutDimension.estimated(100)
             }
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: getGroupHeight())
+                                                   heightDimension: groupHeight)
             var group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
 
             if effectiveWidth > 500 && sectionType != .info {

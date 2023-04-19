@@ -18,6 +18,7 @@ class SearchViewController: BaseViewController {
         case locations
         case loadMoreCharacters
         case loadMoreLocations
+        case episodes
     }
 
     private let searchView = SearchView()
@@ -63,7 +64,7 @@ class SearchViewController: BaseViewController {
         viewModel.searchResults.sink(receiveValue: { [weak self] result in
             self?.snapshot.deleteAllItems()
 
-            self?.snapshot.appendSections([.characters, .loadMoreCharacters, .locations, .loadMoreLocations])
+            self?.snapshot.appendSections([.characters, .loadMoreCharacters, .locations, .loadMoreLocations, .episodes])
 
             let locationsWithName = result.locationsWithName
             let locationsWithType = result.locationsWithType
@@ -86,6 +87,7 @@ class SearchViewController: BaseViewController {
                 if self?.totalLocationsPage ?? 0 > 2 {
                     self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreLocations)
                 }
+                self?.snapshot.appendItems(result.episodes, toSection: .episodes)
             case 1:
                 self?.currentCharactersPage = 1
                 self?.snapshot.appendItems(characters, toSection: .characters)
@@ -99,7 +101,7 @@ class SearchViewController: BaseViewController {
                     self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreLocations)
                 }
             default:
-                print("error")
+                self?.snapshot.appendItems(result.episodes, toSection: .episodes)
             }
             if let snapshot = self?.snapshot {
                 self?.dataSource?.apply(snapshot, animatingDifferences: true)
@@ -110,6 +112,7 @@ class SearchViewController: BaseViewController {
         }).store(in: &cancellables)
     }
 
+    // swiftlint:disable cyclomatic_complexity
     private func configureDataSource() {
         dataSource = DataSource(collectionView: searchView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, result) -> UICollectionViewCell? in
 
@@ -135,6 +138,21 @@ class SearchViewController: BaseViewController {
                 }
             case 2:
                 cell = collectionView.dequeueConfiguredReusableCell(using: locationCell, for: indexPath, item: result as? Locations)
+            case 4:
+                guard let episodeCell = self?.searchView.episodeCell else { return nil }
+                let episode = result as? Episodes
+                let cell = collectionView.dequeueConfiguredReusableCell(using: episodeCell, for: indexPath, item: episode)
+                cell.upperLabel.text = episode?.name
+                cell.lowerLeftLabel.text = episode?.episode
+                cell.lowerRightLabel.text = episode?.airDate
+                for index in 0...3 {
+                    let isIndexValid =  episode?.characters.indices.contains(index)
+                    if isIndexValid ?? false {
+                        let urlString = episode?.characters[index].image ?? ""
+                        cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
+                    }
+                }
+                return cell
             default:
                 cell = collectionView.dequeueReusableCell(withReuseIdentifier: LoadMoreCell.identifier, for: indexPath) as? LoadMoreCell ?? cell
             }
@@ -145,14 +163,23 @@ class SearchViewController: BaseViewController {
             guard let headerView = self?.searchView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
             }
-            let sectionText = indexPath.section == 0 ? K.Headers.characters : K.Headers.locations
+            var sectionText = ""
 
+            switch indexPath.section {
+            case 0:
+                sectionText = K.Headers.characters
+            case 2:
+                sectionText = K.Headers.locations
+            default:
+                sectionText = K.Headers.episodes
+            }
             headerView.textLabel.text = sectionText
             headerView.textLabel.textColor = .lightGray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
         }
     }
+    // swiftlint:enable cyclomatic_complexity
 }
 
 // MARK: - CollectionView Delegate
@@ -166,6 +193,10 @@ extension SearchViewController: UICollectionViewDelegate {
 
         if let character = dataSource?.itemIdentifier(for: indexPath) as? Characters? {
             viewModel.goCharacterDetails(id: (character?.id) ?? "", navController: navigationController ?? UINavigationController())
+        }
+
+        if let episode = dataSource?.itemIdentifier(for: indexPath) as? Episodes {
+            viewModel.goEpisodeDetails(id: episode.id, navController: navigationController ?? UIVideoEditorController())
         }
 
         // load-more section
@@ -261,7 +292,7 @@ extension SearchViewController: UISearchResultsUpdating {
         navigationItem.searchController = searchController
         definesPresentationContext = true
         let searchBar = searchController.searchBar
-        searchBar.scopeButtonTitles = ["All", K.Titles.characters, K.Titles.locations]
+        searchBar.scopeButtonTitles = ["All", K.Titles.characters, K.Titles.locations, K.Titles.episodes]
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

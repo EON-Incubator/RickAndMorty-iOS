@@ -13,13 +13,14 @@ class CharacterDetailsViewModel {
     let character = PassthroughSubject<Characters, Never>()
     weak var coordinator: MainCoordinator?
     private var characterId: String
+    var networkTimeoutMessage: PassthroughSubject<String, Never> = .init()
 
     init(characterId: String) {
         self.characterId = characterId
     }
 
     func fetchData() {
-        if UserDefaults().bool(forKey: "isOfflineMode") {
+        if Network.shared.isOfflineMode() {
             getDataFromDB()
             return
         }
@@ -33,7 +34,8 @@ class CharacterDetailsViewModel {
                     }
                 case .failure(let error):
                     print(error)
-                    self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
+                    Network.shared.setOfflineMode(true)
+                    self?.networkTimeoutMessage.send(error.localizedDescription)
                 }
 
             }

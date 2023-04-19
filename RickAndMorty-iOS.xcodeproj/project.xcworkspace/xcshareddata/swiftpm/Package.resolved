@@ -6,7 +6,7 @@
       "location" : "https://github.com/apollographql/apollo-ios.git",
       "state" : {
         "branch" : "main",
-        "revision" : "3aa8812693c0366db6890271fad11e2ea2ab6298"
+        "revision" : "71b0707563dabf74d8dcf9bbbf7b18f85c00fff9"
       }
     },
     {
@@ -124,6 +124,15 @@
       "state" : {
         "revision" : "34950d5c751e9fe3b151041700d8a1255bec67ca",
         "version" : "8.1.0"
+      }
+    },
+    {
+      "identity" : "youtube-ios-player-helper",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/youtube/youtube-ios-player-helper",
+      "state" : {
+        "revision" : "f57129cd4380ec0a74dd3a59da3270a1d653d59b",
+        "version" : "1.0.4"
       }
     }
   ],

@@ -12,17 +12,17 @@ import RealmSwift
 
 class EpisodesViewModel {
 
+    weak var coordinator: MainCoordinator?
     var episodes = CurrentValueSubject<[Episodes], Never>([])
-
     var currentPage = 0 {
         didSet {
             fetchData(page: currentPage)
         }
     }
-    weak var coordinator: MainCoordinator?
+    var networkTimeoutMessage: PassthroughSubject<String, Never> = .init()
 
     func fetchData(page: Int) {
-        if UserDefaults().bool(forKey: "isOfflineMode") {
+        if Network.shared.isOfflineMode() {
             getDataFromDB(page: page)
             return
         }
@@ -38,7 +38,8 @@ class EpisodesViewModel {
                         }
                     case .failure(let error):
                         print(error)
-                        self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
+                        Network.shared.setOfflineMode(true)
+                        self?.networkTimeoutMessage.send(error.localizedDescription)
                     }
                 }
     }
