@@ -21,7 +21,7 @@ final class EpisodesSpec: QuickSpec {
                 let sut = EpisodesViewModel()
 
                 beforeEach {
-                    sut.episodes = CurrentValueSubject<[RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result], Never>([])
+                    sut.episodes = CurrentValueSubject<[RickAndMorty_iOS.Episodes], Never>([])
                 }
 
                 context("when data fetching is called with page 1") {
@@ -61,7 +61,7 @@ final class EpisodesSpec: QuickSpec {
                 let sut = EpisodesViewModel()
 
                 beforeEach {
-                    sut.episodes = CurrentValueSubject<[RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result], Never>([])
+                    sut.episodes = CurrentValueSubject<[RickAndMorty_iOS.Episodes], Never>([])
                 }
 
                 context("when there is 1 mock episode (\"Episode 0\") from the results") {
@@ -73,6 +73,7 @@ final class EpisodesSpec: QuickSpec {
                         episode0.name = "Episode 0"
                         episode0.air_date = "1900-01-01"
                         episode0.episode = "S00E00"
+                        episode0.characters = [Mock<Character>]()
 
                         let getEpisodesQuery = RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result.from(episode0)
 

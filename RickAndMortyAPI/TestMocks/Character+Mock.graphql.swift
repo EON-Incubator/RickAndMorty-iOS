@@ -2,8 +2,7 @@
 // This file was automatically generated and should not be edited.
 
 import ApolloTestSupport
-import RickAndMorty-iOS
-
+import RickAndMorty_iOS
 public class Character: MockObject {
   public static let objectType: Object = RickAndMortyAPI.Objects.Character
   public static let _mockFields = MockFields()

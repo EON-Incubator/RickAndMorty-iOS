@@ -20,7 +20,7 @@ final class CharactersSpec: QuickSpec {
             let sut = CharactersViewModel()
 
             beforeEach {
-                sut.characters = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
+                sut.characters = CurrentValueSubject<[RickAndMorty_iOS.Characters], Never>([])
             }
 
             context("when data fetching is called with page 1") {
@@ -70,7 +70,7 @@ final class CharactersSpec: QuickSpec {
             let sut = CharactersViewModel()
 
             beforeEach {
-                sut.characters = CurrentValueSubject<[RickAndMortyAPI.CharacterBasics], Never>([])
+                sut.characters = CurrentValueSubject<[RickAndMorty_iOS.Characters], Never>([])
             }
 
             context("when there is 1 mock character (\"Character 1\") from the results") {
