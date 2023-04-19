@@ -12,12 +12,15 @@ class CharacterGridCell: UICollectionViewCell {
 
     static let identifier = K.Identifiers.characterCell
 
-    lazy var characterNameLabel: UILabel = {
+    lazy var characterNameLabel: UILabel = { [weak self] in
         let label = PaddingLabel()
         label.textAlignment = .center
         label.backgroundColor = K.Colors.characterNameLabel
         label.textColor = .black
         label.font = UIFont(name: K.Fonts.secondary, size: 18)
+        label.layer.cornerRadius = self?.layer.cornerRadius ?? 0
+        label.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        label.clipsToBounds = true
         return label
     }()
 
