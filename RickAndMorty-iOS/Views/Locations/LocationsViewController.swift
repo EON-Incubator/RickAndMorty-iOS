@@ -61,11 +61,12 @@ class LocationsViewController: BaseViewController {
                     snapshot.appendItems(locations, toSection: .appearance)
                     self?.dataSource?.apply(snapshot, animatingDifferences: true)
                 }
-                self?.locationsView.loadingView.spinner.stopAnimating()
+
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {
                 self?.locationsView.collectionView.refreshControl?.endRefreshing()
+                self?.locationsView.loadingView.spinner.stopAnimating()
             }
 
         }).store(in: &cancellables)
