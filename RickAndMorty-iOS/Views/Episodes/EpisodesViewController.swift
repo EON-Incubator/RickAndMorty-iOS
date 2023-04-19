@@ -62,7 +62,6 @@ class EpisodesViewController: BaseViewController {
                     snapshot.appendItems(episodes, toSection: .appearance)
                     self?.dataSource?.apply(snapshot, animatingDifferences: true)
                 }
-                self?.episodesView.loadingView.spinner.stopAnimating()
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {

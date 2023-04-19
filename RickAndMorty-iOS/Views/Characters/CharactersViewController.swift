@@ -93,11 +93,11 @@ class CharactersViewController: BaseViewController {
                     snapshot.appendItems(characters, toSection: .appearance)
                     self?.dataSource?.apply(snapshot, animatingDifferences: true)
                 }
-                self?.charactersGridView.loadingView.spinner.stopAnimating()
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {
                 self?.charactersGridView.collectionView.refreshControl?.endRefreshing()
+                self?.charactersGridView.loadingView.spinner.stopAnimating()
             }
         }).store(in: &cancellables)
     }

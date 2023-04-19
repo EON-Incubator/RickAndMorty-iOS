@@ -12,6 +12,12 @@ import RealmSwift
 import TMDb
 import SDWebImage
 import UIKit
+import Combine
+
+struct DownloadProgress {
+    var message: String
+    var progress: Float
+}
 
 // swiftlint: disable file_length
 class Network {
@@ -19,11 +25,9 @@ class Network {
     let networkMontior = NWPathMonitor()
     let defaults = UserDefaults.standard
     let apollo = ApolloClient(url: URL(string: "https://rickandmortyapi.com/graphql")!)
-
     private var charactersTotalPages = 0
     private var locationsTotalPages = 0
     private var episodesTotalPages = 0
-
     private var isEpisodesDataDownloaded = false {
         didSet {
             if isEpisodesDataDownloaded == true {
@@ -67,26 +71,40 @@ class Network {
     private var isEpisodesImagesDownloaded = false {
         didSet {
             if isEpisodesImagesDownloaded == true {
-                DownloadProgressView.shared.dismiss()
-                defaults.set(true, forKey: "isDownloadCompleted")
+                showDownloadProgress.send(false)
+                setDownloadCompleted(true)
+                setOfflineMode(true)
             }
         }
     }
 
+    var downloadProgress: PassthroughSubject<DownloadProgress, Never> = .init()
+    var showDownloadProgress: PassthroughSubject<Bool, Never> = .init()
+    var showDownloadAlert: PassthroughSubject<UIAlertController, Never> = .init()
+
     func setOfflineMode(_ mode: Bool) {
-        defaults.set(mode, forKey: "isOfflineMode")
+        defaults.set(mode, forKey: K.UserDefaultsKeys.isOfflineMode)
     }
 
     func isOfflineMode() -> Bool {
-        defaults.bool(forKey: "isOfflineMode")
+        defaults.bool(forKey: K.UserDefaultsKeys.isOfflineMode)
+    }
+
+    func setDownloadCompleted(_ mode: Bool) {
+        defaults.set(mode, forKey: K.UserDefaultsKeys.isDownloadCompleted)
+    }
+
+    func isDownloadCompleted() -> Bool {
+        defaults.bool(forKey: K.UserDefaultsKeys.isDownloadCompleted)
     }
 }
 
 // MARK: - Download Operations
 extension Network {
     func downloadAllData() {
-        defaults.set(false, forKey: "isDownloadCompleted")
-        DownloadProgressView.shared.show()
+        setDownloadCompleted(false)
+        showDownloadProgress.send(true)
+
         downloadEpisodes(page: 1)
     }
 
@@ -94,8 +112,7 @@ extension Network {
         if charactersTotalPages > 0 {
             let progress = Float(page) / Float(charactersTotalPages)
             let progressMsg = String(format: "Downloading Characters...%.0f%%", progress * 100)
-            DownloadProgressView.shared.titleLabel.text = progressMsg
-            DownloadProgressView.shared.progressView.progress = progress
+            downloadProgress.send(DownloadProgress(message: progressMsg, progress: progress))
         }
         apollo.fetch(
             query: RickAndMortyAPI.GetCharactersWithDetailsQuery(
@@ -126,8 +143,7 @@ extension Network {
         if episodesTotalPages > 0 {
             let progress = Float(page) / Float(episodesTotalPages)
             let progressMsg = String(format: "Downloading Episodes...%.0f%%", progress * 100)
-            DownloadProgressView.shared.titleLabel.text = progressMsg
-            DownloadProgressView.shared.progressView.progress = progress
+            downloadProgress.send(DownloadProgress(message: progressMsg, progress: progress))
         }
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetEpisodesQuery(
@@ -157,8 +173,7 @@ extension Network {
         if locationsTotalPages > 0 {
             let progress = Float(page) / Float(locationsTotalPages)
             let progressMsg = String(format: "Downloading Locations...%.0f%%", progress * 100)
-            DownloadProgressView.shared.titleLabel.text = progressMsg
-            DownloadProgressView.shared.progressView.progress = progress
+            downloadProgress.send(DownloadProgress(message: progressMsg, progress: progress))
         }
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetLocationsQuery(
@@ -208,7 +223,8 @@ extension Network {
     func downloadEpisodeDetails(season: Int, episode: Int, parentId: String) {
         DispatchQueue.main.async {
             let progressMsg = "Downloading Episode Details..."
-            DownloadProgressView.shared.titleLabel.text = progressMsg
+            let progress: Float = 0.0
+            self.downloadProgress.send(DownloadProgress(message: progressMsg, progress: progress))
         }
         let tmdb = TMDbAPI(apiKey: K.Tmdb.tmdbApiKey)
         Task {
@@ -508,8 +524,8 @@ extension Network {
                     if let episodeCountFromDB = self?.episodeCountFromDB() {
                         // Currently there are {episodeCountFromDB} episodes from the local DB.
                         if episodeCountFromDB == -1 { return }
-                        let isDownloadCompleted = self?.defaults.bool(forKey: "isDownloadCompleted") ?? false
-                        if (count > episodeCountFromDB) || !isDownloadCompleted {
+                        let isDownloadCompleted = self?.isDownloadCompleted()
+                        if (count > episodeCountFromDB) || !(isDownloadCompleted ?? false) {
                             // New data availble.
                             let downloadAlert = UIAlertController(title: K.DataUpdate.downloadAlertTitle, message: K.DataUpdate.downloadAlertMsg, preferredStyle: .alert)
                             let downloadAction = UIAlertAction(title: K.DataUpdate.downloadAlertDownloadButton, style: .default) { _ in
@@ -518,7 +534,8 @@ extension Network {
                             downloadAlert.addAction(downloadAction)
                             let cancel = UIAlertAction(title: K.DataUpdate.downloadAlertCancelButton, style: .cancel)
                             downloadAlert.addAction(cancel)
-                            DownloadProgressView.shared.currentWindow?.rootViewController?.present(downloadAlert, animated: true)
+                            self?.showDownloadAlert.send(downloadAlert)
+
                         } else {
                             // User have the latest data.
                         }
@@ -556,8 +573,7 @@ extension Network {
                 let progress = Float(noOfFinishedUrls) / Float(noOfTotalUrls)
                 let progressMsg = String(format: "Downloading Characters Images...%.0f%%", progress * 100)
                 DispatchQueue.main.async {
-                    DownloadProgressView.shared.titleLabel.text = progressMsg
-                    DownloadProgressView.shared.progressView.progress = progress
+                    self.downloadProgress.send(DownloadProgress(message: progressMsg, progress: progress))
                 }
             }, completed: { [weak self] (_, _) in
                 DispatchQueue.main.async {
@@ -579,8 +595,7 @@ extension Network {
                 let progress = Float(noOfFinishedUrls) / Float(noOfTotalUrls)
                 let progressMsg = String(format: "Downloading Episodes Images...%.0f%%", progress * 100)
                 DispatchQueue.main.async {
-                    DownloadProgressView.shared.titleLabel.text = progressMsg
-                    DownloadProgressView.shared.progressView.progress = progress
+                    self.downloadProgress.send(DownloadProgress(message: progressMsg, progress: progress))
                 }
             }, completed: { [weak self] (_, _) in
                 DispatchQueue.main.async {

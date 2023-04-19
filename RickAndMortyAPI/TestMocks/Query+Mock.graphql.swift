@@ -2,7 +2,7 @@
 // This file was automatically generated and should not be edited.
 
 import ApolloTestSupport
-import RickAndMorty-iOS
+import RickAndMorty_iOS
 
 public class Query: MockObject {
   public static let objectType: Object = RickAndMortyAPI.Objects.Query
