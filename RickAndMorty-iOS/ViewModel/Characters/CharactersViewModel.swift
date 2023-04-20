@@ -59,7 +59,7 @@ class CharactersViewModel {
     }
 
     func getDataFromDB(page: Int, name: String = "") {
-        if let results = Network.shared.getCharacters(page: page, status: filterOptions.status, gender: filterOptions.gender, name: name) {
+        if let results = DBManager.shared.getCharacters(page: page, status: filterOptions.status, gender: filterOptions.gender, name: name) {
             self.mapDataFromDB(page: page, characters: results)
         } else {
             self.characters.value = [Characters]()

@@ -51,7 +51,7 @@ class LocationsViewModel {
     }
 
     func getDataFromDB(page: Int) {
-        if let results = Network.shared.getLocations(page: page) {
+        if let results = DBManager.shared.getLocations(page: page) {
             self.mapDataFromDB(page: page, locations: results)
         } else {
             self.locations.value = [Locations]()

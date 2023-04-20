@@ -127,7 +127,9 @@ class MainCoordinator: Coordinator {
             }.store(in: &cancellables)
 
         Network.shared.showDownloadAlert.sink { alertController in
-            self.window.rootViewController?.present(alertController, animated: true)
+            if self.downloadProgressView.window == nil {
+                self.window.rootViewController?.present(alertController, animated: true)
+            }
         }.store(in: &cancellables)
     }
 

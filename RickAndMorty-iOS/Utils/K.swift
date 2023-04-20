@@ -10,6 +10,9 @@ import UIKit
 
 // swiftlint: disable type_name
 struct K {
+    struct Apollo {
+        static let graphQLUrl = "https://rickandmortyapi.com/graphql"
+    }
 
     struct Tmdb {
         static let tmdbApiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? ""
@@ -114,7 +117,6 @@ struct K {
         static let systemMagnifyingGlass = "magnifyingglass"
         static let systemPerson = "person.circle"
         static let systemStar = "star"
-        static let episodeImageUrl = "https://image.tmdb.org/t/p/w400"
         static let hulu = "hulu"
         static let amazon = "amazon"
         static let adultSwim = "adultSwim"

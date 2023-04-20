@@ -73,7 +73,7 @@ class CharacterDetailsViewModel {
     }
 
     func getDataFromDB() {
-        if let char = Network.shared.getCharacter(characterId: characterId) {
+        if let char = DBManager.shared.getCharacter(characterId: characterId) {
             self.character.send(char)
         }
     }
