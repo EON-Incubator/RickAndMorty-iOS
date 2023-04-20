@@ -11,6 +11,11 @@ import RealmSwift
 class DBManager {
     static let shared = DBManager()
 
+    func setSchemaVersion() {
+            let config = Realm.Configuration(schemaVersion: 0)
+            Realm.Configuration.defaultConfiguration = config
+    }
+
 // MARK: - LocalDB Read Operations
     func search(keyword: String) -> SearchResults {
         var characters = [Characters]()

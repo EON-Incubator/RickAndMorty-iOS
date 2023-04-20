@@ -13,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        DBManager.shared.setSchemaVersion()
         Network.shared.setOfflineMode(false)
 
         Network.shared.networkMontior.pathUpdateHandler = { path in

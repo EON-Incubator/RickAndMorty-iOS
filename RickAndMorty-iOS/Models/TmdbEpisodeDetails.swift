@@ -19,8 +19,6 @@ class TmdbEpisodeDetails: RealmSwift.Object {
     @Persisted var airDate: Date?
     @Persisted var productionCode: String?
     @Persisted var stillPath: String?
-//    @Persisted var crew: [CrewMember]?
-//    @Persisted var guestStars: [CastMember]?
     @Persisted var voteAverage: Double?
     @Persisted var voteCount: Int?
     @Persisted var episodeImages = List<TmdbEpisodeImages>()
