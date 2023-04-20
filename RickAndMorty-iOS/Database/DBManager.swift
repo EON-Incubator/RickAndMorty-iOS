@@ -11,12 +11,12 @@ import RealmSwift
 class DBManager {
     static let shared = DBManager()
 
-// MARK: - LocalDB Read Operations
+    // MARK: - LocalDB Read Operations
     func search(keyword: String) -> SearchResults {
         var characters = [Characters]()
         var locationsWithName = [Locations]()
         var locationsWithType = [Locations]()
-        var uniqueEpisodes = [Episodes]()
+        var episodes = [Episodes]()
 
         do {
             let realm = try Realm()
@@ -26,16 +26,14 @@ class DBManager {
             locationsWithName = Array(locWithName)
             let locWithType = realm.objects(Locations.self).filter("type CONTAINS[c] %@", keyword)
             locationsWithType = Array(locWithType)
-            let episodeFilterByOverview = realm.objects(Episodes.self).filter("episodeDetails.overview  CONTAINS[c] %@", keyword.lowercased())
-            let episodeFilterByName = realm.objects(Episodes.self).filter("episodeDetails.name  CONTAINS[c] %@", keyword.lowercased())
+            let episodeFilter = realm.objects(Episodes.self).filter("episodeDetails.name CONTAINS[c] %@ OR episodeDetails.overview CONTAINS[c] %@", keyword, keyword)
+            episodes = Array(episodeFilter)
 
-            let episodes = Array(episodeFilterByName) + Array(episodeFilterByOverview)
-            uniqueEpisodes = Array(Set(episodes))
         } catch {
             print("REALM ERROR: error in initializing realm")
         }
 
-        let searchResults = SearchResults(characters: characters, charactersTotalPages: 1, locationsWithName: locationsWithName, locationsWithNameTotalPages: 1, locationsWithType: locationsWithType, locationsWithTypeTotalPages: 1, episodes: uniqueEpisodes)
+        let searchResults = SearchResults(characters: characters, charactersTotalPages: 1, locationsWithName: locationsWithName, locationsWithNameTotalPages: 1, locationsWithType: locationsWithType, locationsWithTypeTotalPages: 1, episodes: episodes)
 
         return searchResults
     }
@@ -132,7 +130,7 @@ class DBManager {
         }
     }
 
-// MARK: - LocalDB Save Operations
+    // MARK: - LocalDB Save Operations
     func saveCharacters(_ results: [RickAndMortyAPI.GetCharactersWithDetailsQuery.Data.Characters.Result?]) {
         var characters = [Characters]()
 
