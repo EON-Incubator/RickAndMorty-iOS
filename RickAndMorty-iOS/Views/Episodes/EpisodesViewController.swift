@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import RealmSwift
 
 class EpisodesViewController: BaseViewController {
 
@@ -61,11 +62,11 @@ class EpisodesViewController: BaseViewController {
                     snapshot.appendItems(episodes, toSection: .appearance)
                     self?.dataSource?.apply(snapshot, animatingDifferences: true)
                 }
-                self?.episodesView.loadingView.spinner.stopAnimating()
             }
             // Dismiss refresh control.
             DispatchQueue.main.async {
                 self?.episodesView.collectionView.refreshControl?.endRefreshing()
+                self?.episodesView.loadingView.spinner.stopAnimating()
             }
         }).store(in: &cancellables)
     }
@@ -89,16 +90,16 @@ extension EpisodesViewController {
                 return cell
             }
 
-            let episode = data as? RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result
+            let episode = data as? Episodes
             let cell = collectionView.dequeueConfiguredReusableCell(using: episodeCell, for: indexPath, item: episode)
             cell.upperLabel.text = episode?.name
             cell.lowerLeftLabel.text = episode?.episode
-            cell.lowerRightLabel.text = episode?.air_date
+            cell.lowerRightLabel.text = episode?.airDate
 
             for index in 0...3 {
                 let isIndexValid =  episode?.characters.indices.contains(index)
                 if isIndexValid ?? false {
-                    let urlString = episode?.characters[index]?.image ?? ""
+                    let urlString = episode?.characters[index].image ?? ""
                     cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
                 }
             }
@@ -121,8 +122,8 @@ extension EpisodesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        if let episode = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.GetEpisodesQuery.Data.Episodes.Result {
-            viewModel.goEpisodeDetails(id: episode.id ?? "", navController: navigationController ?? UIVideoEditorController())
+        if let episode = dataSource?.itemIdentifier(for: indexPath) as? Episodes {
+            viewModel.goEpisodeDetails(id: episode.id, navController: navigationController ?? UIVideoEditorController())
         }
     }
 }

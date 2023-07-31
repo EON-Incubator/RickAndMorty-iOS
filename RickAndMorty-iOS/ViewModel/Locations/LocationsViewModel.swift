@@ -8,13 +8,15 @@
 import Foundation
 import Combine
 import UIKit
+import RealmSwift
 
 class LocationsViewModel {
 
-    let locationsNameSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
-    let locationsTypeSearch = CurrentValueSubject<[RickAndMortyAPI.LocationDetails], Never>([])
+    let locationsNameSearch = CurrentValueSubject<[Locations], Never>([])
+    let locationsTypeSearch = CurrentValueSubject<[Locations], Never>([])
 
-    var locations = CurrentValueSubject<[RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result], Never>([])
+    var locations = CurrentValueSubject<[Locations], Never>([])
+    var networkTimeoutMessage: PassthroughSubject<String, Never> = .init()
     var currentPage = 0 {
         didSet {
             fetchData(page: currentPage)
@@ -25,6 +27,10 @@ class LocationsViewModel {
     weak var coordinator: MainCoordinator?
 
     func fetchData(page: Int, name: String = "", type: String = "") {
+        if Network.shared.isOfflineMode() {
+            getDataFromDB(page: page)
+            return
+        }
         Network.shared.apollo.fetch(
             query: RickAndMortyAPI.GetLocationsQuery(
                 page: GraphQLNullable<Int>(integerLiteral: page),
@@ -38,18 +44,63 @@ class LocationsViewModel {
                     }
                 case .failure(let error):
                     print(error)
-                    self?.coordinator?.presentNetworkTimoutAlert(error.localizedDescription)
+                    Network.shared.setOfflineMode(true)
+                    self?.networkTimeoutMessage.send(error.localizedDescription)
                 }
             }
     }
 
-    func mapData(page: Int, locations: [RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result?]) {
-        locationsNameSearch.value = (locations.compactMap { $0?.fragments.locationDetails })
-        locationsTypeSearch.value = (locations.compactMap { $0?.fragments.locationDetails })
+    func getDataFromDB(page: Int) {
+        if let results = DBManager.shared.getLocations(page: page) {
+            self.mapDataFromDB(page: page, locations: results)
+        } else {
+            self.locations.value = [Locations]()
+        }
+    }
+
+    func mapDataFromDB(page: Int, locations: Results<Locations>) {
         if page == 1 {
             self.locations.value = (locations.compactMap { $0 })
         } else {
             self.locations.value.append(contentsOf: (locations.compactMap { $0 }) )
+        }
+    }
+
+    func mapData(page: Int, locations: [RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result?]) {
+
+        var locationsArray = [Locations]()
+
+        for item in locations {
+            let location = Locations()
+            location.id = item?.id ?? ""
+            location.name = item?.name ?? ""
+            location.type = item?.type ?? ""
+            location.dimension = item?.dimension ?? ""
+            var charactersArray = [Characters]()
+            if let charcters = item?.residents {
+                for char in charcters {
+                    let character = Characters()
+                    character.id = char?.id ?? ""
+                    character.name = char?.name ?? ""
+                    character.gender = char?.gender ?? ""
+                    character.image = char?.image ?? ""
+                    character.species = char?.species ?? ""
+                    character.status = char?.status ?? ""
+                    character.type = char?.type ?? ""
+                    charactersArray.append(character)
+                }
+            }
+            location.residents.append(objectsIn: charactersArray)
+            locationsArray.append(location)
+        }
+
+        locationsNameSearch.value = (locationsArray.compactMap { $0 })
+        locationsTypeSearch.value = (locationsArray.compactMap { $0 })
+
+        if page == 1 {
+            self.locations.value = (locationsArray.compactMap { $0 })
+        } else {
+            self.locations.value.append(contentsOf: (locationsArray.compactMap { $0 }) )
         }
     }
 

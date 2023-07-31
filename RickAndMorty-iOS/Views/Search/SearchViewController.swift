@@ -18,6 +18,7 @@ class SearchViewController: BaseViewController {
         case locations
         case loadMoreCharacters
         case loadMoreLocations
+        case episodes
     }
 
     private let searchView = SearchView()
@@ -35,7 +36,7 @@ class SearchViewController: BaseViewController {
     private var currentLocationsPage = 1
     private var totalCharactersPage: Int = 0
     private var totalLocationsPage: Int = 0
-    private var uniqueLocations: [RickAndMortyAPI.LocationDetails] = []
+    private var uniqueLocations: [Locations] = []
 
     private weak var debounceTimer: Timer?
 
@@ -63,21 +64,18 @@ class SearchViewController: BaseViewController {
         viewModel.searchResults.sink(receiveValue: { [weak self] result in
             self?.snapshot.deleteAllItems()
 
-            self?.snapshot.appendSections([.characters, .loadMoreCharacters, .locations, .loadMoreLocations])
+            self?.snapshot.appendSections([.characters, .loadMoreCharacters, .locations, .loadMoreLocations, .episodes])
 
-            let locationsWithName: [RickAndMortyAPI.LocationDetails] = result.locationsWithName?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
+            let locationsWithName = result.locationsWithName
+            let locationsWithType = result.locationsWithType
 
-            let locationsWithType: [RickAndMortyAPI.LocationDetails] = result.locationsWithType?.results?.compactMap { $0?.fragments.locationDetails } as? [RickAndMortyAPI.LocationDetails] ?? []
-
-            let locations: [RickAndMortyAPI.LocationDetails] = locationsWithName + locationsWithType
+            let locations: [Locations] = locationsWithName + locationsWithType
             self?.uniqueLocations = Array(Set(locations))
 
-            let characters = result.characters?.results?.compactMap {
-                $0?.fragments.characterBasics
-            } as? [RickAndMortyAPI.CharacterBasics] ?? []
+            let characters = result.characters
 
-            self?.totalCharactersPage = result.characters?.info?.pages ?? 1
-            self?.totalLocationsPage = (result.locationsWithType?.info?.pages ?? 0) + (result.locationsWithName?.info?.pages ?? 0)
+            self?.totalCharactersPage = result.charactersTotalPages
+            self?.totalLocationsPage = result.locationsWithNameTotalPages + result.locationsWithTypeTotalPages
 
             switch self?.searchController.searchBar.selectedScopeButtonIndex {
             case 0:
@@ -86,9 +84,10 @@ class SearchViewController: BaseViewController {
                     self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreCharacters)
                 }
                 self?.snapshot.appendItems(self?.uniqueLocations ?? [], toSection: .locations)
-                if self?.totalLocationsPage ?? 0 > 1 {
+                if self?.totalLocationsPage ?? 0 > 2 {
                     self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreLocations)
                 }
+                self?.snapshot.appendItems(result.episodes, toSection: .episodes)
             case 1:
                 self?.currentCharactersPage = 1
                 self?.snapshot.appendItems(characters, toSection: .characters)
@@ -98,11 +97,11 @@ class SearchViewController: BaseViewController {
             case 2:
                 self?.currentLocationsPage = 1
                 self?.snapshot.appendItems(self?.uniqueLocations ?? [], toSection: .locations)
-                if self?.totalLocationsPage ?? 0 > 1 {
+                if self?.totalLocationsPage ?? 0 > 2 {
                     self?.snapshot.appendItems([EmptyData(id: UUID())], toSection: .loadMoreLocations)
                 }
             default:
-                print("error")
+                self?.snapshot.appendItems(result.episodes, toSection: .episodes)
             }
             if let snapshot = self?.snapshot {
                 self?.dataSource?.apply(snapshot, animatingDifferences: true)
@@ -113,6 +112,7 @@ class SearchViewController: BaseViewController {
         }).store(in: &cancellables)
     }
 
+    // swiftlint:disable cyclomatic_complexity
     private func configureDataSource() {
         dataSource = DataSource(collectionView: searchView.collectionView, cellProvider: { [weak self] (collectionView, indexPath, result) -> UICollectionViewCell? in
 
@@ -122,22 +122,37 @@ class SearchViewController: BaseViewController {
 
             switch indexPath.section {
             case 0:
-                if let character = result as? RickAndMortyAPI.CharacterBasics {
+                if let character = result as? Characters {
 
                     weak var characterRowCell = (collectionView.dequeueReusableCell(withReuseIdentifier: CharacterRowCell.identifier, for: indexPath) as? CharacterRowCell)
 
-                    let urlString = character.image ?? ""
+                    let urlString = character.image
                     characterRowCell?.characterAvatarImageView.sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
                     characterRowCell?.upperLabel.text = character.name
                     characterRowCell?.lowerLeftLabel.text = character.gender
                     characterRowCell?.lowerRightLabel.text = character.species
                     characterRowCell?.characterStatusLabel.text = character.status
-                    characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character.status ?? "")
+                    characterRowCell?.characterStatusLabel.backgroundColor = characterRowCell?.statusColor(character.status)
 
                     cell = characterRowCell ?? CharacterRowCell()
                 }
             case 2:
-                cell = collectionView.dequeueConfiguredReusableCell(using: locationCell, for: indexPath, item: result as? RickAndMortyAPI.LocationDetails)
+                cell = collectionView.dequeueConfiguredReusableCell(using: locationCell, for: indexPath, item: result as? Locations)
+            case 4:
+                guard let episodeCell = self?.searchView.episodeCell else { return nil }
+                let episode = result as? Episodes
+                let cell = collectionView.dequeueConfiguredReusableCell(using: episodeCell, for: indexPath, item: episode)
+                cell.upperLabel.text = episode?.name
+                cell.lowerLeftLabel.text = episode?.episode
+                cell.lowerRightLabel.text = episode?.airDate
+                for index in 0...3 {
+                    let isIndexValid =  episode?.characters.indices.contains(index)
+                    if isIndexValid ?? false {
+                        let urlString = episode?.characters[index].image ?? ""
+                        cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
+                    }
+                }
+                return cell
             default:
                 cell = collectionView.dequeueReusableCell(withReuseIdentifier: LoadMoreCell.identifier, for: indexPath) as? LoadMoreCell ?? cell
             }
@@ -148,14 +163,23 @@ class SearchViewController: BaseViewController {
             guard let headerView = self?.searchView.collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: K.Headers.identifier, for: indexPath) as? HeaderView else {
                 fatalError()
             }
-            let sectionText = indexPath.section == 0 ? K.Headers.characters : K.Headers.locations
+            var sectionText = ""
 
+            switch indexPath.section {
+            case 0:
+                sectionText = K.Headers.characters
+            case 2:
+                sectionText = K.Headers.locations
+            default:
+                sectionText = K.Headers.episodes
+            }
             headerView.textLabel.text = sectionText
             headerView.textLabel.textColor = .lightGray
             headerView.textLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             return headerView
         }
     }
+    // swiftlint:enable cyclomatic_complexity
 }
 
 // MARK: - CollectionView Delegate
@@ -163,12 +187,16 @@ extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        if let location = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.LocationDetails? {
+        if let location = dataSource?.itemIdentifier(for: indexPath) as? Locations? {
             viewModel.goLocationDetails(id: (location?.id) ?? "", navController: navigationController ?? UINavigationController(), residentCount: location?.residents.count ?? 0)
         }
 
-        if let character = dataSource?.itemIdentifier(for: indexPath) as? RickAndMortyAPI.CharacterBasics? {
+        if let character = dataSource?.itemIdentifier(for: indexPath) as? Characters? {
             viewModel.goCharacterDetails(id: (character?.id) ?? "", navController: navigationController ?? UINavigationController())
+        }
+
+        if let episode = dataSource?.itemIdentifier(for: indexPath) as? Episodes {
+            viewModel.goEpisodeDetails(id: episode.id, navController: navigationController ?? UIVideoEditorController())
         }
 
         // load-more section
@@ -264,7 +292,7 @@ extension SearchViewController: UISearchResultsUpdating {
         navigationItem.searchController = searchController
         definesPresentationContext = true
         let searchBar = searchController.searchBar
-        searchBar.scopeButtonTitles = ["All", K.Titles.characters, K.Titles.locations]
+        searchBar.scopeButtonTitles = ["All", K.Titles.characters, K.Titles.locations, K.Titles.episodes]
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

@@ -23,7 +23,7 @@ final class LocationsSpec: QuickSpec {
             let sut = LocationsViewModel()
 
             beforeEach {
-                sut.locations = CurrentValueSubject<[RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result], Never>([])
+                sut.locations = CurrentValueSubject<[RickAndMorty_iOS.Locations], Never>([])
             }
 
             context("when data fetching is called with page 1") {
@@ -63,7 +63,7 @@ final class LocationsSpec: QuickSpec {
             let sut = LocationsViewModel()
 
             beforeEach {
-                sut.locations = CurrentValueSubject<[RickAndMortyAPI.GetLocationsQuery.Data.Locations.Result], Never>([])
+                sut.locations = CurrentValueSubject<[RickAndMorty_iOS.Locations], Never>([])
             }
 
             context("when there is only 1 mock location (\"Location 1\") from the results") {

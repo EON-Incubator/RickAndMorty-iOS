@@ -25,18 +25,40 @@
 		544A6CD629C11AD40055FB75 /* EpisodeDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CD529C11AD40055FB75 /* EpisodeDetailsView.swift */; };
 		544A6CD829C11BAA0055FB75 /* EpisodeDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544A6CD729C11BAA0055FB75 /* EpisodeDetailsViewModel.swift */; };
 		54644B7929CA8AC7007FB8B3 /* EmptyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54644B7829CA8AC7007FB8B3 /* EmptyData.swift */; };
+		54941D9529E9B47C0076DD20 /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 54941D9429E9B47C0076DD20 /* YouTubeiOSPlayerHelper */; };
+		54A0C36929E609A9009153BF /* CarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A0C36829E609A9009153BF /* CarouselCell.swift */; };
 		54A2EC3829BB7CEE006E880E /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 54A2EC3729BB7CEE006E880E /* SDWebImage */; };
 		54A2EC3C29BB7D7C006E880E /* CharactersGridCellSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A2EC3B29BB7D7C006E880E /* CharactersGridCellSpec.swift */; };
+		54AEA28B29EA079F0084B912 /* YoutubeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AEA28A29EA079F0084B912 /* YoutubeViewController.swift */; };
+		54AEA28D29EA08230084B912 /* YoutubeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AEA28C29EA08230084B912 /* YoutubeView.swift */; };
 		54BAB03029CE492700F67056 /* LoadMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BAB02F29CE492700F67056 /* LoadMoreCell.swift */; };
 		54BDF5BE29BBB2CB003F7084 /* CharacterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BDF5BD29BBB2CB003F7084 /* CharacterDetailsViewController.swift */; };
 		54BDF5C229BBBEB9003F7084 /* CharacterDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BDF5C129BBBEB9003F7084 /* CharacterDetailsView.swift */; };
 		54BDF5C529BBC891003F7084 /* AvatarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BDF5C429BBC891003F7084 /* AvatarCell.swift */; };
+		54C01EA229E49586009847AE /* TMDb in Frameworks */ = {isa = PBXBuildFile; productRef = 54C01EA129E49586009847AE /* TMDb */; };
+		54C01EA429E4BBC4009847AE /* EpisodeOverviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C01EA329E4BBC4009847AE /* EpisodeOverviewCell.swift */; };
 		54CA239A29D5FD0900898FBC /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CA239929D5FD0900898FBC /* K.swift */; };
 		54D1E4E029D492CE00571BC5 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D1E4DF29D492CE00571BC5 /* LoadingView.swift */; };
 		54ECFC3F29C545A00049ACE3 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54ECFC3E29C545A00049ACE3 /* SearchViewController.swift */; };
 		54ECFC4129C546400049ACE3 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54ECFC4029C546400049ACE3 /* SearchView.swift */; };
 		54ECFC4429C546820049ACE3 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54ECFC4329C546820049ACE3 /* SearchViewModel.swift */; };
+		F729CB5E29E464180051E624 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = F729CB5D29E464180051E624 /* Realm */; };
+		F729CB6029E464180051E624 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F729CB5F29E464180051E624 /* RealmSwift */; };
+		F729CB6729E4B9960051E624 /* TmdbEpisodeDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB6629E4B9950051E624 /* TmdbEpisodeDetails.swift */; };
+		F729CB6A29E5A9F10051E624 /* Characters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB6929E5A9F10051E624 /* Characters.swift */; };
+		F729CB6C29E5DAE30051E624 /* Episodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB6B29E5DAE30051E624 /* Episodes.swift */; };
+		F729CB6E29E60CF70051E624 /* Locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB6D29E60CF70051E624 /* Locations.swift */; };
+		F729CB7229E636610051E624 /* DownloadProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729CB7129E636610051E624 /* DownloadProgressView.swift */; };
+		F74BACBF29F08C3600742939 /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74BACBE29F08C3600742939 /* DBManager.swift */; };
+		F759DA8329F03E7F00593BD1 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = F759DA8229F03E7F00593BD1 /* Realm */; };
+		F759DA8529F03E7F00593BD1 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F759DA8429F03E7F00593BD1 /* RealmSwift */; };
+		F759DA8729F03E8B00593BD1 /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = F759DA8629F03E8B00593BD1 /* YouTubeiOSPlayerHelper */; };
 		F7604C9B29BF7219003C2906 /* LocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7604C9A29BF7219003C2906 /* LocationsView.swift */; };
+		F76E21D729E71682000CA322 /* TmdbEpisodeImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76E21D629E71682000CA322 /* TmdbEpisodeImages.swift */; };
+		F76E21D929E75551000CA322 /* TmdbEpisodeVideos.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */; };
+		F76E21DB29E88F8B000CA322 /* GetCharactersWithDetailsQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76E21DA29E88F8B000CA322 /* GetCharactersWithDetailsQuery.graphql.swift */; };
+		F76E21DD29E9D720000CA322 /* SearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76E21DC29E9D720000CA322 /* SearchResults.swift */; };
+		F76E21DF29E9E98B000CA322 /* GetEpisodesCountQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76E21DE29E9E98B000CA322 /* GetEpisodesCountQuery.graphql.swift */; };
 		F77E4B7C29B906D400B8B5CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B7B29B906D400B8B5CE /* AppDelegate.swift */; };
 		F77E4B7E29B906D400B8B5CE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77E4B7D29B906D400B8B5CE /* SceneDelegate.swift */; };
 		F77E4B8529B906D600B8B5CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F77E4B8429B906D600B8B5CE /* Assets.xcassets */; };
@@ -144,17 +166,33 @@
 		544A6CD529C11AD40055FB75 /* EpisodeDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailsView.swift; sourceTree = "<group>"; };
 		544A6CD729C11BAA0055FB75 /* EpisodeDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailsViewModel.swift; sourceTree = "<group>"; };
 		54644B7829CA8AC7007FB8B3 /* EmptyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyData.swift; sourceTree = "<group>"; };
+		54A0C36829E609A9009153BF /* CarouselCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselCell.swift; sourceTree = "<group>"; };
 		54A2EC3B29BB7D7C006E880E /* CharactersGridCellSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersGridCellSpec.swift; sourceTree = "<group>"; };
+		54AEA28A29EA079F0084B912 /* YoutubeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeViewController.swift; sourceTree = "<group>"; };
+		54AEA28C29EA08230084B912 /* YoutubeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeView.swift; sourceTree = "<group>"; };
 		54BAB02F29CE492700F67056 /* LoadMoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCell.swift; sourceTree = "<group>"; };
 		54BDF5BD29BBB2CB003F7084 /* CharacterDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsViewController.swift; sourceTree = "<group>"; };
 		54BDF5C129BBBEB9003F7084 /* CharacterDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsView.swift; sourceTree = "<group>"; };
 		54BDF5C429BBC891003F7084 /* AvatarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarCell.swift; sourceTree = "<group>"; };
+		54C01EA329E4BBC4009847AE /* EpisodeOverviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeOverviewCell.swift; sourceTree = "<group>"; };
 		54CA239929D5FD0900898FBC /* K.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K.swift; sourceTree = "<group>"; };
 		54D1E4DF29D492CE00571BC5 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		54DE9B7C29ED934000250D3C /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		54ECFC3E29C545A00049ACE3 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		54ECFC4029C546400049ACE3 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		54ECFC4329C546820049ACE3 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		F729CB6629E4B9950051E624 /* TmdbEpisodeDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TmdbEpisodeDetails.swift; path = "RickAndMorty-iOS/Models/TmdbEpisodeDetails.swift"; sourceTree = SOURCE_ROOT; };
+		F729CB6929E5A9F10051E624 /* Characters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Characters.swift; sourceTree = "<group>"; };
+		F729CB6B29E5DAE30051E624 /* Episodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episodes.swift; sourceTree = "<group>"; };
+		F729CB6D29E60CF70051E624 /* Locations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locations.swift; sourceTree = "<group>"; };
+		F729CB7129E636610051E624 /* DownloadProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadProgressView.swift; sourceTree = "<group>"; };
+		F74BACBE29F08C3600742939 /* DBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBManager.swift; sourceTree = "<group>"; };
 		F7604C9A29BF7219003C2906 /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
+		F76E21D629E71682000CA322 /* TmdbEpisodeImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbEpisodeImages.swift; sourceTree = "<group>"; };
+		F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbEpisodeVideos.swift; sourceTree = "<group>"; };
+		F76E21DA29E88F8B000CA322 /* GetCharactersWithDetailsQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetCharactersWithDetailsQuery.graphql.swift; sourceTree = "<group>"; };
+		F76E21DC29E9D720000CA322 /* SearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResults.swift; sourceTree = "<group>"; };
+		F76E21DE29E9E98B000CA322 /* GetEpisodesCountQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetEpisodesCountQuery.graphql.swift; sourceTree = "<group>"; };
 		F77E4B7829B906D400B8B5CE /* RickAndMorty-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RickAndMorty-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F77E4B7B29B906D400B8B5CE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F77E4B7D29B906D400B8B5CE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -232,7 +270,11 @@
 			files = (
 				5447EE1D29BA591800D2D05A /* SDWebImage in Frameworks */,
 				F77E4B9F29B94B9300B8B5CE /* Apollo in Frameworks */,
+				F729CB5E29E464180051E624 /* Realm in Frameworks */,
+				F729CB6029E464180051E624 /* RealmSwift in Frameworks */,
 				5447EE1A29BA36DC00D2D05A /* SnapKit in Frameworks */,
+				54C01EA229E49586009847AE /* TMDb in Frameworks */,
+				54941D9529E9B47C0076DD20 /* YouTubeiOSPlayerHelper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,10 +282,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F759DA8529F03E7F00593BD1 /* RealmSwift in Frameworks */,
+				F759DA8729F03E8B00593BD1 /* YouTubeiOSPlayerHelper in Frameworks */,
 				54A2EC3829BB7CEE006E880E /* SDWebImage in Frameworks */,
 				F7EA934729CB91E000F7F112 /* ApolloTestSupport in Frameworks */,
 				F77E4BF329BA3BE100B8B5CE /* Quick in Frameworks */,
 				F77E4BF629BA3BF200B8B5CE /* Nimble in Frameworks */,
+				F759DA8329F03E7F00593BD1 /* Realm in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +320,9 @@
 				54644B7829CA8AC7007FB8B3 /* EmptyData.swift */,
 				54BAB02F29CE492700F67056 /* LoadMoreCell.swift */,
 				54D1E4DF29D492CE00571BC5 /* LoadingView.swift */,
+				54C01EA329E4BBC4009847AE /* EpisodeOverviewCell.swift */,
+				54A0C36829E609A9009153BF /* CarouselCell.swift */,
+				F729CB7129E636610051E624 /* DownloadProgressView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -292,10 +340,10 @@
 		544A6CBD29BF878A0055FB75 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				54ECFC4229C546670049ACE3 /* Search */,
 				544A6CBE29BF87A30055FB75 /* Characters */,
 				F7C26FED29C0C0BB00903AF2 /* Locations */,
 				544A6CD229C114300055FB75 /* Episodes */,
+				54ECFC4229C546670049ACE3 /* Search */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -316,6 +364,8 @@
 				544A6CCE29C1087C0055FB75 /* EpisodesView.swift */,
 				544A6CD329C119170055FB75 /* EpisodeDetailsViewController.swift */,
 				544A6CD529C11AD40055FB75 /* EpisodeDetailsView.swift */,
+				54AEA28A29EA079F0084B912 /* YoutubeViewController.swift */,
+				54AEA28C29EA08230084B912 /* YoutubeView.swift */,
 			);
 			path = Episodes;
 			sourceTree = "<group>";
@@ -370,6 +420,28 @@
 			path = Search;
 			sourceTree = "<group>";
 		};
+		F729CB6829E5A6EE0051E624 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F729CB6929E5A9F10051E624 /* Characters.swift */,
+				F729CB6D29E60CF70051E624 /* Locations.swift */,
+				F729CB6B29E5DAE30051E624 /* Episodes.swift */,
+				F76E21DC29E9D720000CA322 /* SearchResults.swift */,
+				F729CB6629E4B9950051E624 /* TmdbEpisodeDetails.swift */,
+				F76E21D629E71682000CA322 /* TmdbEpisodeImages.swift */,
+				F76E21D829E75551000CA322 /* TmdbEpisodeVideos.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F74BACC029F098AF00742939 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				F74BACBE29F08C3600742939 /* DBManager.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
 		F7604C9C29BF721D003C2906 /* Locations */ = {
 			isa = PBXGroup;
 			children = (
@@ -411,12 +483,15 @@
 				F77E4B9829B935EC00B8B5CE /* Coordinators */,
 				F77E4B9429B934C300B8B5CE /* Views */,
 				544A6CBD29BF878A0055FB75 /* ViewModel */,
+				F729CB6829E5A6EE0051E624 /* Models */,
 				F77E4BDD29BA390F00B8B5CE /* Network */,
+				F74BACC029F098AF00742939 /* Database */,
 				F7EA92EF29CB8F9600F7F112 /* RickAndMortyAPI */,
 				F77E4BA029B94D5900B8B5CE /* GraphQL */,
 				F7C26FF729C22F5900903AF2 /* Assets */,
 				F77E4B8629B906D600B8B5CE /* LaunchScreen.storyboard */,
 				F77E4B8929B906D600B8B5CE /* Info.plist */,
+				54DE9B7C29ED934000250D3C /* Config.xcconfig */,
 			);
 			path = "RickAndMorty-iOS";
 			sourceTree = "<group>";
@@ -424,11 +499,11 @@
 		F77E4B9429B934C300B8B5CE /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				54ECFC3D29C545810049ACE3 /* Search */,
 				540F4CEE29BEA1A600677B82 /* Shared */,
 				F77E4B9529B934D200B8B5CE /* Characters */,
 				F7604C9C29BF721D003C2906 /* Locations */,
 				544A6CC929C1029B0055FB75 /* Episodes */,
+				54ECFC3D29C545810049ACE3 /* Search */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -622,6 +697,8 @@
 		F7EA92F729CB8F9600F7F112 /* Queries */ = {
 			isa = PBXGroup;
 			children = (
+				F76E21DE29E9E98B000CA322 /* GetEpisodesCountQuery.graphql.swift */,
+				F76E21DA29E88F8B000CA322 /* GetCharactersWithDetailsQuery.graphql.swift */,
 				F7EA92F829CB8F9600F7F112 /* GetCharactersQuery.graphql.swift */,
 				F7EA92F929CB8F9600F7F112 /* GetEpisodeQuery.graphql.swift */,
 				F7EA92FA29CB8F9600F7F112 /* GetEpisodesQuery.graphql.swift */,
@@ -694,6 +771,10 @@
 				F77E4B9E29B94B9300B8B5CE /* Apollo */,
 				5447EE1929BA36DC00D2D05A /* SnapKit */,
 				5447EE1C29BA591800D2D05A /* SDWebImage */,
+				F729CB5D29E464180051E624 /* Realm */,
+				F729CB5F29E464180051E624 /* RealmSwift */,
+				54C01EA129E49586009847AE /* TMDb */,
+				54941D9429E9B47C0076DD20 /* YouTubeiOSPlayerHelper */,
 			);
 			productName = "RickAndMorty-iOS";
 			productReference = F77E4B7829B906D400B8B5CE /* RickAndMorty-iOS.app */;
@@ -718,6 +799,9 @@
 				F77E4BF529BA3BF200B8B5CE /* Nimble */,
 				54A2EC3729BB7CEE006E880E /* SDWebImage */,
 				F7EA934629CB91E000F7F112 /* ApolloTestSupport */,
+				F759DA8229F03E7F00593BD1 /* Realm */,
+				F759DA8429F03E7F00593BD1 /* RealmSwift */,
+				F759DA8629F03E8B00593BD1 /* YouTubeiOSPlayerHelper */,
 			);
 			productName = "RickAndMorty-iOSTests";
 			productReference = F77E4BE829BA3BA000B8B5CE /* RickAndMorty-iOSTests.xctest */;
@@ -754,7 +838,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					F77E4B7729B906D400B8B5CE = {
 						CreatedOnToolsVersion = 14.2;
@@ -784,6 +868,9 @@
 				5447EE1B29BA591800D2D05A /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				F77E4BF129BA3BE100B8B5CE /* XCRemoteSwiftPackageReference "Quick" */,
 				F77E4BF429BA3BF200B8B5CE /* XCRemoteSwiftPackageReference "Nimble" */,
+				F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */,
+				54941D9329E9B47C0076DD20 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 			);
 			productRefGroup = F77E4B7929B906D400B8B5CE /* Products */;
 			projectDirPath = "";
@@ -858,8 +945,11 @@
 				54BDF5C529BBC891003F7084 /* AvatarCell.swift in Sources */,
 				54BAB03029CE492700F67056 /* LoadMoreCell.swift in Sources */,
 				F7EA932A29CB8F9600F7F112 /* SchemaMetadata.graphql.swift in Sources */,
+				F76E21DF29E9E98B000CA322 /* GetEpisodesCountQuery.graphql.swift in Sources */,
+				F76E21D929E75551000CA322 /* TmdbEpisodeVideos.swift in Sources */,
 				F7EA931729CB8F9600F7F112 /* PageInfo.graphql.swift in Sources */,
 				54ECFC4129C546400049ACE3 /* SearchView.swift in Sources */,
+				54C01EA429E4BBC4009847AE /* EpisodeOverviewCell.swift in Sources */,
 				54D1E4E029D492CE00571BC5 /* LoadingView.swift in Sources */,
 				F7EA932129CB8F9600F7F112 /* Characters.graphql.swift in Sources */,
 				544A6CC229BFA5410055FB75 /* Section.swift in Sources */,
@@ -867,8 +957,10 @@
 				F7EA931F29CB8F9600F7F112 /* GetLocationQuery.graphql.swift in Sources */,
 				F7C26FF329C0C11C00903AF2 /* LocationDetailsViewModel.swift in Sources */,
 				544A6CD629C11AD40055FB75 /* EpisodeDetailsView.swift in Sources */,
+				F729CB7229E636610051E624 /* DownloadProgressView.swift in Sources */,
 				544A6CD129C109380055FB75 /* EpisodesViewModel.swift in Sources */,
 				540F4CF229BEABE700677B82 /* HeaderView.swift in Sources */,
+				54AEA28D29EA08230084B912 /* YoutubeView.swift in Sources */,
 				F7EA932329CB8F9600F7F112 /* Info.graphql.swift in Sources */,
 				540F4CF029BEA1DC00677B82 /* InfoCell.swift in Sources */,
 				F7F240CA29C442CE007E34AC /* CharactersFilterViewController.swift in Sources */,
@@ -891,12 +983,17 @@
 				F77E4B9A29B9362300B8B5CE /* Coordinator.swift in Sources */,
 				F7EA931D29CB8F9600F7F112 /* GetLocationsQuery.graphql.swift in Sources */,
 				F7EA932029CB8F9600F7F112 /* GetCharacterQuery.graphql.swift in Sources */,
+				F729CB6C29E5DAE30051E624 /* Episodes.swift in Sources */,
 				F7EA931529CB8F9600F7F112 /* CharacterBasics.graphql.swift in Sources */,
+				F76E21DB29E88F8B000CA322 /* GetCharactersWithDetailsQuery.graphql.swift in Sources */,
+				F729CB6729E4B9960051E624 /* TmdbEpisodeDetails.swift in Sources */,
 				544A6CCD29C106060055FB75 /* EpisodesViewController.swift in Sources */,
 				F7F240C829C440A0007E34AC /* CharactersFilterView.swift in Sources */,
 				F77E4B9229B9090900B8B5CE /* CharactersViewController.swift in Sources */,
 				F7EA932929CB8F9600F7F112 /* SchemaConfiguration.swift in Sources */,
+				F729CB6A29E5A9F10051E624 /* Characters.swift in Sources */,
 				F7C26FEA29BF73B100903AF2 /* LocationsViewModel.swift in Sources */,
+				F76E21D729E71682000CA322 /* TmdbEpisodeImages.swift in Sources */,
 				F7EA932529CB8F9600F7F112 /* Query.graphql.swift in Sources */,
 				5447EE1F29BA5A7900D2D05A /* CharacterGridCell.swift in Sources */,
 				F77E4B7E29B906D400B8B5CE /* SceneDelegate.swift in Sources */,
@@ -905,6 +1002,7 @@
 				F7EA931C29CB8F9600F7F112 /* GetEpisodesQuery.graphql.swift in Sources */,
 				F7C26FF629C119C900903AF2 /* CharacterRowCell.swift in Sources */,
 				544A6CD829C11BAA0055FB75 /* EpisodeDetailsViewModel.swift in Sources */,
+				F729CB6E29E60CF70051E624 /* Locations.swift in Sources */,
 				544A6CC029BF88450055FB75 /* CharactersViewModel.swift in Sources */,
 				F7EA932629CB8F9600F7F112 /* Episode.graphql.swift in Sources */,
 				F7EA931E29CB8F9600F7F112 /* SearchForQuery.graphql.swift in Sources */,
@@ -912,12 +1010,16 @@
 				54CA239A29D5FD0900898FBC /* K.swift in Sources */,
 				54BDF5BE29BBB2CB003F7084 /* CharacterDetailsViewController.swift in Sources */,
 				544A6CC829C0F8A70055FB75 /* RowCell.swift in Sources */,
+				F76E21DD29E9D720000CA322 /* SearchResults.swift in Sources */,
 				544A6CC429BFA8980055FB75 /* CharacterDetailsViewModel.swift in Sources */,
 				F7EA932729CB8F9600F7F112 /* Episodes.graphql.swift in Sources */,
 				F7EA932829CB8F9600F7F112 /* Locations.graphql.swift in Sources */,
 				54BDF5C229BBBEB9003F7084 /* CharacterDetailsView.swift in Sources */,
 				54ECFC3F29C545A00049ACE3 /* SearchViewController.swift in Sources */,
+				F74BACBF29F08C3600742939 /* DBManager.swift in Sources */,
+				54AEA28B29EA079F0084B912 /* YoutubeViewController.swift in Sources */,
 				F77E4BDC29BA390200B8B5CE /* Network.swift in Sources */,
+				54A0C36929E609A9009153BF /* CarouselCell.swift in Sources */,
 				544A6CCF29C1087C0055FB75 /* EpisodesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1098,6 +1200,7 @@
 		};
 		F77E4B8D29B906D600B8B5CE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 54DE9B7C29ED934000250D3C /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1117,7 +1220,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.EON-Incubator.RickAndMorty-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.EON-Incubator.RickAndMortyiOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1128,6 +1231,7 @@
 		};
 		F77E4B8E29B906D600B8B5CE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 54DE9B7C29ED934000250D3C /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1147,7 +1251,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.EON-Incubator.RickAndMorty-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.EON-Incubator.RickAndMortyiOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1162,6 +1266,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
@@ -1183,6 +1288,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
@@ -1292,6 +1398,30 @@
 				kind = branch;
 			};
 		};
+		54941D9329E9B47C0076DD20 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/youtube/youtube-ios-player-helper";
+			requirement = {
+				kind = exactVersion;
+				version = 1.0.4;
+			};
+		};
+		54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adamayoung/TMDb";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+		F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		F77E4B9D29B94B9300B8B5CE /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
@@ -1329,10 +1459,45 @@
 			package = 5447EE1B29BA591800D2D05A /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
 		};
+		54941D9429E9B47C0076DD20 /* YouTubeiOSPlayerHelper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 54941D9329E9B47C0076DD20 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */;
+			productName = YouTubeiOSPlayerHelper;
+		};
 		54A2EC3729BB7CEE006E880E /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5447EE1B29BA591800D2D05A /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
+		};
+		54C01EA129E49586009847AE /* TMDb */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 54C01EA029E49586009847AE /* XCRemoteSwiftPackageReference "TMDb" */;
+			productName = TMDb;
+		};
+		F729CB5D29E464180051E624 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		F729CB5F29E464180051E624 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		F759DA8229F03E7F00593BD1 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		F759DA8429F03E7F00593BD1 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F729CB5C29E464180051E624 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		F759DA8629F03E8B00593BD1 /* YouTubeiOSPlayerHelper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 54941D9329E9B47C0076DD20 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */;
+			productName = YouTubeiOSPlayerHelper;
 		};
 		F77E4B9E29B94B9300B8B5CE /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -6,15 +6,30 @@
 //
 
 import UIKit
-// import SDWebImage
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        // SDImageCache.shared.config.shouldCacheImagesInMemory = false
+
+        Network.shared.setOfflineMode(false)
+
+        Network.shared.networkMontior.pathUpdateHandler = { path in
+            if path.status == .satisfied {
+                // Connected
+                let isDownloadCompleted = Network.shared.isDownloadCompleted()
+                Network.shared.setOfflineMode(isDownloadCompleted)
+                Network.shared.checkForUpdate()
+            } else {
+                // Disconnected
+                Network.shared.setOfflineMode(true)
+            }
+        }
+
+        let queue = DispatchQueue(label: "Monitor")
+        Network.shared.networkMontior.start(queue: queue)
+
         return true
     }
 

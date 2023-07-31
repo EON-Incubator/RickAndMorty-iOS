@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class MainCoordinator: Coordinator {
 
@@ -15,6 +16,8 @@ class MainCoordinator: Coordinator {
     private let locationNavController = UINavigationController()
     private let episodeNavController = UINavigationController()
     private let searchNavController = UINavigationController()
+    private let downloadProgressView = DownloadProgressView()
+    private var cancellables = Set<AnyCancellable>()
 
     init(window: UIWindow) {
         self.window = window
@@ -56,26 +59,44 @@ class MainCoordinator: Coordinator {
         // Add CharactersViewController to the character navigation controller.
         let charactersViewModel = CharactersViewModel()
         charactersViewModel.coordinator = self
+        charactersViewModel.networkTimeoutMessage
+            .sink { message in
+                self.presentNetworkTimoutAlert(message)
+            }.store(in: &cancellables)
         let charactersViewController = CharactersViewController(viewModel: charactersViewModel)
         characterNavController.pushViewController(charactersViewController, animated: false)
 
         // Add LocationsViewController to the location navigation controller.
         let locationsViewModel = LocationsViewModel()
         locationsViewModel.coordinator = self
+        locationsViewModel.networkTimeoutMessage
+            .sink { message in
+                self.presentNetworkTimoutAlert(message)
+            }.store(in: &cancellables)
         let locationsViewController = LocationsViewController(viewModel: locationsViewModel)
         locationNavController.pushViewController(locationsViewController, animated: false)
 
         // Add EpisodesViewController to the episode navigation controller.
         let episodeViewModel = EpisodesViewModel()
         episodeViewModel.coordinator = self
+        episodeViewModel.networkTimeoutMessage
+            .sink { message in
+                self.presentNetworkTimoutAlert(message)
+            }.store(in: &cancellables)
         let episodesViewController = EpisodesViewController(viewModel: episodeViewModel)
         episodeNavController.pushViewController(episodesViewController, animated: false)
 
         // Add SearchViewController to the search navigation controller.
         let searchViewModel = SearchViewModel()
         searchViewModel.coordinator = self
+        searchViewModel.networkTimeoutMessage
+            .sink { message in
+                self.presentNetworkTimoutAlert(message)
+            }.store(in: &cancellables)
         let searchViewController = SearchViewController(viewModel: searchViewModel)
         searchNavController.pushViewController(searchViewController, animated: false)
+
+        subscribeToDownloadProgress()
 
         // Set tab bar controller as the root view controller of the UIWindow.
         window.tintColor = .label
@@ -88,6 +109,28 @@ class MainCoordinator: Coordinator {
         navController.tabBarItem.image = image
         navController.tabBarItem.title = title
         navController.navigationBar.standardAppearance = barAppearance
+    }
+
+    func subscribeToDownloadProgress() {
+        Network.shared.showDownloadProgress
+            .sink { shouldShow in
+                if shouldShow {
+                    self.showDownloadProgressView()
+                } else {
+                    self.dismissDownloadProgressView()
+                }
+            }.store(in: &cancellables)
+
+        Network.shared.downloadProgress
+            .sink { downloadProgress in
+                self.updateDownloadProgressView(message: downloadProgress.message, progress: downloadProgress.progress)
+            }.store(in: &cancellables)
+
+        Network.shared.showDownloadAlert.sink { alertController in
+            if self.downloadProgressView.window == nil {
+                self.window.rootViewController?.present(alertController, animated: true)
+            }
+        }.store(in: &cancellables)
     }
 
     // MARK: - Navigations
@@ -145,9 +188,45 @@ class MainCoordinator: Coordinator {
         let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
 
         tabBarController.present(alertController, animated: true) {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
                 alertController.dismiss(animated: true, completion: nil)
             }
         }
+    }
+
+    func showDownloadProgressView() {
+        downloadProgressView.alpha = 0
+        window.addSubview(downloadProgressView)
+        downloadProgressView.dismissButton.addTarget(self, action: #selector(dismissDownloadProgressView), for: .touchUpInside)
+        downloadProgressView.setupConstraints()
+        downloadProgressView.snp.updateConstraints { make in
+            make.bottom.equalTo(window)
+            make.leading.trailing.equalTo(window).inset(20)
+            make.height.equalTo(50)
+        }
+        downloadProgressView.superview?.layoutSubviews()
+
+        UIView.animate(withDuration: 0.5, animations: {
+            self.downloadProgressView.snp.updateConstraints { make in
+                make.bottom.equalTo(self.window).inset(90)
+            }
+            self.downloadProgressView.superview?.layoutSubviews()
+            self.downloadProgressView.alpha = 1
+        }, completion: nil)
+    }
+
+    @objc func dismissDownloadProgressView() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.downloadProgressView.snp.updateConstraints { make in
+                make.bottom.equalTo(self.window)
+            }
+            self.downloadProgressView.superview?.layoutSubviews()
+            self.downloadProgressView.alpha = 0
+        }, completion: nil)
+    }
+
+    func updateDownloadProgressView(message: String, progress: Float) {
+        self.downloadProgressView.titleLabel.text = message
+        self.downloadProgressView.progressView.progress = progress
     }
 }

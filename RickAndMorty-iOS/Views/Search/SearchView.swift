@@ -11,7 +11,9 @@ class SearchView: BaseView {
 
     let loadingView = LoadingView()
 
-    let locationCell = UICollectionView.CellRegistration<LocationRowCell, RickAndMortyAPI.LocationDetails> { (cell, _ indexPath, location) in
+    let episodeCell = UICollectionView.CellRegistration<RowCell, AnyHashable> { (_ cell, _ indexPath, _ episode) in }
+
+    let locationCell = UICollectionView.CellRegistration<LocationRowCell, Locations> { (cell, _ indexPath, location) in
         cell.lowerRightLabel.isHidden = false
         cell.upperLabel.text = location.name
         cell.lowerLeftLabel.text = location.type
@@ -24,7 +26,7 @@ class SearchView: BaseView {
         for index in 0...3 {
             let isIndexValid = location.residents.indices.contains(index)
             if isIndexValid {
-                let urlString = location.residents[index]?.image ?? ""
+                let urlString = location.residents[index].image
                 cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 100, height: 100)])
             }
         }
@@ -105,7 +107,7 @@ class SearchView: BaseView {
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: groupHeight)
 
-            var group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
+            var group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: 1)
 
             if effectiveWidth > 500 {
                 group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 2)

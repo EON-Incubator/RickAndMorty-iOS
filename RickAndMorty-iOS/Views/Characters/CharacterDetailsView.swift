@@ -10,15 +10,15 @@ import SnapKit
 
 class CharacterDetailsView: BaseView {
 
-    let episodeCell = UICollectionView.CellRegistration<RowCell, RickAndMortyAPI.GetCharacterQuery.Data.Character.Episode> { (cell, _ indexPath, episode) in
+    let episodeCell = UICollectionView.CellRegistration<RowCell, Episodes> { (cell, _ indexPath, episode) in
         cell.upperLabel.text = episode.name
         cell.lowerLeftLabel.text = episode.episode
-        cell.lowerRightLabel.text = episode.air_date
+        cell.lowerRightLabel.text = episode.airDate
 
         for index in 0...3 {
             let isIndexValid =  episode.characters.indices.contains(index)
             if isIndexValid {
-                let urlString = episode.characters[index]?.image ?? ""
+                let urlString = episode.characters[index].image
                 cell.characterAvatarImageViews[index].sd_setImage(with: URL(string: urlString), placeholderImage: nil, context: [.imageThumbnailPixelSize: CGSize(width: 50, height: 50)])
             }
         }
@@ -79,19 +79,19 @@ extension CharacterDetailsView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-            func getGroupHeight() -> NSCollectionLayoutDimension {
-                switch sectionType {
-                case .appearance, .empty:
-                    return NSCollectionLayoutDimension.estimated(280)
-                case .info, .location, .emptyInfo, .emptyLocation:
-                    return NSCollectionLayoutDimension.estimated(60)
-                default:
-                    return NSCollectionLayoutDimension.estimated(100)
-                }
+            var groupHeight: NSCollectionLayoutDimension
+
+            switch sectionType {
+            case .appearance, .empty:
+                groupHeight = NSCollectionLayoutDimension.estimated(280)
+            case .info, .location, .emptyInfo, .emptyLocation:
+                groupHeight = NSCollectionLayoutDimension.estimated(60)
+            default:
+                groupHeight = NSCollectionLayoutDimension.estimated(100)
             }
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: getGroupHeight())
+                                                   heightDimension: groupHeight)
             var group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: columns)
 
             if effectiveWidth > 500 && sectionType != .info {
